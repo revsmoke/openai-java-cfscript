@@ -1,7 +1,7 @@
 import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.create
+import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.get
 
 plugins {
@@ -11,13 +11,13 @@ plugins {
 
 configure<PublishingExtension> {
     publications {
-        create<MavenPublication>("maven") {
+        register<MavenPublication>("maven") {
             from(components["java"])
 
             pom {
                 name.set("OpenAI API")
-                description.set("APIs for sampling from and fine-tuning language models")
-                url.set("https://beta.openai.com/docs/")
+                description.set("The OpenAI REST API. Please see https://platform.openai.com/docs/api-reference\nfor more details.")
+                url.set("https://platform.openai.com/docs")
 
                 licenses {
                     license {
@@ -33,9 +33,9 @@ configure<PublishingExtension> {
                 }
 
                 scm {
-                    connection.set("scm:git:git://github.com/openai/openai-java.git")
-                    developerConnection.set("scm:git:git://github.com/openai/openai-java.git")
-                    url.set("https://github.com/openai/openai-java")
+                    connection.set("scm:git:git://github.com/stainless-sdks/openai-java.git")
+                    developerConnection.set("scm:git:git://github.com/stainless-sdks/openai-java.git")
+                    url.set("https://github.com/stainless-sdks/openai-java")
                 }
 
                 versionMapping {
@@ -49,9 +49,9 @@ configure<PublishingExtension> {
 }
 
 signing {
-    val signingKeyId = System.getenv("GPG_SIGNING_KEY_ID")
-    val signingKey = System.getenv("GPG_SIGNING_KEY")
-    val signingPassword = System.getenv("GPG_SIGNING_PASSWORD")
+    val signingKeyId = System.getenv("GPG_SIGNING_KEY_ID")?.ifBlank { null }
+    val signingKey = System.getenv("GPG_SIGNING_KEY")?.ifBlank { null }
+    val signingPassword = System.getenv("GPG_SIGNING_PASSWORD")?.ifBlank { null }
     if (signingKey != null && signingPassword != null) {
         useInMemoryPgpKeys(
             signingKeyId,
@@ -62,6 +62,6 @@ signing {
     }
 }
 
-tasks.publish {
+tasks.named("publish") {
     dependsOn(":closeAndReleaseSonatypeStagingRepository")
 }

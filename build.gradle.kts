@@ -3,8 +3,8 @@ plugins {
 }
 
 allprojects {
-    group = "com.openai.api"
-    version = "0.0.1" // x-release-please-version
+    group = "com.openai"
+    version = "0.0.1" 
 }
 
 nexusPublishing {

@@ -1,16 +1,14 @@
 # OpenAI Java API Library
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.openai.api/openai-java)](https://central.sonatype.com/artifact/com.openai.api/openai-java/0.0.1)
+[![Maven Central](https://img.shields.io/maven-central/v/com.openai/openai-java)](https://central.sonatype.com/artifact/com.openai/openai-java/0.0.1)
 
 The OpenAI Java SDK provides convenient access to the OpenAI REST API from applications written in Java. It includes helper classes with helpful types and documentation for every request and response property.
-
-This package is currently in beta (pre-v1.0.0). We expect some breaking changes to rarely-used areas of the SDK, and appreciate your [feedback](mailto:support@openai.com).
 
 The OpenAI Java SDK is similar to the OpenAI Kotlin SDK but with minor differences that make it more ergonomic for use in Java, such as `Optional` instead of nullable values, `Stream` instead of `Sequence`, and `CompletableFuture` instead of suspend functions.
 
 ## Documentation
 
-The API documentation can be found [here](https://beta.openai.com/docs/).
+The REST API documentation can be found [on platform.openai.com](https://platform.openai.com/docs).
 
 ---
 
@@ -21,14 +19,14 @@ The API documentation can be found [here](https://beta.openai.com/docs/).
 #### Gradle
 
 ```kotlin
-implementation("com.openai.api:openai-java:0.0.1")
+implementation("com.openai:openai-java:0.0.1")
 ```
 
 #### Maven
 
 ```xml
 <dependency>
-    <groupId>com.openai.api</groupId>
+    <groupId>com.openai</groupId>
     <artifactId>openai-java</artifactId>
     <version>0.0.1</version>
 </dependency>
@@ -36,22 +34,34 @@ implementation("com.openai.api:openai-java:0.0.1")
 
 ### Configure the client
 
-Use `OpenAiOkHttpClient.builder()` to configure the client. At a minimum you need to set `.apiKey()`:
+Use `OpenAIOkHttpClient.builder()` to configure the client. At a minimum you need to set `.apiKey()`:
 
 ```java
-import com.openai.api.client.OpenAiClient;
-import com.openai.api.client.okhttp.OpenAiOkHttpClient;
+import com.openai.client.OpenAIClient;
+import com.openai.client.okhttp.OpenAIOkHttpClient;
 
-OpenAiClient client = OpenAiOkHttpClient.builder()
-    .apiKey("<your API Key>")
+OpenAIClient client = OpenAIOkHttpClient.builder()
+    .apiKey("My API Key")
     .build();
 ```
 
-Alternately, set the environment variable `OPENAI_API_KEY` and use `OpenAiOkHttpClient.fromEnv()`:
+Alternately, set the environment with `OPENAI_API_KEY`, `OPENAI_ORG_ID` or `OPENAI_PROJECT_ID`, and use `OpenAIOkHttpClient.fromEnv()` to read from the environment.
 
 ```java
-OpenAiClient client = OpenAiOkHttpClient.fromEnv();
+OpenAIClient client = OpenAIOkHttpClient.fromEnv();
+
+// Note: you can also call fromEnv() from the client builder, for example if you need to set additional properties
+OpenAIClient client = OpenAIOkHttpClient.builder()
+    .fromEnv()
+    // ... set properties on the builder
+    .build();
 ```
+
+| Property     | Environment variable | Required | Default value |
+| ------------ | -------------------- | -------- | ------------- |
+| apiKey       | `OPENAI_API_KEY`     | true     | —             |
+| organization | `OPENAI_ORG_ID`      | false    | —             |
+| project      | `OPENAI_PROJECT_ID`  | false    | —             |
 
 Read the documentation for more configuration options.
 
@@ -59,20 +69,18 @@ Read the documentation for more configuration options.
 
 ### Example: creating a resource
 
-To create a new completion, first use the `CompletionCreateParams` builder to specify attributes,
+To create a new chat completion, first use the `ChatCompletionCreateParams` builder to specify attributes,
 then pass that to the `create` method of the `completions` service.
 
 ```java
-import com.openai.api.models.Completion;
-import com.openai.api.models.CompletionCreateParams;
+import com.openai.models.ChatCompletion;
+import com.openai.models.ChatCompletionCreateParams;
+import java.util.List;
 
-CompletionCreateParams params = CompletionCreateParams.builder()
-    .model("text-davinci-002")
-    .prompt("Say this is a test")
-    .maxTokens(6)
-    .temperature(0)
+ChatCompletionCreateParams params = ChatCompletionCreateParams.builder()
+    .model(ChatCompletionCreateParams.Model.ofString("gpt-3.5-turbo"))
     .build();
-Completion completion = client.completions().create(params);
+ChatCompletion chatCompletion = client.chat().completions().create(params);
 ```
 
 ---
@@ -83,14 +91,14 @@ Completion completion = client.completions().create(params);
 
 To make a request to the OpenAI API, you generally build an instance of the appropriate `Params` class.
 
-In [Example: creating a resource](#example-creating-a-resource) above, we used the `CompletionCreateParams.builder()` to pass to
+In [Example: creating a resource](#example-creating-a-resource) above, we used the `ChatCompletionCreateParams.builder()` to pass to
 the `create` method of the `completions` service.
 
 Sometimes, the API may support other properties that are not yet supported in the Java SDK types. In that case,
 you can attach them using the `putAdditionalProperty` method.
 
 ```java
-CompletionCreateParams params = CompletionCreateParams.builder()
+ChatCompletionCreateParams params = ChatCompletionCreateParams.builder()
     // ... normal properties
     .putAdditionalProperty("secret_param", "4242")
     .build();
@@ -100,10 +108,10 @@ CompletionCreateParams params = CompletionCreateParams.builder()
 
 ### Response validation
 
-When receiving a response, the OpenAI Java SDK will deserialize it into instances of the typed model classes. In rare cases, the API may return a response property that doesn't match the expected Java type. If you directly access the mistaken property, the SDK will throw an unchecked `OpenAiInvalidDataException` at runtime. If you would prefer to check in advance that that response is completely well-typed, call `.validate()` on the returned model.
+When receiving a response, the OpenAI Java SDK will deserialize it into instances of the typed model classes. In rare cases, the API may return a response property that doesn't match the expected Java type. If you directly access the mistaken property, the SDK will throw an unchecked `OpenAIInvalidDataException` at runtime. If you would prefer to check in advance that that response is completely well-typed, call `.validate()` on the returned model.
 
 ```java
-Completion completion = client.completions().create().validate();
+ChatCompletion chatCompletion = client.chat().completions().create().validate();
 ```
 
 ### Response properties as JSON
@@ -133,7 +141,7 @@ if (field.isMissing()) {
 Sometimes, the server response may include additional properties that are not yet available in this library's types. You can access them using the model's `_additionalProperties` method:
 
 ```java
-JsonValue secret = completion._additionalProperties().get("secret_field");
+JsonValue secret = chatCompletion._additionalProperties().get("secret_field");
 ```
 
 ---
@@ -144,9 +152,9 @@ JsonValue secret = completion._additionalProperties().get("secret_field");
 
 This library throws exceptions in a single hierarchy for easy handling:
 
-- **`OpenAiException`** - Base exception for all exceptions
+- **`OpenAIException`** - Base exception for all exceptions
 
-  - **`OpenAiServiceException`** - HTTP errors with a well-formed response body we were able to parse. The exception message and the `.debuggingRequestId()` will be set by the server.
+  - **`OpenAIServiceException`** - HTTP errors with a well-formed response body we were able to parse. The exception message and the `.debuggingRequestId()` will be set by the server.
 
     | 400    | BadRequestException           |
     | ------ | ----------------------------- |
@@ -158,8 +166,8 @@ This library throws exceptions in a single hierarchy for easy handling:
     | 5xx    | InternalServerException       |
     | others | UnexpectedStatusCodeException |
 
-  - **`OpenAiIoException`** - I/O networking errors
-  - **`OpenAiInvalidDataException`** - any other exceptions on the client side, e.g.:
+  - **`OpenAIIoException`** - I/O networking errors
+  - **`OpenAIInvalidDataException`** - any other exceptions on the client side, e.g.:
     - We failed to serialize the request body
     - We failed to parse the response body (has access to response code and body)
 
@@ -167,11 +175,11 @@ This library throws exceptions in a single hierarchy for easy handling:
 
 ### Retries
 
-Requests that experience certain errors are automatically retried 2 times by default, with a short exponential backoff. Connection errors (for example, due to a network connectivity problem), 409 Conflict, 429 Rate Limit, and >=500 Internal errors will all be retried by default.
+Requests that experience certain errors are automatically retried 2 times by default, with a short exponential backoff. Connection errors (for example, due to a network connectivity problem), 408 Request Timeout, 409 Conflict, 429 Rate Limit, and >=500 Internal errors will all be retried by default.
 You can provide a `maxRetries` on the client builder to configure this:
 
 ```java
-OpenAiClient client = OpenAiOkHttpClient.builder()
+OpenAIClient client = OpenAIOkHttpClient.builder()
     .fromEnv()
     .maxRetries(4)
     .build();
@@ -179,10 +187,10 @@ OpenAiClient client = OpenAiOkHttpClient.builder()
 
 ### Timeouts
 
-Requests time out after 60 seconds by default. You can configure this on the client builder:
+Requests time out after 10 minutes by default. You can configure this on the client builder:
 
 ```java
-OpenAiClient client = OpenAiOkHttpClient.builder()
+OpenAIClient client = OpenAIOkHttpClient.builder()
     .fromEnv()
     .timeout(Duration.ofSeconds(30))
     .build();
@@ -193,7 +201,7 @@ OpenAiClient client = OpenAiOkHttpClient.builder()
 Requests can be routed through a proxy. You can configure this on the client builder:
 
 ```java
-OpenAiClient client = OpenAiOkHttpClient.builder()
+OpenAIClient client = OpenAIOkHttpClient.builder()
     .fromEnv()
     .proxy(new Proxy(
         Type.HTTP,
@@ -201,3 +209,38 @@ OpenAiClient client = OpenAiOkHttpClient.builder()
     ))
     .build();
 ```
+
+## Making custom/undocumented requests
+
+This library is typed for convenient access to the documented API. If you need to access undocumented
+params or response properties, the library can still be used.
+
+### Undocumented request params
+
+To make requests using undocumented parameters, you can provide or override parameters on the params object
+while building it.
+
+```kotlin
+FooCreateParams address = FooCreateParams.builder()
+    .id("my_id")
+    .putAdditionalProperty("secret_prop", JsonValue.from("hello"))
+    .build();
+```
+
+### Undocumented response properties
+
+To access undocumented response properties, you can use `res._additionalProperties()` on a response object to
+get a map of untyped fields of type `Map<String, JsonValue>`. You can then access fields like
+`._additionalProperties().get("secret_prop").asString()` or use other helpers defined on the `JsonValue` class
+to extract it to a desired type.
+
+## Semantic versioning
+
+This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions, though certain backwards-incompatible changes may be released as minor versions:
+
+1. Changes to library internals which are technically public but not intended or documented for external use. _(Please open a GitHub issue to let us know if you are relying on such internals)_.
+2. Changes that we do not expect to impact the vast majority of users in practice.
+
+We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
+
+We are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/openai-java/issues) with questions, bugs, or suggestions.

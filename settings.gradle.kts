@@ -1,6 +1,6 @@
-rootProject.name = "OpenAI-java-root"
+rootProject.name = "openai-java-root"
 
-include("OpenAI-java")
-include("OpenAI-java-client-okhttp")
-include("OpenAI-java-core")
-include("OpenAI-java-example")
+include("openai-java")
+include("openai-java-client-okhttp")
+include("openai-java-core")
+include("openai-java-example")
