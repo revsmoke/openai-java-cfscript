@@ -11,13 +11,13 @@ class FunctionDefinitionTest {
     fun createFunctionDefinition() {
         val functionDefinition =
             FunctionDefinition.builder()
-                .name("string")
-                .description("string")
+                .name("name")
+                .description("description")
                 .parameters(FunctionParameters.builder().build())
                 .build()
         assertThat(functionDefinition).isNotNull
-        assertThat(functionDefinition.name()).isEqualTo("string")
-        assertThat(functionDefinition.description()).contains("string")
+        assertThat(functionDefinition.name()).isEqualTo("name")
+        assertThat(functionDefinition.description()).contains("description")
         assertThat(functionDefinition.parameters()).contains(FunctionParameters.builder().build())
     }
 }

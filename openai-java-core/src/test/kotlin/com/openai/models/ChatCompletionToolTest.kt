@@ -13,8 +13,8 @@ class ChatCompletionToolTest {
             ChatCompletionTool.builder()
                 .function(
                     FunctionDefinition.builder()
-                        .name("string")
-                        .description("string")
+                        .name("name")
+                        .description("description")
                         .parameters(FunctionParameters.builder().build())
                         .build()
                 )
@@ -24,8 +24,8 @@ class ChatCompletionToolTest {
         assertThat(chatCompletionTool.function())
             .isEqualTo(
                 FunctionDefinition.builder()
-                    .name("string")
-                    .description("string")
+                    .name("name")
+                    .description("description")
                     .parameters(FunctionParameters.builder().build())
                     .build()
             )

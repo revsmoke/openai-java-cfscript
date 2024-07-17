@@ -11,15 +11,15 @@ class ErrorObjectTest {
     fun createErrorObject() {
         val errorObject =
             ErrorObject.builder()
-                .code("string")
-                .message("string")
-                .param("string")
-                .type("string")
+                .code("code")
+                .message("message")
+                .param("param")
+                .type("type")
                 .build()
         assertThat(errorObject).isNotNull
-        assertThat(errorObject.code()).contains("string")
-        assertThat(errorObject.message()).isEqualTo("string")
-        assertThat(errorObject.param()).contains("string")
-        assertThat(errorObject.type()).isEqualTo("string")
+        assertThat(errorObject.code()).contains("code")
+        assertThat(errorObject.message()).isEqualTo("message")
+        assertThat(errorObject.param()).contains("param")
+        assertThat(errorObject.type()).isEqualTo("type")
     }
 }

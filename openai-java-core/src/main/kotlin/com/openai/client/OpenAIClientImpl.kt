@@ -20,7 +20,27 @@ constructor(
 
     private val chat: ChatService by lazy { ChatServiceImpl(clientOptions) }
 
+    private val files: FileService by lazy { FileServiceImpl(clientOptions) }
+
+    private val moderations: ModerationService by lazy { ModerationServiceImpl(clientOptions) }
+
+    private val models: ModelService by lazy { ModelServiceImpl(clientOptions) }
+
+    private val fineTuning: FineTuningService by lazy { FineTuningServiceImpl(clientOptions) }
+
+    private val batches: BatchService by lazy { BatchServiceImpl(clientOptions) }
+
     override fun async(): OpenAIClientAsync = async
 
     override fun chat(): ChatService = chat
+
+    override fun files(): FileService = files
+
+    override fun moderations(): ModerationService = moderations
+
+    override fun models(): ModelService = models
+
+    override fun fineTuning(): FineTuningService = fineTuning
+
+    override fun batches(): BatchService = batches
 }

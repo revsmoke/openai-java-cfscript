@@ -13,13 +13,13 @@ class ChatCompletionUserMessageParamTest {
             ChatCompletionUserMessageParam.builder()
                 .content(ChatCompletionUserMessageParam.Content.ofString("string"))
                 .role(ChatCompletionUserMessageParam.Role.USER)
-                .name("string")
+                .name("name")
                 .build()
         assertThat(chatCompletionUserMessageParam).isNotNull
         assertThat(chatCompletionUserMessageParam.content())
             .isEqualTo(ChatCompletionUserMessageParam.Content.ofString("string"))
         assertThat(chatCompletionUserMessageParam.role())
             .isEqualTo(ChatCompletionUserMessageParam.Role.USER)
-        assertThat(chatCompletionUserMessageParam.name()).contains("string")
+        assertThat(chatCompletionUserMessageParam.name()).contains("name")
     }
 }

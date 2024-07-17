@@ -11,11 +11,11 @@ class ChatCompletionContentPartTextTest {
     fun createChatCompletionContentPartText() {
         val chatCompletionContentPartText =
             ChatCompletionContentPartText.builder()
-                .text("string")
+                .text("text")
                 .type(ChatCompletionContentPartText.Type.TEXT)
                 .build()
         assertThat(chatCompletionContentPartText).isNotNull
-        assertThat(chatCompletionContentPartText.text()).isEqualTo("string")
+        assertThat(chatCompletionContentPartText.text()).isEqualTo("text")
         assertThat(chatCompletionContentPartText.type())
             .isEqualTo(ChatCompletionContentPartText.Type.TEXT)
     }

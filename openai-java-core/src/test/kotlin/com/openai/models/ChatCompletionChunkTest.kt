@@ -11,17 +11,17 @@ class ChatCompletionChunkTest {
     fun createChatCompletionChunk() {
         val chatCompletionChunk =
             ChatCompletionChunk.builder()
-                .id("string")
+                .id("id")
                 .choices(
                     listOf(
                         ChatCompletionChunk.Choice.builder()
                             .delta(
                                 ChatCompletionChunk.Choice.Delta.builder()
-                                    .content("string")
+                                    .content("content")
                                     .functionCall(
                                         ChatCompletionChunk.Choice.Delta.FunctionCall.builder()
-                                            .arguments("string")
-                                            .name("string")
+                                            .arguments("arguments")
+                                            .name("name")
                                             .build()
                                     )
                                     .role(ChatCompletionChunk.Choice.Delta.Role.SYSTEM)
@@ -29,13 +29,13 @@ class ChatCompletionChunkTest {
                                         listOf(
                                             ChatCompletionChunk.Choice.Delta.ToolCall.builder()
                                                 .index(123L)
-                                                .id("string")
+                                                .id("id")
                                                 .function(
                                                     ChatCompletionChunk.Choice.Delta.ToolCall
                                                         .Function
                                                         .builder()
-                                                        .arguments("string")
-                                                        .name("string")
+                                                        .arguments("arguments")
+                                                        .name("name")
                                                         .build()
                                                 )
                                                 .type(
@@ -54,14 +54,14 @@ class ChatCompletionChunkTest {
                                     .content(
                                         listOf(
                                             ChatCompletionTokenLogprob.builder()
-                                                .token("string")
+                                                .token("token")
                                                 .bytes(listOf(123L))
                                                 .logprob(42.23)
                                                 .topLogprobs(
                                                     listOf(
                                                         ChatCompletionTokenLogprob.TopLogprob
                                                             .builder()
-                                                            .token("string")
+                                                            .token("token")
                                                             .bytes(listOf(123L))
                                                             .logprob(42.23)
                                                             .build()
@@ -76,10 +76,10 @@ class ChatCompletionChunkTest {
                     )
                 )
                 .created(123L)
-                .model("string")
+                .model("model")
                 .object_(ChatCompletionChunk.Object.CHAT_COMPLETION_CHUNK)
                 .serviceTier(ChatCompletionChunk.ServiceTier.SCALE)
-                .systemFingerprint("string")
+                .systemFingerprint("system_fingerprint")
                 .usage(
                     ChatCompletionChunk.Usage.builder()
                         .completionTokens(123L)
@@ -89,17 +89,17 @@ class ChatCompletionChunkTest {
                 )
                 .build()
         assertThat(chatCompletionChunk).isNotNull
-        assertThat(chatCompletionChunk.id()).isEqualTo("string")
+        assertThat(chatCompletionChunk.id()).isEqualTo("id")
         assertThat(chatCompletionChunk.choices())
             .containsExactly(
                 ChatCompletionChunk.Choice.builder()
                     .delta(
                         ChatCompletionChunk.Choice.Delta.builder()
-                            .content("string")
+                            .content("content")
                             .functionCall(
                                 ChatCompletionChunk.Choice.Delta.FunctionCall.builder()
-                                    .arguments("string")
-                                    .name("string")
+                                    .arguments("arguments")
+                                    .name("name")
                                     .build()
                             )
                             .role(ChatCompletionChunk.Choice.Delta.Role.SYSTEM)
@@ -107,12 +107,12 @@ class ChatCompletionChunkTest {
                                 listOf(
                                     ChatCompletionChunk.Choice.Delta.ToolCall.builder()
                                         .index(123L)
-                                        .id("string")
+                                        .id("id")
                                         .function(
                                             ChatCompletionChunk.Choice.Delta.ToolCall.Function
                                                 .builder()
-                                                .arguments("string")
-                                                .name("string")
+                                                .arguments("arguments")
+                                                .name("name")
                                                 .build()
                                         )
                                         .type(
@@ -130,13 +130,13 @@ class ChatCompletionChunkTest {
                             .content(
                                 listOf(
                                     ChatCompletionTokenLogprob.builder()
-                                        .token("string")
+                                        .token("token")
                                         .bytes(listOf(123L))
                                         .logprob(42.23)
                                         .topLogprobs(
                                             listOf(
                                                 ChatCompletionTokenLogprob.TopLogprob.builder()
-                                                    .token("string")
+                                                    .token("token")
                                                     .bytes(listOf(123L))
                                                     .logprob(42.23)
                                                     .build()
@@ -150,12 +150,12 @@ class ChatCompletionChunkTest {
                     .build()
             )
         assertThat(chatCompletionChunk.created()).isEqualTo(123L)
-        assertThat(chatCompletionChunk.model()).isEqualTo("string")
+        assertThat(chatCompletionChunk.model()).isEqualTo("model")
         assertThat(chatCompletionChunk.object_())
             .isEqualTo(ChatCompletionChunk.Object.CHAT_COMPLETION_CHUNK)
         assertThat(chatCompletionChunk.serviceTier())
             .contains(ChatCompletionChunk.ServiceTier.SCALE)
-        assertThat(chatCompletionChunk.systemFingerprint()).contains("string")
+        assertThat(chatCompletionChunk.systemFingerprint()).contains("system_fingerprint")
         assertThat(chatCompletionChunk.usage())
             .contains(
                 ChatCompletionChunk.Usage.builder()

@@ -8,7 +8,7 @@ The OpenAI Java SDK is similar to the OpenAI Kotlin SDK but with minor differenc
 
 ## Documentation
 
-The REST API documentation can be found [on platform.openai.com](https://platform.openai.com/docs).
+The REST API documentation can be found on [platform.openai.com](https://platform.openai.com/docs).
 
 ---
 
@@ -83,6 +83,40 @@ ChatCompletionCreateParams params = ChatCompletionCreateParams.builder()
 ChatCompletion chatCompletion = client.chat().completions().create(params);
 ```
 
+### Example: listing resources
+
+The OpenAI API provides a `list` method to get a paginated list of jobs.
+You can retrieve the first page by:
+
+```java
+import com.openai.models.FineTuningJob;
+import com.openai.models.Page;
+
+FineTuningJobListPage page = client.fineTuning().jobs().list();
+for (FineTuningJob job : page.data()) {
+    System.out.println(job);
+}
+```
+
+Use the `FineTuningJobListParams` builder to set parameters:
+
+```java
+FineTuningJobListParams params = FineTuningJobListParams.builder()
+    .limit(20)
+    .build();
+FineTuningJobListPage page1 = client.fineTuning().jobs().list(params);
+
+// Using the `from` method of the builder you can reuse previous params values:
+FineTuningJobListPage page2 = client.fineTuning().jobs().list(FineTuningJobListParams.builder()
+    .from(params)
+    .build());
+
+// Or easily get params for the next page by using the helper `getNextPageParams`:
+FineTuningJobListPage page3 = client.fineTuning().jobs().list(params.getNextPageParams(page2));
+```
+
+See [Pagination](#pagination) below for more information on transparently working with lists of objects without worrying about fetching each page.
+
 ---
 
 ## Requests
@@ -145,6 +179,57 @@ JsonValue secret = chatCompletion._additionalProperties().get("secret_field");
 ```
 
 ---
+
+## Pagination
+
+For methods that return a paginated list of results, this library provides convenient ways access
+the results either one page at a time, or item-by-item across all pages.
+
+### Auto-pagination
+
+To iterate through all results across all pages, you can use `autoPager`,
+which automatically handles fetching more pages for you:
+
+### Synchronous
+
+```java
+// As an Iterable:
+FineTuningJobListPage page = client.fineTuning().jobs().list(params);
+for (FineTuningJob job : page.autoPager()) {
+    System.out.println(job);
+};
+
+// As a Stream:
+client.fineTuning().jobs().list(params).autoPager().stream()
+    .limit(50)
+    .forEach(job -> System.out.println(job));
+```
+
+### Asynchronous
+
+```java
+// Using forEach, which returns CompletableFuture<Void>:
+asyncClient.fineTuning().jobs().list(params).autoPager()
+    .forEach(job -> System.out.println(job), executor);
+```
+
+### Manual pagination
+
+If none of the above helpers meet your needs, you can also manually request pages one-by-one.
+A page of results has a `data()` method to fetch the list of objects, as well as top-level
+`response` and other methods to fetch top-level data about the page. It also has methods
+`hasNextPage`, `getNextPage`, and `getNextPageParams` methods to help with pagination.
+
+```java
+FineTuningJobListPage page = client.fineTuning().jobs().list(params);
+while (page != null) {
+    for (FineTuningJob job : page.data()) {
+        System.out.println(job);
+    }
+
+    page = page.getNextPage().orElse(null);
+}
+```
 
 ---
 
@@ -244,3 +329,7 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
 We are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/openai-java/issues) with questions, bugs, or suggestions.
+
+## Requirements
+
+This library requires Java 8 or later.

@@ -11,7 +11,7 @@ class ChatCompletionTest {
     fun createChatCompletion() {
         val chatCompletion =
             ChatCompletion.builder()
-                .id("string")
+                .id("id")
                 .choices(
                     listOf(
                         ChatCompletion.Choice.builder()
@@ -22,14 +22,14 @@ class ChatCompletionTest {
                                     .content(
                                         listOf(
                                             ChatCompletionTokenLogprob.builder()
-                                                .token("string")
+                                                .token("token")
                                                 .bytes(listOf(123L))
                                                 .logprob(42.23)
                                                 .topLogprobs(
                                                     listOf(
                                                         ChatCompletionTokenLogprob.TopLogprob
                                                             .builder()
-                                                            .token("string")
+                                                            .token("token")
                                                             .bytes(listOf(123L))
                                                             .logprob(42.23)
                                                             .build()
@@ -42,22 +42,22 @@ class ChatCompletionTest {
                             )
                             .message(
                                 ChatCompletionMessage.builder()
-                                    .content("string")
+                                    .content("content")
                                     .role(ChatCompletionMessage.Role.ASSISTANT)
                                     .functionCall(
                                         ChatCompletionMessage.FunctionCall.builder()
-                                            .arguments("string")
-                                            .name("string")
+                                            .arguments("arguments")
+                                            .name("name")
                                             .build()
                                     )
                                     .toolCalls(
                                         listOf(
                                             ChatCompletionMessageToolCall.builder()
-                                                .id("string")
+                                                .id("id")
                                                 .function(
                                                     ChatCompletionMessageToolCall.Function.builder()
-                                                        .arguments("string")
-                                                        .name("string")
+                                                        .arguments("arguments")
+                                                        .name("name")
                                                         .build()
                                                 )
                                                 .type(ChatCompletionMessageToolCall.Type.FUNCTION)
@@ -70,10 +70,10 @@ class ChatCompletionTest {
                     )
                 )
                 .created(123L)
-                .model("string")
+                .model("model")
                 .object_(ChatCompletion.Object.CHAT_COMPLETION)
                 .serviceTier(ChatCompletion.ServiceTier.SCALE)
-                .systemFingerprint("string")
+                .systemFingerprint("system_fingerprint")
                 .usage(
                     ChatCompletion.Usage.builder()
                         .completionTokens(123L)
@@ -83,7 +83,7 @@ class ChatCompletionTest {
                 )
                 .build()
         assertThat(chatCompletion).isNotNull
-        assertThat(chatCompletion.id()).isEqualTo("string")
+        assertThat(chatCompletion.id()).isEqualTo("id")
         assertThat(chatCompletion.choices())
             .containsExactly(
                 ChatCompletion.Choice.builder()
@@ -94,13 +94,13 @@ class ChatCompletionTest {
                             .content(
                                 listOf(
                                     ChatCompletionTokenLogprob.builder()
-                                        .token("string")
+                                        .token("token")
                                         .bytes(listOf(123L))
                                         .logprob(42.23)
                                         .topLogprobs(
                                             listOf(
                                                 ChatCompletionTokenLogprob.TopLogprob.builder()
-                                                    .token("string")
+                                                    .token("token")
                                                     .bytes(listOf(123L))
                                                     .logprob(42.23)
                                                     .build()
@@ -113,22 +113,22 @@ class ChatCompletionTest {
                     )
                     .message(
                         ChatCompletionMessage.builder()
-                            .content("string")
+                            .content("content")
                             .role(ChatCompletionMessage.Role.ASSISTANT)
                             .functionCall(
                                 ChatCompletionMessage.FunctionCall.builder()
-                                    .arguments("string")
-                                    .name("string")
+                                    .arguments("arguments")
+                                    .name("name")
                                     .build()
                             )
                             .toolCalls(
                                 listOf(
                                     ChatCompletionMessageToolCall.builder()
-                                        .id("string")
+                                        .id("id")
                                         .function(
                                             ChatCompletionMessageToolCall.Function.builder()
-                                                .arguments("string")
-                                                .name("string")
+                                                .arguments("arguments")
+                                                .name("name")
                                                 .build()
                                         )
                                         .type(ChatCompletionMessageToolCall.Type.FUNCTION)
@@ -140,10 +140,10 @@ class ChatCompletionTest {
                     .build()
             )
         assertThat(chatCompletion.created()).isEqualTo(123L)
-        assertThat(chatCompletion.model()).isEqualTo("string")
+        assertThat(chatCompletion.model()).isEqualTo("model")
         assertThat(chatCompletion.object_()).isEqualTo(ChatCompletion.Object.CHAT_COMPLETION)
         assertThat(chatCompletion.serviceTier()).contains(ChatCompletion.ServiceTier.SCALE)
-        assertThat(chatCompletion.systemFingerprint()).contains("string")
+        assertThat(chatCompletion.systemFingerprint()).contains("system_fingerprint")
         assertThat(chatCompletion.usage())
             .contains(
                 ChatCompletion.Usage.builder()

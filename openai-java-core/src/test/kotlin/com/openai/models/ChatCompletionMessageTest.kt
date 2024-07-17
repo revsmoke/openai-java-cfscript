@@ -11,22 +11,22 @@ class ChatCompletionMessageTest {
     fun createChatCompletionMessage() {
         val chatCompletionMessage =
             ChatCompletionMessage.builder()
-                .content("string")
+                .content("content")
                 .role(ChatCompletionMessage.Role.ASSISTANT)
                 .functionCall(
                     ChatCompletionMessage.FunctionCall.builder()
-                        .arguments("string")
-                        .name("string")
+                        .arguments("arguments")
+                        .name("name")
                         .build()
                 )
                 .toolCalls(
                     listOf(
                         ChatCompletionMessageToolCall.builder()
-                            .id("string")
+                            .id("id")
                             .function(
                                 ChatCompletionMessageToolCall.Function.builder()
-                                    .arguments("string")
-                                    .name("string")
+                                    .arguments("arguments")
+                                    .name("name")
                                     .build()
                             )
                             .type(ChatCompletionMessageToolCall.Type.FUNCTION)
@@ -35,23 +35,23 @@ class ChatCompletionMessageTest {
                 )
                 .build()
         assertThat(chatCompletionMessage).isNotNull
-        assertThat(chatCompletionMessage.content()).contains("string")
+        assertThat(chatCompletionMessage.content()).contains("content")
         assertThat(chatCompletionMessage.role()).isEqualTo(ChatCompletionMessage.Role.ASSISTANT)
         assertThat(chatCompletionMessage.functionCall())
             .contains(
                 ChatCompletionMessage.FunctionCall.builder()
-                    .arguments("string")
-                    .name("string")
+                    .arguments("arguments")
+                    .name("name")
                     .build()
             )
         assertThat(chatCompletionMessage.toolCalls().get())
             .containsExactly(
                 ChatCompletionMessageToolCall.builder()
-                    .id("string")
+                    .id("id")
                     .function(
                         ChatCompletionMessageToolCall.Function.builder()
-                            .arguments("string")
-                            .name("string")
+                            .arguments("arguments")
+                            .name("name")
                             .build()
                     )
                     .type(ChatCompletionMessageToolCall.Type.FUNCTION)

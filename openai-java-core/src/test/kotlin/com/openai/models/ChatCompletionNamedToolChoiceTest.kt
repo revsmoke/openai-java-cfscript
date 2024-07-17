@@ -11,12 +11,12 @@ class ChatCompletionNamedToolChoiceTest {
     fun createChatCompletionNamedToolChoice() {
         val chatCompletionNamedToolChoice =
             ChatCompletionNamedToolChoice.builder()
-                .function(ChatCompletionNamedToolChoice.Function.builder().name("string").build())
+                .function(ChatCompletionNamedToolChoice.Function.builder().name("name").build())
                 .type(ChatCompletionNamedToolChoice.Type.FUNCTION)
                 .build()
         assertThat(chatCompletionNamedToolChoice).isNotNull
         assertThat(chatCompletionNamedToolChoice.function())
-            .isEqualTo(ChatCompletionNamedToolChoice.Function.builder().name("string").build())
+            .isEqualTo(ChatCompletionNamedToolChoice.Function.builder().name("name").build())
         assertThat(chatCompletionNamedToolChoice.type())
             .isEqualTo(ChatCompletionNamedToolChoice.Type.FUNCTION)
     }

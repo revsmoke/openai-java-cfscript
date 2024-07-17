@@ -11,14 +11,14 @@ class ChatCompletionSystemMessageParamTest {
     fun createChatCompletionSystemMessageParam() {
         val chatCompletionSystemMessageParam =
             ChatCompletionSystemMessageParam.builder()
-                .content("string")
+                .content("content")
                 .role(ChatCompletionSystemMessageParam.Role.SYSTEM)
-                .name("string")
+                .name("name")
                 .build()
         assertThat(chatCompletionSystemMessageParam).isNotNull
-        assertThat(chatCompletionSystemMessageParam.content()).isEqualTo("string")
+        assertThat(chatCompletionSystemMessageParam.content()).isEqualTo("content")
         assertThat(chatCompletionSystemMessageParam.role())
             .isEqualTo(ChatCompletionSystemMessageParam.Role.SYSTEM)
-        assertThat(chatCompletionSystemMessageParam.name()).contains("string")
+        assertThat(chatCompletionSystemMessageParam.name()).contains("name")
     }
 }

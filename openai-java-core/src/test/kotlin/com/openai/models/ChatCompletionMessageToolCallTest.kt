@@ -11,22 +11,22 @@ class ChatCompletionMessageToolCallTest {
     fun createChatCompletionMessageToolCall() {
         val chatCompletionMessageToolCall =
             ChatCompletionMessageToolCall.builder()
-                .id("string")
+                .id("id")
                 .function(
                     ChatCompletionMessageToolCall.Function.builder()
-                        .arguments("string")
-                        .name("string")
+                        .arguments("arguments")
+                        .name("name")
                         .build()
                 )
                 .type(ChatCompletionMessageToolCall.Type.FUNCTION)
                 .build()
         assertThat(chatCompletionMessageToolCall).isNotNull
-        assertThat(chatCompletionMessageToolCall.id()).isEqualTo("string")
+        assertThat(chatCompletionMessageToolCall.id()).isEqualTo("id")
         assertThat(chatCompletionMessageToolCall.function())
             .isEqualTo(
                 ChatCompletionMessageToolCall.Function.builder()
-                    .arguments("string")
-                    .name("string")
+                    .arguments("arguments")
+                    .name("name")
                     .build()
             )
         assertThat(chatCompletionMessageToolCall.type())

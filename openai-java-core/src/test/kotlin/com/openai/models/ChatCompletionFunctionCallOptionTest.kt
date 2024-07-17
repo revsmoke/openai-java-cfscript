@@ -10,8 +10,8 @@ class ChatCompletionFunctionCallOptionTest {
     @Test
     fun createChatCompletionFunctionCallOption() {
         val chatCompletionFunctionCallOption =
-            ChatCompletionFunctionCallOption.builder().name("string").build()
+            ChatCompletionFunctionCallOption.builder().name("name").build()
         assertThat(chatCompletionFunctionCallOption).isNotNull
-        assertThat(chatCompletionFunctionCallOption.name()).isEqualTo("string")
+        assertThat(chatCompletionFunctionCallOption.name()).isEqualTo("name")
     }
 }

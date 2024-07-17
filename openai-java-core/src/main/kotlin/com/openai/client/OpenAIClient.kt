@@ -12,4 +12,14 @@ interface OpenAIClient {
     fun async(): OpenAIClientAsync
 
     fun chat(): ChatService
+
+    fun files(): FileService
+
+    fun moderations(): ModerationService
+
+    fun models(): ModelService
+
+    fun fineTuning(): FineTuningService
+
+    fun batches(): BatchService
 }
