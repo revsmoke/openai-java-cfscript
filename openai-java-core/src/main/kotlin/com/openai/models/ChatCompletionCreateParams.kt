@@ -1004,13 +1004,9 @@ constructor(
          * `none` is the default when no functions are present. `auto` is the default if functions
          * are present.
          */
-        fun functionCall(chatCompletionFunctionCallOption: ChatCompletionFunctionCallOption) =
-            apply {
-                this.functionCall =
-                    FunctionCall.ofChatCompletionFunctionCallOption(
-                        chatCompletionFunctionCallOption
-                    )
-            }
+        fun functionCall(functionCallOption: ChatCompletionFunctionCallOption) = apply {
+            this.functionCall = FunctionCall.ofFunctionCallOption(functionCallOption)
+        }
 
         /**
          * Deprecated in favor of `tools`.
@@ -1444,7 +1440,7 @@ constructor(
     class FunctionCall
     private constructor(
         private val unionMember0: UnionMember0? = null,
-        private val chatCompletionFunctionCallOption: ChatCompletionFunctionCallOption? = null,
+        private val functionCallOption: ChatCompletionFunctionCallOption? = null,
         private val _json: JsonValue? = null,
     ) {
 
@@ -1459,35 +1455,34 @@ constructor(
          * Specifying a particular function via `{"name": "my_function"}` forces the model to call
          * that function.
          */
-        fun chatCompletionFunctionCallOption(): Optional<ChatCompletionFunctionCallOption> =
-            Optional.ofNullable(chatCompletionFunctionCallOption)
+        fun functionCallOption(): Optional<ChatCompletionFunctionCallOption> =
+            Optional.ofNullable(functionCallOption)
 
         fun isUnionMember0(): Boolean = unionMember0 != null
 
-        fun isChatCompletionFunctionCallOption(): Boolean = chatCompletionFunctionCallOption != null
+        fun isFunctionCallOption(): Boolean = functionCallOption != null
 
         fun asUnionMember0(): UnionMember0 = unionMember0.getOrThrow("unionMember0")
 
-        fun asChatCompletionFunctionCallOption(): ChatCompletionFunctionCallOption =
-            chatCompletionFunctionCallOption.getOrThrow("chatCompletionFunctionCallOption")
+        fun asFunctionCallOption(): ChatCompletionFunctionCallOption =
+            functionCallOption.getOrThrow("functionCallOption")
 
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
         fun <T> accept(visitor: Visitor<T>): T {
             return when {
                 unionMember0 != null -> visitor.visitUnionMember0(unionMember0)
-                chatCompletionFunctionCallOption != null ->
-                    visitor.visitChatCompletionFunctionCallOption(chatCompletionFunctionCallOption)
+                functionCallOption != null -> visitor.visitFunctionCallOption(functionCallOption)
                 else -> visitor.unknown(_json)
             }
         }
 
         fun validate(): FunctionCall = apply {
             if (!validated) {
-                if (unionMember0 == null && chatCompletionFunctionCallOption == null) {
+                if (unionMember0 == null && functionCallOption == null) {
                     throw OpenAIInvalidDataException("Unknown FunctionCall: $_json")
                 }
-                chatCompletionFunctionCallOption?.validate()
+                functionCallOption?.validate()
                 validated = true
             }
         }
@@ -1499,18 +1494,17 @@ constructor(
 
             return other is FunctionCall &&
                 this.unionMember0 == other.unionMember0 &&
-                this.chatCompletionFunctionCallOption == other.chatCompletionFunctionCallOption
+                this.functionCallOption == other.functionCallOption
         }
 
         override fun hashCode(): Int {
-            return Objects.hash(unionMember0, chatCompletionFunctionCallOption)
+            return Objects.hash(unionMember0, functionCallOption)
         }
 
         override fun toString(): String {
             return when {
                 unionMember0 != null -> "FunctionCall{unionMember0=$unionMember0}"
-                chatCompletionFunctionCallOption != null ->
-                    "FunctionCall{chatCompletionFunctionCallOption=$chatCompletionFunctionCallOption}"
+                functionCallOption != null -> "FunctionCall{functionCallOption=$functionCallOption}"
                 _json != null -> "FunctionCall{_unknown=$_json}"
                 else -> throw IllegalStateException("Invalid FunctionCall")
             }
@@ -1523,18 +1517,15 @@ constructor(
                 FunctionCall(unionMember0 = unionMember0)
 
             @JvmStatic
-            fun ofChatCompletionFunctionCallOption(
-                chatCompletionFunctionCallOption: ChatCompletionFunctionCallOption
-            ) = FunctionCall(chatCompletionFunctionCallOption = chatCompletionFunctionCallOption)
+            fun ofFunctionCallOption(functionCallOption: ChatCompletionFunctionCallOption) =
+                FunctionCall(functionCallOption = functionCallOption)
         }
 
         interface Visitor<out T> {
 
             fun visitUnionMember0(unionMember0: UnionMember0): T
 
-            fun visitChatCompletionFunctionCallOption(
-                chatCompletionFunctionCallOption: ChatCompletionFunctionCallOption
-            ): T
+            fun visitFunctionCallOption(functionCallOption: ChatCompletionFunctionCallOption): T
 
             fun unknown(json: JsonValue?): T {
                 throw OpenAIInvalidDataException("Unknown FunctionCall: $json")
@@ -1552,7 +1543,7 @@ constructor(
                         it.validate()
                     }
                     ?.let {
-                        return FunctionCall(chatCompletionFunctionCallOption = it, _json = json)
+                        return FunctionCall(functionCallOption = it, _json = json)
                     }
 
                 return FunctionCall(_json = json)
@@ -1568,8 +1559,8 @@ constructor(
             ) {
                 when {
                     value.unionMember0 != null -> generator.writeObject(value.unionMember0)
-                    value.chatCompletionFunctionCallOption != null ->
-                        generator.writeObject(value.chatCompletionFunctionCallOption)
+                    value.functionCallOption != null ->
+                        generator.writeObject(value.functionCallOption)
                     value._json != null -> generator.writeObject(value._json)
                     else -> throw IllegalStateException("Invalid FunctionCall")
                 }

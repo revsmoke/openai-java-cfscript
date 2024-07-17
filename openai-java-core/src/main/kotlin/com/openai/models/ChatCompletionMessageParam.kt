@@ -21,76 +21,73 @@ import java.util.Optional
 @JsonSerialize(using = ChatCompletionMessageParam.Serializer::class)
 class ChatCompletionMessageParam
 private constructor(
-    private val chatCompletionRequestSystemMessage: ChatCompletionSystemMessageParam? = null,
-    private val chatCompletionRequestUserMessage: ChatCompletionUserMessageParam? = null,
-    private val chatCompletionRequestAssistantMessage: ChatCompletionAssistantMessageParam? = null,
-    private val chatCompletionRequestToolMessage: ChatCompletionToolMessageParam? = null,
-    private val chatCompletionRequestFunctionMessage: ChatCompletionFunctionMessageParam? = null,
+    private val chatCompletionSystemMessageParam: ChatCompletionSystemMessageParam? = null,
+    private val chatCompletionUserMessageParam: ChatCompletionUserMessageParam? = null,
+    private val chatCompletionAssistantMessageParam: ChatCompletionAssistantMessageParam? = null,
+    private val chatCompletionToolMessageParam: ChatCompletionToolMessageParam? = null,
+    private val chatCompletionFunctionMessageParam: ChatCompletionFunctionMessageParam? = null,
     private val _json: JsonValue? = null,
 ) {
 
     private var validated: Boolean = false
 
-    fun chatCompletionRequestSystemMessage(): Optional<ChatCompletionSystemMessageParam> =
-        Optional.ofNullable(chatCompletionRequestSystemMessage)
+    fun chatCompletionSystemMessageParam(): Optional<ChatCompletionSystemMessageParam> =
+        Optional.ofNullable(chatCompletionSystemMessageParam)
 
-    fun chatCompletionRequestUserMessage(): Optional<ChatCompletionUserMessageParam> =
-        Optional.ofNullable(chatCompletionRequestUserMessage)
+    fun chatCompletionUserMessageParam(): Optional<ChatCompletionUserMessageParam> =
+        Optional.ofNullable(chatCompletionUserMessageParam)
 
-    fun chatCompletionRequestAssistantMessage(): Optional<ChatCompletionAssistantMessageParam> =
-        Optional.ofNullable(chatCompletionRequestAssistantMessage)
+    fun chatCompletionAssistantMessageParam(): Optional<ChatCompletionAssistantMessageParam> =
+        Optional.ofNullable(chatCompletionAssistantMessageParam)
 
-    fun chatCompletionRequestToolMessage(): Optional<ChatCompletionToolMessageParam> =
-        Optional.ofNullable(chatCompletionRequestToolMessage)
+    fun chatCompletionToolMessageParam(): Optional<ChatCompletionToolMessageParam> =
+        Optional.ofNullable(chatCompletionToolMessageParam)
 
-    fun chatCompletionRequestFunctionMessage(): Optional<ChatCompletionFunctionMessageParam> =
-        Optional.ofNullable(chatCompletionRequestFunctionMessage)
+    fun chatCompletionFunctionMessageParam(): Optional<ChatCompletionFunctionMessageParam> =
+        Optional.ofNullable(chatCompletionFunctionMessageParam)
 
-    fun isChatCompletionRequestSystemMessage(): Boolean = chatCompletionRequestSystemMessage != null
+    fun isChatCompletionSystemMessageParam(): Boolean = chatCompletionSystemMessageParam != null
 
-    fun isChatCompletionRequestUserMessage(): Boolean = chatCompletionRequestUserMessage != null
+    fun isChatCompletionUserMessageParam(): Boolean = chatCompletionUserMessageParam != null
 
-    fun isChatCompletionRequestAssistantMessage(): Boolean =
-        chatCompletionRequestAssistantMessage != null
+    fun isChatCompletionAssistantMessageParam(): Boolean =
+        chatCompletionAssistantMessageParam != null
 
-    fun isChatCompletionRequestToolMessage(): Boolean = chatCompletionRequestToolMessage != null
+    fun isChatCompletionToolMessageParam(): Boolean = chatCompletionToolMessageParam != null
 
-    fun isChatCompletionRequestFunctionMessage(): Boolean =
-        chatCompletionRequestFunctionMessage != null
+    fun isChatCompletionFunctionMessageParam(): Boolean = chatCompletionFunctionMessageParam != null
 
-    fun asChatCompletionRequestSystemMessage(): ChatCompletionSystemMessageParam =
-        chatCompletionRequestSystemMessage.getOrThrow("chatCompletionRequestSystemMessage")
+    fun asChatCompletionSystemMessageParam(): ChatCompletionSystemMessageParam =
+        chatCompletionSystemMessageParam.getOrThrow("chatCompletionSystemMessageParam")
 
-    fun asChatCompletionRequestUserMessage(): ChatCompletionUserMessageParam =
-        chatCompletionRequestUserMessage.getOrThrow("chatCompletionRequestUserMessage")
+    fun asChatCompletionUserMessageParam(): ChatCompletionUserMessageParam =
+        chatCompletionUserMessageParam.getOrThrow("chatCompletionUserMessageParam")
 
-    fun asChatCompletionRequestAssistantMessage(): ChatCompletionAssistantMessageParam =
-        chatCompletionRequestAssistantMessage.getOrThrow("chatCompletionRequestAssistantMessage")
+    fun asChatCompletionAssistantMessageParam(): ChatCompletionAssistantMessageParam =
+        chatCompletionAssistantMessageParam.getOrThrow("chatCompletionAssistantMessageParam")
 
-    fun asChatCompletionRequestToolMessage(): ChatCompletionToolMessageParam =
-        chatCompletionRequestToolMessage.getOrThrow("chatCompletionRequestToolMessage")
+    fun asChatCompletionToolMessageParam(): ChatCompletionToolMessageParam =
+        chatCompletionToolMessageParam.getOrThrow("chatCompletionToolMessageParam")
 
-    fun asChatCompletionRequestFunctionMessage(): ChatCompletionFunctionMessageParam =
-        chatCompletionRequestFunctionMessage.getOrThrow("chatCompletionRequestFunctionMessage")
+    fun asChatCompletionFunctionMessageParam(): ChatCompletionFunctionMessageParam =
+        chatCompletionFunctionMessageParam.getOrThrow("chatCompletionFunctionMessageParam")
 
     fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
     fun <T> accept(visitor: Visitor<T>): T {
         return when {
-            chatCompletionRequestSystemMessage != null ->
-                visitor.visitChatCompletionRequestSystemMessage(chatCompletionRequestSystemMessage)
-            chatCompletionRequestUserMessage != null ->
-                visitor.visitChatCompletionRequestUserMessage(chatCompletionRequestUserMessage)
-            chatCompletionRequestAssistantMessage != null ->
-                visitor.visitChatCompletionRequestAssistantMessage(
-                    chatCompletionRequestAssistantMessage
+            chatCompletionSystemMessageParam != null ->
+                visitor.visitChatCompletionSystemMessageParam(chatCompletionSystemMessageParam)
+            chatCompletionUserMessageParam != null ->
+                visitor.visitChatCompletionUserMessageParam(chatCompletionUserMessageParam)
+            chatCompletionAssistantMessageParam != null ->
+                visitor.visitChatCompletionAssistantMessageParam(
+                    chatCompletionAssistantMessageParam
                 )
-            chatCompletionRequestToolMessage != null ->
-                visitor.visitChatCompletionRequestToolMessage(chatCompletionRequestToolMessage)
-            chatCompletionRequestFunctionMessage != null ->
-                visitor.visitChatCompletionRequestFunctionMessage(
-                    chatCompletionRequestFunctionMessage
-                )
+            chatCompletionToolMessageParam != null ->
+                visitor.visitChatCompletionToolMessageParam(chatCompletionToolMessageParam)
+            chatCompletionFunctionMessageParam != null ->
+                visitor.visitChatCompletionFunctionMessageParam(chatCompletionFunctionMessageParam)
             else -> visitor.unknown(_json)
         }
     }
@@ -98,19 +95,19 @@ private constructor(
     fun validate(): ChatCompletionMessageParam = apply {
         if (!validated) {
             if (
-                chatCompletionRequestSystemMessage == null &&
-                    chatCompletionRequestUserMessage == null &&
-                    chatCompletionRequestAssistantMessage == null &&
-                    chatCompletionRequestToolMessage == null &&
-                    chatCompletionRequestFunctionMessage == null
+                chatCompletionSystemMessageParam == null &&
+                    chatCompletionUserMessageParam == null &&
+                    chatCompletionAssistantMessageParam == null &&
+                    chatCompletionToolMessageParam == null &&
+                    chatCompletionFunctionMessageParam == null
             ) {
                 throw OpenAIInvalidDataException("Unknown ChatCompletionMessageParam: $_json")
             }
-            chatCompletionRequestSystemMessage?.validate()
-            chatCompletionRequestUserMessage?.validate()
-            chatCompletionRequestAssistantMessage?.validate()
-            chatCompletionRequestToolMessage?.validate()
-            chatCompletionRequestFunctionMessage?.validate()
+            chatCompletionSystemMessageParam?.validate()
+            chatCompletionUserMessageParam?.validate()
+            chatCompletionAssistantMessageParam?.validate()
+            chatCompletionToolMessageParam?.validate()
+            chatCompletionFunctionMessageParam?.validate()
             validated = true
         }
     }
@@ -121,36 +118,35 @@ private constructor(
         }
 
         return other is ChatCompletionMessageParam &&
-            this.chatCompletionRequestSystemMessage == other.chatCompletionRequestSystemMessage &&
-            this.chatCompletionRequestUserMessage == other.chatCompletionRequestUserMessage &&
-            this.chatCompletionRequestAssistantMessage ==
-                other.chatCompletionRequestAssistantMessage &&
-            this.chatCompletionRequestToolMessage == other.chatCompletionRequestToolMessage &&
-            this.chatCompletionRequestFunctionMessage == other.chatCompletionRequestFunctionMessage
+            this.chatCompletionSystemMessageParam == other.chatCompletionSystemMessageParam &&
+            this.chatCompletionUserMessageParam == other.chatCompletionUserMessageParam &&
+            this.chatCompletionAssistantMessageParam == other.chatCompletionAssistantMessageParam &&
+            this.chatCompletionToolMessageParam == other.chatCompletionToolMessageParam &&
+            this.chatCompletionFunctionMessageParam == other.chatCompletionFunctionMessageParam
     }
 
     override fun hashCode(): Int {
         return Objects.hash(
-            chatCompletionRequestSystemMessage,
-            chatCompletionRequestUserMessage,
-            chatCompletionRequestAssistantMessage,
-            chatCompletionRequestToolMessage,
-            chatCompletionRequestFunctionMessage,
+            chatCompletionSystemMessageParam,
+            chatCompletionUserMessageParam,
+            chatCompletionAssistantMessageParam,
+            chatCompletionToolMessageParam,
+            chatCompletionFunctionMessageParam,
         )
     }
 
     override fun toString(): String {
         return when {
-            chatCompletionRequestSystemMessage != null ->
-                "ChatCompletionMessageParam{chatCompletionRequestSystemMessage=$chatCompletionRequestSystemMessage}"
-            chatCompletionRequestUserMessage != null ->
-                "ChatCompletionMessageParam{chatCompletionRequestUserMessage=$chatCompletionRequestUserMessage}"
-            chatCompletionRequestAssistantMessage != null ->
-                "ChatCompletionMessageParam{chatCompletionRequestAssistantMessage=$chatCompletionRequestAssistantMessage}"
-            chatCompletionRequestToolMessage != null ->
-                "ChatCompletionMessageParam{chatCompletionRequestToolMessage=$chatCompletionRequestToolMessage}"
-            chatCompletionRequestFunctionMessage != null ->
-                "ChatCompletionMessageParam{chatCompletionRequestFunctionMessage=$chatCompletionRequestFunctionMessage}"
+            chatCompletionSystemMessageParam != null ->
+                "ChatCompletionMessageParam{chatCompletionSystemMessageParam=$chatCompletionSystemMessageParam}"
+            chatCompletionUserMessageParam != null ->
+                "ChatCompletionMessageParam{chatCompletionUserMessageParam=$chatCompletionUserMessageParam}"
+            chatCompletionAssistantMessageParam != null ->
+                "ChatCompletionMessageParam{chatCompletionAssistantMessageParam=$chatCompletionAssistantMessageParam}"
+            chatCompletionToolMessageParam != null ->
+                "ChatCompletionMessageParam{chatCompletionToolMessageParam=$chatCompletionToolMessageParam}"
+            chatCompletionFunctionMessageParam != null ->
+                "ChatCompletionMessageParam{chatCompletionFunctionMessageParam=$chatCompletionFunctionMessageParam}"
             _json != null -> "ChatCompletionMessageParam{_unknown=$_json}"
             else -> throw IllegalStateException("Invalid ChatCompletionMessageParam")
         }
@@ -159,66 +155,66 @@ private constructor(
     companion object {
 
         @JvmStatic
-        fun ofChatCompletionRequestSystemMessage(
-            chatCompletionRequestSystemMessage: ChatCompletionSystemMessageParam
+        fun ofChatCompletionSystemMessageParam(
+            chatCompletionSystemMessageParam: ChatCompletionSystemMessageParam
         ) =
             ChatCompletionMessageParam(
-                chatCompletionRequestSystemMessage = chatCompletionRequestSystemMessage
+                chatCompletionSystemMessageParam = chatCompletionSystemMessageParam
             )
 
         @JvmStatic
-        fun ofChatCompletionRequestUserMessage(
-            chatCompletionRequestUserMessage: ChatCompletionUserMessageParam
+        fun ofChatCompletionUserMessageParam(
+            chatCompletionUserMessageParam: ChatCompletionUserMessageParam
         ) =
             ChatCompletionMessageParam(
-                chatCompletionRequestUserMessage = chatCompletionRequestUserMessage
+                chatCompletionUserMessageParam = chatCompletionUserMessageParam
             )
 
         @JvmStatic
-        fun ofChatCompletionRequestAssistantMessage(
-            chatCompletionRequestAssistantMessage: ChatCompletionAssistantMessageParam
+        fun ofChatCompletionAssistantMessageParam(
+            chatCompletionAssistantMessageParam: ChatCompletionAssistantMessageParam
         ) =
             ChatCompletionMessageParam(
-                chatCompletionRequestAssistantMessage = chatCompletionRequestAssistantMessage
+                chatCompletionAssistantMessageParam = chatCompletionAssistantMessageParam
             )
 
         @JvmStatic
-        fun ofChatCompletionRequestToolMessage(
-            chatCompletionRequestToolMessage: ChatCompletionToolMessageParam
+        fun ofChatCompletionToolMessageParam(
+            chatCompletionToolMessageParam: ChatCompletionToolMessageParam
         ) =
             ChatCompletionMessageParam(
-                chatCompletionRequestToolMessage = chatCompletionRequestToolMessage
+                chatCompletionToolMessageParam = chatCompletionToolMessageParam
             )
 
         @JvmStatic
-        fun ofChatCompletionRequestFunctionMessage(
-            chatCompletionRequestFunctionMessage: ChatCompletionFunctionMessageParam
+        fun ofChatCompletionFunctionMessageParam(
+            chatCompletionFunctionMessageParam: ChatCompletionFunctionMessageParam
         ) =
             ChatCompletionMessageParam(
-                chatCompletionRequestFunctionMessage = chatCompletionRequestFunctionMessage
+                chatCompletionFunctionMessageParam = chatCompletionFunctionMessageParam
             )
     }
 
     interface Visitor<out T> {
 
-        fun visitChatCompletionRequestSystemMessage(
-            chatCompletionRequestSystemMessage: ChatCompletionSystemMessageParam
+        fun visitChatCompletionSystemMessageParam(
+            chatCompletionSystemMessageParam: ChatCompletionSystemMessageParam
         ): T
 
-        fun visitChatCompletionRequestUserMessage(
-            chatCompletionRequestUserMessage: ChatCompletionUserMessageParam
+        fun visitChatCompletionUserMessageParam(
+            chatCompletionUserMessageParam: ChatCompletionUserMessageParam
         ): T
 
-        fun visitChatCompletionRequestAssistantMessage(
-            chatCompletionRequestAssistantMessage: ChatCompletionAssistantMessageParam
+        fun visitChatCompletionAssistantMessageParam(
+            chatCompletionAssistantMessageParam: ChatCompletionAssistantMessageParam
         ): T
 
-        fun visitChatCompletionRequestToolMessage(
-            chatCompletionRequestToolMessage: ChatCompletionToolMessageParam
+        fun visitChatCompletionToolMessageParam(
+            chatCompletionToolMessageParam: ChatCompletionToolMessageParam
         ): T
 
-        fun visitChatCompletionRequestFunctionMessage(
-            chatCompletionRequestFunctionMessage: ChatCompletionFunctionMessageParam
+        fun visitChatCompletionFunctionMessageParam(
+            chatCompletionFunctionMessageParam: ChatCompletionFunctionMessageParam
         ): T
 
         fun unknown(json: JsonValue?): T {
@@ -236,14 +232,14 @@ private constructor(
                 }
                 ?.let {
                     return ChatCompletionMessageParam(
-                        chatCompletionRequestSystemMessage = it,
+                        chatCompletionSystemMessageParam = it,
                         _json = json
                     )
                 }
             tryDeserialize(node, jacksonTypeRef<ChatCompletionUserMessageParam>()) { it.validate() }
                 ?.let {
                     return ChatCompletionMessageParam(
-                        chatCompletionRequestUserMessage = it,
+                        chatCompletionUserMessageParam = it,
                         _json = json
                     )
                 }
@@ -252,14 +248,14 @@ private constructor(
                 }
                 ?.let {
                     return ChatCompletionMessageParam(
-                        chatCompletionRequestAssistantMessage = it,
+                        chatCompletionAssistantMessageParam = it,
                         _json = json
                     )
                 }
             tryDeserialize(node, jacksonTypeRef<ChatCompletionToolMessageParam>()) { it.validate() }
                 ?.let {
                     return ChatCompletionMessageParam(
-                        chatCompletionRequestToolMessage = it,
+                        chatCompletionToolMessageParam = it,
                         _json = json
                     )
                 }
@@ -268,7 +264,7 @@ private constructor(
                 }
                 ?.let {
                     return ChatCompletionMessageParam(
-                        chatCompletionRequestFunctionMessage = it,
+                        chatCompletionFunctionMessageParam = it,
                         _json = json
                     )
                 }
@@ -286,16 +282,16 @@ private constructor(
             provider: SerializerProvider
         ) {
             when {
-                value.chatCompletionRequestSystemMessage != null ->
-                    generator.writeObject(value.chatCompletionRequestSystemMessage)
-                value.chatCompletionRequestUserMessage != null ->
-                    generator.writeObject(value.chatCompletionRequestUserMessage)
-                value.chatCompletionRequestAssistantMessage != null ->
-                    generator.writeObject(value.chatCompletionRequestAssistantMessage)
-                value.chatCompletionRequestToolMessage != null ->
-                    generator.writeObject(value.chatCompletionRequestToolMessage)
-                value.chatCompletionRequestFunctionMessage != null ->
-                    generator.writeObject(value.chatCompletionRequestFunctionMessage)
+                value.chatCompletionSystemMessageParam != null ->
+                    generator.writeObject(value.chatCompletionSystemMessageParam)
+                value.chatCompletionUserMessageParam != null ->
+                    generator.writeObject(value.chatCompletionUserMessageParam)
+                value.chatCompletionAssistantMessageParam != null ->
+                    generator.writeObject(value.chatCompletionAssistantMessageParam)
+                value.chatCompletionToolMessageParam != null ->
+                    generator.writeObject(value.chatCompletionToolMessageParam)
+                value.chatCompletionFunctionMessageParam != null ->
+                    generator.writeObject(value.chatCompletionFunctionMessageParam)
                 value._json != null -> generator.writeObject(value._json)
                 else -> throw IllegalStateException("Invalid ChatCompletionMessageParam")
             }

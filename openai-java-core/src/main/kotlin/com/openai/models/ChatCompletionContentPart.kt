@@ -21,62 +21,48 @@ import java.util.Optional
 @JsonSerialize(using = ChatCompletionContentPart.Serializer::class)
 class ChatCompletionContentPart
 private constructor(
-    private val chatCompletionRequestMessageContentPartText: ChatCompletionContentPartText? = null,
-    private val chatCompletionRequestMessageContentPartImage: ChatCompletionContentPartImage? =
-        null,
+    private val chatCompletionContentPartText: ChatCompletionContentPartText? = null,
+    private val chatCompletionContentPartImage: ChatCompletionContentPartImage? = null,
     private val _json: JsonValue? = null,
 ) {
 
     private var validated: Boolean = false
 
-    fun chatCompletionRequestMessageContentPartText(): Optional<ChatCompletionContentPartText> =
-        Optional.ofNullable(chatCompletionRequestMessageContentPartText)
+    fun chatCompletionContentPartText(): Optional<ChatCompletionContentPartText> =
+        Optional.ofNullable(chatCompletionContentPartText)
 
-    fun chatCompletionRequestMessageContentPartImage(): Optional<ChatCompletionContentPartImage> =
-        Optional.ofNullable(chatCompletionRequestMessageContentPartImage)
+    fun chatCompletionContentPartImage(): Optional<ChatCompletionContentPartImage> =
+        Optional.ofNullable(chatCompletionContentPartImage)
 
-    fun isChatCompletionRequestMessageContentPartText(): Boolean =
-        chatCompletionRequestMessageContentPartText != null
+    fun isChatCompletionContentPartText(): Boolean = chatCompletionContentPartText != null
 
-    fun isChatCompletionRequestMessageContentPartImage(): Boolean =
-        chatCompletionRequestMessageContentPartImage != null
+    fun isChatCompletionContentPartImage(): Boolean = chatCompletionContentPartImage != null
 
-    fun asChatCompletionRequestMessageContentPartText(): ChatCompletionContentPartText =
-        chatCompletionRequestMessageContentPartText.getOrThrow(
-            "chatCompletionRequestMessageContentPartText"
-        )
+    fun asChatCompletionContentPartText(): ChatCompletionContentPartText =
+        chatCompletionContentPartText.getOrThrow("chatCompletionContentPartText")
 
-    fun asChatCompletionRequestMessageContentPartImage(): ChatCompletionContentPartImage =
-        chatCompletionRequestMessageContentPartImage.getOrThrow(
-            "chatCompletionRequestMessageContentPartImage"
-        )
+    fun asChatCompletionContentPartImage(): ChatCompletionContentPartImage =
+        chatCompletionContentPartImage.getOrThrow("chatCompletionContentPartImage")
 
     fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
     fun <T> accept(visitor: Visitor<T>): T {
         return when {
-            chatCompletionRequestMessageContentPartText != null ->
-                visitor.visitChatCompletionRequestMessageContentPartText(
-                    chatCompletionRequestMessageContentPartText
-                )
-            chatCompletionRequestMessageContentPartImage != null ->
-                visitor.visitChatCompletionRequestMessageContentPartImage(
-                    chatCompletionRequestMessageContentPartImage
-                )
+            chatCompletionContentPartText != null ->
+                visitor.visitChatCompletionContentPartText(chatCompletionContentPartText)
+            chatCompletionContentPartImage != null ->
+                visitor.visitChatCompletionContentPartImage(chatCompletionContentPartImage)
             else -> visitor.unknown(_json)
         }
     }
 
     fun validate(): ChatCompletionContentPart = apply {
         if (!validated) {
-            if (
-                chatCompletionRequestMessageContentPartText == null &&
-                    chatCompletionRequestMessageContentPartImage == null
-            ) {
+            if (chatCompletionContentPartText == null && chatCompletionContentPartImage == null) {
                 throw OpenAIInvalidDataException("Unknown ChatCompletionContentPart: $_json")
             }
-            chatCompletionRequestMessageContentPartText?.validate()
-            chatCompletionRequestMessageContentPartImage?.validate()
+            chatCompletionContentPartText?.validate()
+            chatCompletionContentPartImage?.validate()
             validated = true
         }
     }
@@ -87,25 +73,20 @@ private constructor(
         }
 
         return other is ChatCompletionContentPart &&
-            this.chatCompletionRequestMessageContentPartText ==
-                other.chatCompletionRequestMessageContentPartText &&
-            this.chatCompletionRequestMessageContentPartImage ==
-                other.chatCompletionRequestMessageContentPartImage
+            this.chatCompletionContentPartText == other.chatCompletionContentPartText &&
+            this.chatCompletionContentPartImage == other.chatCompletionContentPartImage
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            chatCompletionRequestMessageContentPartText,
-            chatCompletionRequestMessageContentPartImage
-        )
+        return Objects.hash(chatCompletionContentPartText, chatCompletionContentPartImage)
     }
 
     override fun toString(): String {
         return when {
-            chatCompletionRequestMessageContentPartText != null ->
-                "ChatCompletionContentPart{chatCompletionRequestMessageContentPartText=$chatCompletionRequestMessageContentPartText}"
-            chatCompletionRequestMessageContentPartImage != null ->
-                "ChatCompletionContentPart{chatCompletionRequestMessageContentPartImage=$chatCompletionRequestMessageContentPartImage}"
+            chatCompletionContentPartText != null ->
+                "ChatCompletionContentPart{chatCompletionContentPartText=$chatCompletionContentPartText}"
+            chatCompletionContentPartImage != null ->
+                "ChatCompletionContentPart{chatCompletionContentPartImage=$chatCompletionContentPartImage}"
             _json != null -> "ChatCompletionContentPart{_unknown=$_json}"
             else -> throw IllegalStateException("Invalid ChatCompletionContentPart")
         }
@@ -114,32 +95,27 @@ private constructor(
     companion object {
 
         @JvmStatic
-        fun ofChatCompletionRequestMessageContentPartText(
-            chatCompletionRequestMessageContentPartText: ChatCompletionContentPartText
-        ) =
-            ChatCompletionContentPart(
-                chatCompletionRequestMessageContentPartText =
-                    chatCompletionRequestMessageContentPartText
-            )
+        fun ofChatCompletionContentPartText(
+            chatCompletionContentPartText: ChatCompletionContentPartText
+        ) = ChatCompletionContentPart(chatCompletionContentPartText = chatCompletionContentPartText)
 
         @JvmStatic
-        fun ofChatCompletionRequestMessageContentPartImage(
-            chatCompletionRequestMessageContentPartImage: ChatCompletionContentPartImage
+        fun ofChatCompletionContentPartImage(
+            chatCompletionContentPartImage: ChatCompletionContentPartImage
         ) =
             ChatCompletionContentPart(
-                chatCompletionRequestMessageContentPartImage =
-                    chatCompletionRequestMessageContentPartImage
+                chatCompletionContentPartImage = chatCompletionContentPartImage
             )
     }
 
     interface Visitor<out T> {
 
-        fun visitChatCompletionRequestMessageContentPartText(
-            chatCompletionRequestMessageContentPartText: ChatCompletionContentPartText
+        fun visitChatCompletionContentPartText(
+            chatCompletionContentPartText: ChatCompletionContentPartText
         ): T
 
-        fun visitChatCompletionRequestMessageContentPartImage(
-            chatCompletionRequestMessageContentPartImage: ChatCompletionContentPartImage
+        fun visitChatCompletionContentPartImage(
+            chatCompletionContentPartImage: ChatCompletionContentPartImage
         ): T
 
         fun unknown(json: JsonValue?): T {
@@ -155,14 +131,14 @@ private constructor(
             tryDeserialize(node, jacksonTypeRef<ChatCompletionContentPartText>()) { it.validate() }
                 ?.let {
                     return ChatCompletionContentPart(
-                        chatCompletionRequestMessageContentPartText = it,
+                        chatCompletionContentPartText = it,
                         _json = json
                     )
                 }
             tryDeserialize(node, jacksonTypeRef<ChatCompletionContentPartImage>()) { it.validate() }
                 ?.let {
                     return ChatCompletionContentPart(
-                        chatCompletionRequestMessageContentPartImage = it,
+                        chatCompletionContentPartImage = it,
                         _json = json
                     )
                 }
@@ -179,10 +155,10 @@ private constructor(
             provider: SerializerProvider
         ) {
             when {
-                value.chatCompletionRequestMessageContentPartText != null ->
-                    generator.writeObject(value.chatCompletionRequestMessageContentPartText)
-                value.chatCompletionRequestMessageContentPartImage != null ->
-                    generator.writeObject(value.chatCompletionRequestMessageContentPartImage)
+                value.chatCompletionContentPartText != null ->
+                    generator.writeObject(value.chatCompletionContentPartText)
+                value.chatCompletionContentPartImage != null ->
+                    generator.writeObject(value.chatCompletionContentPartImage)
                 value._json != null -> generator.writeObject(value._json)
                 else -> throw IllegalStateException("Invalid ChatCompletionContentPart")
             }
