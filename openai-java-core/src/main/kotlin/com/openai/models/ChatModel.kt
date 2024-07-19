@@ -34,6 +34,10 @@ private constructor(
 
         @JvmField val GPT_4O_2024_05_13 = ChatModel(JsonField.of("gpt-4o-2024-05-13"))
 
+        @JvmField val GPT_4O_MINI = ChatModel(JsonField.of("gpt-4o-mini"))
+
+        @JvmField val GPT_4O_MINI_2024_07_18 = ChatModel(JsonField.of("gpt-4o-mini-2024-07-18"))
+
         @JvmField val GPT_4_TURBO = ChatModel(JsonField.of("gpt-4-turbo"))
 
         @JvmField val GPT_4_TURBO_2024_04_09 = ChatModel(JsonField.of("gpt-4-turbo-2024-04-09"))
@@ -78,6 +82,8 @@ private constructor(
     enum class Known {
         GPT_4O,
         GPT_4O_2024_05_13,
+        GPT_4O_MINI,
+        GPT_4O_MINI_2024_07_18,
         GPT_4_TURBO,
         GPT_4_TURBO_2024_04_09,
         GPT_4_0125_PREVIEW,
@@ -102,6 +108,8 @@ private constructor(
     enum class Value {
         GPT_4O,
         GPT_4O_2024_05_13,
+        GPT_4O_MINI,
+        GPT_4O_MINI_2024_07_18,
         GPT_4_TURBO,
         GPT_4_TURBO_2024_04_09,
         GPT_4_0125_PREVIEW,
@@ -128,6 +136,8 @@ private constructor(
         when (this) {
             GPT_4O -> Value.GPT_4O
             GPT_4O_2024_05_13 -> Value.GPT_4O_2024_05_13
+            GPT_4O_MINI -> Value.GPT_4O_MINI
+            GPT_4O_MINI_2024_07_18 -> Value.GPT_4O_MINI_2024_07_18
             GPT_4_TURBO -> Value.GPT_4_TURBO
             GPT_4_TURBO_2024_04_09 -> Value.GPT_4_TURBO_2024_04_09
             GPT_4_0125_PREVIEW -> Value.GPT_4_0125_PREVIEW
@@ -154,6 +164,8 @@ private constructor(
         when (this) {
             GPT_4O -> Known.GPT_4O
             GPT_4O_2024_05_13 -> Known.GPT_4O_2024_05_13
+            GPT_4O_MINI -> Known.GPT_4O_MINI
+            GPT_4O_MINI_2024_07_18 -> Known.GPT_4O_MINI_2024_07_18
             GPT_4_TURBO -> Known.GPT_4_TURBO
             GPT_4_TURBO_2024_04_09 -> Known.GPT_4_TURBO_2024_04_09
             GPT_4_0125_PREVIEW -> Known.GPT_4_0125_PREVIEW
