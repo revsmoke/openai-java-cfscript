@@ -197,7 +197,7 @@ private constructor(
         /**
          * An array of content parts with a defined type, each can be of type `text` or `image_url`
          * when passing in images. You can pass multiple images by adding multiple `image_url`
-         * content parts. Image input is only supported when using the `gpt-4-visual-preview` model.
+         * content parts. Image input is only supported when using the `gpt-4o` model.
          */
         fun chatCompletionContentParts(): Optional<List<ChatCompletionContentPart>> =
             Optional.ofNullable(chatCompletionContentParts)
