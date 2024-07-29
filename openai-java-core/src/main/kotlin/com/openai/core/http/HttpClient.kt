@@ -1,10 +1,10 @@
 package com.openai.core.http
 
 import com.openai.core.RequestOptions
-import java.io.Closeable
+import java.lang.AutoCloseable
 import java.util.concurrent.CompletableFuture
 
-interface HttpClient : Closeable {
+interface HttpClient : AutoCloseable {
 
     fun execute(
         request: HttpRequest,
