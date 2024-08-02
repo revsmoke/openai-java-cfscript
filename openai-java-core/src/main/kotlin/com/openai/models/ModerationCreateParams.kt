@@ -4,7 +4,6 @@ package com.openai.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
-import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.core.ObjectCodec
@@ -15,9 +14,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.openai.core.BaseDeserializer
 import com.openai.core.BaseSerializer
-import com.openai.core.Enum
 import com.openai.core.ExcludeMissing
-import com.openai.core.JsonField
 import com.openai.core.JsonValue
 import com.openai.core.NoAutoDetect
 import com.openai.core.getOrThrow
@@ -267,8 +264,8 @@ constructor(
          * Accuracy of `text-moderation-stable` may be slightly lower than for
          * `text-moderation-latest`.
          */
-        fun model(unionMember1: Model.UnionMember1) = apply {
-            this.model = Model.ofUnionMember1(unionMember1)
+        fun model(moderationModel: ModerationModel) = apply {
+            this.model = Model.ofModerationModel(moderationModel)
         }
 
         fun additionalQueryParams(additionalQueryParams: Map<String, List<String>>) = apply {
@@ -453,7 +450,7 @@ constructor(
     class Model
     private constructor(
         private val string: String? = null,
-        private val unionMember1: UnionMember1? = null,
+        private val moderationModel: ModerationModel? = null,
         private val _json: JsonValue? = null,
     ) {
 
@@ -461,29 +458,29 @@ constructor(
 
         fun string(): Optional<String> = Optional.ofNullable(string)
 
-        fun unionMember1(): Optional<UnionMember1> = Optional.ofNullable(unionMember1)
+        fun moderationModel(): Optional<ModerationModel> = Optional.ofNullable(moderationModel)
 
         fun isString(): Boolean = string != null
 
-        fun isUnionMember1(): Boolean = unionMember1 != null
+        fun isModerationModel(): Boolean = moderationModel != null
 
         fun asString(): String = string.getOrThrow("string")
 
-        fun asUnionMember1(): UnionMember1 = unionMember1.getOrThrow("unionMember1")
+        fun asModerationModel(): ModerationModel = moderationModel.getOrThrow("moderationModel")
 
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
         fun <T> accept(visitor: Visitor<T>): T {
             return when {
                 string != null -> visitor.visitString(string)
-                unionMember1 != null -> visitor.visitUnionMember1(unionMember1)
+                moderationModel != null -> visitor.visitModerationModel(moderationModel)
                 else -> visitor.unknown(_json)
             }
         }
 
         fun validate(): Model = apply {
             if (!validated) {
-                if (string == null && unionMember1 == null) {
+                if (string == null && moderationModel == null) {
                     throw OpenAIInvalidDataException("Unknown Model: $_json")
                 }
                 validated = true
@@ -497,17 +494,17 @@ constructor(
 
             return other is Model &&
                 this.string == other.string &&
-                this.unionMember1 == other.unionMember1
+                this.moderationModel == other.moderationModel
         }
 
         override fun hashCode(): Int {
-            return Objects.hash(string, unionMember1)
+            return Objects.hash(string, moderationModel)
         }
 
         override fun toString(): String {
             return when {
                 string != null -> "Model{string=$string}"
-                unionMember1 != null -> "Model{unionMember1=$unionMember1}"
+                moderationModel != null -> "Model{moderationModel=$moderationModel}"
                 _json != null -> "Model{_unknown=$_json}"
                 else -> throw IllegalStateException("Invalid Model")
             }
@@ -518,14 +515,15 @@ constructor(
             @JvmStatic fun ofString(string: String) = Model(string = string)
 
             @JvmStatic
-            fun ofUnionMember1(unionMember1: UnionMember1) = Model(unionMember1 = unionMember1)
+            fun ofModerationModel(moderationModel: ModerationModel) =
+                Model(moderationModel = moderationModel)
         }
 
         interface Visitor<out T> {
 
             fun visitString(string: String): T
 
-            fun visitUnionMember1(unionMember1: UnionMember1): T
+            fun visitModerationModel(moderationModel: ModerationModel): T
 
             fun unknown(json: JsonValue?): T {
                 throw OpenAIInvalidDataException("Unknown Model: $json")
@@ -539,8 +537,8 @@ constructor(
                 tryDeserialize(node, jacksonTypeRef<String>())?.let {
                     return Model(string = it, _json = json)
                 }
-                tryDeserialize(node, jacksonTypeRef<UnionMember1>())?.let {
-                    return Model(unionMember1 = it, _json = json)
+                tryDeserialize(node, jacksonTypeRef<ModerationModel>())?.let {
+                    return Model(moderationModel = it, _json = json)
                 }
 
                 return Model(_json = json)
@@ -556,70 +554,11 @@ constructor(
             ) {
                 when {
                     value.string != null -> generator.writeObject(value.string)
-                    value.unionMember1 != null -> generator.writeObject(value.unionMember1)
+                    value.moderationModel != null -> generator.writeObject(value.moderationModel)
                     value._json != null -> generator.writeObject(value._json)
                     else -> throw IllegalStateException("Invalid Model")
                 }
             }
-        }
-
-        class UnionMember1
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
-
-            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is UnionMember1 && this.value == other.value
-            }
-
-            override fun hashCode() = value.hashCode()
-
-            override fun toString() = value.toString()
-
-            companion object {
-
-                @JvmField
-                val TEXT_MODERATION_LATEST = UnionMember1(JsonField.of("text-moderation-latest"))
-
-                @JvmField
-                val TEXT_MODERATION_STABLE = UnionMember1(JsonField.of("text-moderation-stable"))
-
-                @JvmStatic fun of(value: String) = UnionMember1(JsonField.of(value))
-            }
-
-            enum class Known {
-                TEXT_MODERATION_LATEST,
-                TEXT_MODERATION_STABLE,
-            }
-
-            enum class Value {
-                TEXT_MODERATION_LATEST,
-                TEXT_MODERATION_STABLE,
-                _UNKNOWN,
-            }
-
-            fun value(): Value =
-                when (this) {
-                    TEXT_MODERATION_LATEST -> Value.TEXT_MODERATION_LATEST
-                    TEXT_MODERATION_STABLE -> Value.TEXT_MODERATION_STABLE
-                    else -> Value._UNKNOWN
-                }
-
-            fun known(): Known =
-                when (this) {
-                    TEXT_MODERATION_LATEST -> Known.TEXT_MODERATION_LATEST
-                    TEXT_MODERATION_STABLE -> Known.TEXT_MODERATION_STABLE
-                    else -> throw OpenAIInvalidDataException("Unknown UnionMember1: $value")
-                }
-
-            fun asString(): String = _value().asStringOrThrow()
         }
     }
 }
