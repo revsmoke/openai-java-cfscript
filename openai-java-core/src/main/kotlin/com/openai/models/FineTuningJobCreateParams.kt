@@ -91,7 +91,7 @@ constructor(
 
         /**
          * The name of the model to fine-tune. You can select one of the
-         * [supported models](https://platform.openai.com/docs/guides/fine-tuning/what-models-can-be-fine-tuned).
+         * [supported models](https://platform.openai.com/docs/guides/fine-tuning/which-models-can-be-fine-tuned).
          */
         @JsonProperty("model") fun model(): Model? = model
 
@@ -131,7 +131,7 @@ constructor(
          * A string of up to 18 characters that will be added to your fine-tuned model name.
          *
          * For example, a `suffix` of "custom-model-name" would produce a model name like
-         * `ft:gpt-3.5-turbo:openai:custom-model-name:7p4lURel`.
+         * `ft:gpt-4o-mini:openai:custom-model-name:7p4lURel`.
          */
         @JsonProperty("suffix") fun suffix(): String? = suffix
 
@@ -222,7 +222,7 @@ constructor(
 
             /**
              * The name of the model to fine-tune. You can select one of the
-             * [supported models](https://platform.openai.com/docs/guides/fine-tuning/what-models-can-be-fine-tuned).
+             * [supported models](https://platform.openai.com/docs/guides/fine-tuning/which-models-can-be-fine-tuned).
              */
             @JsonProperty("model") fun model(model: Model) = apply { this.model = model }
 
@@ -269,7 +269,7 @@ constructor(
              * A string of up to 18 characters that will be added to your fine-tuned model name.
              *
              * For example, a `suffix` of "custom-model-name" would produce a model name like
-             * `ft:gpt-3.5-turbo:openai:custom-model-name:7p4lURel`.
+             * `ft:gpt-4o-mini:openai:custom-model-name:7p4lURel`.
              */
             @JsonProperty("suffix") fun suffix(suffix: String) = apply { this.suffix = suffix }
 
@@ -398,19 +398,19 @@ constructor(
 
         /**
          * The name of the model to fine-tune. You can select one of the
-         * [supported models](https://platform.openai.com/docs/guides/fine-tuning/what-models-can-be-fine-tuned).
+         * [supported models](https://platform.openai.com/docs/guides/fine-tuning/which-models-can-be-fine-tuned).
          */
         fun model(model: Model) = apply { this.model = model }
 
         /**
          * The name of the model to fine-tune. You can select one of the
-         * [supported models](https://platform.openai.com/docs/guides/fine-tuning/what-models-can-be-fine-tuned).
+         * [supported models](https://platform.openai.com/docs/guides/fine-tuning/which-models-can-be-fine-tuned).
          */
         fun model(string: String) = apply { this.model = Model.ofString(string) }
 
         /**
          * The name of the model to fine-tune. You can select one of the
-         * [supported models](https://platform.openai.com/docs/guides/fine-tuning/what-models-can-be-fine-tuned).
+         * [supported models](https://platform.openai.com/docs/guides/fine-tuning/which-models-can-be-fine-tuned).
          */
         fun model(unionMember1: Model.UnionMember1) = apply {
             this.model = Model.ofUnionMember1(unionMember1)
@@ -460,7 +460,7 @@ constructor(
          * A string of up to 18 characters that will be added to your fine-tuned model name.
          *
          * For example, a `suffix` of "custom-model-name" would produce a model name like
-         * `ft:gpt-3.5-turbo:openai:custom-model-name:7p4lURel`.
+         * `ft:gpt-4o-mini:openai:custom-model-name:7p4lURel`.
          */
         fun suffix(suffix: String) = apply { this.suffix = suffix }
 
@@ -691,6 +691,8 @@ constructor(
 
                 @JvmField val GPT_3_5_TURBO = UnionMember1(JsonField.of("gpt-3.5-turbo"))
 
+                @JvmField val GPT_4O_MINI = UnionMember1(JsonField.of("gpt-4o-mini"))
+
                 @JvmStatic fun of(value: String) = UnionMember1(JsonField.of(value))
             }
 
@@ -698,12 +700,14 @@ constructor(
                 BABBAGE_002,
                 DAVINCI_002,
                 GPT_3_5_TURBO,
+                GPT_4O_MINI,
             }
 
             enum class Value {
                 BABBAGE_002,
                 DAVINCI_002,
                 GPT_3_5_TURBO,
+                GPT_4O_MINI,
                 _UNKNOWN,
             }
 
@@ -712,6 +716,7 @@ constructor(
                     BABBAGE_002 -> Value.BABBAGE_002
                     DAVINCI_002 -> Value.DAVINCI_002
                     GPT_3_5_TURBO -> Value.GPT_3_5_TURBO
+                    GPT_4O_MINI -> Value.GPT_4O_MINI
                     else -> Value._UNKNOWN
                 }
 
@@ -720,6 +725,7 @@ constructor(
                     BABBAGE_002 -> Known.BABBAGE_002
                     DAVINCI_002 -> Known.DAVINCI_002
                     GPT_3_5_TURBO -> Known.GPT_3_5_TURBO
+                    GPT_4O_MINI -> Known.GPT_4O_MINI
                     else -> throw OpenAIInvalidDataException("Unknown UnionMember1: $value")
                 }
 

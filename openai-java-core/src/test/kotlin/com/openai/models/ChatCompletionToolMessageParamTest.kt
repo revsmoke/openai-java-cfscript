@@ -11,12 +11,13 @@ class ChatCompletionToolMessageParamTest {
     fun createChatCompletionToolMessageParam() {
         val chatCompletionToolMessageParam =
             ChatCompletionToolMessageParam.builder()
-                .content("content")
+                .content(ChatCompletionToolMessageParam.Content.ofString("string"))
                 .role(ChatCompletionToolMessageParam.Role.TOOL)
                 .toolCallId("tool_call_id")
                 .build()
         assertThat(chatCompletionToolMessageParam).isNotNull
-        assertThat(chatCompletionToolMessageParam.content()).isEqualTo("content")
+        assertThat(chatCompletionToolMessageParam.content())
+            .isEqualTo(ChatCompletionToolMessageParam.Content.ofString("string"))
         assertThat(chatCompletionToolMessageParam.role())
             .isEqualTo(ChatCompletionToolMessageParam.Role.TOOL)
         assertThat(chatCompletionToolMessageParam.toolCallId()).isEqualTo("tool_call_id")

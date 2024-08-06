@@ -12,6 +12,7 @@ class ChatCompletionMessageTest {
         val chatCompletionMessage =
             ChatCompletionMessage.builder()
                 .content("content")
+                .refusal("refusal")
                 .role(ChatCompletionMessage.Role.ASSISTANT)
                 .functionCall(
                     ChatCompletionMessage.FunctionCall.builder()
@@ -36,6 +37,7 @@ class ChatCompletionMessageTest {
                 .build()
         assertThat(chatCompletionMessage).isNotNull
         assertThat(chatCompletionMessage.content()).contains("content")
+        assertThat(chatCompletionMessage.refusal()).contains("refusal")
         assertThat(chatCompletionMessage.role()).isEqualTo(ChatCompletionMessage.Role.ASSISTANT)
         assertThat(chatCompletionMessage.functionCall())
             .contains(

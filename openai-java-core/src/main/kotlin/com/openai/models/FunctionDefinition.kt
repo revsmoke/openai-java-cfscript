@@ -22,6 +22,7 @@ private constructor(
     private val description: JsonField<String>,
     private val name: JsonField<String>,
     private val parameters: JsonField<FunctionParameters>,
+    private val strict: JsonField<Boolean>,
     private val additionalProperties: Map<String, JsonValue>,
 ) {
 
@@ -54,6 +55,14 @@ private constructor(
         Optional.ofNullable(parameters.getNullable("parameters"))
 
     /**
+     * Whether to enable strict schema adherence when generating the function call. If set to true,
+     * the model will follow the exact schema defined in the `parameters` field. Only a subset of
+     * JSON Schema is supported when `strict` is `true`. Learn more about Structured Outputs in the
+     * [function calling guide](docs/guides/function-calling).
+     */
+    fun strict(): Optional<Boolean> = Optional.ofNullable(strict.getNullable("strict"))
+
+    /**
      * A description of what the function does, used by the model to choose when and how to call the
      * function.
      */
@@ -75,6 +84,14 @@ private constructor(
      */
     @JsonProperty("parameters") @ExcludeMissing fun _parameters() = parameters
 
+    /**
+     * Whether to enable strict schema adherence when generating the function call. If set to true,
+     * the model will follow the exact schema defined in the `parameters` field. Only a subset of
+     * JSON Schema is supported when `strict` is `true`. Learn more about Structured Outputs in the
+     * [function calling guide](docs/guides/function-calling).
+     */
+    @JsonProperty("strict") @ExcludeMissing fun _strict() = strict
+
     @JsonAnyGetter
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -84,6 +101,7 @@ private constructor(
             description()
             name()
             parameters().map { it.validate() }
+            strict()
             validated = true
         }
     }
@@ -99,6 +117,7 @@ private constructor(
             this.description == other.description &&
             this.name == other.name &&
             this.parameters == other.parameters &&
+            this.strict == other.strict &&
             this.additionalProperties == other.additionalProperties
     }
 
@@ -109,6 +128,7 @@ private constructor(
                     description,
                     name,
                     parameters,
+                    strict,
                     additionalProperties,
                 )
         }
@@ -116,7 +136,7 @@ private constructor(
     }
 
     override fun toString() =
-        "FunctionDefinition{description=$description, name=$name, parameters=$parameters, additionalProperties=$additionalProperties}"
+        "FunctionDefinition{description=$description, name=$name, parameters=$parameters, strict=$strict, additionalProperties=$additionalProperties}"
 
     companion object {
 
@@ -128,6 +148,7 @@ private constructor(
         private var description: JsonField<String> = JsonMissing.of()
         private var name: JsonField<String> = JsonMissing.of()
         private var parameters: JsonField<FunctionParameters> = JsonMissing.of()
+        private var strict: JsonField<Boolean> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -135,6 +156,7 @@ private constructor(
             this.description = functionDefinition.description
             this.name = functionDefinition.name
             this.parameters = functionDefinition.parameters
+            this.strict = functionDefinition.strict
             additionalProperties(functionDefinition.additionalProperties)
         }
 
@@ -190,6 +212,24 @@ private constructor(
             this.parameters = parameters
         }
 
+        /**
+         * Whether to enable strict schema adherence when generating the function call. If set to
+         * true, the model will follow the exact schema defined in the `parameters` field. Only a
+         * subset of JSON Schema is supported when `strict` is `true`. Learn more about Structured
+         * Outputs in the [function calling guide](docs/guides/function-calling).
+         */
+        fun strict(strict: Boolean) = strict(JsonField.of(strict))
+
+        /**
+         * Whether to enable strict schema adherence when generating the function call. If set to
+         * true, the model will follow the exact schema defined in the `parameters` field. Only a
+         * subset of JSON Schema is supported when `strict` is `true`. Learn more about Structured
+         * Outputs in the [function calling guide](docs/guides/function-calling).
+         */
+        @JsonProperty("strict")
+        @ExcludeMissing
+        fun strict(strict: JsonField<Boolean>) = apply { this.strict = strict }
+
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             this.additionalProperties.putAll(additionalProperties)
@@ -209,6 +249,7 @@ private constructor(
                 description,
                 name,
                 parameters,
+                strict,
                 additionalProperties.toUnmodifiable(),
             )
     }

@@ -38,11 +38,31 @@ class ChatCompletionTest {
                                                 .build()
                                         )
                                     )
+                                    .refusal(
+                                        listOf(
+                                            ChatCompletionTokenLogprob.builder()
+                                                .token("token")
+                                                .bytes(listOf(123L))
+                                                .logprob(42.23)
+                                                .topLogprobs(
+                                                    listOf(
+                                                        ChatCompletionTokenLogprob.TopLogprob
+                                                            .builder()
+                                                            .token("token")
+                                                            .bytes(listOf(123L))
+                                                            .logprob(42.23)
+                                                            .build()
+                                                    )
+                                                )
+                                                .build()
+                                        )
+                                    )
                                     .build()
                             )
                             .message(
                                 ChatCompletionMessage.builder()
                                     .content("content")
+                                    .refusal("refusal")
                                     .role(ChatCompletionMessage.Role.ASSISTANT)
                                     .functionCall(
                                         ChatCompletionMessage.FunctionCall.builder()
@@ -109,11 +129,30 @@ class ChatCompletionTest {
                                         .build()
                                 )
                             )
+                            .refusal(
+                                listOf(
+                                    ChatCompletionTokenLogprob.builder()
+                                        .token("token")
+                                        .bytes(listOf(123L))
+                                        .logprob(42.23)
+                                        .topLogprobs(
+                                            listOf(
+                                                ChatCompletionTokenLogprob.TopLogprob.builder()
+                                                    .token("token")
+                                                    .bytes(listOf(123L))
+                                                    .logprob(42.23)
+                                                    .build()
+                                            )
+                                        )
+                                        .build()
+                                )
+                            )
                             .build()
                     )
                     .message(
                         ChatCompletionMessage.builder()
                             .content("content")
+                            .refusal("refusal")
                             .role(ChatCompletionMessage.Role.ASSISTANT)
                             .functionCall(
                                 ChatCompletionMessage.FunctionCall.builder()

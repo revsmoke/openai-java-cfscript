@@ -6,23 +6,33 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.core.JsonGenerator
+import com.fasterxml.jackson.core.ObjectCodec
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.SerializerProvider
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.openai.core.BaseDeserializer
+import com.openai.core.BaseSerializer
 import com.openai.core.Enum
 import com.openai.core.ExcludeMissing
 import com.openai.core.JsonField
 import com.openai.core.JsonMissing
 import com.openai.core.JsonValue
 import com.openai.core.NoAutoDetect
+import com.openai.core.getOrThrow
 import com.openai.core.toUnmodifiable
 import com.openai.errors.OpenAIInvalidDataException
 import java.util.Objects
+import java.util.Optional
 
 @JsonDeserialize(builder = ChatCompletionToolMessageParam.Builder::class)
 @NoAutoDetect
 class ChatCompletionToolMessageParam
 private constructor(
     private val role: JsonField<Role>,
-    private val content: JsonField<String>,
+    private val content: JsonField<Content>,
     private val toolCallId: JsonField<String>,
     private val additionalProperties: Map<String, JsonValue>,
 ) {
@@ -35,7 +45,7 @@ private constructor(
     fun role(): Role = role.getRequired("role")
 
     /** The contents of the tool message. */
-    fun content(): String = content.getRequired("content")
+    fun content(): Content = content.getRequired("content")
 
     /** Tool call that this message is responding to. */
     fun toolCallId(): String = toolCallId.getRequired("tool_call_id")
@@ -100,7 +110,7 @@ private constructor(
     class Builder {
 
         private var role: JsonField<Role> = JsonMissing.of()
-        private var content: JsonField<String> = JsonMissing.of()
+        private var content: JsonField<Content> = JsonMissing.of()
         private var toolCallId: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -121,12 +131,12 @@ private constructor(
         fun role(role: JsonField<Role>) = apply { this.role = role }
 
         /** The contents of the tool message. */
-        fun content(content: String) = content(JsonField.of(content))
+        fun content(content: Content) = content(JsonField.of(content))
 
         /** The contents of the tool message. */
         @JsonProperty("content")
         @ExcludeMissing
-        fun content(content: JsonField<String>) = apply { this.content = content }
+        fun content(content: JsonField<Content>) = apply { this.content = content }
 
         /** Tool call that this message is responding to. */
         fun toolCallId(toolCallId: String) = toolCallId(JsonField.of(toolCallId))
@@ -157,6 +167,139 @@ private constructor(
                 toolCallId,
                 additionalProperties.toUnmodifiable(),
             )
+    }
+
+    @JsonDeserialize(using = Content.Deserializer::class)
+    @JsonSerialize(using = Content.Serializer::class)
+    class Content
+    private constructor(
+        private val string: String? = null,
+        private val chatCompletionContentPartTexts: List<ChatCompletionContentPartText>? = null,
+        private val _json: JsonValue? = null,
+    ) {
+
+        private var validated: Boolean = false
+
+        /** The contents of the tool message. */
+        fun string(): Optional<String> = Optional.ofNullable(string)
+        /**
+         * An array of content parts with a defined type. For tool messages, only type `text` is
+         * supported.
+         */
+        fun chatCompletionContentPartTexts(): Optional<List<ChatCompletionContentPartText>> =
+            Optional.ofNullable(chatCompletionContentPartTexts)
+
+        fun isString(): Boolean = string != null
+
+        fun isChatCompletionContentPartTexts(): Boolean = chatCompletionContentPartTexts != null
+
+        fun asString(): String = string.getOrThrow("string")
+
+        fun asChatCompletionContentPartTexts(): List<ChatCompletionContentPartText> =
+            chatCompletionContentPartTexts.getOrThrow("chatCompletionContentPartTexts")
+
+        fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
+
+        fun <T> accept(visitor: Visitor<T>): T {
+            return when {
+                string != null -> visitor.visitString(string)
+                chatCompletionContentPartTexts != null ->
+                    visitor.visitChatCompletionContentPartTexts(chatCompletionContentPartTexts)
+                else -> visitor.unknown(_json)
+            }
+        }
+
+        fun validate(): Content = apply {
+            if (!validated) {
+                if (string == null && chatCompletionContentPartTexts == null) {
+                    throw OpenAIInvalidDataException("Unknown Content: $_json")
+                }
+                chatCompletionContentPartTexts?.forEach { it.validate() }
+                validated = true
+            }
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Content &&
+                this.string == other.string &&
+                this.chatCompletionContentPartTexts == other.chatCompletionContentPartTexts
+        }
+
+        override fun hashCode(): Int {
+            return Objects.hash(string, chatCompletionContentPartTexts)
+        }
+
+        override fun toString(): String {
+            return when {
+                string != null -> "Content{string=$string}"
+                chatCompletionContentPartTexts != null ->
+                    "Content{chatCompletionContentPartTexts=$chatCompletionContentPartTexts}"
+                _json != null -> "Content{_unknown=$_json}"
+                else -> throw IllegalStateException("Invalid Content")
+            }
+        }
+
+        companion object {
+
+            @JvmStatic fun ofString(string: String) = Content(string = string)
+
+            @JvmStatic
+            fun ofChatCompletionContentPartTexts(
+                chatCompletionContentPartTexts: List<ChatCompletionContentPartText>
+            ) = Content(chatCompletionContentPartTexts = chatCompletionContentPartTexts)
+        }
+
+        interface Visitor<out T> {
+
+            fun visitString(string: String): T
+
+            fun visitChatCompletionContentPartTexts(
+                chatCompletionContentPartTexts: List<ChatCompletionContentPartText>
+            ): T
+
+            fun unknown(json: JsonValue?): T {
+                throw OpenAIInvalidDataException("Unknown Content: $json")
+            }
+        }
+
+        class Deserializer : BaseDeserializer<Content>(Content::class) {
+
+            override fun ObjectCodec.deserialize(node: JsonNode): Content {
+                val json = JsonValue.fromJsonNode(node)
+                tryDeserialize(node, jacksonTypeRef<String>())?.let {
+                    return Content(string = it, _json = json)
+                }
+                tryDeserialize(node, jacksonTypeRef<List<ChatCompletionContentPartText>>()) {
+                        it.forEach { it.validate() }
+                    }
+                    ?.let {
+                        return Content(chatCompletionContentPartTexts = it, _json = json)
+                    }
+
+                return Content(_json = json)
+            }
+        }
+
+        class Serializer : BaseSerializer<Content>(Content::class) {
+
+            override fun serialize(
+                value: Content,
+                generator: JsonGenerator,
+                provider: SerializerProvider
+            ) {
+                when {
+                    value.string != null -> generator.writeObject(value.string)
+                    value.chatCompletionContentPartTexts != null ->
+                        generator.writeObject(value.chatCompletionContentPartTexts)
+                    value._json != null -> generator.writeObject(value._json)
+                    else -> throw IllegalStateException("Invalid Content")
+                }
+            }
+        }
     }
 
     class Role

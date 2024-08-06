@@ -12,7 +12,7 @@ class ChatCompletionAssistantMessageParamTest {
         val chatCompletionAssistantMessageParam =
             ChatCompletionAssistantMessageParam.builder()
                 .role(ChatCompletionAssistantMessageParam.Role.ASSISTANT)
-                .content("content")
+                .content(ChatCompletionAssistantMessageParam.Content.ofString("string"))
                 .functionCall(
                     ChatCompletionAssistantMessageParam.FunctionCall.builder()
                         .arguments("arguments")
@@ -20,6 +20,7 @@ class ChatCompletionAssistantMessageParamTest {
                         .build()
                 )
                 .name("name")
+                .refusal("refusal")
                 .toolCalls(
                     listOf(
                         ChatCompletionMessageToolCall.builder()
@@ -38,7 +39,8 @@ class ChatCompletionAssistantMessageParamTest {
         assertThat(chatCompletionAssistantMessageParam).isNotNull
         assertThat(chatCompletionAssistantMessageParam.role())
             .isEqualTo(ChatCompletionAssistantMessageParam.Role.ASSISTANT)
-        assertThat(chatCompletionAssistantMessageParam.content()).contains("content")
+        assertThat(chatCompletionAssistantMessageParam.content())
+            .contains(ChatCompletionAssistantMessageParam.Content.ofString("string"))
         assertThat(chatCompletionAssistantMessageParam.functionCall())
             .contains(
                 ChatCompletionAssistantMessageParam.FunctionCall.builder()
@@ -47,6 +49,7 @@ class ChatCompletionAssistantMessageParamTest {
                     .build()
             )
         assertThat(chatCompletionAssistantMessageParam.name()).contains("name")
+        assertThat(chatCompletionAssistantMessageParam.refusal()).contains("refusal")
         assertThat(chatCompletionAssistantMessageParam.toolCalls().get())
             .containsExactly(
                 ChatCompletionMessageToolCall.builder()

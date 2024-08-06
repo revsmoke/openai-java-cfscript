@@ -575,6 +575,7 @@ private constructor(
         class Logprobs
         private constructor(
             private val content: JsonField<List<ChatCompletionTokenLogprob>>,
+            private val refusal: JsonField<List<ChatCompletionTokenLogprob>>,
             private val additionalProperties: Map<String, JsonValue>,
         ) {
 
@@ -586,8 +587,15 @@ private constructor(
             fun content(): Optional<List<ChatCompletionTokenLogprob>> =
                 Optional.ofNullable(content.getNullable("content"))
 
+            /** A list of message refusal tokens with log probability information. */
+            fun refusal(): Optional<List<ChatCompletionTokenLogprob>> =
+                Optional.ofNullable(refusal.getNullable("refusal"))
+
             /** A list of message content tokens with log probability information. */
             @JsonProperty("content") @ExcludeMissing fun _content() = content
+
+            /** A list of message refusal tokens with log probability information. */
+            @JsonProperty("refusal") @ExcludeMissing fun _refusal() = refusal
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -596,6 +604,7 @@ private constructor(
             fun validate(): Logprobs = apply {
                 if (!validated) {
                     content().map { it.forEach { it.validate() } }
+                    refusal().map { it.forEach { it.validate() } }
                     validated = true
                 }
             }
@@ -609,18 +618,24 @@ private constructor(
 
                 return other is Logprobs &&
                     this.content == other.content &&
+                    this.refusal == other.refusal &&
                     this.additionalProperties == other.additionalProperties
             }
 
             override fun hashCode(): Int {
                 if (hashCode == 0) {
-                    hashCode = Objects.hash(content, additionalProperties)
+                    hashCode =
+                        Objects.hash(
+                            content,
+                            refusal,
+                            additionalProperties,
+                        )
                 }
                 return hashCode
             }
 
             override fun toString() =
-                "Logprobs{content=$content, additionalProperties=$additionalProperties}"
+                "Logprobs{content=$content, refusal=$refusal, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -630,11 +645,13 @@ private constructor(
             class Builder {
 
                 private var content: JsonField<List<ChatCompletionTokenLogprob>> = JsonMissing.of()
+                private var refusal: JsonField<List<ChatCompletionTokenLogprob>> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(logprobs: Logprobs) = apply {
                     this.content = logprobs.content
+                    this.refusal = logprobs.refusal
                     additionalProperties(logprobs.additionalProperties)
                 }
 
@@ -647,6 +664,17 @@ private constructor(
                 @ExcludeMissing
                 fun content(content: JsonField<List<ChatCompletionTokenLogprob>>) = apply {
                     this.content = content
+                }
+
+                /** A list of message refusal tokens with log probability information. */
+                fun refusal(refusal: List<ChatCompletionTokenLogprob>) =
+                    refusal(JsonField.of(refusal))
+
+                /** A list of message refusal tokens with log probability information. */
+                @JsonProperty("refusal")
+                @ExcludeMissing
+                fun refusal(refusal: JsonField<List<ChatCompletionTokenLogprob>>) = apply {
+                    this.refusal = refusal
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -667,7 +695,8 @@ private constructor(
                 fun build(): Logprobs =
                     Logprobs(
                         content.map { it.toUnmodifiable() },
-                        additionalProperties.toUnmodifiable()
+                        refusal.map { it.toUnmodifiable() },
+                        additionalProperties.toUnmodifiable(),
                     )
             }
         }

@@ -264,6 +264,8 @@ constructor(
 
         /**
          * An object specifying the format that the model must output. Compatible with
+         * [GPT-4o](https://platform.openai.com/docs/models/gpt-4o), [GPT-4o
+         * mini](https://platform.openai.com/docs/models/gpt-4o-mini),
          * [GPT-4 Turbo](https://platform.openai.com/docs/models/gpt-4-and-gpt-4-turbo) and all
          * GPT-3.5 Turbo models newer than `gpt-3.5-turbo-1106`.
          *
@@ -617,6 +619,8 @@ constructor(
 
             /**
              * An object specifying the format that the model must output. Compatible with
+             * [GPT-4o](https://platform.openai.com/docs/models/gpt-4o), [GPT-4o
+             * mini](https://platform.openai.com/docs/models/gpt-4o-mini),
              * [GPT-4 Turbo](https://platform.openai.com/docs/models/gpt-4-and-gpt-4-turbo) and all
              * GPT-3.5 Turbo models newer than `gpt-3.5-turbo-1106`.
              *
@@ -1083,6 +1087,8 @@ constructor(
 
         /**
          * An object specifying the format that the model must output. Compatible with
+         * [GPT-4o](https://platform.openai.com/docs/models/gpt-4o), [GPT-4o
+         * mini](https://platform.openai.com/docs/models/gpt-4o-mini),
          * [GPT-4 Turbo](https://platform.openai.com/docs/models/gpt-4-and-gpt-4-turbo) and all
          * GPT-3.5 Turbo models newer than `gpt-3.5-turbo-1106`.
          *
@@ -1098,6 +1104,71 @@ constructor(
          */
         fun responseFormat(responseFormat: ResponseFormat) = apply {
             this.responseFormat = responseFormat
+        }
+
+        /**
+         * An object specifying the format that the model must output. Compatible with
+         * [GPT-4o](https://platform.openai.com/docs/models/gpt-4o), [GPT-4o
+         * mini](https://platform.openai.com/docs/models/gpt-4o-mini),
+         * [GPT-4 Turbo](https://platform.openai.com/docs/models/gpt-4-and-gpt-4-turbo) and all
+         * GPT-3.5 Turbo models newer than `gpt-3.5-turbo-1106`.
+         *
+         * Setting to `{ "type": "json_object" }` enables JSON mode, which guarantees the message
+         * the model generates is valid JSON.
+         *
+         * **Important:** when using JSON mode, you **must** also instruct the model to produce JSON
+         * yourself via a system or user message. Without this, the model may generate an unending
+         * stream of whitespace until the generation reaches the token limit, resulting in a
+         * long-running and seemingly "stuck" request. Also note that the message content may be
+         * partially cut off if `finish_reason="length"`, which indicates the generation exceeded
+         * `max_tokens` or the conversation exceeded the max context length.
+         */
+        fun responseFormat(responseFormatText: ResponseFormatText) = apply {
+            this.responseFormat = ResponseFormat.ofResponseFormatText(responseFormatText)
+        }
+
+        /**
+         * An object specifying the format that the model must output. Compatible with
+         * [GPT-4o](https://platform.openai.com/docs/models/gpt-4o), [GPT-4o
+         * mini](https://platform.openai.com/docs/models/gpt-4o-mini),
+         * [GPT-4 Turbo](https://platform.openai.com/docs/models/gpt-4-and-gpt-4-turbo) and all
+         * GPT-3.5 Turbo models newer than `gpt-3.5-turbo-1106`.
+         *
+         * Setting to `{ "type": "json_object" }` enables JSON mode, which guarantees the message
+         * the model generates is valid JSON.
+         *
+         * **Important:** when using JSON mode, you **must** also instruct the model to produce JSON
+         * yourself via a system or user message. Without this, the model may generate an unending
+         * stream of whitespace until the generation reaches the token limit, resulting in a
+         * long-running and seemingly "stuck" request. Also note that the message content may be
+         * partially cut off if `finish_reason="length"`, which indicates the generation exceeded
+         * `max_tokens` or the conversation exceeded the max context length.
+         */
+        fun responseFormat(responseFormatJsonObject: ResponseFormatJsonObject) = apply {
+            this.responseFormat =
+                ResponseFormat.ofResponseFormatJsonObject(responseFormatJsonObject)
+        }
+
+        /**
+         * An object specifying the format that the model must output. Compatible with
+         * [GPT-4o](https://platform.openai.com/docs/models/gpt-4o), [GPT-4o
+         * mini](https://platform.openai.com/docs/models/gpt-4o-mini),
+         * [GPT-4 Turbo](https://platform.openai.com/docs/models/gpt-4-and-gpt-4-turbo) and all
+         * GPT-3.5 Turbo models newer than `gpt-3.5-turbo-1106`.
+         *
+         * Setting to `{ "type": "json_object" }` enables JSON mode, which guarantees the message
+         * the model generates is valid JSON.
+         *
+         * **Important:** when using JSON mode, you **must** also instruct the model to produce JSON
+         * yourself via a system or user message. Without this, the model may generate an unending
+         * stream of whitespace until the generation reaches the token limit, resulting in a
+         * long-running and seemingly "stuck" request. Also note that the message content may be
+         * partially cut off if `finish_reason="length"`, which indicates the generation exceeded
+         * `max_tokens` or the conversation exceeded the max context length.
+         */
+        fun responseFormat(responseFormatJsonSchema: ResponseFormatJsonSchema) = apply {
+            this.responseFormat =
+                ResponseFormat.ofResponseFormatJsonSchema(responseFormatJsonSchema)
         }
 
         /**
@@ -1837,39 +1908,70 @@ constructor(
         }
     }
 
-    /**
-     * An object specifying the format that the model must output. Compatible with
-     * [GPT-4 Turbo](https://platform.openai.com/docs/models/gpt-4-and-gpt-4-turbo) and all GPT-3.5
-     * Turbo models newer than `gpt-3.5-turbo-1106`.
-     *
-     * Setting to `{ "type": "json_object" }` enables JSON mode, which guarantees the message the
-     * model generates is valid JSON.
-     *
-     * **Important:** when using JSON mode, you **must** also instruct the model to produce JSON
-     * yourself via a system or user message. Without this, the model may generate an unending
-     * stream of whitespace until the generation reaches the token limit, resulting in a
-     * long-running and seemingly "stuck" request. Also note that the message content may be
-     * partially cut off if `finish_reason="length"`, which indicates the generation exceeded
-     * `max_tokens` or the conversation exceeded the max context length.
-     */
-    @JsonDeserialize(builder = ResponseFormat.Builder::class)
-    @NoAutoDetect
+    @JsonDeserialize(using = ResponseFormat.Deserializer::class)
+    @JsonSerialize(using = ResponseFormat.Serializer::class)
     class ResponseFormat
     private constructor(
-        private val type: Type?,
-        private val additionalProperties: Map<String, JsonValue>,
+        private val responseFormatText: ResponseFormatText? = null,
+        private val responseFormatJsonObject: ResponseFormatJsonObject? = null,
+        private val responseFormatJsonSchema: ResponseFormatJsonSchema? = null,
+        private val _json: JsonValue? = null,
     ) {
 
-        private var hashCode: Int = 0
+        private var validated: Boolean = false
 
-        /** Must be one of `text` or `json_object`. */
-        @JsonProperty("type") fun type(): Type? = type
+        fun responseFormatText(): Optional<ResponseFormatText> =
+            Optional.ofNullable(responseFormatText)
 
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+        fun responseFormatJsonObject(): Optional<ResponseFormatJsonObject> =
+            Optional.ofNullable(responseFormatJsonObject)
 
-        fun toBuilder() = Builder().from(this)
+        fun responseFormatJsonSchema(): Optional<ResponseFormatJsonSchema> =
+            Optional.ofNullable(responseFormatJsonSchema)
+
+        fun isResponseFormatText(): Boolean = responseFormatText != null
+
+        fun isResponseFormatJsonObject(): Boolean = responseFormatJsonObject != null
+
+        fun isResponseFormatJsonSchema(): Boolean = responseFormatJsonSchema != null
+
+        fun asResponseFormatText(): ResponseFormatText =
+            responseFormatText.getOrThrow("responseFormatText")
+
+        fun asResponseFormatJsonObject(): ResponseFormatJsonObject =
+            responseFormatJsonObject.getOrThrow("responseFormatJsonObject")
+
+        fun asResponseFormatJsonSchema(): ResponseFormatJsonSchema =
+            responseFormatJsonSchema.getOrThrow("responseFormatJsonSchema")
+
+        fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
+
+        fun <T> accept(visitor: Visitor<T>): T {
+            return when {
+                responseFormatText != null -> visitor.visitResponseFormatText(responseFormatText)
+                responseFormatJsonObject != null ->
+                    visitor.visitResponseFormatJsonObject(responseFormatJsonObject)
+                responseFormatJsonSchema != null ->
+                    visitor.visitResponseFormatJsonSchema(responseFormatJsonSchema)
+                else -> visitor.unknown(_json)
+            }
+        }
+
+        fun validate(): ResponseFormat = apply {
+            if (!validated) {
+                if (
+                    responseFormatText == null &&
+                        responseFormatJsonObject == null &&
+                        responseFormatJsonSchema == null
+                ) {
+                    throw OpenAIInvalidDataException("Unknown ResponseFormat: $_json")
+                }
+                responseFormatText?.validate()
+                responseFormatJsonObject?.validate()
+                responseFormatJsonSchema?.validate()
+                validated = true
+            }
+        }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -1877,112 +1979,99 @@ constructor(
             }
 
             return other is ResponseFormat &&
-                this.type == other.type &&
-                this.additionalProperties == other.additionalProperties
+                this.responseFormatText == other.responseFormatText &&
+                this.responseFormatJsonObject == other.responseFormatJsonObject &&
+                this.responseFormatJsonSchema == other.responseFormatJsonSchema
         }
 
         override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = Objects.hash(type, additionalProperties)
-            }
-            return hashCode
+            return Objects.hash(
+                responseFormatText,
+                responseFormatJsonObject,
+                responseFormatJsonSchema,
+            )
         }
 
-        override fun toString() =
-            "ResponseFormat{type=$type, additionalProperties=$additionalProperties}"
+        override fun toString(): String {
+            return when {
+                responseFormatText != null ->
+                    "ResponseFormat{responseFormatText=$responseFormatText}"
+                responseFormatJsonObject != null ->
+                    "ResponseFormat{responseFormatJsonObject=$responseFormatJsonObject}"
+                responseFormatJsonSchema != null ->
+                    "ResponseFormat{responseFormatJsonSchema=$responseFormatJsonSchema}"
+                _json != null -> "ResponseFormat{_unknown=$_json}"
+                else -> throw IllegalStateException("Invalid ResponseFormat")
+            }
+        }
 
         companion object {
 
-            @JvmStatic fun builder() = Builder()
+            @JvmStatic
+            fun ofResponseFormatText(responseFormatText: ResponseFormatText) =
+                ResponseFormat(responseFormatText = responseFormatText)
+
+            @JvmStatic
+            fun ofResponseFormatJsonObject(responseFormatJsonObject: ResponseFormatJsonObject) =
+                ResponseFormat(responseFormatJsonObject = responseFormatJsonObject)
+
+            @JvmStatic
+            fun ofResponseFormatJsonSchema(responseFormatJsonSchema: ResponseFormatJsonSchema) =
+                ResponseFormat(responseFormatJsonSchema = responseFormatJsonSchema)
         }
 
-        class Builder {
+        interface Visitor<out T> {
 
-            private var type: Type? = null
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+            fun visitResponseFormatText(responseFormatText: ResponseFormatText): T
 
-            @JvmSynthetic
-            internal fun from(responseFormat: ResponseFormat) = apply {
-                this.type = responseFormat.type
-                additionalProperties(responseFormat.additionalProperties)
+            fun visitResponseFormatJsonObject(responseFormatJsonObject: ResponseFormatJsonObject): T
+
+            fun visitResponseFormatJsonSchema(responseFormatJsonSchema: ResponseFormatJsonSchema): T
+
+            fun unknown(json: JsonValue?): T {
+                throw OpenAIInvalidDataException("Unknown ResponseFormat: $json")
             }
-
-            /** Must be one of `text` or `json_object`. */
-            @JsonProperty("type") fun type(type: Type) = apply { this.type = type }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            @JsonAnySetter
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun build(): ResponseFormat =
-                ResponseFormat(type, additionalProperties.toUnmodifiable())
         }
 
-        class Type
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
+        class Deserializer : BaseDeserializer<ResponseFormat>(ResponseFormat::class) {
 
-            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+            override fun ObjectCodec.deserialize(node: JsonNode): ResponseFormat {
+                val json = JsonValue.fromJsonNode(node)
+                tryDeserialize(node, jacksonTypeRef<ResponseFormatText>()) { it.validate() }
+                    ?.let {
+                        return ResponseFormat(responseFormatText = it, _json = json)
+                    }
+                tryDeserialize(node, jacksonTypeRef<ResponseFormatJsonObject>()) { it.validate() }
+                    ?.let {
+                        return ResponseFormat(responseFormatJsonObject = it, _json = json)
+                    }
+                tryDeserialize(node, jacksonTypeRef<ResponseFormatJsonSchema>()) { it.validate() }
+                    ?.let {
+                        return ResponseFormat(responseFormatJsonSchema = it, _json = json)
+                    }
 
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
+                return ResponseFormat(_json = json)
+            }
+        }
+
+        class Serializer : BaseSerializer<ResponseFormat>(ResponseFormat::class) {
+
+            override fun serialize(
+                value: ResponseFormat,
+                generator: JsonGenerator,
+                provider: SerializerProvider
+            ) {
+                when {
+                    value.responseFormatText != null ->
+                        generator.writeObject(value.responseFormatText)
+                    value.responseFormatJsonObject != null ->
+                        generator.writeObject(value.responseFormatJsonObject)
+                    value.responseFormatJsonSchema != null ->
+                        generator.writeObject(value.responseFormatJsonSchema)
+                    value._json != null -> generator.writeObject(value._json)
+                    else -> throw IllegalStateException("Invalid ResponseFormat")
                 }
-
-                return other is Type && this.value == other.value
             }
-
-            override fun hashCode() = value.hashCode()
-
-            override fun toString() = value.toString()
-
-            companion object {
-
-                @JvmField val TEXT = Type(JsonField.of("text"))
-
-                @JvmField val JSON_OBJECT = Type(JsonField.of("json_object"))
-
-                @JvmStatic fun of(value: String) = Type(JsonField.of(value))
-            }
-
-            enum class Known {
-                TEXT,
-                JSON_OBJECT,
-            }
-
-            enum class Value {
-                TEXT,
-                JSON_OBJECT,
-                _UNKNOWN,
-            }
-
-            fun value(): Value =
-                when (this) {
-                    TEXT -> Value.TEXT
-                    JSON_OBJECT -> Value.JSON_OBJECT
-                    else -> Value._UNKNOWN
-                }
-
-            fun known(): Known =
-                when (this) {
-                    TEXT -> Known.TEXT
-                    JSON_OBJECT -> Known.JSON_OBJECT
-                    else -> throw OpenAIInvalidDataException("Unknown Type: $value")
-                }
-
-            fun asString(): String = _value().asStringOrThrow()
         }
     }
 

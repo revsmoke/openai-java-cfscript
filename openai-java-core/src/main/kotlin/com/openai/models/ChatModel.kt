@@ -32,6 +32,8 @@ private constructor(
 
         @JvmField val GPT_4O = ChatModel(JsonField.of("gpt-4o"))
 
+        @JvmField val GPT_4O_2024_08_06 = ChatModel(JsonField.of("gpt-4o-2024-08-06"))
+
         @JvmField val GPT_4O_2024_05_13 = ChatModel(JsonField.of("gpt-4o-2024-05-13"))
 
         @JvmField val GPT_4O_MINI = ChatModel(JsonField.of("gpt-4o-mini"))
@@ -81,6 +83,7 @@ private constructor(
 
     enum class Known {
         GPT_4O,
+        GPT_4O_2024_08_06,
         GPT_4O_2024_05_13,
         GPT_4O_MINI,
         GPT_4O_MINI_2024_07_18,
@@ -107,6 +110,7 @@ private constructor(
 
     enum class Value {
         GPT_4O,
+        GPT_4O_2024_08_06,
         GPT_4O_2024_05_13,
         GPT_4O_MINI,
         GPT_4O_MINI_2024_07_18,
@@ -135,6 +139,7 @@ private constructor(
     fun value(): Value =
         when (this) {
             GPT_4O -> Value.GPT_4O
+            GPT_4O_2024_08_06 -> Value.GPT_4O_2024_08_06
             GPT_4O_2024_05_13 -> Value.GPT_4O_2024_05_13
             GPT_4O_MINI -> Value.GPT_4O_MINI
             GPT_4O_MINI_2024_07_18 -> Value.GPT_4O_MINI_2024_07_18
@@ -163,6 +168,7 @@ private constructor(
     fun known(): Known =
         when (this) {
             GPT_4O -> Known.GPT_4O
+            GPT_4O_2024_08_06 -> Known.GPT_4O_2024_08_06
             GPT_4O_2024_05_13 -> Known.GPT_4O_2024_05_13
             GPT_4O_MINI -> Known.GPT_4O_MINI
             GPT_4O_MINI_2024_07_18 -> Known.GPT_4O_MINI_2024_07_18

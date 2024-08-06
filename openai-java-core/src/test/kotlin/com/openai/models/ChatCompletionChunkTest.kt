@@ -24,6 +24,7 @@ class ChatCompletionChunkTest {
                                             .name("name")
                                             .build()
                                     )
+                                    .refusal("refusal")
                                     .role(ChatCompletionChunk.Choice.Delta.Role.SYSTEM)
                                     .toolCalls(
                                         listOf(
@@ -52,6 +53,25 @@ class ChatCompletionChunkTest {
                             .logprobs(
                                 ChatCompletionChunk.Choice.Logprobs.builder()
                                     .content(
+                                        listOf(
+                                            ChatCompletionTokenLogprob.builder()
+                                                .token("token")
+                                                .bytes(listOf(123L))
+                                                .logprob(42.23)
+                                                .topLogprobs(
+                                                    listOf(
+                                                        ChatCompletionTokenLogprob.TopLogprob
+                                                            .builder()
+                                                            .token("token")
+                                                            .bytes(listOf(123L))
+                                                            .logprob(42.23)
+                                                            .build()
+                                                    )
+                                                )
+                                                .build()
+                                        )
+                                    )
+                                    .refusal(
                                         listOf(
                                             ChatCompletionTokenLogprob.builder()
                                                 .token("token")
@@ -102,6 +122,7 @@ class ChatCompletionChunkTest {
                                     .name("name")
                                     .build()
                             )
+                            .refusal("refusal")
                             .role(ChatCompletionChunk.Choice.Delta.Role.SYSTEM)
                             .toolCalls(
                                 listOf(
@@ -128,6 +149,24 @@ class ChatCompletionChunkTest {
                     .logprobs(
                         ChatCompletionChunk.Choice.Logprobs.builder()
                             .content(
+                                listOf(
+                                    ChatCompletionTokenLogprob.builder()
+                                        .token("token")
+                                        .bytes(listOf(123L))
+                                        .logprob(42.23)
+                                        .topLogprobs(
+                                            listOf(
+                                                ChatCompletionTokenLogprob.TopLogprob.builder()
+                                                    .token("token")
+                                                    .bytes(listOf(123L))
+                                                    .logprob(42.23)
+                                                    .build()
+                                            )
+                                        )
+                                        .build()
+                                )
+                            )
+                            .refusal(
                                 listOf(
                                     ChatCompletionTokenLogprob.builder()
                                         .token("token")
