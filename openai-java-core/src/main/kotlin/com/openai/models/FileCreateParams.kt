@@ -2,16 +2,11 @@
 
 package com.openai.models
 
-import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.openai.core.ContentTypes
-import com.openai.core.Enum
-import com.openai.core.JsonField
-import com.openai.core.JsonValue
 import com.openai.core.MultipartFormValue
 import com.openai.core.NoAutoDetect
 import com.openai.core.toUnmodifiable
-import com.openai.errors.OpenAIInvalidDataException
 import com.openai.models.*
 import java.util.Objects
 import org.apache.hc.core5.http.ContentType
@@ -19,14 +14,14 @@ import org.apache.hc.core5.http.ContentType
 class FileCreateParams
 constructor(
     private val file: MultipartFormValue<ByteArray>,
-    private val purpose: MultipartFormValue<Purpose>,
+    private val purpose: MultipartFormValue<FilePurpose>,
     private val additionalQueryParams: Map<String, List<String>>,
     private val additionalHeaders: Map<String, List<String>>,
 ) {
 
     fun file(): MultipartFormValue<ByteArray> = file
 
-    fun purpose(): MultipartFormValue<Purpose> = purpose
+    fun purpose(): MultipartFormValue<FilePurpose> = purpose
 
     @JvmSynthetic
     internal fun getBody(): Array<MultipartFormValue<*>?> {
@@ -42,7 +37,7 @@ constructor(
     class FileCreateBody
     internal constructor(
         private val file: ByteArray?,
-        private val purpose: Purpose?,
+        private val purpose: FilePurpose?,
     ) {
 
         private var hashCode: Int = 0
@@ -60,7 +55,7 @@ constructor(
          * [Batch API](https://platform.openai.com/docs/guides/batch), and "fine-tune" for
          * [Fine-tuning](https://platform.openai.com/docs/api-reference/fine-tuning).
          */
-        fun purpose(): Purpose? = purpose
+        fun purpose(): FilePurpose? = purpose
 
         fun toBuilder() = Builder().from(this)
 
@@ -91,7 +86,7 @@ constructor(
         class Builder {
 
             private var file: ByteArray? = null
-            private var purpose: Purpose? = null
+            private var purpose: FilePurpose? = null
 
             @JvmSynthetic
             internal fun from(fileCreateBody: FileCreateBody) = apply {
@@ -112,7 +107,7 @@ constructor(
              * [Batch API](https://platform.openai.com/docs/guides/batch), and "fine-tune" for
              * [Fine-tuning](https://platform.openai.com/docs/api-reference/fine-tuning).
              */
-            fun purpose(purpose: Purpose) = apply { this.purpose = purpose }
+            fun purpose(purpose: FilePurpose) = apply { this.purpose = purpose }
         }
     }
 
@@ -155,7 +150,7 @@ constructor(
     class Builder {
 
         private var file: MultipartFormValue<ByteArray>? = null
-        private var purpose: MultipartFormValue<Purpose>? = null
+        private var purpose: MultipartFormValue<FilePurpose>? = null
         private var additionalQueryParams: MutableMap<String, MutableList<String>> = mutableMapOf()
         private var additionalHeaders: MutableMap<String, MutableList<String>> = mutableMapOf()
 
@@ -186,9 +181,10 @@ constructor(
          * [Batch API](https://platform.openai.com/docs/guides/batch), and "fine-tune" for
          * [Fine-tuning](https://platform.openai.com/docs/api-reference/fine-tuning).
          */
-        fun purpose(purpose: Purpose, contentType: ContentType = ContentTypes.DefaultText) = apply {
-            this.purpose = MultipartFormValue.fromEnum("purpose", purpose, contentType)
-        }
+        fun purpose(purpose: FilePurpose, contentType: ContentType = ContentTypes.DefaultText) =
+            apply {
+                this.purpose = MultipartFormValue.fromEnum("purpose", purpose, contentType)
+            }
 
         fun additionalQueryParams(additionalQueryParams: Map<String, List<String>>) = apply {
             this.additionalQueryParams.clear()
@@ -237,74 +233,5 @@ constructor(
                 additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
                 additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
             )
-    }
-
-    class Purpose
-    @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
-
-        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Purpose && this.value == other.value
-        }
-
-        override fun hashCode() = value.hashCode()
-
-        override fun toString() = value.toString()
-
-        companion object {
-
-            @JvmField val ASSISTANTS = Purpose(JsonField.of("assistants"))
-
-            @JvmField val BATCH = Purpose(JsonField.of("batch"))
-
-            @JvmField val FINE_TUNE = Purpose(JsonField.of("fine-tune"))
-
-            @JvmField val VISION = Purpose(JsonField.of("vision"))
-
-            @JvmStatic fun of(value: String) = Purpose(JsonField.of(value))
-        }
-
-        enum class Known {
-            ASSISTANTS,
-            BATCH,
-            FINE_TUNE,
-            VISION,
-        }
-
-        enum class Value {
-            ASSISTANTS,
-            BATCH,
-            FINE_TUNE,
-            VISION,
-            _UNKNOWN,
-        }
-
-        fun value(): Value =
-            when (this) {
-                ASSISTANTS -> Value.ASSISTANTS
-                BATCH -> Value.BATCH
-                FINE_TUNE -> Value.FINE_TUNE
-                VISION -> Value.VISION
-                else -> Value._UNKNOWN
-            }
-
-        fun known(): Known =
-            when (this) {
-                ASSISTANTS -> Known.ASSISTANTS
-                BATCH -> Known.BATCH
-                FINE_TUNE -> Known.FINE_TUNE
-                VISION -> Known.VISION
-                else -> throw OpenAIInvalidDataException("Unknown Purpose: $value")
-            }
-
-        fun asString(): String = _value().asStringOrThrow()
     }
 }
