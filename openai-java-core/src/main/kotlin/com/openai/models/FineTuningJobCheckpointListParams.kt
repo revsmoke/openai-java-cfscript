@@ -2,7 +2,6 @@
 
 package com.openai.models
 
-import com.openai.core.JsonValue
 import com.openai.core.NoAutoDetect
 import com.openai.core.toUnmodifiable
 import com.openai.models.*
@@ -16,7 +15,6 @@ constructor(
     private val limit: Long?,
     private val additionalQueryParams: Map<String, List<String>>,
     private val additionalHeaders: Map<String, List<String>>,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
     fun fineTuningJobId(): String = fineTuningJobId
@@ -47,8 +45,6 @@ constructor(
 
     fun _additionalHeaders(): Map<String, List<String>> = additionalHeaders
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
@@ -59,8 +55,7 @@ constructor(
             this.after == other.after &&
             this.limit == other.limit &&
             this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders &&
-            this.additionalBodyProperties == other.additionalBodyProperties
+            this.additionalHeaders == other.additionalHeaders
     }
 
     override fun hashCode(): Int {
@@ -70,12 +65,11 @@ constructor(
             limit,
             additionalQueryParams,
             additionalHeaders,
-            additionalBodyProperties,
         )
     }
 
     override fun toString() =
-        "FineTuningJobCheckpointListParams{fineTuningJobId=$fineTuningJobId, after=$after, limit=$limit, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
+        "FineTuningJobCheckpointListParams{fineTuningJobId=$fineTuningJobId, after=$after, limit=$limit, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -92,7 +86,6 @@ constructor(
         private var limit: Long? = null
         private var additionalQueryParams: MutableMap<String, MutableList<String>> = mutableMapOf()
         private var additionalHeaders: MutableMap<String, MutableList<String>> = mutableMapOf()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(fineTuningJobCheckpointListParams: FineTuningJobCheckpointListParams) =
@@ -102,7 +95,6 @@ constructor(
                 this.limit = fineTuningJobCheckpointListParams.limit
                 additionalQueryParams(fineTuningJobCheckpointListParams.additionalQueryParams)
                 additionalHeaders(fineTuningJobCheckpointListParams.additionalHeaders)
-                additionalBodyProperties(fineTuningJobCheckpointListParams.additionalBodyProperties)
             }
 
         fun fineTuningJobId(fineTuningJobId: String) = apply {
@@ -155,20 +147,6 @@ constructor(
 
         fun removeHeader(name: String) = apply { this.additionalHeaders.put(name, mutableListOf()) }
 
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            this.additionalBodyProperties.putAll(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            this.additionalBodyProperties.put(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
-            }
-
         fun build(): FineTuningJobCheckpointListParams =
             FineTuningJobCheckpointListParams(
                 checkNotNull(fineTuningJobId) { "`fineTuningJobId` is required but was not set" },
@@ -176,7 +154,6 @@ constructor(
                 limit,
                 additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
                 additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
             )
     }
 }
