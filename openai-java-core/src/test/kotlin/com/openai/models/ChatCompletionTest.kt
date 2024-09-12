@@ -99,6 +99,11 @@ class ChatCompletionTest {
                         .completionTokens(123L)
                         .promptTokens(123L)
                         .totalTokens(123L)
+                        .completionTokensDetails(
+                            ChatCompletion.Usage.CompletionTokensDetails.builder()
+                                .reasoningTokens(123L)
+                                .build()
+                        )
                         .build()
                 )
                 .build()
@@ -189,6 +194,11 @@ class ChatCompletionTest {
                     .completionTokens(123L)
                     .promptTokens(123L)
                     .totalTokens(123L)
+                    .completionTokensDetails(
+                        ChatCompletion.Usage.CompletionTokensDetails.builder()
+                            .reasoningTokens(123L)
+                            .build()
+                    )
                     .build()
             )
     }

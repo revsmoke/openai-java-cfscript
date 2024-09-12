@@ -818,6 +818,7 @@ private constructor(
         private val completionTokens: JsonField<Long>,
         private val promptTokens: JsonField<Long>,
         private val totalTokens: JsonField<Long>,
+        private val completionTokensDetails: JsonField<CompletionTokensDetails>,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
@@ -834,6 +835,10 @@ private constructor(
         /** Total number of tokens used in the request (prompt + completion). */
         fun totalTokens(): Long = totalTokens.getRequired("total_tokens")
 
+        /** Breakdown of tokens used in a completion. */
+        fun completionTokensDetails(): Optional<CompletionTokensDetails> =
+            Optional.ofNullable(completionTokensDetails.getNullable("completion_tokens_details"))
+
         /** Number of tokens in the generated completion. */
         @JsonProperty("completion_tokens")
         @ExcludeMissing
@@ -845,6 +850,11 @@ private constructor(
         /** Total number of tokens used in the request (prompt + completion). */
         @JsonProperty("total_tokens") @ExcludeMissing fun _totalTokens() = totalTokens
 
+        /** Breakdown of tokens used in a completion. */
+        @JsonProperty("completion_tokens_details")
+        @ExcludeMissing
+        fun _completionTokensDetails() = completionTokensDetails
+
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -854,6 +864,7 @@ private constructor(
                 completionTokens()
                 promptTokens()
                 totalTokens()
+                completionTokensDetails().map { it.validate() }
                 validated = true
             }
         }
@@ -869,6 +880,7 @@ private constructor(
                 this.completionTokens == other.completionTokens &&
                 this.promptTokens == other.promptTokens &&
                 this.totalTokens == other.totalTokens &&
+                this.completionTokensDetails == other.completionTokensDetails &&
                 this.additionalProperties == other.additionalProperties
         }
 
@@ -879,6 +891,7 @@ private constructor(
                         completionTokens,
                         promptTokens,
                         totalTokens,
+                        completionTokensDetails,
                         additionalProperties,
                     )
             }
@@ -886,7 +899,7 @@ private constructor(
         }
 
         override fun toString() =
-            "Usage{completionTokens=$completionTokens, promptTokens=$promptTokens, totalTokens=$totalTokens, additionalProperties=$additionalProperties}"
+            "Usage{completionTokens=$completionTokens, promptTokens=$promptTokens, totalTokens=$totalTokens, completionTokensDetails=$completionTokensDetails, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -898,6 +911,8 @@ private constructor(
             private var completionTokens: JsonField<Long> = JsonMissing.of()
             private var promptTokens: JsonField<Long> = JsonMissing.of()
             private var totalTokens: JsonField<Long> = JsonMissing.of()
+            private var completionTokensDetails: JsonField<CompletionTokensDetails> =
+                JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -905,6 +920,7 @@ private constructor(
                 this.completionTokens = usage.completionTokens
                 this.promptTokens = usage.promptTokens
                 this.totalTokens = usage.totalTokens
+                this.completionTokensDetails = usage.completionTokensDetails
                 additionalProperties(usage.additionalProperties)
             }
 
@@ -937,6 +953,17 @@ private constructor(
             @ExcludeMissing
             fun totalTokens(totalTokens: JsonField<Long>) = apply { this.totalTokens = totalTokens }
 
+            /** Breakdown of tokens used in a completion. */
+            fun completionTokensDetails(completionTokensDetails: CompletionTokensDetails) =
+                completionTokensDetails(JsonField.of(completionTokensDetails))
+
+            /** Breakdown of tokens used in a completion. */
+            @JsonProperty("completion_tokens_details")
+            @ExcludeMissing
+            fun completionTokensDetails(
+                completionTokensDetails: JsonField<CompletionTokensDetails>
+            ) = apply { this.completionTokensDetails = completionTokensDetails }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 this.additionalProperties.putAll(additionalProperties)
@@ -956,8 +983,111 @@ private constructor(
                     completionTokens,
                     promptTokens,
                     totalTokens,
+                    completionTokensDetails,
                     additionalProperties.toUnmodifiable(),
                 )
+        }
+
+        /** Breakdown of tokens used in a completion. */
+        @JsonDeserialize(builder = CompletionTokensDetails.Builder::class)
+        @NoAutoDetect
+        class CompletionTokensDetails
+        private constructor(
+            private val reasoningTokens: JsonField<Long>,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var validated: Boolean = false
+
+            private var hashCode: Int = 0
+
+            /** Tokens generated by the model for reasoning. */
+            fun reasoningTokens(): Optional<Long> =
+                Optional.ofNullable(reasoningTokens.getNullable("reasoning_tokens"))
+
+            /** Tokens generated by the model for reasoning. */
+            @JsonProperty("reasoning_tokens")
+            @ExcludeMissing
+            fun _reasoningTokens() = reasoningTokens
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun validate(): CompletionTokensDetails = apply {
+                if (!validated) {
+                    reasoningTokens()
+                    validated = true
+                }
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is CompletionTokensDetails &&
+                    this.reasoningTokens == other.reasoningTokens &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode = Objects.hash(reasoningTokens, additionalProperties)
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "CompletionTokensDetails{reasoningTokens=$reasoningTokens, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var reasoningTokens: JsonField<Long> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(completionTokensDetails: CompletionTokensDetails) = apply {
+                    this.reasoningTokens = completionTokensDetails.reasoningTokens
+                    additionalProperties(completionTokensDetails.additionalProperties)
+                }
+
+                /** Tokens generated by the model for reasoning. */
+                fun reasoningTokens(reasoningTokens: Long) =
+                    reasoningTokens(JsonField.of(reasoningTokens))
+
+                /** Tokens generated by the model for reasoning. */
+                @JsonProperty("reasoning_tokens")
+                @ExcludeMissing
+                fun reasoningTokens(reasoningTokens: JsonField<Long>) = apply {
+                    this.reasoningTokens = reasoningTokens
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): CompletionTokensDetails =
+                    CompletionTokensDetails(reasoningTokens, additionalProperties.toUnmodifiable())
+            }
         }
     }
 }

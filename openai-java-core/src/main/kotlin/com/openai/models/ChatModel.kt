@@ -30,11 +30,19 @@ private constructor(
 
     companion object {
 
+        @JvmField val O1_PREVIEW = ChatModel(JsonField.of("o1-preview"))
+
+        @JvmField val O1_PREVIEW_2024_09_12 = ChatModel(JsonField.of("o1-preview-2024-09-12"))
+
+        @JvmField val O1_MINI = ChatModel(JsonField.of("o1-mini"))
+
+        @JvmField val O1_MINI_2024_09_12 = ChatModel(JsonField.of("o1-mini-2024-09-12"))
+
         @JvmField val GPT_4O = ChatModel(JsonField.of("gpt-4o"))
 
-        @JvmField val GPT_4O_2024_05_13 = ChatModel(JsonField.of("gpt-4o-2024-05-13"))
-
         @JvmField val GPT_4O_2024_08_06 = ChatModel(JsonField.of("gpt-4o-2024-08-06"))
+
+        @JvmField val GPT_4O_2024_05_13 = ChatModel(JsonField.of("gpt-4o-2024-05-13"))
 
         @JvmField val CHATGPT_4O_LATEST = ChatModel(JsonField.of("chatgpt-4o-latest"))
 
@@ -84,9 +92,13 @@ private constructor(
     }
 
     enum class Known {
+        O1_PREVIEW,
+        O1_PREVIEW_2024_09_12,
+        O1_MINI,
+        O1_MINI_2024_09_12,
         GPT_4O,
-        GPT_4O_2024_05_13,
         GPT_4O_2024_08_06,
+        GPT_4O_2024_05_13,
         CHATGPT_4O_LATEST,
         GPT_4O_MINI,
         GPT_4O_MINI_2024_07_18,
@@ -112,9 +124,13 @@ private constructor(
     }
 
     enum class Value {
+        O1_PREVIEW,
+        O1_PREVIEW_2024_09_12,
+        O1_MINI,
+        O1_MINI_2024_09_12,
         GPT_4O,
-        GPT_4O_2024_05_13,
         GPT_4O_2024_08_06,
+        GPT_4O_2024_05_13,
         CHATGPT_4O_LATEST,
         GPT_4O_MINI,
         GPT_4O_MINI_2024_07_18,
@@ -142,9 +158,13 @@ private constructor(
 
     fun value(): Value =
         when (this) {
+            O1_PREVIEW -> Value.O1_PREVIEW
+            O1_PREVIEW_2024_09_12 -> Value.O1_PREVIEW_2024_09_12
+            O1_MINI -> Value.O1_MINI
+            O1_MINI_2024_09_12 -> Value.O1_MINI_2024_09_12
             GPT_4O -> Value.GPT_4O
-            GPT_4O_2024_05_13 -> Value.GPT_4O_2024_05_13
             GPT_4O_2024_08_06 -> Value.GPT_4O_2024_08_06
+            GPT_4O_2024_05_13 -> Value.GPT_4O_2024_05_13
             CHATGPT_4O_LATEST -> Value.CHATGPT_4O_LATEST
             GPT_4O_MINI -> Value.GPT_4O_MINI
             GPT_4O_MINI_2024_07_18 -> Value.GPT_4O_MINI_2024_07_18
@@ -172,9 +192,13 @@ private constructor(
 
     fun known(): Known =
         when (this) {
+            O1_PREVIEW -> Known.O1_PREVIEW
+            O1_PREVIEW_2024_09_12 -> Known.O1_PREVIEW_2024_09_12
+            O1_MINI -> Known.O1_MINI
+            O1_MINI_2024_09_12 -> Known.O1_MINI_2024_09_12
             GPT_4O -> Known.GPT_4O
-            GPT_4O_2024_05_13 -> Known.GPT_4O_2024_05_13
             GPT_4O_2024_08_06 -> Known.GPT_4O_2024_08_06
+            GPT_4O_2024_05_13 -> Known.GPT_4O_2024_05_13
             CHATGPT_4O_LATEST -> Known.CHATGPT_4O_LATEST
             GPT_4O_MINI -> Known.GPT_4O_MINI
             GPT_4O_MINI_2024_07_18 -> Known.GPT_4O_MINI_2024_07_18

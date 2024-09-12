@@ -36,6 +36,7 @@ constructor(
     private val functions: List<Function>?,
     private val logitBias: LogitBias?,
     private val logprobs: Boolean?,
+    private val maxCompletionTokens: Long?,
     private val maxTokens: Long?,
     private val n: Long?,
     private val parallelToolCalls: Boolean?,
@@ -70,6 +71,8 @@ constructor(
     fun logitBias(): Optional<LogitBias> = Optional.ofNullable(logitBias)
 
     fun logprobs(): Optional<Boolean> = Optional.ofNullable(logprobs)
+
+    fun maxCompletionTokens(): Optional<Long> = Optional.ofNullable(maxCompletionTokens)
 
     fun maxTokens(): Optional<Long> = Optional.ofNullable(maxTokens)
 
@@ -113,6 +116,7 @@ constructor(
             functions,
             logitBias,
             logprobs,
+            maxCompletionTokens,
             maxTokens,
             n,
             parallelToolCalls,
@@ -148,6 +152,7 @@ constructor(
         private val functions: List<Function>?,
         private val logitBias: LogitBias?,
         private val logprobs: Boolean?,
+        private val maxCompletionTokens: Long?,
         private val maxTokens: Long?,
         private val n: Long?,
         private val parallelToolCalls: Boolean?,
@@ -230,12 +235,20 @@ constructor(
         @JsonProperty("logprobs") fun logprobs(): Boolean? = logprobs
 
         /**
+         * An upper bound for the number of tokens that can be generated for a completion, including
+         * visible output tokens and
+         * [reasoning tokens](https://platform.openai.com/docs/guides/reasoning).
+         */
+        @JsonProperty("max_completion_tokens")
+        fun maxCompletionTokens(): Long? = maxCompletionTokens
+
+        /**
          * The maximum number of [tokens](/tokenizer) that can be generated in the chat completion.
+         * This value can be used to control [costs](https://openai.com/api/pricing/) for text
+         * generated via API.
          *
-         * The total length of input tokens and generated tokens is limited by the model's context
-         * length.
-         * [Example Python code](https://cookbook.openai.com/examples/how_to_count_tokens_with_tiktoken)
-         * for counting tokens.
+         * This value is now deprecated in favor of `max_completion_tokens`, and is not compatible
+         * with [o1 series models](https://platform.openai.com/docs/guides/reasoning).
          */
         @JsonProperty("max_tokens") fun maxTokens(): Long? = maxTokens
 
@@ -270,11 +283,11 @@ constructor(
          * GPT-3.5 Turbo models newer than `gpt-3.5-turbo-1106`.
          *
          * Setting to `{ "type": "json_schema", "json_schema": {...} }` enables Structured Outputs
-         * which guarantees the model will match your supplied JSON schema. Learn more in the
+         * which ensures the model will match your supplied JSON schema. Learn more in the
          * [Structured Outputs guide](https://platform.openai.com/docs/guides/structured-outputs).
          *
-         * Setting to `{ "type": "json_object" }` enables JSON mode, which guarantees the message
-         * the model generates is valid JSON.
+         * Setting to `{ "type": "json_object" }` enables JSON mode, which ensures the message the
+         * model generates is valid JSON.
          *
          * **Important:** when using JSON mode, you **must** also instruct the model to produce JSON
          * yourself via a system or user message. Without this, the model may generate an unending
@@ -296,7 +309,11 @@ constructor(
         /**
          * Specifies the latency tier to use for processing the request. This parameter is relevant
          * for customers subscribed to the scale tier service:
-         * - If set to 'auto', the system will utilize scale tier credits until they are exhausted.
+         * - If set to 'auto', and the Project is Scale tier enabled, the system will utilize scale
+         *   tier credits until they are exhausted.
+         * - If set to 'auto', and the Project is not Scale tier enabled, the request will be
+         *   processed using the default service tier with a lower uptime SLA and no latency
+         *   guarentee.
          * - If set to 'default', the request will be processed using the default service tier with
          *   a lower uptime SLA and no latency guarentee.
          * - When not set, the default behavior is 'auto'.
@@ -391,6 +408,7 @@ constructor(
                 this.functions == other.functions &&
                 this.logitBias == other.logitBias &&
                 this.logprobs == other.logprobs &&
+                this.maxCompletionTokens == other.maxCompletionTokens &&
                 this.maxTokens == other.maxTokens &&
                 this.n == other.n &&
                 this.parallelToolCalls == other.parallelToolCalls &&
@@ -421,6 +439,7 @@ constructor(
                         functions,
                         logitBias,
                         logprobs,
+                        maxCompletionTokens,
                         maxTokens,
                         n,
                         parallelToolCalls,
@@ -444,7 +463,7 @@ constructor(
         }
 
         override fun toString() =
-            "ChatCompletionCreateBody{messages=$messages, model=$model, frequencyPenalty=$frequencyPenalty, functionCall=$functionCall, functions=$functions, logitBias=$logitBias, logprobs=$logprobs, maxTokens=$maxTokens, n=$n, parallelToolCalls=$parallelToolCalls, presencePenalty=$presencePenalty, responseFormat=$responseFormat, seed=$seed, serviceTier=$serviceTier, stop=$stop, stream=$stream, streamOptions=$streamOptions, temperature=$temperature, toolChoice=$toolChoice, tools=$tools, topLogprobs=$topLogprobs, topP=$topP, user=$user, additionalProperties=$additionalProperties}"
+            "ChatCompletionCreateBody{messages=$messages, model=$model, frequencyPenalty=$frequencyPenalty, functionCall=$functionCall, functions=$functions, logitBias=$logitBias, logprobs=$logprobs, maxCompletionTokens=$maxCompletionTokens, maxTokens=$maxTokens, n=$n, parallelToolCalls=$parallelToolCalls, presencePenalty=$presencePenalty, responseFormat=$responseFormat, seed=$seed, serviceTier=$serviceTier, stop=$stop, stream=$stream, streamOptions=$streamOptions, temperature=$temperature, toolChoice=$toolChoice, tools=$tools, topLogprobs=$topLogprobs, topP=$topP, user=$user, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -460,6 +479,7 @@ constructor(
             private var functions: List<Function>? = null
             private var logitBias: LogitBias? = null
             private var logprobs: Boolean? = null
+            private var maxCompletionTokens: Long? = null
             private var maxTokens: Long? = null
             private var n: Long? = null
             private var parallelToolCalls: Boolean? = null
@@ -487,6 +507,7 @@ constructor(
                 this.functions = chatCompletionCreateBody.functions
                 this.logitBias = chatCompletionCreateBody.logitBias
                 this.logprobs = chatCompletionCreateBody.logprobs
+                this.maxCompletionTokens = chatCompletionCreateBody.maxCompletionTokens
                 this.maxTokens = chatCompletionCreateBody.maxTokens
                 this.n = chatCompletionCreateBody.n
                 this.parallelToolCalls = chatCompletionCreateBody.parallelToolCalls
@@ -580,13 +601,23 @@ constructor(
             fun logprobs(logprobs: Boolean) = apply { this.logprobs = logprobs }
 
             /**
+             * An upper bound for the number of tokens that can be generated for a completion,
+             * including visible output tokens and
+             * [reasoning tokens](https://platform.openai.com/docs/guides/reasoning).
+             */
+            @JsonProperty("max_completion_tokens")
+            fun maxCompletionTokens(maxCompletionTokens: Long) = apply {
+                this.maxCompletionTokens = maxCompletionTokens
+            }
+
+            /**
              * The maximum number of [tokens](/tokenizer) that can be generated in the chat
-             * completion.
+             * completion. This value can be used to control
+             * [costs](https://openai.com/api/pricing/) for text generated via API.
              *
-             * The total length of input tokens and generated tokens is limited by the model's
-             * context length.
-             * [Example Python code](https://cookbook.openai.com/examples/how_to_count_tokens_with_tiktoken)
-             * for counting tokens.
+             * This value is now deprecated in favor of `max_completion_tokens`, and is not
+             * compatible with
+             * [o1 series models](https://platform.openai.com/docs/guides/reasoning).
              */
             @JsonProperty("max_tokens")
             fun maxTokens(maxTokens: Long) = apply { this.maxTokens = maxTokens }
@@ -629,12 +660,12 @@ constructor(
              * GPT-3.5 Turbo models newer than `gpt-3.5-turbo-1106`.
              *
              * Setting to `{ "type": "json_schema", "json_schema": {...} }` enables Structured
-             * Outputs which guarantees the model will match your supplied JSON schema. Learn more
-             * in the
+             * Outputs which ensures the model will match your supplied JSON schema. Learn more in
+             * the
              * [Structured Outputs guide](https://platform.openai.com/docs/guides/structured-outputs).
              *
-             * Setting to `{ "type": "json_object" }` enables JSON mode, which guarantees the
-             * message the model generates is valid JSON.
+             * Setting to `{ "type": "json_object" }` enables JSON mode, which ensures the message
+             * the model generates is valid JSON.
              *
              * **Important:** when using JSON mode, you **must** also instruct the model to produce
              * JSON yourself via a system or user message. Without this, the model may generate an
@@ -659,8 +690,11 @@ constructor(
             /**
              * Specifies the latency tier to use for processing the request. This parameter is
              * relevant for customers subscribed to the scale tier service:
-             * - If set to 'auto', the system will utilize scale tier credits until they are
-             *   exhausted.
+             * - If set to 'auto', and the Project is Scale tier enabled, the system will utilize
+             *   scale tier credits until they are exhausted.
+             * - If set to 'auto', and the Project is not Scale tier enabled, the request will be
+             *   processed using the default service tier with a lower uptime SLA and no latency
+             *   guarentee.
              * - If set to 'default', the request will be processed using the default service tier
              *   with a lower uptime SLA and no latency guarentee.
              * - When not set, the default behavior is 'auto'.
@@ -770,6 +804,7 @@ constructor(
                     functions?.toUnmodifiable(),
                     logitBias,
                     logprobs,
+                    maxCompletionTokens,
                     maxTokens,
                     n,
                     parallelToolCalls,
@@ -810,6 +845,7 @@ constructor(
             this.functions == other.functions &&
             this.logitBias == other.logitBias &&
             this.logprobs == other.logprobs &&
+            this.maxCompletionTokens == other.maxCompletionTokens &&
             this.maxTokens == other.maxTokens &&
             this.n == other.n &&
             this.parallelToolCalls == other.parallelToolCalls &&
@@ -840,6 +876,7 @@ constructor(
             functions,
             logitBias,
             logprobs,
+            maxCompletionTokens,
             maxTokens,
             n,
             parallelToolCalls,
@@ -863,7 +900,7 @@ constructor(
     }
 
     override fun toString() =
-        "ChatCompletionCreateParams{messages=$messages, model=$model, frequencyPenalty=$frequencyPenalty, functionCall=$functionCall, functions=$functions, logitBias=$logitBias, logprobs=$logprobs, maxTokens=$maxTokens, n=$n, parallelToolCalls=$parallelToolCalls, presencePenalty=$presencePenalty, responseFormat=$responseFormat, seed=$seed, serviceTier=$serviceTier, stop=$stop, stream=$stream, streamOptions=$streamOptions, temperature=$temperature, toolChoice=$toolChoice, tools=$tools, topLogprobs=$topLogprobs, topP=$topP, user=$user, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
+        "ChatCompletionCreateParams{messages=$messages, model=$model, frequencyPenalty=$frequencyPenalty, functionCall=$functionCall, functions=$functions, logitBias=$logitBias, logprobs=$logprobs, maxCompletionTokens=$maxCompletionTokens, maxTokens=$maxTokens, n=$n, parallelToolCalls=$parallelToolCalls, presencePenalty=$presencePenalty, responseFormat=$responseFormat, seed=$seed, serviceTier=$serviceTier, stop=$stop, stream=$stream, streamOptions=$streamOptions, temperature=$temperature, toolChoice=$toolChoice, tools=$tools, topLogprobs=$topLogprobs, topP=$topP, user=$user, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -882,6 +919,7 @@ constructor(
         private var functions: MutableList<Function> = mutableListOf()
         private var logitBias: LogitBias? = null
         private var logprobs: Boolean? = null
+        private var maxCompletionTokens: Long? = null
         private var maxTokens: Long? = null
         private var n: Long? = null
         private var parallelToolCalls: Boolean? = null
@@ -911,6 +949,7 @@ constructor(
             this.functions(chatCompletionCreateParams.functions ?: listOf())
             this.logitBias = chatCompletionCreateParams.logitBias
             this.logprobs = chatCompletionCreateParams.logprobs
+            this.maxCompletionTokens = chatCompletionCreateParams.maxCompletionTokens
             this.maxTokens = chatCompletionCreateParams.maxTokens
             this.n = chatCompletionCreateParams.n
             this.parallelToolCalls = chatCompletionCreateParams.parallelToolCalls
@@ -1058,12 +1097,21 @@ constructor(
         fun logprobs(logprobs: Boolean) = apply { this.logprobs = logprobs }
 
         /**
+         * An upper bound for the number of tokens that can be generated for a completion, including
+         * visible output tokens and
+         * [reasoning tokens](https://platform.openai.com/docs/guides/reasoning).
+         */
+        fun maxCompletionTokens(maxCompletionTokens: Long) = apply {
+            this.maxCompletionTokens = maxCompletionTokens
+        }
+
+        /**
          * The maximum number of [tokens](/tokenizer) that can be generated in the chat completion.
+         * This value can be used to control [costs](https://openai.com/api/pricing/) for text
+         * generated via API.
          *
-         * The total length of input tokens and generated tokens is limited by the model's context
-         * length.
-         * [Example Python code](https://cookbook.openai.com/examples/how_to_count_tokens_with_tiktoken)
-         * for counting tokens.
+         * This value is now deprecated in favor of `max_completion_tokens`, and is not compatible
+         * with [o1 series models](https://platform.openai.com/docs/guides/reasoning).
          */
         fun maxTokens(maxTokens: Long) = apply { this.maxTokens = maxTokens }
 
@@ -1102,11 +1150,11 @@ constructor(
          * GPT-3.5 Turbo models newer than `gpt-3.5-turbo-1106`.
          *
          * Setting to `{ "type": "json_schema", "json_schema": {...} }` enables Structured Outputs
-         * which guarantees the model will match your supplied JSON schema. Learn more in the
+         * which ensures the model will match your supplied JSON schema. Learn more in the
          * [Structured Outputs guide](https://platform.openai.com/docs/guides/structured-outputs).
          *
-         * Setting to `{ "type": "json_object" }` enables JSON mode, which guarantees the message
-         * the model generates is valid JSON.
+         * Setting to `{ "type": "json_object" }` enables JSON mode, which ensures the message the
+         * model generates is valid JSON.
          *
          * **Important:** when using JSON mode, you **must** also instruct the model to produce JSON
          * yourself via a system or user message. Without this, the model may generate an unending
@@ -1127,11 +1175,11 @@ constructor(
          * GPT-3.5 Turbo models newer than `gpt-3.5-turbo-1106`.
          *
          * Setting to `{ "type": "json_schema", "json_schema": {...} }` enables Structured Outputs
-         * which guarantees the model will match your supplied JSON schema. Learn more in the
+         * which ensures the model will match your supplied JSON schema. Learn more in the
          * [Structured Outputs guide](https://platform.openai.com/docs/guides/structured-outputs).
          *
-         * Setting to `{ "type": "json_object" }` enables JSON mode, which guarantees the message
-         * the model generates is valid JSON.
+         * Setting to `{ "type": "json_object" }` enables JSON mode, which ensures the message the
+         * model generates is valid JSON.
          *
          * **Important:** when using JSON mode, you **must** also instruct the model to produce JSON
          * yourself via a system or user message. Without this, the model may generate an unending
@@ -1152,11 +1200,11 @@ constructor(
          * GPT-3.5 Turbo models newer than `gpt-3.5-turbo-1106`.
          *
          * Setting to `{ "type": "json_schema", "json_schema": {...} }` enables Structured Outputs
-         * which guarantees the model will match your supplied JSON schema. Learn more in the
+         * which ensures the model will match your supplied JSON schema. Learn more in the
          * [Structured Outputs guide](https://platform.openai.com/docs/guides/structured-outputs).
          *
-         * Setting to `{ "type": "json_object" }` enables JSON mode, which guarantees the message
-         * the model generates is valid JSON.
+         * Setting to `{ "type": "json_object" }` enables JSON mode, which ensures the message the
+         * model generates is valid JSON.
          *
          * **Important:** when using JSON mode, you **must** also instruct the model to produce JSON
          * yourself via a system or user message. Without this, the model may generate an unending
@@ -1178,11 +1226,11 @@ constructor(
          * GPT-3.5 Turbo models newer than `gpt-3.5-turbo-1106`.
          *
          * Setting to `{ "type": "json_schema", "json_schema": {...} }` enables Structured Outputs
-         * which guarantees the model will match your supplied JSON schema. Learn more in the
+         * which ensures the model will match your supplied JSON schema. Learn more in the
          * [Structured Outputs guide](https://platform.openai.com/docs/guides/structured-outputs).
          *
-         * Setting to `{ "type": "json_object" }` enables JSON mode, which guarantees the message
-         * the model generates is valid JSON.
+         * Setting to `{ "type": "json_object" }` enables JSON mode, which ensures the message the
+         * model generates is valid JSON.
          *
          * **Important:** when using JSON mode, you **must** also instruct the model to produce JSON
          * yourself via a system or user message. Without this, the model may generate an unending
@@ -1207,7 +1255,11 @@ constructor(
         /**
          * Specifies the latency tier to use for processing the request. This parameter is relevant
          * for customers subscribed to the scale tier service:
-         * - If set to 'auto', the system will utilize scale tier credits until they are exhausted.
+         * - If set to 'auto', and the Project is Scale tier enabled, the system will utilize scale
+         *   tier credits until they are exhausted.
+         * - If set to 'auto', and the Project is not Scale tier enabled, the request will be
+         *   processed using the default service tier with a lower uptime SLA and no latency
+         *   guarentee.
          * - If set to 'default', the request will be processed using the default service tier with
          *   a lower uptime SLA and no latency guarentee.
          * - When not set, the default behavior is 'auto'.
@@ -1397,6 +1449,7 @@ constructor(
                 if (functions.size == 0) null else functions.toUnmodifiable(),
                 logitBias,
                 logprobs,
+                maxCompletionTokens,
                 maxTokens,
                 n,
                 parallelToolCalls,
