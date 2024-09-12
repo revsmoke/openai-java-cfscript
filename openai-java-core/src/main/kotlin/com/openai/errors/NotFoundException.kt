@@ -2,12 +2,8 @@ package com.openai.errors
 
 import com.google.common.collect.ListMultimap
 
-class NotFoundException
-constructor(
+class NotFoundException(
     headers: ListMultimap<String, String>,
-    private val error: OpenAIError,
-) : OpenAIServiceException(headers, "${error}") {
-    override fun statusCode(): Int = 404
-
-    fun error(): OpenAIError = error
-}
+    body: String,
+    error: OpenAIError,
+) : OpenAIServiceException(404, headers, body, error)

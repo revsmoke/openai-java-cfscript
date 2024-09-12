@@ -2,12 +2,8 @@ package com.openai.errors
 
 import com.google.common.collect.ListMultimap
 
-class BadRequestException
-constructor(
+class BadRequestException(
     headers: ListMultimap<String, String>,
-    private val error: OpenAIError,
-) : OpenAIServiceException(headers, "${error}") {
-    override fun statusCode(): Int = 400
-
-    fun error(): OpenAIError = error
-}
+    body: String,
+    error: OpenAIError,
+) : OpenAIServiceException(400, headers, body, error)
