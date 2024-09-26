@@ -22,10 +22,6 @@ constructor(
 
     private val files: FileServiceAsync by lazy { FileServiceAsyncImpl(clientOptions) }
 
-    private val moderations: ModerationServiceAsync by lazy {
-        ModerationServiceAsyncImpl(clientOptions)
-    }
-
     private val models: ModelServiceAsync by lazy { ModelServiceAsyncImpl(clientOptions) }
 
     private val fineTuning: FineTuningServiceAsync by lazy {
@@ -39,8 +35,6 @@ constructor(
     override fun chat(): ChatServiceAsync = chat
 
     override fun files(): FileServiceAsync = files
-
-    override fun moderations(): ModerationServiceAsync = moderations
 
     override fun models(): ModelServiceAsync = models
 

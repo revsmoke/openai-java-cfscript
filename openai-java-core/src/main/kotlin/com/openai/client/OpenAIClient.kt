@@ -15,8 +15,6 @@ interface OpenAIClient {
 
     fun files(): FileService
 
-    fun moderations(): ModerationService
-
     fun models(): ModelService
 
     fun fineTuning(): FineTuningService

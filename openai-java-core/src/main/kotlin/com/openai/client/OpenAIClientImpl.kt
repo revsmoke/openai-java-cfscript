@@ -22,8 +22,6 @@ constructor(
 
     private val files: FileService by lazy { FileServiceImpl(clientOptions) }
 
-    private val moderations: ModerationService by lazy { ModerationServiceImpl(clientOptions) }
-
     private val models: ModelService by lazy { ModelServiceImpl(clientOptions) }
 
     private val fineTuning: FineTuningService by lazy { FineTuningServiceImpl(clientOptions) }
@@ -35,8 +33,6 @@ constructor(
     override fun chat(): ChatService = chat
 
     override fun files(): FileService = files
-
-    override fun moderations(): ModerationService = moderations
 
     override fun models(): ModelService = models
 
