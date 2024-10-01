@@ -107,7 +107,14 @@ class ChatCompletionChunkTest {
                         .totalTokens(123L)
                         .completionTokensDetails(
                             ChatCompletionChunk.Usage.CompletionTokensDetails.builder()
+                                .audioTokens(123L)
                                 .reasoningTokens(123L)
+                                .build()
+                        )
+                        .promptTokensDetails(
+                            ChatCompletionChunk.Usage.PromptTokensDetails.builder()
+                                .audioTokens(123L)
+                                .cachedTokens(123L)
                                 .build()
                         )
                         .build()
@@ -208,7 +215,14 @@ class ChatCompletionChunkTest {
                     .totalTokens(123L)
                     .completionTokensDetails(
                         ChatCompletionChunk.Usage.CompletionTokensDetails.builder()
+                            .audioTokens(123L)
                             .reasoningTokens(123L)
+                            .build()
+                    )
+                    .promptTokensDetails(
+                        ChatCompletionChunk.Usage.PromptTokensDetails.builder()
+                            .audioTokens(123L)
+                            .cachedTokens(123L)
                             .build()
                     )
                     .build()

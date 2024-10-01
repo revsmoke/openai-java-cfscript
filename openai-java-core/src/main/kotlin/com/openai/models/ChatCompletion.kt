@@ -819,6 +819,7 @@ private constructor(
         private val promptTokens: JsonField<Long>,
         private val totalTokens: JsonField<Long>,
         private val completionTokensDetails: JsonField<CompletionTokensDetails>,
+        private val promptTokensDetails: JsonField<PromptTokensDetails>,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
@@ -839,6 +840,10 @@ private constructor(
         fun completionTokensDetails(): Optional<CompletionTokensDetails> =
             Optional.ofNullable(completionTokensDetails.getNullable("completion_tokens_details"))
 
+        /** Breakdown of tokens used in the prompt. */
+        fun promptTokensDetails(): Optional<PromptTokensDetails> =
+            Optional.ofNullable(promptTokensDetails.getNullable("prompt_tokens_details"))
+
         /** Number of tokens in the generated completion. */
         @JsonProperty("completion_tokens")
         @ExcludeMissing
@@ -855,6 +860,11 @@ private constructor(
         @ExcludeMissing
         fun _completionTokensDetails() = completionTokensDetails
 
+        /** Breakdown of tokens used in the prompt. */
+        @JsonProperty("prompt_tokens_details")
+        @ExcludeMissing
+        fun _promptTokensDetails() = promptTokensDetails
+
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -865,6 +875,7 @@ private constructor(
                 promptTokens()
                 totalTokens()
                 completionTokensDetails().map { it.validate() }
+                promptTokensDetails().map { it.validate() }
                 validated = true
             }
         }
@@ -881,6 +892,7 @@ private constructor(
                 this.promptTokens == other.promptTokens &&
                 this.totalTokens == other.totalTokens &&
                 this.completionTokensDetails == other.completionTokensDetails &&
+                this.promptTokensDetails == other.promptTokensDetails &&
                 this.additionalProperties == other.additionalProperties
         }
 
@@ -892,6 +904,7 @@ private constructor(
                         promptTokens,
                         totalTokens,
                         completionTokensDetails,
+                        promptTokensDetails,
                         additionalProperties,
                     )
             }
@@ -899,7 +912,7 @@ private constructor(
         }
 
         override fun toString() =
-            "Usage{completionTokens=$completionTokens, promptTokens=$promptTokens, totalTokens=$totalTokens, completionTokensDetails=$completionTokensDetails, additionalProperties=$additionalProperties}"
+            "Usage{completionTokens=$completionTokens, promptTokens=$promptTokens, totalTokens=$totalTokens, completionTokensDetails=$completionTokensDetails, promptTokensDetails=$promptTokensDetails, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -913,6 +926,7 @@ private constructor(
             private var totalTokens: JsonField<Long> = JsonMissing.of()
             private var completionTokensDetails: JsonField<CompletionTokensDetails> =
                 JsonMissing.of()
+            private var promptTokensDetails: JsonField<PromptTokensDetails> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -921,6 +935,7 @@ private constructor(
                 this.promptTokens = usage.promptTokens
                 this.totalTokens = usage.totalTokens
                 this.completionTokensDetails = usage.completionTokensDetails
+                this.promptTokensDetails = usage.promptTokensDetails
                 additionalProperties(usage.additionalProperties)
             }
 
@@ -964,6 +979,17 @@ private constructor(
                 completionTokensDetails: JsonField<CompletionTokensDetails>
             ) = apply { this.completionTokensDetails = completionTokensDetails }
 
+            /** Breakdown of tokens used in the prompt. */
+            fun promptTokensDetails(promptTokensDetails: PromptTokensDetails) =
+                promptTokensDetails(JsonField.of(promptTokensDetails))
+
+            /** Breakdown of tokens used in the prompt. */
+            @JsonProperty("prompt_tokens_details")
+            @ExcludeMissing
+            fun promptTokensDetails(promptTokensDetails: JsonField<PromptTokensDetails>) = apply {
+                this.promptTokensDetails = promptTokensDetails
+            }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 this.additionalProperties.putAll(additionalProperties)
@@ -984,6 +1010,7 @@ private constructor(
                     promptTokens,
                     totalTokens,
                     completionTokensDetails,
+                    promptTokensDetails,
                     additionalProperties.toUnmodifiable(),
                 )
         }
@@ -993,6 +1020,7 @@ private constructor(
         @NoAutoDetect
         class CompletionTokensDetails
         private constructor(
+            private val audioTokens: JsonField<Long>,
             private val reasoningTokens: JsonField<Long>,
             private val additionalProperties: Map<String, JsonValue>,
         ) {
@@ -1001,9 +1029,16 @@ private constructor(
 
             private var hashCode: Int = 0
 
+            /** Audio input tokens generated by the model. */
+            fun audioTokens(): Optional<Long> =
+                Optional.ofNullable(audioTokens.getNullable("audio_tokens"))
+
             /** Tokens generated by the model for reasoning. */
             fun reasoningTokens(): Optional<Long> =
                 Optional.ofNullable(reasoningTokens.getNullable("reasoning_tokens"))
+
+            /** Audio input tokens generated by the model. */
+            @JsonProperty("audio_tokens") @ExcludeMissing fun _audioTokens() = audioTokens
 
             /** Tokens generated by the model for reasoning. */
             @JsonProperty("reasoning_tokens")
@@ -1016,6 +1051,7 @@ private constructor(
 
             fun validate(): CompletionTokensDetails = apply {
                 if (!validated) {
+                    audioTokens()
                     reasoningTokens()
                     validated = true
                 }
@@ -1029,19 +1065,25 @@ private constructor(
                 }
 
                 return other is CompletionTokensDetails &&
+                    this.audioTokens == other.audioTokens &&
                     this.reasoningTokens == other.reasoningTokens &&
                     this.additionalProperties == other.additionalProperties
             }
 
             override fun hashCode(): Int {
                 if (hashCode == 0) {
-                    hashCode = Objects.hash(reasoningTokens, additionalProperties)
+                    hashCode =
+                        Objects.hash(
+                            audioTokens,
+                            reasoningTokens,
+                            additionalProperties,
+                        )
                 }
                 return hashCode
             }
 
             override fun toString() =
-                "CompletionTokensDetails{reasoningTokens=$reasoningTokens, additionalProperties=$additionalProperties}"
+                "CompletionTokensDetails{audioTokens=$audioTokens, reasoningTokens=$reasoningTokens, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -1050,13 +1092,25 @@ private constructor(
 
             class Builder {
 
+                private var audioTokens: JsonField<Long> = JsonMissing.of()
                 private var reasoningTokens: JsonField<Long> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(completionTokensDetails: CompletionTokensDetails) = apply {
+                    this.audioTokens = completionTokensDetails.audioTokens
                     this.reasoningTokens = completionTokensDetails.reasoningTokens
                     additionalProperties(completionTokensDetails.additionalProperties)
+                }
+
+                /** Audio input tokens generated by the model. */
+                fun audioTokens(audioTokens: Long) = audioTokens(JsonField.of(audioTokens))
+
+                /** Audio input tokens generated by the model. */
+                @JsonProperty("audio_tokens")
+                @ExcludeMissing
+                fun audioTokens(audioTokens: JsonField<Long>) = apply {
+                    this.audioTokens = audioTokens
                 }
 
                 /** Tokens generated by the model for reasoning. */
@@ -1086,7 +1140,141 @@ private constructor(
                     }
 
                 fun build(): CompletionTokensDetails =
-                    CompletionTokensDetails(reasoningTokens, additionalProperties.toUnmodifiable())
+                    CompletionTokensDetails(
+                        audioTokens,
+                        reasoningTokens,
+                        additionalProperties.toUnmodifiable(),
+                    )
+            }
+        }
+
+        /** Breakdown of tokens used in the prompt. */
+        @JsonDeserialize(builder = PromptTokensDetails.Builder::class)
+        @NoAutoDetect
+        class PromptTokensDetails
+        private constructor(
+            private val audioTokens: JsonField<Long>,
+            private val cachedTokens: JsonField<Long>,
+            private val additionalProperties: Map<String, JsonValue>,
+        ) {
+
+            private var validated: Boolean = false
+
+            private var hashCode: Int = 0
+
+            /** Audio input tokens present in the prompt. */
+            fun audioTokens(): Optional<Long> =
+                Optional.ofNullable(audioTokens.getNullable("audio_tokens"))
+
+            /** Cached tokens present in the prompt. */
+            fun cachedTokens(): Optional<Long> =
+                Optional.ofNullable(cachedTokens.getNullable("cached_tokens"))
+
+            /** Audio input tokens present in the prompt. */
+            @JsonProperty("audio_tokens") @ExcludeMissing fun _audioTokens() = audioTokens
+
+            /** Cached tokens present in the prompt. */
+            @JsonProperty("cached_tokens") @ExcludeMissing fun _cachedTokens() = cachedTokens
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun validate(): PromptTokensDetails = apply {
+                if (!validated) {
+                    audioTokens()
+                    cachedTokens()
+                    validated = true
+                }
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is PromptTokensDetails &&
+                    this.audioTokens == other.audioTokens &&
+                    this.cachedTokens == other.cachedTokens &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            audioTokens,
+                            cachedTokens,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "PromptTokensDetails{audioTokens=$audioTokens, cachedTokens=$cachedTokens, additionalProperties=$additionalProperties}"
+
+            companion object {
+
+                @JvmStatic fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var audioTokens: JsonField<Long> = JsonMissing.of()
+                private var cachedTokens: JsonField<Long> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(promptTokensDetails: PromptTokensDetails) = apply {
+                    this.audioTokens = promptTokensDetails.audioTokens
+                    this.cachedTokens = promptTokensDetails.cachedTokens
+                    additionalProperties(promptTokensDetails.additionalProperties)
+                }
+
+                /** Audio input tokens present in the prompt. */
+                fun audioTokens(audioTokens: Long) = audioTokens(JsonField.of(audioTokens))
+
+                /** Audio input tokens present in the prompt. */
+                @JsonProperty("audio_tokens")
+                @ExcludeMissing
+                fun audioTokens(audioTokens: JsonField<Long>) = apply {
+                    this.audioTokens = audioTokens
+                }
+
+                /** Cached tokens present in the prompt. */
+                fun cachedTokens(cachedTokens: Long) = cachedTokens(JsonField.of(cachedTokens))
+
+                /** Cached tokens present in the prompt. */
+                @JsonProperty("cached_tokens")
+                @ExcludeMissing
+                fun cachedTokens(cachedTokens: JsonField<Long>) = apply {
+                    this.cachedTokens = cachedTokens
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+                @JsonAnySetter
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    this.additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun build(): PromptTokensDetails =
+                    PromptTokensDetails(
+                        audioTokens,
+                        cachedTokens,
+                        additionalProperties.toUnmodifiable(),
+                    )
             }
         }
     }

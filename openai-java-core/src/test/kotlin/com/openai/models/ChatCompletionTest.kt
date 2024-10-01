@@ -101,7 +101,14 @@ class ChatCompletionTest {
                         .totalTokens(123L)
                         .completionTokensDetails(
                             ChatCompletion.Usage.CompletionTokensDetails.builder()
+                                .audioTokens(123L)
                                 .reasoningTokens(123L)
+                                .build()
+                        )
+                        .promptTokensDetails(
+                            ChatCompletion.Usage.PromptTokensDetails.builder()
+                                .audioTokens(123L)
+                                .cachedTokens(123L)
                                 .build()
                         )
                         .build()
@@ -196,7 +203,14 @@ class ChatCompletionTest {
                     .totalTokens(123L)
                     .completionTokensDetails(
                         ChatCompletion.Usage.CompletionTokensDetails.builder()
+                            .audioTokens(123L)
                             .reasoningTokens(123L)
+                            .build()
+                    )
+                    .promptTokensDetails(
+                        ChatCompletion.Usage.PromptTokensDetails.builder()
+                            .audioTokens(123L)
+                            .cachedTokens(123L)
                             .build()
                     )
                     .build()

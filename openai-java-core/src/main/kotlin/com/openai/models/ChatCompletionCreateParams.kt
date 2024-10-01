@@ -38,6 +38,7 @@ constructor(
     private val logprobs: Boolean?,
     private val maxCompletionTokens: Long?,
     private val maxTokens: Long?,
+    private val metadata: Metadata?,
     private val n: Long?,
     private val parallelToolCalls: Boolean?,
     private val presencePenalty: Double?,
@@ -45,6 +46,7 @@ constructor(
     private val seed: Long?,
     private val serviceTier: ServiceTier?,
     private val stop: Stop?,
+    private val store: Boolean?,
     private val stream: Boolean?,
     private val streamOptions: ChatCompletionStreamOptions?,
     private val temperature: Double?,
@@ -76,6 +78,8 @@ constructor(
 
     fun maxTokens(): Optional<Long> = Optional.ofNullable(maxTokens)
 
+    fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
+
     fun n(): Optional<Long> = Optional.ofNullable(n)
 
     fun parallelToolCalls(): Optional<Boolean> = Optional.ofNullable(parallelToolCalls)
@@ -89,6 +93,8 @@ constructor(
     fun serviceTier(): Optional<ServiceTier> = Optional.ofNullable(serviceTier)
 
     fun stop(): Optional<Stop> = Optional.ofNullable(stop)
+
+    fun store(): Optional<Boolean> = Optional.ofNullable(store)
 
     fun stream(): Optional<Boolean> = Optional.ofNullable(stream)
 
@@ -118,6 +124,7 @@ constructor(
             logprobs,
             maxCompletionTokens,
             maxTokens,
+            metadata,
             n,
             parallelToolCalls,
             presencePenalty,
@@ -125,6 +132,7 @@ constructor(
             seed,
             serviceTier,
             stop,
+            store,
             stream,
             streamOptions,
             temperature,
@@ -154,6 +162,7 @@ constructor(
         private val logprobs: Boolean?,
         private val maxCompletionTokens: Long?,
         private val maxTokens: Long?,
+        private val metadata: Metadata?,
         private val n: Long?,
         private val parallelToolCalls: Boolean?,
         private val presencePenalty: Double?,
@@ -161,6 +170,7 @@ constructor(
         private val seed: Long?,
         private val serviceTier: ServiceTier?,
         private val stop: Stop?,
+        private val store: Boolean?,
         private val stream: Boolean?,
         private val streamOptions: ChatCompletionStreamOptions?,
         private val temperature: Double?,
@@ -175,8 +185,12 @@ constructor(
         private var hashCode: Int = 0
 
         /**
-         * A list of messages comprising the conversation so far.
-         * [Example Python code](https://cookbook.openai.com/examples/how_to_format_inputs_to_chatgpt_models).
+         * A list of messages comprising the conversation so far. Depending on the
+         * [model](https://platform.openai.com/docs/models) you use, different message types
+         * (modalities) are supported, like
+         * [text](https://platform.openai.com/docs/guides/text-generation),
+         * [images](https://platform.openai.com/docs/guides/vision), and
+         * [audio](https://platform.openai.com/docs/guides/audio).
          */
         @JsonProperty("messages") fun messages(): List<ChatCompletionMessageParam>? = messages
 
@@ -253,6 +267,12 @@ constructor(
         @JsonProperty("max_tokens") fun maxTokens(): Long? = maxTokens
 
         /**
+         * Developer-defined tags and values used for filtering completions in the
+         * [dashboard](https://platform.openai.com/completions).
+         */
+        @JsonProperty("metadata") fun metadata(): Metadata? = metadata
+
+        /**
          * How many chat completion choices to generate for each input message. Note that you will
          * be charged based on the number of generated tokens across all of the choices. Keep `n` as
          * `1` to minimize costs.
@@ -324,6 +344,12 @@ constructor(
 
         /** Up to 4 sequences where the API will stop generating further tokens. */
         @JsonProperty("stop") fun stop(): Stop? = stop
+
+        /**
+         * Whether or not to store the output of this completion request for traffic logging in the
+         * [dashboard](https://platform.openai.com/completions).
+         */
+        @JsonProperty("store") fun store(): Boolean? = store
 
         /**
          * If set, partial message deltas will be sent, like in ChatGPT. Tokens will be sent as
@@ -410,6 +436,7 @@ constructor(
                 this.logprobs == other.logprobs &&
                 this.maxCompletionTokens == other.maxCompletionTokens &&
                 this.maxTokens == other.maxTokens &&
+                this.metadata == other.metadata &&
                 this.n == other.n &&
                 this.parallelToolCalls == other.parallelToolCalls &&
                 this.presencePenalty == other.presencePenalty &&
@@ -417,6 +444,7 @@ constructor(
                 this.seed == other.seed &&
                 this.serviceTier == other.serviceTier &&
                 this.stop == other.stop &&
+                this.store == other.store &&
                 this.stream == other.stream &&
                 this.streamOptions == other.streamOptions &&
                 this.temperature == other.temperature &&
@@ -441,6 +469,7 @@ constructor(
                         logprobs,
                         maxCompletionTokens,
                         maxTokens,
+                        metadata,
                         n,
                         parallelToolCalls,
                         presencePenalty,
@@ -448,6 +477,7 @@ constructor(
                         seed,
                         serviceTier,
                         stop,
+                        store,
                         stream,
                         streamOptions,
                         temperature,
@@ -463,7 +493,7 @@ constructor(
         }
 
         override fun toString() =
-            "ChatCompletionCreateBody{messages=$messages, model=$model, frequencyPenalty=$frequencyPenalty, functionCall=$functionCall, functions=$functions, logitBias=$logitBias, logprobs=$logprobs, maxCompletionTokens=$maxCompletionTokens, maxTokens=$maxTokens, n=$n, parallelToolCalls=$parallelToolCalls, presencePenalty=$presencePenalty, responseFormat=$responseFormat, seed=$seed, serviceTier=$serviceTier, stop=$stop, stream=$stream, streamOptions=$streamOptions, temperature=$temperature, toolChoice=$toolChoice, tools=$tools, topLogprobs=$topLogprobs, topP=$topP, user=$user, additionalProperties=$additionalProperties}"
+            "ChatCompletionCreateBody{messages=$messages, model=$model, frequencyPenalty=$frequencyPenalty, functionCall=$functionCall, functions=$functions, logitBias=$logitBias, logprobs=$logprobs, maxCompletionTokens=$maxCompletionTokens, maxTokens=$maxTokens, metadata=$metadata, n=$n, parallelToolCalls=$parallelToolCalls, presencePenalty=$presencePenalty, responseFormat=$responseFormat, seed=$seed, serviceTier=$serviceTier, stop=$stop, store=$store, stream=$stream, streamOptions=$streamOptions, temperature=$temperature, toolChoice=$toolChoice, tools=$tools, topLogprobs=$topLogprobs, topP=$topP, user=$user, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -481,6 +511,7 @@ constructor(
             private var logprobs: Boolean? = null
             private var maxCompletionTokens: Long? = null
             private var maxTokens: Long? = null
+            private var metadata: Metadata? = null
             private var n: Long? = null
             private var parallelToolCalls: Boolean? = null
             private var presencePenalty: Double? = null
@@ -488,6 +519,7 @@ constructor(
             private var seed: Long? = null
             private var serviceTier: ServiceTier? = null
             private var stop: Stop? = null
+            private var store: Boolean? = null
             private var stream: Boolean? = null
             private var streamOptions: ChatCompletionStreamOptions? = null
             private var temperature: Double? = null
@@ -509,6 +541,7 @@ constructor(
                 this.logprobs = chatCompletionCreateBody.logprobs
                 this.maxCompletionTokens = chatCompletionCreateBody.maxCompletionTokens
                 this.maxTokens = chatCompletionCreateBody.maxTokens
+                this.metadata = chatCompletionCreateBody.metadata
                 this.n = chatCompletionCreateBody.n
                 this.parallelToolCalls = chatCompletionCreateBody.parallelToolCalls
                 this.presencePenalty = chatCompletionCreateBody.presencePenalty
@@ -516,6 +549,7 @@ constructor(
                 this.seed = chatCompletionCreateBody.seed
                 this.serviceTier = chatCompletionCreateBody.serviceTier
                 this.stop = chatCompletionCreateBody.stop
+                this.store = chatCompletionCreateBody.store
                 this.stream = chatCompletionCreateBody.stream
                 this.streamOptions = chatCompletionCreateBody.streamOptions
                 this.temperature = chatCompletionCreateBody.temperature
@@ -528,8 +562,12 @@ constructor(
             }
 
             /**
-             * A list of messages comprising the conversation so far.
-             * [Example Python code](https://cookbook.openai.com/examples/how_to_format_inputs_to_chatgpt_models).
+             * A list of messages comprising the conversation so far. Depending on the
+             * [model](https://platform.openai.com/docs/models) you use, different message types
+             * (modalities) are supported, like
+             * [text](https://platform.openai.com/docs/guides/text-generation),
+             * [images](https://platform.openai.com/docs/guides/vision), and
+             * [audio](https://platform.openai.com/docs/guides/audio).
              */
             @JsonProperty("messages")
             fun messages(messages: List<ChatCompletionMessageParam>) = apply {
@@ -623,6 +661,13 @@ constructor(
             fun maxTokens(maxTokens: Long) = apply { this.maxTokens = maxTokens }
 
             /**
+             * Developer-defined tags and values used for filtering completions in the
+             * [dashboard](https://platform.openai.com/completions).
+             */
+            @JsonProperty("metadata")
+            fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+
+            /**
              * How many chat completion choices to generate for each input message. Note that you
              * will be charged based on the number of generated tokens across all of the choices.
              * Keep `n` as `1` to minimize costs.
@@ -707,6 +752,12 @@ constructor(
 
             /** Up to 4 sequences where the API will stop generating further tokens. */
             @JsonProperty("stop") fun stop(stop: Stop) = apply { this.stop = stop }
+
+            /**
+             * Whether or not to store the output of this completion request for traffic logging in
+             * the [dashboard](https://platform.openai.com/completions).
+             */
+            @JsonProperty("store") fun store(store: Boolean) = apply { this.store = store }
 
             /**
              * If set, partial message deltas will be sent, like in ChatGPT. Tokens will be sent as
@@ -806,6 +857,7 @@ constructor(
                     logprobs,
                     maxCompletionTokens,
                     maxTokens,
+                    metadata,
                     n,
                     parallelToolCalls,
                     presencePenalty,
@@ -813,6 +865,7 @@ constructor(
                     seed,
                     serviceTier,
                     stop,
+                    store,
                     stream,
                     streamOptions,
                     temperature,
@@ -847,6 +900,7 @@ constructor(
             this.logprobs == other.logprobs &&
             this.maxCompletionTokens == other.maxCompletionTokens &&
             this.maxTokens == other.maxTokens &&
+            this.metadata == other.metadata &&
             this.n == other.n &&
             this.parallelToolCalls == other.parallelToolCalls &&
             this.presencePenalty == other.presencePenalty &&
@@ -854,6 +908,7 @@ constructor(
             this.seed == other.seed &&
             this.serviceTier == other.serviceTier &&
             this.stop == other.stop &&
+            this.store == other.store &&
             this.stream == other.stream &&
             this.streamOptions == other.streamOptions &&
             this.temperature == other.temperature &&
@@ -878,6 +933,7 @@ constructor(
             logprobs,
             maxCompletionTokens,
             maxTokens,
+            metadata,
             n,
             parallelToolCalls,
             presencePenalty,
@@ -885,6 +941,7 @@ constructor(
             seed,
             serviceTier,
             stop,
+            store,
             stream,
             streamOptions,
             temperature,
@@ -900,7 +957,7 @@ constructor(
     }
 
     override fun toString() =
-        "ChatCompletionCreateParams{messages=$messages, model=$model, frequencyPenalty=$frequencyPenalty, functionCall=$functionCall, functions=$functions, logitBias=$logitBias, logprobs=$logprobs, maxCompletionTokens=$maxCompletionTokens, maxTokens=$maxTokens, n=$n, parallelToolCalls=$parallelToolCalls, presencePenalty=$presencePenalty, responseFormat=$responseFormat, seed=$seed, serviceTier=$serviceTier, stop=$stop, stream=$stream, streamOptions=$streamOptions, temperature=$temperature, toolChoice=$toolChoice, tools=$tools, topLogprobs=$topLogprobs, topP=$topP, user=$user, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
+        "ChatCompletionCreateParams{messages=$messages, model=$model, frequencyPenalty=$frequencyPenalty, functionCall=$functionCall, functions=$functions, logitBias=$logitBias, logprobs=$logprobs, maxCompletionTokens=$maxCompletionTokens, maxTokens=$maxTokens, metadata=$metadata, n=$n, parallelToolCalls=$parallelToolCalls, presencePenalty=$presencePenalty, responseFormat=$responseFormat, seed=$seed, serviceTier=$serviceTier, stop=$stop, store=$store, stream=$stream, streamOptions=$streamOptions, temperature=$temperature, toolChoice=$toolChoice, tools=$tools, topLogprobs=$topLogprobs, topP=$topP, user=$user, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -921,6 +978,7 @@ constructor(
         private var logprobs: Boolean? = null
         private var maxCompletionTokens: Long? = null
         private var maxTokens: Long? = null
+        private var metadata: Metadata? = null
         private var n: Long? = null
         private var parallelToolCalls: Boolean? = null
         private var presencePenalty: Double? = null
@@ -928,6 +986,7 @@ constructor(
         private var seed: Long? = null
         private var serviceTier: ServiceTier? = null
         private var stop: Stop? = null
+        private var store: Boolean? = null
         private var stream: Boolean? = null
         private var streamOptions: ChatCompletionStreamOptions? = null
         private var temperature: Double? = null
@@ -951,6 +1010,7 @@ constructor(
             this.logprobs = chatCompletionCreateParams.logprobs
             this.maxCompletionTokens = chatCompletionCreateParams.maxCompletionTokens
             this.maxTokens = chatCompletionCreateParams.maxTokens
+            this.metadata = chatCompletionCreateParams.metadata
             this.n = chatCompletionCreateParams.n
             this.parallelToolCalls = chatCompletionCreateParams.parallelToolCalls
             this.presencePenalty = chatCompletionCreateParams.presencePenalty
@@ -958,6 +1018,7 @@ constructor(
             this.seed = chatCompletionCreateParams.seed
             this.serviceTier = chatCompletionCreateParams.serviceTier
             this.stop = chatCompletionCreateParams.stop
+            this.store = chatCompletionCreateParams.store
             this.stream = chatCompletionCreateParams.stream
             this.streamOptions = chatCompletionCreateParams.streamOptions
             this.temperature = chatCompletionCreateParams.temperature
@@ -972,8 +1033,12 @@ constructor(
         }
 
         /**
-         * A list of messages comprising the conversation so far.
-         * [Example Python code](https://cookbook.openai.com/examples/how_to_format_inputs_to_chatgpt_models).
+         * A list of messages comprising the conversation so far. Depending on the
+         * [model](https://platform.openai.com/docs/models) you use, different message types
+         * (modalities) are supported, like
+         * [text](https://platform.openai.com/docs/guides/text-generation),
+         * [images](https://platform.openai.com/docs/guides/vision), and
+         * [audio](https://platform.openai.com/docs/guides/audio).
          */
         fun messages(messages: List<ChatCompletionMessageParam>) = apply {
             this.messages.clear()
@@ -981,8 +1046,12 @@ constructor(
         }
 
         /**
-         * A list of messages comprising the conversation so far.
-         * [Example Python code](https://cookbook.openai.com/examples/how_to_format_inputs_to_chatgpt_models).
+         * A list of messages comprising the conversation so far. Depending on the
+         * [model](https://platform.openai.com/docs/models) you use, different message types
+         * (modalities) are supported, like
+         * [text](https://platform.openai.com/docs/guides/text-generation),
+         * [images](https://platform.openai.com/docs/guides/vision), and
+         * [audio](https://platform.openai.com/docs/guides/audio).
          */
         fun addMessage(message: ChatCompletionMessageParam) = apply { this.messages.add(message) }
 
@@ -1114,6 +1183,12 @@ constructor(
          * with [o1 series models](https://platform.openai.com/docs/guides/reasoning).
          */
         fun maxTokens(maxTokens: Long) = apply { this.maxTokens = maxTokens }
+
+        /**
+         * Developer-defined tags and values used for filtering completions in the
+         * [dashboard](https://platform.openai.com/completions).
+         */
+        fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
 
         /**
          * How many chat completion choices to generate for each input message. Note that you will
@@ -1276,6 +1351,12 @@ constructor(
 
         /** Up to 4 sequences where the API will stop generating further tokens. */
         fun stop(strings: List<String>) = apply { this.stop = Stop.ofStrings(strings) }
+
+        /**
+         * Whether or not to store the output of this completion request for traffic logging in the
+         * [dashboard](https://platform.openai.com/completions).
+         */
+        fun store(store: Boolean) = apply { this.store = store }
 
         /**
          * If set, partial message deltas will be sent, like in ChatGPT. Tokens will be sent as
@@ -1451,6 +1532,7 @@ constructor(
                 logprobs,
                 maxCompletionTokens,
                 maxTokens,
+                metadata,
                 n,
                 parallelToolCalls,
                 presencePenalty,
@@ -1458,6 +1540,7 @@ constructor(
                 seed,
                 serviceTier,
                 stop,
+                store,
                 stream,
                 streamOptions,
                 temperature,
@@ -1983,6 +2066,74 @@ constructor(
             }
 
             fun build(): LogitBias = LogitBias(additionalProperties.toUnmodifiable())
+        }
+    }
+
+    /**
+     * Developer-defined tags and values used for filtering completions in the
+     * [dashboard](https://platform.openai.com/completions).
+     */
+    @JsonDeserialize(builder = Metadata.Builder::class)
+    @NoAutoDetect
+    class Metadata
+    private constructor(
+        private val additionalProperties: Map<String, JsonValue>,
+    ) {
+
+        private var hashCode: Int = 0
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun toBuilder() = Builder().from(this)
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Metadata && this.additionalProperties == other.additionalProperties
+        }
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = Objects.hash(additionalProperties)
+            }
+            return hashCode
+        }
+
+        override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
+
+        companion object {
+
+            @JvmStatic fun builder() = Builder()
+        }
+
+        class Builder {
+
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(metadata: Metadata) = apply {
+                additionalProperties(metadata.additionalProperties)
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            @JsonAnySetter
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                this.additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
         }
     }
 
