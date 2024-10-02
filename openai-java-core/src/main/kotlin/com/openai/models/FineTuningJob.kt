@@ -816,7 +816,7 @@ private constructor(
         class NEpochs
         private constructor(
             private val unionMember0: UnionMember0? = null,
-            private val long: Long? = null,
+            private val long_: Long? = null,
             private val _json: JsonValue? = null,
         ) {
 
@@ -824,29 +824,29 @@ private constructor(
 
             fun unionMember0(): Optional<UnionMember0> = Optional.ofNullable(unionMember0)
 
-            fun long(): Optional<Long> = Optional.ofNullable(long)
+            fun long_(): Optional<Long> = Optional.ofNullable(long_)
 
             fun isUnionMember0(): Boolean = unionMember0 != null
 
-            fun isLong(): Boolean = long != null
+            fun isLong(): Boolean = long_ != null
 
             fun asUnionMember0(): UnionMember0 = unionMember0.getOrThrow("unionMember0")
 
-            fun asLong(): Long = long.getOrThrow("long")
+            fun asLong(): Long = long_.getOrThrow("long_")
 
             fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
             fun <T> accept(visitor: Visitor<T>): T {
                 return when {
                     unionMember0 != null -> visitor.visitUnionMember0(unionMember0)
-                    long != null -> visitor.visitLong(long)
+                    long_ != null -> visitor.visitLong(long_)
                     else -> visitor.unknown(_json)
                 }
             }
 
             fun validate(): NEpochs = apply {
                 if (!validated) {
-                    if (unionMember0 == null && long == null) {
+                    if (unionMember0 == null && long_ == null) {
                         throw OpenAIInvalidDataException("Unknown NEpochs: $_json")
                     }
                     validated = true
@@ -860,17 +860,17 @@ private constructor(
 
                 return other is NEpochs &&
                     this.unionMember0 == other.unionMember0 &&
-                    this.long == other.long
+                    this.long_ == other.long_
             }
 
             override fun hashCode(): Int {
-                return Objects.hash(unionMember0, long)
+                return Objects.hash(unionMember0, long_)
             }
 
             override fun toString(): String {
                 return when {
                     unionMember0 != null -> "NEpochs{unionMember0=$unionMember0}"
-                    long != null -> "NEpochs{long=$long}"
+                    long_ != null -> "NEpochs{long_=$long_}"
                     _json != null -> "NEpochs{_unknown=$_json}"
                     else -> throw IllegalStateException("Invalid NEpochs")
                 }
@@ -882,14 +882,14 @@ private constructor(
                 fun ofUnionMember0(unionMember0: UnionMember0) =
                     NEpochs(unionMember0 = unionMember0)
 
-                @JvmStatic fun ofLong(long: Long) = NEpochs(long = long)
+                @JvmStatic fun ofLong(long_: Long) = NEpochs(long_ = long_)
             }
 
             interface Visitor<out T> {
 
                 fun visitUnionMember0(unionMember0: UnionMember0): T
 
-                fun visitLong(long: Long): T
+                fun visitLong(long_: Long): T
 
                 fun unknown(json: JsonValue?): T {
                     throw OpenAIInvalidDataException("Unknown NEpochs: $json")
@@ -904,7 +904,7 @@ private constructor(
                         return NEpochs(unionMember0 = it, _json = json)
                     }
                     tryDeserialize(node, jacksonTypeRef<Long>())?.let {
-                        return NEpochs(long = it, _json = json)
+                        return NEpochs(long_ = it, _json = json)
                     }
 
                     return NEpochs(_json = json)
@@ -920,7 +920,7 @@ private constructor(
                 ) {
                     when {
                         value.unionMember0 != null -> generator.writeObject(value.unionMember0)
-                        value.long != null -> generator.writeObject(value.long)
+                        value.long_ != null -> generator.writeObject(value.long_)
                         value._json != null -> generator.writeObject(value._json)
                         else -> throw IllegalStateException("Invalid NEpochs")
                     }

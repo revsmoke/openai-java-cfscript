@@ -840,7 +840,7 @@ constructor(
         class BatchSize
         private constructor(
             private val unionMember0: UnionMember0? = null,
-            private val long: Long? = null,
+            private val long_: Long? = null,
             private val _json: JsonValue? = null,
         ) {
 
@@ -848,29 +848,29 @@ constructor(
 
             fun unionMember0(): Optional<UnionMember0> = Optional.ofNullable(unionMember0)
 
-            fun long(): Optional<Long> = Optional.ofNullable(long)
+            fun long_(): Optional<Long> = Optional.ofNullable(long_)
 
             fun isUnionMember0(): Boolean = unionMember0 != null
 
-            fun isLong(): Boolean = long != null
+            fun isLong(): Boolean = long_ != null
 
             fun asUnionMember0(): UnionMember0 = unionMember0.getOrThrow("unionMember0")
 
-            fun asLong(): Long = long.getOrThrow("long")
+            fun asLong(): Long = long_.getOrThrow("long_")
 
             fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
             fun <T> accept(visitor: Visitor<T>): T {
                 return when {
                     unionMember0 != null -> visitor.visitUnionMember0(unionMember0)
-                    long != null -> visitor.visitLong(long)
+                    long_ != null -> visitor.visitLong(long_)
                     else -> visitor.unknown(_json)
                 }
             }
 
             fun validate(): BatchSize = apply {
                 if (!validated) {
-                    if (unionMember0 == null && long == null) {
+                    if (unionMember0 == null && long_ == null) {
                         throw OpenAIInvalidDataException("Unknown BatchSize: $_json")
                     }
                     validated = true
@@ -884,17 +884,17 @@ constructor(
 
                 return other is BatchSize &&
                     this.unionMember0 == other.unionMember0 &&
-                    this.long == other.long
+                    this.long_ == other.long_
             }
 
             override fun hashCode(): Int {
-                return Objects.hash(unionMember0, long)
+                return Objects.hash(unionMember0, long_)
             }
 
             override fun toString(): String {
                 return when {
                     unionMember0 != null -> "BatchSize{unionMember0=$unionMember0}"
-                    long != null -> "BatchSize{long=$long}"
+                    long_ != null -> "BatchSize{long_=$long_}"
                     _json != null -> "BatchSize{_unknown=$_json}"
                     else -> throw IllegalStateException("Invalid BatchSize")
                 }
@@ -906,14 +906,14 @@ constructor(
                 fun ofUnionMember0(unionMember0: UnionMember0) =
                     BatchSize(unionMember0 = unionMember0)
 
-                @JvmStatic fun ofLong(long: Long) = BatchSize(long = long)
+                @JvmStatic fun ofLong(long_: Long) = BatchSize(long_ = long_)
             }
 
             interface Visitor<out T> {
 
                 fun visitUnionMember0(unionMember0: UnionMember0): T
 
-                fun visitLong(long: Long): T
+                fun visitLong(long_: Long): T
 
                 fun unknown(json: JsonValue?): T {
                     throw OpenAIInvalidDataException("Unknown BatchSize: $json")
@@ -928,7 +928,7 @@ constructor(
                         return BatchSize(unionMember0 = it, _json = json)
                     }
                     tryDeserialize(node, jacksonTypeRef<Long>())?.let {
-                        return BatchSize(long = it, _json = json)
+                        return BatchSize(long_ = it, _json = json)
                     }
 
                     return BatchSize(_json = json)
@@ -944,7 +944,7 @@ constructor(
                 ) {
                     when {
                         value.unionMember0 != null -> generator.writeObject(value.unionMember0)
-                        value.long != null -> generator.writeObject(value.long)
+                        value.long_ != null -> generator.writeObject(value.long_)
                         value._json != null -> generator.writeObject(value._json)
                         else -> throw IllegalStateException("Invalid BatchSize")
                     }
@@ -1008,7 +1008,7 @@ constructor(
         class LearningRateMultiplier
         private constructor(
             private val unionMember0: UnionMember0? = null,
-            private val double: Double? = null,
+            private val double_: Double? = null,
             private val _json: JsonValue? = null,
         ) {
 
@@ -1016,29 +1016,29 @@ constructor(
 
             fun unionMember0(): Optional<UnionMember0> = Optional.ofNullable(unionMember0)
 
-            fun double(): Optional<Double> = Optional.ofNullable(double)
+            fun double_(): Optional<Double> = Optional.ofNullable(double_)
 
             fun isUnionMember0(): Boolean = unionMember0 != null
 
-            fun isDouble(): Boolean = double != null
+            fun isDouble(): Boolean = double_ != null
 
             fun asUnionMember0(): UnionMember0 = unionMember0.getOrThrow("unionMember0")
 
-            fun asDouble(): Double = double.getOrThrow("double")
+            fun asDouble(): Double = double_.getOrThrow("double_")
 
             fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
             fun <T> accept(visitor: Visitor<T>): T {
                 return when {
                     unionMember0 != null -> visitor.visitUnionMember0(unionMember0)
-                    double != null -> visitor.visitDouble(double)
+                    double_ != null -> visitor.visitDouble(double_)
                     else -> visitor.unknown(_json)
                 }
             }
 
             fun validate(): LearningRateMultiplier = apply {
                 if (!validated) {
-                    if (unionMember0 == null && double == null) {
+                    if (unionMember0 == null && double_ == null) {
                         throw OpenAIInvalidDataException("Unknown LearningRateMultiplier: $_json")
                     }
                     validated = true
@@ -1052,17 +1052,17 @@ constructor(
 
                 return other is LearningRateMultiplier &&
                     this.unionMember0 == other.unionMember0 &&
-                    this.double == other.double
+                    this.double_ == other.double_
             }
 
             override fun hashCode(): Int {
-                return Objects.hash(unionMember0, double)
+                return Objects.hash(unionMember0, double_)
             }
 
             override fun toString(): String {
                 return when {
                     unionMember0 != null -> "LearningRateMultiplier{unionMember0=$unionMember0}"
-                    double != null -> "LearningRateMultiplier{double=$double}"
+                    double_ != null -> "LearningRateMultiplier{double_=$double_}"
                     _json != null -> "LearningRateMultiplier{_unknown=$_json}"
                     else -> throw IllegalStateException("Invalid LearningRateMultiplier")
                 }
@@ -1074,14 +1074,14 @@ constructor(
                 fun ofUnionMember0(unionMember0: UnionMember0) =
                     LearningRateMultiplier(unionMember0 = unionMember0)
 
-                @JvmStatic fun ofDouble(double: Double) = LearningRateMultiplier(double = double)
+                @JvmStatic fun ofDouble(double_: Double) = LearningRateMultiplier(double_ = double_)
             }
 
             interface Visitor<out T> {
 
                 fun visitUnionMember0(unionMember0: UnionMember0): T
 
-                fun visitDouble(double: Double): T
+                fun visitDouble(double_: Double): T
 
                 fun unknown(json: JsonValue?): T {
                     throw OpenAIInvalidDataException("Unknown LearningRateMultiplier: $json")
@@ -1097,7 +1097,7 @@ constructor(
                         return LearningRateMultiplier(unionMember0 = it, _json = json)
                     }
                     tryDeserialize(node, jacksonTypeRef<Double>())?.let {
-                        return LearningRateMultiplier(double = it, _json = json)
+                        return LearningRateMultiplier(double_ = it, _json = json)
                     }
 
                     return LearningRateMultiplier(_json = json)
@@ -1114,7 +1114,7 @@ constructor(
                 ) {
                     when {
                         value.unionMember0 != null -> generator.writeObject(value.unionMember0)
-                        value.double != null -> generator.writeObject(value.double)
+                        value.double_ != null -> generator.writeObject(value.double_)
                         value._json != null -> generator.writeObject(value._json)
                         else -> throw IllegalStateException("Invalid LearningRateMultiplier")
                     }
@@ -1178,7 +1178,7 @@ constructor(
         class NEpochs
         private constructor(
             private val unionMember0: UnionMember0? = null,
-            private val long: Long? = null,
+            private val long_: Long? = null,
             private val _json: JsonValue? = null,
         ) {
 
@@ -1186,29 +1186,29 @@ constructor(
 
             fun unionMember0(): Optional<UnionMember0> = Optional.ofNullable(unionMember0)
 
-            fun long(): Optional<Long> = Optional.ofNullable(long)
+            fun long_(): Optional<Long> = Optional.ofNullable(long_)
 
             fun isUnionMember0(): Boolean = unionMember0 != null
 
-            fun isLong(): Boolean = long != null
+            fun isLong(): Boolean = long_ != null
 
             fun asUnionMember0(): UnionMember0 = unionMember0.getOrThrow("unionMember0")
 
-            fun asLong(): Long = long.getOrThrow("long")
+            fun asLong(): Long = long_.getOrThrow("long_")
 
             fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
             fun <T> accept(visitor: Visitor<T>): T {
                 return when {
                     unionMember0 != null -> visitor.visitUnionMember0(unionMember0)
-                    long != null -> visitor.visitLong(long)
+                    long_ != null -> visitor.visitLong(long_)
                     else -> visitor.unknown(_json)
                 }
             }
 
             fun validate(): NEpochs = apply {
                 if (!validated) {
-                    if (unionMember0 == null && long == null) {
+                    if (unionMember0 == null && long_ == null) {
                         throw OpenAIInvalidDataException("Unknown NEpochs: $_json")
                     }
                     validated = true
@@ -1222,17 +1222,17 @@ constructor(
 
                 return other is NEpochs &&
                     this.unionMember0 == other.unionMember0 &&
-                    this.long == other.long
+                    this.long_ == other.long_
             }
 
             override fun hashCode(): Int {
-                return Objects.hash(unionMember0, long)
+                return Objects.hash(unionMember0, long_)
             }
 
             override fun toString(): String {
                 return when {
                     unionMember0 != null -> "NEpochs{unionMember0=$unionMember0}"
-                    long != null -> "NEpochs{long=$long}"
+                    long_ != null -> "NEpochs{long_=$long_}"
                     _json != null -> "NEpochs{_unknown=$_json}"
                     else -> throw IllegalStateException("Invalid NEpochs")
                 }
@@ -1244,14 +1244,14 @@ constructor(
                 fun ofUnionMember0(unionMember0: UnionMember0) =
                     NEpochs(unionMember0 = unionMember0)
 
-                @JvmStatic fun ofLong(long: Long) = NEpochs(long = long)
+                @JvmStatic fun ofLong(long_: Long) = NEpochs(long_ = long_)
             }
 
             interface Visitor<out T> {
 
                 fun visitUnionMember0(unionMember0: UnionMember0): T
 
-                fun visitLong(long: Long): T
+                fun visitLong(long_: Long): T
 
                 fun unknown(json: JsonValue?): T {
                     throw OpenAIInvalidDataException("Unknown NEpochs: $json")
@@ -1266,7 +1266,7 @@ constructor(
                         return NEpochs(unionMember0 = it, _json = json)
                     }
                     tryDeserialize(node, jacksonTypeRef<Long>())?.let {
-                        return NEpochs(long = it, _json = json)
+                        return NEpochs(long_ = it, _json = json)
                     }
 
                     return NEpochs(_json = json)
@@ -1282,7 +1282,7 @@ constructor(
                 ) {
                     when {
                         value.unionMember0 != null -> generator.writeObject(value.unionMember0)
-                        value.long != null -> generator.writeObject(value.long)
+                        value.long_ != null -> generator.writeObject(value.long_)
                         value._json != null -> generator.writeObject(value._json)
                         else -> throw IllegalStateException("Invalid NEpochs")
                     }
