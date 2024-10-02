@@ -29,8 +29,6 @@ private constructor(
 
     private var validated: Boolean = false
 
-    private var hashCode: Int = 0
-
     /** The type of the tool. Currently, only `function` is supported. */
     fun type(): Type = type.getRequired("type")
 
@@ -54,32 +52,6 @@ private constructor(
     }
 
     fun toBuilder() = Builder().from(this)
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return other is ChatCompletionNamedToolChoice &&
-            this.type == other.type &&
-            this.function == other.function &&
-            this.additionalProperties == other.additionalProperties
-    }
-
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    type,
-                    function,
-                    additionalProperties,
-                )
-        }
-        return hashCode
-    }
-
-    override fun toString() =
-        "ChatCompletionNamedToolChoice{type=$type, function=$function, additionalProperties=$additionalProperties}"
 
     companion object {
 
@@ -145,8 +117,6 @@ private constructor(
 
         private var validated: Boolean = false
 
-        private var hashCode: Int = 0
-
         /** The name of the function to call. */
         fun name(): String = name.getRequired("name")
 
@@ -165,25 +135,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Function &&
-                this.name == other.name &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = Objects.hash(name, additionalProperties)
-            }
-            return hashCode
-        }
-
-        override fun toString() = "Function{name=$name, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -225,6 +176,27 @@ private constructor(
 
             fun build(): Function = Function(name, additionalProperties.toUnmodifiable())
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Function &&
+                this.name == other.name &&
+                this.additionalProperties == other.additionalProperties
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = Objects.hash(name, additionalProperties)
+            }
+            return hashCode
+        }
+
+        override fun toString() = "Function{name=$name, additionalProperties=$additionalProperties}"
     }
 
     class Type
@@ -277,4 +249,32 @@ private constructor(
 
         fun asString(): String = _value().asStringOrThrow()
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return other is ChatCompletionNamedToolChoice &&
+            this.type == other.type &&
+            this.function == other.function &&
+            this.additionalProperties == other.additionalProperties
+    }
+
+    private var hashCode: Int = 0
+
+    override fun hashCode(): Int {
+        if (hashCode == 0) {
+            hashCode =
+                Objects.hash(
+                    type,
+                    function,
+                    additionalProperties,
+                )
+        }
+        return hashCode
+    }
+
+    override fun toString() =
+        "ChatCompletionNamedToolChoice{type=$type, function=$function, additionalProperties=$additionalProperties}"
 }

@@ -29,8 +29,6 @@ private constructor(
 
     private var validated: Boolean = false
 
-    private var hashCode: Int = 0
-
     /** The type of the content part. */
     fun type(): Type = type.getRequired("type")
 
@@ -54,32 +52,6 @@ private constructor(
     }
 
     fun toBuilder() = Builder().from(this)
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return other is ChatCompletionContentPartImage &&
-            this.type == other.type &&
-            this.imageUrl == other.imageUrl &&
-            this.additionalProperties == other.additionalProperties
-    }
-
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    type,
-                    imageUrl,
-                    additionalProperties,
-                )
-        }
-        return hashCode
-    }
-
-    override fun toString() =
-        "ChatCompletionContentPartImage{type=$type, imageUrl=$imageUrl, additionalProperties=$additionalProperties}"
 
     companion object {
 
@@ -146,8 +118,6 @@ private constructor(
 
         private var validated: Boolean = false
 
-        private var hashCode: Int = 0
-
         /** Either a URL of the image or the base64 encoded image data. */
         fun url(): String = url.getRequired("url")
 
@@ -179,32 +149,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is ImageUrl &&
-                this.url == other.url &&
-                this.detail == other.detail &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        url,
-                        detail,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "ImageUrl{url=$url, detail=$detail, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -330,6 +274,34 @@ private constructor(
 
             fun asString(): String = _value().asStringOrThrow()
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is ImageUrl &&
+                this.url == other.url &&
+                this.detail == other.detail &&
+                this.additionalProperties == other.additionalProperties
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode =
+                    Objects.hash(
+                        url,
+                        detail,
+                        additionalProperties,
+                    )
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "ImageUrl{url=$url, detail=$detail, additionalProperties=$additionalProperties}"
     }
 
     class Type
@@ -382,4 +354,32 @@ private constructor(
 
         fun asString(): String = _value().asStringOrThrow()
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return other is ChatCompletionContentPartImage &&
+            this.type == other.type &&
+            this.imageUrl == other.imageUrl &&
+            this.additionalProperties == other.additionalProperties
+    }
+
+    private var hashCode: Int = 0
+
+    override fun hashCode(): Int {
+        if (hashCode == 0) {
+            hashCode =
+                Objects.hash(
+                    type,
+                    imageUrl,
+                    additionalProperties,
+                )
+        }
+        return hashCode
+    }
+
+    override fun toString() =
+        "ChatCompletionContentPartImage{type=$type, imageUrl=$imageUrl, additionalProperties=$additionalProperties}"
 }

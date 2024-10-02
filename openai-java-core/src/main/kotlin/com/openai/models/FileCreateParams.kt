@@ -40,8 +40,6 @@ constructor(
         private val purpose: FilePurpose?,
     ) {
 
-        private var hashCode: Int = 0
-
         /** The File object (not file name) to be uploaded. */
         fun file(): ByteArray? = file
 
@@ -58,25 +56,6 @@ constructor(
         fun purpose(): FilePurpose? = purpose
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is FileCreateBody &&
-                this.file == other.file &&
-                this.purpose == other.purpose
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = Objects.hash(file, purpose)
-            }
-            return hashCode
-        }
-
-        override fun toString() = "FileCreateBody{file=$file, purpose=$purpose}"
 
         companion object {
 
@@ -109,6 +88,27 @@ constructor(
              */
             fun purpose(purpose: FilePurpose) = apply { this.purpose = purpose }
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is FileCreateBody &&
+                this.file == other.file &&
+                this.purpose == other.purpose
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = Objects.hash(file, purpose)
+            }
+            return hashCode
+        }
+
+        override fun toString() = "FileCreateBody{file=$file, purpose=$purpose}"
     }
 
     fun _additionalQueryParams(): Map<String, List<String>> = additionalQueryParams

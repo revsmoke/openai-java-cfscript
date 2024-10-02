@@ -36,8 +36,6 @@ private constructor(
 
     private var validated: Boolean = false
 
-    private var hashCode: Int = 0
-
     /** The file identifier, which can be referenced in the API endpoints. */
     fun id(): String = id.getRequired("id")
 
@@ -124,44 +122,6 @@ private constructor(
     }
 
     fun toBuilder() = Builder().from(this)
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return other is FileObject &&
-            this.id == other.id &&
-            this.bytes == other.bytes &&
-            this.createdAt == other.createdAt &&
-            this.filename == other.filename &&
-            this.object_ == other.object_ &&
-            this.purpose == other.purpose &&
-            this.status == other.status &&
-            this.statusDetails == other.statusDetails &&
-            this.additionalProperties == other.additionalProperties
-    }
-
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    id,
-                    bytes,
-                    createdAt,
-                    filename,
-                    object_,
-                    purpose,
-                    status,
-                    statusDetails,
-                    additionalProperties,
-                )
-        }
-        return hashCode
-    }
-
-    override fun toString() =
-        "FileObject{id=$id, bytes=$bytes, createdAt=$createdAt, filename=$filename, object_=$object_, purpose=$purpose, status=$status, statusDetails=$statusDetails, additionalProperties=$additionalProperties}"
 
     companion object {
 
@@ -503,4 +463,44 @@ private constructor(
 
         fun asString(): String = _value().asStringOrThrow()
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return other is FileObject &&
+            this.id == other.id &&
+            this.bytes == other.bytes &&
+            this.createdAt == other.createdAt &&
+            this.filename == other.filename &&
+            this.object_ == other.object_ &&
+            this.purpose == other.purpose &&
+            this.status == other.status &&
+            this.statusDetails == other.statusDetails &&
+            this.additionalProperties == other.additionalProperties
+    }
+
+    private var hashCode: Int = 0
+
+    override fun hashCode(): Int {
+        if (hashCode == 0) {
+            hashCode =
+                Objects.hash(
+                    id,
+                    bytes,
+                    createdAt,
+                    filename,
+                    object_,
+                    purpose,
+                    status,
+                    statusDetails,
+                    additionalProperties,
+                )
+        }
+        return hashCode
+    }
+
+    override fun toString() =
+        "FileObject{id=$id, bytes=$bytes, createdAt=$createdAt, filename=$filename, object_=$object_, purpose=$purpose, status=$status, statusDetails=$statusDetails, additionalProperties=$additionalProperties}"
 }

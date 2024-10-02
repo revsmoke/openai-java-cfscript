@@ -56,8 +56,6 @@ private constructor(
 
     private var validated: Boolean = false
 
-    private var hashCode: Int = 0
-
     /** The object identifier, which can be referenced in the API endpoints. */
     fun id(): String = id.getRequired("id")
 
@@ -253,62 +251,6 @@ private constructor(
     }
 
     fun toBuilder() = Builder().from(this)
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return other is FineTuningJob &&
-            this.id == other.id &&
-            this.createdAt == other.createdAt &&
-            this.error == other.error &&
-            this.fineTunedModel == other.fineTunedModel &&
-            this.finishedAt == other.finishedAt &&
-            this.hyperparameters == other.hyperparameters &&
-            this.model == other.model &&
-            this.object_ == other.object_ &&
-            this.organizationId == other.organizationId &&
-            this.resultFiles == other.resultFiles &&
-            this.status == other.status &&
-            this.trainedTokens == other.trainedTokens &&
-            this.trainingFile == other.trainingFile &&
-            this.validationFile == other.validationFile &&
-            this.integrations == other.integrations &&
-            this.seed == other.seed &&
-            this.estimatedFinish == other.estimatedFinish &&
-            this.additionalProperties == other.additionalProperties
-    }
-
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    id,
-                    createdAt,
-                    error,
-                    fineTunedModel,
-                    finishedAt,
-                    hyperparameters,
-                    model,
-                    object_,
-                    organizationId,
-                    resultFiles,
-                    status,
-                    trainedTokens,
-                    trainingFile,
-                    validationFile,
-                    integrations,
-                    seed,
-                    estimatedFinish,
-                    additionalProperties,
-                )
-        }
-        return hashCode
-    }
-
-    override fun toString() =
-        "FineTuningJob{id=$id, createdAt=$createdAt, error=$error, fineTunedModel=$fineTunedModel, finishedAt=$finishedAt, hyperparameters=$hyperparameters, model=$model, object_=$object_, organizationId=$organizationId, resultFiles=$resultFiles, status=$status, trainedTokens=$trainedTokens, trainingFile=$trainingFile, validationFile=$validationFile, integrations=$integrations, seed=$seed, estimatedFinish=$estimatedFinish, additionalProperties=$additionalProperties}"
 
     companion object {
 
@@ -631,8 +573,6 @@ private constructor(
 
         private var validated: Boolean = false
 
-        private var hashCode: Int = 0
-
         /** A machine-readable error code. */
         fun code(): String = code.getRequired("code")
 
@@ -671,34 +611,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Error &&
-                this.code == other.code &&
-                this.message == other.message &&
-                this.param == other.param &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        code,
-                        message,
-                        param,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "Error{code=$code, message=$message, param=$param, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -772,6 +684,36 @@ private constructor(
                     additionalProperties.toUnmodifiable(),
                 )
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Error &&
+                this.code == other.code &&
+                this.message == other.message &&
+                this.param == other.param &&
+                this.additionalProperties == other.additionalProperties
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode =
+                    Objects.hash(
+                        code,
+                        message,
+                        param,
+                        additionalProperties,
+                    )
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "Error{code=$code, message=$message, param=$param, additionalProperties=$additionalProperties}"
     }
 
     /**
@@ -787,8 +729,6 @@ private constructor(
     ) {
 
         private var validated: Boolean = false
-
-        private var hashCode: Int = 0
 
         /**
          * The number of epochs to train the model for. An epoch refers to one full cycle through
@@ -818,26 +758,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Hyperparameters &&
-                this.nEpochs == other.nEpochs &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = Objects.hash(nEpochs, additionalProperties)
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "Hyperparameters{nEpochs=$nEpochs, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -1058,6 +978,28 @@ private constructor(
                 fun asString(): String = _value().asStringOrThrow()
             }
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Hyperparameters &&
+                this.nEpochs == other.nEpochs &&
+                this.additionalProperties == other.additionalProperties
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = Objects.hash(nEpochs, additionalProperties)
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "Hyperparameters{nEpochs=$nEpochs, additionalProperties=$additionalProperties}"
     }
 
     class Object
@@ -1191,4 +1133,62 @@ private constructor(
 
         fun asString(): String = _value().asStringOrThrow()
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return other is FineTuningJob &&
+            this.id == other.id &&
+            this.createdAt == other.createdAt &&
+            this.error == other.error &&
+            this.fineTunedModel == other.fineTunedModel &&
+            this.finishedAt == other.finishedAt &&
+            this.hyperparameters == other.hyperparameters &&
+            this.model == other.model &&
+            this.object_ == other.object_ &&
+            this.organizationId == other.organizationId &&
+            this.resultFiles == other.resultFiles &&
+            this.status == other.status &&
+            this.trainedTokens == other.trainedTokens &&
+            this.trainingFile == other.trainingFile &&
+            this.validationFile == other.validationFile &&
+            this.integrations == other.integrations &&
+            this.seed == other.seed &&
+            this.estimatedFinish == other.estimatedFinish &&
+            this.additionalProperties == other.additionalProperties
+    }
+
+    private var hashCode: Int = 0
+
+    override fun hashCode(): Int {
+        if (hashCode == 0) {
+            hashCode =
+                Objects.hash(
+                    id,
+                    createdAt,
+                    error,
+                    fineTunedModel,
+                    finishedAt,
+                    hyperparameters,
+                    model,
+                    object_,
+                    organizationId,
+                    resultFiles,
+                    status,
+                    trainedTokens,
+                    trainingFile,
+                    validationFile,
+                    integrations,
+                    seed,
+                    estimatedFinish,
+                    additionalProperties,
+                )
+        }
+        return hashCode
+    }
+
+    override fun toString() =
+        "FineTuningJob{id=$id, createdAt=$createdAt, error=$error, fineTunedModel=$fineTunedModel, finishedAt=$finishedAt, hyperparameters=$hyperparameters, model=$model, object_=$object_, organizationId=$organizationId, resultFiles=$resultFiles, status=$status, trainedTokens=$trainedTokens, trainingFile=$trainingFile, validationFile=$validationFile, integrations=$integrations, seed=$seed, estimatedFinish=$estimatedFinish, additionalProperties=$additionalProperties}"
 }

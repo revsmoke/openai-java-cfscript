@@ -182,8 +182,6 @@ constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var hashCode: Int = 0
-
         /**
          * A list of messages comprising the conversation so far. Depending on the
          * [model](https://platform.openai.com/docs/models) you use, different message types
@@ -420,80 +418,6 @@ constructor(
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is ChatCompletionCreateBody &&
-                this.messages == other.messages &&
-                this.model == other.model &&
-                this.frequencyPenalty == other.frequencyPenalty &&
-                this.functionCall == other.functionCall &&
-                this.functions == other.functions &&
-                this.logitBias == other.logitBias &&
-                this.logprobs == other.logprobs &&
-                this.maxCompletionTokens == other.maxCompletionTokens &&
-                this.maxTokens == other.maxTokens &&
-                this.metadata == other.metadata &&
-                this.n == other.n &&
-                this.parallelToolCalls == other.parallelToolCalls &&
-                this.presencePenalty == other.presencePenalty &&
-                this.responseFormat == other.responseFormat &&
-                this.seed == other.seed &&
-                this.serviceTier == other.serviceTier &&
-                this.stop == other.stop &&
-                this.store == other.store &&
-                this.stream == other.stream &&
-                this.streamOptions == other.streamOptions &&
-                this.temperature == other.temperature &&
-                this.toolChoice == other.toolChoice &&
-                this.tools == other.tools &&
-                this.topLogprobs == other.topLogprobs &&
-                this.topP == other.topP &&
-                this.user == other.user &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        messages,
-                        model,
-                        frequencyPenalty,
-                        functionCall,
-                        functions,
-                        logitBias,
-                        logprobs,
-                        maxCompletionTokens,
-                        maxTokens,
-                        metadata,
-                        n,
-                        parallelToolCalls,
-                        presencePenalty,
-                        responseFormat,
-                        seed,
-                        serviceTier,
-                        stop,
-                        store,
-                        stream,
-                        streamOptions,
-                        temperature,
-                        toolChoice,
-                        tools,
-                        topLogprobs,
-                        topP,
-                        user,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "ChatCompletionCreateBody{messages=$messages, model=$model, frequencyPenalty=$frequencyPenalty, functionCall=$functionCall, functions=$functions, logitBias=$logitBias, logprobs=$logprobs, maxCompletionTokens=$maxCompletionTokens, maxTokens=$maxTokens, metadata=$metadata, n=$n, parallelToolCalls=$parallelToolCalls, presencePenalty=$presencePenalty, responseFormat=$responseFormat, seed=$seed, serviceTier=$serviceTier, stop=$stop, store=$store, stream=$stream, streamOptions=$streamOptions, temperature=$temperature, toolChoice=$toolChoice, tools=$tools, topLogprobs=$topLogprobs, topP=$topP, user=$user, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -877,6 +801,82 @@ constructor(
                     additionalProperties.toUnmodifiable(),
                 )
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is ChatCompletionCreateBody &&
+                this.messages == other.messages &&
+                this.model == other.model &&
+                this.frequencyPenalty == other.frequencyPenalty &&
+                this.functionCall == other.functionCall &&
+                this.functions == other.functions &&
+                this.logitBias == other.logitBias &&
+                this.logprobs == other.logprobs &&
+                this.maxCompletionTokens == other.maxCompletionTokens &&
+                this.maxTokens == other.maxTokens &&
+                this.metadata == other.metadata &&
+                this.n == other.n &&
+                this.parallelToolCalls == other.parallelToolCalls &&
+                this.presencePenalty == other.presencePenalty &&
+                this.responseFormat == other.responseFormat &&
+                this.seed == other.seed &&
+                this.serviceTier == other.serviceTier &&
+                this.stop == other.stop &&
+                this.store == other.store &&
+                this.stream == other.stream &&
+                this.streamOptions == other.streamOptions &&
+                this.temperature == other.temperature &&
+                this.toolChoice == other.toolChoice &&
+                this.tools == other.tools &&
+                this.topLogprobs == other.topLogprobs &&
+                this.topP == other.topP &&
+                this.user == other.user &&
+                this.additionalProperties == other.additionalProperties
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode =
+                    Objects.hash(
+                        messages,
+                        model,
+                        frequencyPenalty,
+                        functionCall,
+                        functions,
+                        logitBias,
+                        logprobs,
+                        maxCompletionTokens,
+                        maxTokens,
+                        metadata,
+                        n,
+                        parallelToolCalls,
+                        presencePenalty,
+                        responseFormat,
+                        seed,
+                        serviceTier,
+                        stop,
+                        store,
+                        stream,
+                        streamOptions,
+                        temperature,
+                        toolChoice,
+                        tools,
+                        topLogprobs,
+                        topP,
+                        user,
+                        additionalProperties,
+                    )
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "ChatCompletionCreateBody{messages=$messages, model=$model, frequencyPenalty=$frequencyPenalty, functionCall=$functionCall, functions=$functions, logitBias=$logitBias, logprobs=$logprobs, maxCompletionTokens=$maxCompletionTokens, maxTokens=$maxTokens, metadata=$metadata, n=$n, parallelToolCalls=$parallelToolCalls, presencePenalty=$presencePenalty, responseFormat=$responseFormat, seed=$seed, serviceTier=$serviceTier, stop=$stop, store=$store, stream=$stream, streamOptions=$streamOptions, temperature=$temperature, toolChoice=$toolChoice, tools=$tools, topLogprobs=$topLogprobs, topP=$topP, user=$user, additionalProperties=$additionalProperties}"
     }
 
     fun _additionalQueryParams(): Map<String, List<String>> = additionalQueryParams
@@ -1870,8 +1870,6 @@ constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var hashCode: Int = 0
-
         /**
          * A description of what the function does, used by the model to choose when and how to call
          * the function.
@@ -1899,34 +1897,6 @@ constructor(
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Function &&
-                this.description == other.description &&
-                this.name == other.name &&
-                this.parameters == other.parameters &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        description,
-                        name,
-                        parameters,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "Function{description=$description, name=$name, parameters=$parameters, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -1994,6 +1964,36 @@ constructor(
                     additionalProperties.toUnmodifiable(),
                 )
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Function &&
+                this.description == other.description &&
+                this.name == other.name &&
+                this.parameters == other.parameters &&
+                this.additionalProperties == other.additionalProperties
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode =
+                    Objects.hash(
+                        description,
+                        name,
+                        parameters,
+                        additionalProperties,
+                    )
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "Function{description=$description, name=$name, parameters=$parameters, additionalProperties=$additionalProperties}"
     }
 
     /**
@@ -2012,30 +2012,11 @@ constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var hashCode: Int = 0
-
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is LogitBias && this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = Objects.hash(additionalProperties)
-            }
-            return hashCode
-        }
-
-        override fun toString() = "LogitBias{additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -2067,6 +2048,25 @@ constructor(
 
             fun build(): LogitBias = LogitBias(additionalProperties.toUnmodifiable())
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is LogitBias && this.additionalProperties == other.additionalProperties
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = Objects.hash(additionalProperties)
+            }
+            return hashCode
+        }
+
+        override fun toString() = "LogitBias{additionalProperties=$additionalProperties}"
     }
 
     /**
@@ -2080,30 +2080,11 @@ constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var hashCode: Int = 0
-
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Metadata && this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = Objects.hash(additionalProperties)
-            }
-            return hashCode
-        }
-
-        override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -2135,6 +2116,25 @@ constructor(
 
             fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Metadata && this.additionalProperties == other.additionalProperties
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode = Objects.hash(additionalProperties)
+            }
+            return hashCode
+        }
+
+        override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
     }
 
     @JsonDeserialize(using = ResponseFormat.Deserializer::class)

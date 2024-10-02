@@ -30,8 +30,6 @@ private constructor(
 
     private var validated: Boolean = false
 
-    private var hashCode: Int = 0
-
     /** The role of the messages author, in this case `function`. */
     fun role(): Role = role.getRequired("role")
 
@@ -64,34 +62,6 @@ private constructor(
     }
 
     fun toBuilder() = Builder().from(this)
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return other is ChatCompletionFunctionMessageParam &&
-            this.role == other.role &&
-            this.content == other.content &&
-            this.name == other.name &&
-            this.additionalProperties == other.additionalProperties
-    }
-
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    role,
-                    content,
-                    name,
-                    additionalProperties,
-                )
-        }
-        return hashCode
-    }
-
-    override fun toString() =
-        "ChatCompletionFunctionMessageParam{role=$role, content=$content, name=$name, additionalProperties=$additionalProperties}"
 
     companion object {
 
@@ -211,4 +181,34 @@ private constructor(
 
         fun asString(): String = _value().asStringOrThrow()
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return other is ChatCompletionFunctionMessageParam &&
+            this.role == other.role &&
+            this.content == other.content &&
+            this.name == other.name &&
+            this.additionalProperties == other.additionalProperties
+    }
+
+    private var hashCode: Int = 0
+
+    override fun hashCode(): Int {
+        if (hashCode == 0) {
+            hashCode =
+                Objects.hash(
+                    role,
+                    content,
+                    name,
+                    additionalProperties,
+                )
+        }
+        return hashCode
+    }
+
+    override fun toString() =
+        "ChatCompletionFunctionMessageParam{role=$role, content=$content, name=$name, additionalProperties=$additionalProperties}"
 }

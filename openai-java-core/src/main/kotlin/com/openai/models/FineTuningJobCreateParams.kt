@@ -87,8 +87,6 @@ constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var hashCode: Int = 0
-
         /**
          * The name of the model to fine-tune. You can select one of the
          * [supported models](https://platform.openai.com/docs/guides/fine-tuning/which-models-can-be-fine-tuned).
@@ -155,42 +153,6 @@ constructor(
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is FineTuningJobCreateBody &&
-                this.model == other.model &&
-                this.trainingFile == other.trainingFile &&
-                this.hyperparameters == other.hyperparameters &&
-                this.integrations == other.integrations &&
-                this.seed == other.seed &&
-                this.suffix == other.suffix &&
-                this.validationFile == other.validationFile &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        model,
-                        trainingFile,
-                        hyperparameters,
-                        integrations,
-                        seed,
-                        suffix,
-                        validationFile,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "FineTuningJobCreateBody{model=$model, trainingFile=$trainingFile, hyperparameters=$hyperparameters, integrations=$integrations, seed=$seed, suffix=$suffix, validationFile=$validationFile, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -317,6 +279,44 @@ constructor(
                     additionalProperties.toUnmodifiable(),
                 )
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is FineTuningJobCreateBody &&
+                this.model == other.model &&
+                this.trainingFile == other.trainingFile &&
+                this.hyperparameters == other.hyperparameters &&
+                this.integrations == other.integrations &&
+                this.seed == other.seed &&
+                this.suffix == other.suffix &&
+                this.validationFile == other.validationFile &&
+                this.additionalProperties == other.additionalProperties
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode =
+                    Objects.hash(
+                        model,
+                        trainingFile,
+                        hyperparameters,
+                        integrations,
+                        seed,
+                        suffix,
+                        validationFile,
+                        additionalProperties,
+                    )
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "FineTuningJobCreateBody{model=$model, trainingFile=$trainingFile, hyperparameters=$hyperparameters, integrations=$integrations, seed=$seed, suffix=$suffix, validationFile=$validationFile, additionalProperties=$additionalProperties}"
     }
 
     fun _additionalQueryParams(): Map<String, List<String>> = additionalQueryParams
@@ -744,8 +744,6 @@ constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var hashCode: Int = 0
-
         /**
          * Number of examples in each batch. A larger batch size means that model parameters are
          * updated less frequently, but with lower variance.
@@ -770,34 +768,6 @@ constructor(
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Hyperparameters &&
-                this.batchSize == other.batchSize &&
-                this.learningRateMultiplier == other.learningRateMultiplier &&
-                this.nEpochs == other.nEpochs &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        batchSize,
-                        learningRateMultiplier,
-                        nEpochs,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "Hyperparameters{batchSize=$batchSize, learningRateMultiplier=$learningRateMultiplier, nEpochs=$nEpochs, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -1370,6 +1340,36 @@ constructor(
                 fun asString(): String = _value().asStringOrThrow()
             }
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Hyperparameters &&
+                this.batchSize == other.batchSize &&
+                this.learningRateMultiplier == other.learningRateMultiplier &&
+                this.nEpochs == other.nEpochs &&
+                this.additionalProperties == other.additionalProperties
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode =
+                    Objects.hash(
+                        batchSize,
+                        learningRateMultiplier,
+                        nEpochs,
+                        additionalProperties,
+                    )
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "Hyperparameters{batchSize=$batchSize, learningRateMultiplier=$learningRateMultiplier, nEpochs=$nEpochs, additionalProperties=$additionalProperties}"
     }
 
     @JsonDeserialize(builder = Integration.Builder::class)
@@ -1380,8 +1380,6 @@ constructor(
         private val wandb: Wandb?,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
-
-        private var hashCode: Int = 0
 
         /**
          * The type of integration to enable. Currently, only "wandb" (Weights and Biases) is
@@ -1402,32 +1400,6 @@ constructor(
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Integration &&
-                this.type == other.type &&
-                this.wandb == other.wandb &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        type,
-                        wandb,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "Integration{type=$type, wandb=$wandb, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -1551,8 +1523,6 @@ constructor(
             private val additionalProperties: Map<String, JsonValue>,
         ) {
 
-            private var hashCode: Int = 0
-
             /** The name of the project that the new run will be created under. */
             @JsonProperty("project") fun project(): String? = project
 
@@ -1580,36 +1550,6 @@ constructor(
             fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is Wandb &&
-                    this.project == other.project &&
-                    this.name == other.name &&
-                    this.entity == other.entity &&
-                    this.tags == other.tags &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            project,
-                            name,
-                            entity,
-                            tags,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "Wandb{project=$project, name=$name, entity=$entity, tags=$tags, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -1681,6 +1621,66 @@ constructor(
                         additionalProperties.toUnmodifiable(),
                     )
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is Wandb &&
+                    this.project == other.project &&
+                    this.name == other.name &&
+                    this.entity == other.entity &&
+                    this.tags == other.tags &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            project,
+                            name,
+                            entity,
+                            tags,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "Wandb{project=$project, name=$name, entity=$entity, tags=$tags, additionalProperties=$additionalProperties}"
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Integration &&
+                this.type == other.type &&
+                this.wandb == other.wandb &&
+                this.additionalProperties == other.additionalProperties
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode =
+                    Objects.hash(
+                        type,
+                        wandb,
+                        additionalProperties,
+                    )
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "Integration{type=$type, wandb=$wandb, additionalProperties=$additionalProperties}"
     }
 }

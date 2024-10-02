@@ -28,8 +28,6 @@ private constructor(
 
     private var validated: Boolean = false
 
-    private var hashCode: Int = 0
-
     /** The name of the function to call. */
     fun name(): String = name.getRequired("name")
 
@@ -48,26 +46,6 @@ private constructor(
     }
 
     fun toBuilder() = Builder().from(this)
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return other is ChatCompletionFunctionCallOption &&
-            this.name == other.name &&
-            this.additionalProperties == other.additionalProperties
-    }
-
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode = Objects.hash(name, additionalProperties)
-        }
-        return hashCode
-    }
-
-    override fun toString() =
-        "ChatCompletionFunctionCallOption{name=$name, additionalProperties=$additionalProperties}"
 
     companion object {
 
@@ -111,4 +89,26 @@ private constructor(
         fun build(): ChatCompletionFunctionCallOption =
             ChatCompletionFunctionCallOption(name, additionalProperties.toUnmodifiable())
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return other is ChatCompletionFunctionCallOption &&
+            this.name == other.name &&
+            this.additionalProperties == other.additionalProperties
+    }
+
+    private var hashCode: Int = 0
+
+    override fun hashCode(): Int {
+        if (hashCode == 0) {
+            hashCode = Objects.hash(name, additionalProperties)
+        }
+        return hashCode
+    }
+
+    override fun toString() =
+        "ChatCompletionFunctionCallOption{name=$name, additionalProperties=$additionalProperties}"
 }

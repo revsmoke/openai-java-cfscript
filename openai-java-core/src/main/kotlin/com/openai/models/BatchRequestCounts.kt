@@ -27,8 +27,6 @@ private constructor(
 
     private var validated: Boolean = false
 
-    private var hashCode: Int = 0
-
     /** Total number of requests in the batch. */
     fun total(): Long = total.getRequired("total")
 
@@ -61,34 +59,6 @@ private constructor(
     }
 
     fun toBuilder() = Builder().from(this)
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return other is BatchRequestCounts &&
-            this.total == other.total &&
-            this.completed == other.completed &&
-            this.failed == other.failed &&
-            this.additionalProperties == other.additionalProperties
-    }
-
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    total,
-                    completed,
-                    failed,
-                    additionalProperties,
-                )
-        }
-        return hashCode
-    }
-
-    override fun toString() =
-        "BatchRequestCounts{total=$total, completed=$completed, failed=$failed, additionalProperties=$additionalProperties}"
 
     companion object {
 
@@ -156,4 +126,34 @@ private constructor(
                 additionalProperties.toUnmodifiable(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return other is BatchRequestCounts &&
+            this.total == other.total &&
+            this.completed == other.completed &&
+            this.failed == other.failed &&
+            this.additionalProperties == other.additionalProperties
+    }
+
+    private var hashCode: Int = 0
+
+    override fun hashCode(): Int {
+        if (hashCode == 0) {
+            hashCode =
+                Objects.hash(
+                    total,
+                    completed,
+                    failed,
+                    additionalProperties,
+                )
+        }
+        return hashCode
+    }
+
+    override fun toString() =
+        "BatchRequestCounts{total=$total, completed=$completed, failed=$failed, additionalProperties=$additionalProperties}"
 }

@@ -47,8 +47,6 @@ private constructor(
 
     private var validated: Boolean = false
 
-    private var hashCode: Int = 0
-
     fun id(): String = id.getRequired("id")
 
     /** The object type, which is always `batch`. */
@@ -202,68 +200,6 @@ private constructor(
     }
 
     fun toBuilder() = Builder().from(this)
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return other is Batch &&
-            this.id == other.id &&
-            this.object_ == other.object_ &&
-            this.endpoint == other.endpoint &&
-            this.errors == other.errors &&
-            this.inputFileId == other.inputFileId &&
-            this.completionWindow == other.completionWindow &&
-            this.status == other.status &&
-            this.outputFileId == other.outputFileId &&
-            this.errorFileId == other.errorFileId &&
-            this.createdAt == other.createdAt &&
-            this.inProgressAt == other.inProgressAt &&
-            this.expiresAt == other.expiresAt &&
-            this.finalizingAt == other.finalizingAt &&
-            this.completedAt == other.completedAt &&
-            this.failedAt == other.failedAt &&
-            this.expiredAt == other.expiredAt &&
-            this.cancellingAt == other.cancellingAt &&
-            this.cancelledAt == other.cancelledAt &&
-            this.requestCounts == other.requestCounts &&
-            this.metadata == other.metadata &&
-            this.additionalProperties == other.additionalProperties
-    }
-
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    id,
-                    object_,
-                    endpoint,
-                    errors,
-                    inputFileId,
-                    completionWindow,
-                    status,
-                    outputFileId,
-                    errorFileId,
-                    createdAt,
-                    inProgressAt,
-                    expiresAt,
-                    finalizingAt,
-                    completedAt,
-                    failedAt,
-                    expiredAt,
-                    cancellingAt,
-                    cancelledAt,
-                    requestCounts,
-                    metadata,
-                    additionalProperties,
-                )
-        }
-        return hashCode
-    }
-
-    override fun toString() =
-        "Batch{id=$id, object_=$object_, endpoint=$endpoint, errors=$errors, inputFileId=$inputFileId, completionWindow=$completionWindow, status=$status, outputFileId=$outputFileId, errorFileId=$errorFileId, createdAt=$createdAt, inProgressAt=$inProgressAt, expiresAt=$expiresAt, finalizingAt=$finalizingAt, completedAt=$completedAt, failedAt=$failedAt, expiredAt=$expiredAt, cancellingAt=$cancellingAt, cancelledAt=$cancelledAt, requestCounts=$requestCounts, metadata=$metadata, additionalProperties=$additionalProperties}"
 
     companion object {
 
@@ -677,8 +613,6 @@ private constructor(
 
         private var validated: Boolean = false
 
-        private var hashCode: Int = 0
-
         /** The object type, which is always `list`. */
         fun object_(): Optional<String> = Optional.ofNullable(object_.getNullable("object"))
 
@@ -702,32 +636,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Errors &&
-                this.object_ == other.object_ &&
-                this.data == other.data &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        object_,
-                        data,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "Errors{object_=$object_, data=$data, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -782,5 +690,97 @@ private constructor(
                     additionalProperties.toUnmodifiable(),
                 )
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Errors &&
+                this.object_ == other.object_ &&
+                this.data == other.data &&
+                this.additionalProperties == other.additionalProperties
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode =
+                    Objects.hash(
+                        object_,
+                        data,
+                        additionalProperties,
+                    )
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "Errors{object_=$object_, data=$data, additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return other is Batch &&
+            this.id == other.id &&
+            this.object_ == other.object_ &&
+            this.endpoint == other.endpoint &&
+            this.errors == other.errors &&
+            this.inputFileId == other.inputFileId &&
+            this.completionWindow == other.completionWindow &&
+            this.status == other.status &&
+            this.outputFileId == other.outputFileId &&
+            this.errorFileId == other.errorFileId &&
+            this.createdAt == other.createdAt &&
+            this.inProgressAt == other.inProgressAt &&
+            this.expiresAt == other.expiresAt &&
+            this.finalizingAt == other.finalizingAt &&
+            this.completedAt == other.completedAt &&
+            this.failedAt == other.failedAt &&
+            this.expiredAt == other.expiredAt &&
+            this.cancellingAt == other.cancellingAt &&
+            this.cancelledAt == other.cancelledAt &&
+            this.requestCounts == other.requestCounts &&
+            this.metadata == other.metadata &&
+            this.additionalProperties == other.additionalProperties
+    }
+
+    private var hashCode: Int = 0
+
+    override fun hashCode(): Int {
+        if (hashCode == 0) {
+            hashCode =
+                Objects.hash(
+                    id,
+                    object_,
+                    endpoint,
+                    errors,
+                    inputFileId,
+                    completionWindow,
+                    status,
+                    outputFileId,
+                    errorFileId,
+                    createdAt,
+                    inProgressAt,
+                    expiresAt,
+                    finalizingAt,
+                    completedAt,
+                    failedAt,
+                    expiredAt,
+                    cancellingAt,
+                    cancelledAt,
+                    requestCounts,
+                    metadata,
+                    additionalProperties,
+                )
+        }
+        return hashCode
+    }
+
+    override fun toString() =
+        "Batch{id=$id, object_=$object_, endpoint=$endpoint, errors=$errors, inputFileId=$inputFileId, completionWindow=$completionWindow, status=$status, outputFileId=$outputFileId, errorFileId=$errorFileId, createdAt=$createdAt, inProgressAt=$inProgressAt, expiresAt=$expiresAt, finalizingAt=$finalizingAt, completedAt=$completedAt, failedAt=$failedAt, expiredAt=$expiredAt, cancellingAt=$cancellingAt, cancelledAt=$cancelledAt, requestCounts=$requestCounts, metadata=$metadata, additionalProperties=$additionalProperties}"
 }

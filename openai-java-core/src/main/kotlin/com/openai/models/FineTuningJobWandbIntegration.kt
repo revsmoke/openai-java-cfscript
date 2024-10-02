@@ -33,8 +33,6 @@ private constructor(
 
     private var validated: Boolean = false
 
-    private var hashCode: Int = 0
-
     /** The name of the project that the new run will be created under. */
     fun project(): String = project.getRequired("project")
 
@@ -90,36 +88,6 @@ private constructor(
     }
 
     fun toBuilder() = Builder().from(this)
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return other is FineTuningJobWandbIntegration &&
-            this.project == other.project &&
-            this.name == other.name &&
-            this.entity == other.entity &&
-            this.tags == other.tags &&
-            this.additionalProperties == other.additionalProperties
-    }
-
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    project,
-                    name,
-                    entity,
-                    tags,
-                    additionalProperties,
-                )
-        }
-        return hashCode
-    }
-
-    override fun toString() =
-        "FineTuningJobWandbIntegration{project=$project, name=$name, entity=$entity, tags=$tags, additionalProperties=$additionalProperties}"
 
     companion object {
 
@@ -214,4 +182,36 @@ private constructor(
                 additionalProperties.toUnmodifiable(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return other is FineTuningJobWandbIntegration &&
+            this.project == other.project &&
+            this.name == other.name &&
+            this.entity == other.entity &&
+            this.tags == other.tags &&
+            this.additionalProperties == other.additionalProperties
+    }
+
+    private var hashCode: Int = 0
+
+    override fun hashCode(): Int {
+        if (hashCode == 0) {
+            hashCode =
+                Objects.hash(
+                    project,
+                    name,
+                    entity,
+                    tags,
+                    additionalProperties,
+                )
+        }
+        return hashCode
+    }
+
+    override fun toString() =
+        "FineTuningJobWandbIntegration{project=$project, name=$name, entity=$entity, tags=$tags, additionalProperties=$additionalProperties}"
 }

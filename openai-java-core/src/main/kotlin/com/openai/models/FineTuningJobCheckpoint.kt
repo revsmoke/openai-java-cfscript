@@ -38,8 +38,6 @@ private constructor(
 
     private var validated: Boolean = false
 
-    private var hashCode: Int = 0
-
     /** The checkpoint identifier, which can be referenced in the API endpoints. */
     fun id(): String = id.getRequired("id")
 
@@ -103,42 +101,6 @@ private constructor(
     }
 
     fun toBuilder() = Builder().from(this)
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return other is FineTuningJobCheckpoint &&
-            this.id == other.id &&
-            this.createdAt == other.createdAt &&
-            this.fineTunedModelCheckpoint == other.fineTunedModelCheckpoint &&
-            this.stepNumber == other.stepNumber &&
-            this.metrics == other.metrics &&
-            this.fineTuningJobId == other.fineTuningJobId &&
-            this.object_ == other.object_ &&
-            this.additionalProperties == other.additionalProperties
-    }
-
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    id,
-                    createdAt,
-                    fineTunedModelCheckpoint,
-                    stepNumber,
-                    metrics,
-                    fineTuningJobId,
-                    object_,
-                    additionalProperties,
-                )
-        }
-        return hashCode
-    }
-
-    override fun toString() =
-        "FineTuningJobCheckpoint{id=$id, createdAt=$createdAt, fineTunedModelCheckpoint=$fineTunedModelCheckpoint, stepNumber=$stepNumber, metrics=$metrics, fineTuningJobId=$fineTuningJobId, object_=$object_, additionalProperties=$additionalProperties}"
 
     companion object {
 
@@ -272,8 +234,6 @@ private constructor(
 
         private var validated: Boolean = false
 
-        private var hashCode: Int = 0
-
         fun step(): Optional<Double> = Optional.ofNullable(step.getNullable("step"))
 
         fun trainLoss(): Optional<Double> = Optional.ofNullable(trainLoss.getNullable("train_loss"))
@@ -332,42 +292,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Metrics &&
-                this.step == other.step &&
-                this.trainLoss == other.trainLoss &&
-                this.trainMeanTokenAccuracy == other.trainMeanTokenAccuracy &&
-                this.validLoss == other.validLoss &&
-                this.validMeanTokenAccuracy == other.validMeanTokenAccuracy &&
-                this.fullValidLoss == other.fullValidLoss &&
-                this.fullValidMeanTokenAccuracy == other.fullValidMeanTokenAccuracy &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        step,
-                        trainLoss,
-                        trainMeanTokenAccuracy,
-                        validLoss,
-                        validMeanTokenAccuracy,
-                        fullValidLoss,
-                        fullValidMeanTokenAccuracy,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "Metrics{step=$step, trainLoss=$trainLoss, trainMeanTokenAccuracy=$trainMeanTokenAccuracy, validLoss=$validLoss, validMeanTokenAccuracy=$validMeanTokenAccuracy, fullValidLoss=$fullValidLoss, fullValidMeanTokenAccuracy=$fullValidMeanTokenAccuracy, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -476,6 +400,44 @@ private constructor(
                     additionalProperties.toUnmodifiable(),
                 )
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Metrics &&
+                this.step == other.step &&
+                this.trainLoss == other.trainLoss &&
+                this.trainMeanTokenAccuracy == other.trainMeanTokenAccuracy &&
+                this.validLoss == other.validLoss &&
+                this.validMeanTokenAccuracy == other.validMeanTokenAccuracy &&
+                this.fullValidLoss == other.fullValidLoss &&
+                this.fullValidMeanTokenAccuracy == other.fullValidMeanTokenAccuracy &&
+                this.additionalProperties == other.additionalProperties
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode =
+                    Objects.hash(
+                        step,
+                        trainLoss,
+                        trainMeanTokenAccuracy,
+                        validLoss,
+                        validMeanTokenAccuracy,
+                        fullValidLoss,
+                        fullValidMeanTokenAccuracy,
+                        additionalProperties,
+                    )
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "Metrics{step=$step, trainLoss=$trainLoss, trainMeanTokenAccuracy=$trainMeanTokenAccuracy, validLoss=$validLoss, validMeanTokenAccuracy=$validMeanTokenAccuracy, fullValidLoss=$fullValidLoss, fullValidMeanTokenAccuracy=$fullValidMeanTokenAccuracy, additionalProperties=$additionalProperties}"
     }
 
     class Object
@@ -529,4 +491,42 @@ private constructor(
 
         fun asString(): String = _value().asStringOrThrow()
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return other is FineTuningJobCheckpoint &&
+            this.id == other.id &&
+            this.createdAt == other.createdAt &&
+            this.fineTunedModelCheckpoint == other.fineTunedModelCheckpoint &&
+            this.stepNumber == other.stepNumber &&
+            this.metrics == other.metrics &&
+            this.fineTuningJobId == other.fineTuningJobId &&
+            this.object_ == other.object_ &&
+            this.additionalProperties == other.additionalProperties
+    }
+
+    private var hashCode: Int = 0
+
+    override fun hashCode(): Int {
+        if (hashCode == 0) {
+            hashCode =
+                Objects.hash(
+                    id,
+                    createdAt,
+                    fineTunedModelCheckpoint,
+                    stepNumber,
+                    metrics,
+                    fineTuningJobId,
+                    object_,
+                    additionalProperties,
+                )
+        }
+        return hashCode
+    }
+
+    override fun toString() =
+        "FineTuningJobCheckpoint{id=$id, createdAt=$createdAt, fineTunedModelCheckpoint=$fineTunedModelCheckpoint, stepNumber=$stepNumber, metrics=$metrics, fineTuningJobId=$fineTuningJobId, object_=$object_, additionalProperties=$additionalProperties}"
 }

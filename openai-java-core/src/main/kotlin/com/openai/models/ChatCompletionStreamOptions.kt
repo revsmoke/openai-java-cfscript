@@ -26,8 +26,6 @@ private constructor(
 
     private var validated: Boolean = false
 
-    private var hashCode: Int = 0
-
     /**
      * If set, an additional chunk will be streamed before the `data: [DONE]` message. The `usage`
      * field on this chunk shows the token usage statistics for the entire request, and the
@@ -57,26 +55,6 @@ private constructor(
     }
 
     fun toBuilder() = Builder().from(this)
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return other is ChatCompletionStreamOptions &&
-            this.includeUsage == other.includeUsage &&
-            this.additionalProperties == other.additionalProperties
-    }
-
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode = Objects.hash(includeUsage, additionalProperties)
-        }
-        return hashCode
-    }
-
-    override fun toString() =
-        "ChatCompletionStreamOptions{includeUsage=$includeUsage, additionalProperties=$additionalProperties}"
 
     companion object {
 
@@ -131,4 +109,26 @@ private constructor(
         fun build(): ChatCompletionStreamOptions =
             ChatCompletionStreamOptions(includeUsage, additionalProperties.toUnmodifiable())
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return other is ChatCompletionStreamOptions &&
+            this.includeUsage == other.includeUsage &&
+            this.additionalProperties == other.additionalProperties
+    }
+
+    private var hashCode: Int = 0
+
+    override fun hashCode(): Int {
+        if (hashCode == 0) {
+            hashCode = Objects.hash(includeUsage, additionalProperties)
+        }
+        return hashCode
+    }
+
+    override fun toString() =
+        "ChatCompletionStreamOptions{includeUsage=$includeUsage, additionalProperties=$additionalProperties}"
 }

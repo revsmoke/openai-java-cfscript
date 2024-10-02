@@ -36,8 +36,6 @@ private constructor(
 
     private var validated: Boolean = false
 
-    private var hashCode: Int = 0
-
     /** A unique identifier for the chat completion. */
     fun id(): String = id.getRequired("id")
 
@@ -123,44 +121,6 @@ private constructor(
     }
 
     fun toBuilder() = Builder().from(this)
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return other is ChatCompletion &&
-            this.id == other.id &&
-            this.choices == other.choices &&
-            this.created == other.created &&
-            this.model == other.model &&
-            this.serviceTier == other.serviceTier &&
-            this.systemFingerprint == other.systemFingerprint &&
-            this.object_ == other.object_ &&
-            this.usage == other.usage &&
-            this.additionalProperties == other.additionalProperties
-    }
-
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    id,
-                    choices,
-                    created,
-                    model,
-                    serviceTier,
-                    systemFingerprint,
-                    object_,
-                    usage,
-                    additionalProperties,
-                )
-        }
-        return hashCode
-    }
-
-    override fun toString() =
-        "ChatCompletion{id=$id, choices=$choices, created=$created, model=$model, serviceTier=$serviceTier, systemFingerprint=$systemFingerprint, object_=$object_, usage=$usage, additionalProperties=$additionalProperties}"
 
     companion object {
 
@@ -316,8 +276,6 @@ private constructor(
 
         private var validated: Boolean = false
 
-        private var hashCode: Int = 0
-
         /**
          * The reason the model stopped generating tokens. This will be `stop` if the model hit a
          * natural stop point or a provided stop sequence, `length` if the maximum number of tokens
@@ -369,36 +327,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Choice &&
-                this.finishReason == other.finishReason &&
-                this.index == other.index &&
-                this.message == other.message &&
-                this.logprobs == other.logprobs &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        finishReason,
-                        index,
-                        message,
-                        logprobs,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "Choice{finishReason=$finishReason, index=$index, message=$message, logprobs=$logprobs, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -581,8 +509,6 @@ private constructor(
 
             private var validated: Boolean = false
 
-            private var hashCode: Int = 0
-
             /** A list of message content tokens with log probability information. */
             fun content(): Optional<List<ChatCompletionTokenLogprob>> =
                 Optional.ofNullable(content.getNullable("content"))
@@ -610,32 +536,6 @@ private constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is Logprobs &&
-                    this.content == other.content &&
-                    this.refusal == other.refusal &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            content,
-                            refusal,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "Logprobs{content=$content, refusal=$refusal, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -699,7 +599,67 @@ private constructor(
                         additionalProperties.toUnmodifiable(),
                     )
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is Logprobs &&
+                    this.content == other.content &&
+                    this.refusal == other.refusal &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            content,
+                            refusal,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "Logprobs{content=$content, refusal=$refusal, additionalProperties=$additionalProperties}"
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Choice &&
+                this.finishReason == other.finishReason &&
+                this.index == other.index &&
+                this.message == other.message &&
+                this.logprobs == other.logprobs &&
+                this.additionalProperties == other.additionalProperties
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode =
+                    Objects.hash(
+                        finishReason,
+                        index,
+                        message,
+                        logprobs,
+                        additionalProperties,
+                    )
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "Choice{finishReason=$finishReason, index=$index, message=$message, logprobs=$logprobs, additionalProperties=$additionalProperties}"
     }
 
     class Object
@@ -825,8 +785,6 @@ private constructor(
 
         private var validated: Boolean = false
 
-        private var hashCode: Int = 0
-
         /** Number of tokens in the generated completion. */
         fun completionTokens(): Long = completionTokens.getRequired("completion_tokens")
 
@@ -881,38 +839,6 @@ private constructor(
         }
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Usage &&
-                this.completionTokens == other.completionTokens &&
-                this.promptTokens == other.promptTokens &&
-                this.totalTokens == other.totalTokens &&
-                this.completionTokensDetails == other.completionTokensDetails &&
-                this.promptTokensDetails == other.promptTokensDetails &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        completionTokens,
-                        promptTokens,
-                        totalTokens,
-                        completionTokensDetails,
-                        promptTokensDetails,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "Usage{completionTokens=$completionTokens, promptTokens=$promptTokens, totalTokens=$totalTokens, completionTokensDetails=$completionTokensDetails, promptTokensDetails=$promptTokensDetails, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -1027,8 +953,6 @@ private constructor(
 
             private var validated: Boolean = false
 
-            private var hashCode: Int = 0
-
             /** Audio input tokens generated by the model. */
             fun audioTokens(): Optional<Long> =
                 Optional.ofNullable(audioTokens.getNullable("audio_tokens"))
@@ -1058,32 +982,6 @@ private constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is CompletionTokensDetails &&
-                    this.audioTokens == other.audioTokens &&
-                    this.reasoningTokens == other.reasoningTokens &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            audioTokens,
-                            reasoningTokens,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "CompletionTokensDetails{audioTokens=$audioTokens, reasoningTokens=$reasoningTokens, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -1146,6 +1044,34 @@ private constructor(
                         additionalProperties.toUnmodifiable(),
                     )
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is CompletionTokensDetails &&
+                    this.audioTokens == other.audioTokens &&
+                    this.reasoningTokens == other.reasoningTokens &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            audioTokens,
+                            reasoningTokens,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "CompletionTokensDetails{audioTokens=$audioTokens, reasoningTokens=$reasoningTokens, additionalProperties=$additionalProperties}"
         }
 
         /** Breakdown of tokens used in the prompt. */
@@ -1159,8 +1085,6 @@ private constructor(
         ) {
 
             private var validated: Boolean = false
-
-            private var hashCode: Int = 0
 
             /** Audio input tokens present in the prompt. */
             fun audioTokens(): Optional<Long> =
@@ -1189,32 +1113,6 @@ private constructor(
             }
 
             fun toBuilder() = Builder().from(this)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is PromptTokensDetails &&
-                    this.audioTokens == other.audioTokens &&
-                    this.cachedTokens == other.cachedTokens &&
-                    this.additionalProperties == other.additionalProperties
-            }
-
-            override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            audioTokens,
-                            cachedTokens,
-                            additionalProperties,
-                        )
-                }
-                return hashCode
-            }
-
-            override fun toString() =
-                "PromptTokensDetails{audioTokens=$audioTokens, cachedTokens=$cachedTokens, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -1276,6 +1174,108 @@ private constructor(
                         additionalProperties.toUnmodifiable(),
                     )
             }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is PromptTokensDetails &&
+                    this.audioTokens == other.audioTokens &&
+                    this.cachedTokens == other.cachedTokens &&
+                    this.additionalProperties == other.additionalProperties
+            }
+
+            private var hashCode: Int = 0
+
+            override fun hashCode(): Int {
+                if (hashCode == 0) {
+                    hashCode =
+                        Objects.hash(
+                            audioTokens,
+                            cachedTokens,
+                            additionalProperties,
+                        )
+                }
+                return hashCode
+            }
+
+            override fun toString() =
+                "PromptTokensDetails{audioTokens=$audioTokens, cachedTokens=$cachedTokens, additionalProperties=$additionalProperties}"
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Usage &&
+                this.completionTokens == other.completionTokens &&
+                this.promptTokens == other.promptTokens &&
+                this.totalTokens == other.totalTokens &&
+                this.completionTokensDetails == other.completionTokensDetails &&
+                this.promptTokensDetails == other.promptTokensDetails &&
+                this.additionalProperties == other.additionalProperties
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode =
+                    Objects.hash(
+                        completionTokens,
+                        promptTokens,
+                        totalTokens,
+                        completionTokensDetails,
+                        promptTokensDetails,
+                        additionalProperties,
+                    )
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "Usage{completionTokens=$completionTokens, promptTokens=$promptTokens, totalTokens=$totalTokens, completionTokensDetails=$completionTokensDetails, promptTokensDetails=$promptTokensDetails, additionalProperties=$additionalProperties}"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return other is ChatCompletion &&
+            this.id == other.id &&
+            this.choices == other.choices &&
+            this.created == other.created &&
+            this.model == other.model &&
+            this.serviceTier == other.serviceTier &&
+            this.systemFingerprint == other.systemFingerprint &&
+            this.object_ == other.object_ &&
+            this.usage == other.usage &&
+            this.additionalProperties == other.additionalProperties
+    }
+
+    private var hashCode: Int = 0
+
+    override fun hashCode(): Int {
+        if (hashCode == 0) {
+            hashCode =
+                Objects.hash(
+                    id,
+                    choices,
+                    created,
+                    model,
+                    serviceTier,
+                    systemFingerprint,
+                    object_,
+                    usage,
+                    additionalProperties,
+                )
+        }
+        return hashCode
+    }
+
+    override fun toString() =
+        "ChatCompletion{id=$id, choices=$choices, created=$created, model=$model, serviceTier=$serviceTier, systemFingerprint=$systemFingerprint, object_=$object_, usage=$usage, additionalProperties=$additionalProperties}"
 }
