@@ -341,24 +341,14 @@ private constructor(
                 return true
             }
 
-            return other is TopLogprob &&
-                this.token == other.token &&
-                this.logprob == other.logprob &&
-                this.bytes == other.bytes &&
-                this.additionalProperties == other.additionalProperties
+            return /* spotless:off */ other is TopLogprob && this.token == other.token && this.logprob == other.logprob && this.bytes == other.bytes && this.additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         private var hashCode: Int = 0
 
         override fun hashCode(): Int {
             if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        token,
-                        logprob,
-                        bytes,
-                        additionalProperties,
-                    )
+                hashCode = /* spotless:off */ Objects.hash(token, logprob, bytes, additionalProperties) /* spotless:on */
             }
             return hashCode
         }
@@ -372,26 +362,14 @@ private constructor(
             return true
         }
 
-        return other is ChatCompletionTokenLogprob &&
-            this.token == other.token &&
-            this.logprob == other.logprob &&
-            this.bytes == other.bytes &&
-            this.topLogprobs == other.topLogprobs &&
-            this.additionalProperties == other.additionalProperties
+        return /* spotless:off */ other is ChatCompletionTokenLogprob && this.token == other.token && this.logprob == other.logprob && this.bytes == other.bytes && this.topLogprobs == other.topLogprobs && this.additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     private var hashCode: Int = 0
 
     override fun hashCode(): Int {
         if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    token,
-                    logprob,
-                    bytes,
-                    topLogprobs,
-                    additionalProperties,
-                )
+            hashCode = /* spotless:off */ Objects.hash(token, logprob, bytes, topLogprobs, additionalProperties) /* spotless:on */
         }
         return hashCode
     }

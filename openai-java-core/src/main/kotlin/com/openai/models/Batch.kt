@@ -471,7 +471,7 @@ private constructor(
                 return true
             }
 
-            return other is Object && this.value == other.value
+            return /* spotless:off */ other is Object && this.value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -522,7 +522,7 @@ private constructor(
                 return true
             }
 
-            return other is Status && this.value == other.value
+            return /* spotless:off */ other is Status && this.value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -696,22 +696,14 @@ private constructor(
                 return true
             }
 
-            return other is Errors &&
-                this.object_ == other.object_ &&
-                this.data == other.data &&
-                this.additionalProperties == other.additionalProperties
+            return /* spotless:off */ other is Errors && this.object_ == other.object_ && this.data == other.data && this.additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         private var hashCode: Int = 0
 
         override fun hashCode(): Int {
             if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        object_,
-                        data,
-                        additionalProperties,
-                    )
+                hashCode = /* spotless:off */ Objects.hash(object_, data, additionalProperties) /* spotless:on */
             }
             return hashCode
         }
@@ -725,58 +717,14 @@ private constructor(
             return true
         }
 
-        return other is Batch &&
-            this.id == other.id &&
-            this.object_ == other.object_ &&
-            this.endpoint == other.endpoint &&
-            this.errors == other.errors &&
-            this.inputFileId == other.inputFileId &&
-            this.completionWindow == other.completionWindow &&
-            this.status == other.status &&
-            this.outputFileId == other.outputFileId &&
-            this.errorFileId == other.errorFileId &&
-            this.createdAt == other.createdAt &&
-            this.inProgressAt == other.inProgressAt &&
-            this.expiresAt == other.expiresAt &&
-            this.finalizingAt == other.finalizingAt &&
-            this.completedAt == other.completedAt &&
-            this.failedAt == other.failedAt &&
-            this.expiredAt == other.expiredAt &&
-            this.cancellingAt == other.cancellingAt &&
-            this.cancelledAt == other.cancelledAt &&
-            this.requestCounts == other.requestCounts &&
-            this.metadata == other.metadata &&
-            this.additionalProperties == other.additionalProperties
+        return /* spotless:off */ other is Batch && this.id == other.id && this.object_ == other.object_ && this.endpoint == other.endpoint && this.errors == other.errors && this.inputFileId == other.inputFileId && this.completionWindow == other.completionWindow && this.status == other.status && this.outputFileId == other.outputFileId && this.errorFileId == other.errorFileId && this.createdAt == other.createdAt && this.inProgressAt == other.inProgressAt && this.expiresAt == other.expiresAt && this.finalizingAt == other.finalizingAt && this.completedAt == other.completedAt && this.failedAt == other.failedAt && this.expiredAt == other.expiredAt && this.cancellingAt == other.cancellingAt && this.cancelledAt == other.cancelledAt && this.requestCounts == other.requestCounts && this.metadata == other.metadata && this.additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     private var hashCode: Int = 0
 
     override fun hashCode(): Int {
         if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    id,
-                    object_,
-                    endpoint,
-                    errors,
-                    inputFileId,
-                    completionWindow,
-                    status,
-                    outputFileId,
-                    errorFileId,
-                    createdAt,
-                    inProgressAt,
-                    expiresAt,
-                    finalizingAt,
-                    completedAt,
-                    failedAt,
-                    expiredAt,
-                    cancellingAt,
-                    cancelledAt,
-                    requestCounts,
-                    metadata,
-                    additionalProperties,
-                )
+            hashCode = /* spotless:off */ Objects.hash(id, object_, endpoint, errors, inputFileId, completionWindow, status, outputFileId, errorFileId, createdAt, inProgressAt, expiresAt, finalizingAt, completedAt, failedAt, expiredAt, cancellingAt, cancelledAt, requestCounts, metadata, additionalProperties) /* spotless:on */
         }
         return hashCode
     }

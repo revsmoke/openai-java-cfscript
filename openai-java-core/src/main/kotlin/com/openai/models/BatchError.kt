@@ -151,26 +151,14 @@ private constructor(
             return true
         }
 
-        return other is BatchError &&
-            this.code == other.code &&
-            this.message == other.message &&
-            this.param == other.param &&
-            this.line == other.line &&
-            this.additionalProperties == other.additionalProperties
+        return /* spotless:off */ other is BatchError && this.code == other.code && this.message == other.message && this.param == other.param && this.line == other.line && this.additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     private var hashCode: Int = 0
 
     override fun hashCode(): Int {
         if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    code,
-                    message,
-                    param,
-                    line,
-                    additionalProperties,
-                )
+            hashCode = /* spotless:off */ Objects.hash(code, message, param, line, additionalProperties) /* spotless:on */
         }
         return hashCode
     }

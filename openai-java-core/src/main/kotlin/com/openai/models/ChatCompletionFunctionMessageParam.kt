@@ -144,7 +144,7 @@ private constructor(
                 return true
             }
 
-            return other is Role && this.value == other.value
+            return /* spotless:off */ other is Role && this.value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -187,24 +187,14 @@ private constructor(
             return true
         }
 
-        return other is ChatCompletionFunctionMessageParam &&
-            this.role == other.role &&
-            this.content == other.content &&
-            this.name == other.name &&
-            this.additionalProperties == other.additionalProperties
+        return /* spotless:off */ other is ChatCompletionFunctionMessageParam && this.role == other.role && this.content == other.content && this.name == other.name && this.additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     private var hashCode: Int = 0
 
     override fun hashCode(): Int {
         if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    role,
-                    content,
-                    name,
-                    additionalProperties,
-                )
+            hashCode = /* spotless:off */ Objects.hash(role, content, name, additionalProperties) /* spotless:on */
         }
         return hashCode
     }

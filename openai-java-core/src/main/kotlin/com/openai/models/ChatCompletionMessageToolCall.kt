@@ -246,22 +246,14 @@ private constructor(
                 return true
             }
 
-            return other is Function &&
-                this.name == other.name &&
-                this.arguments == other.arguments &&
-                this.additionalProperties == other.additionalProperties
+            return /* spotless:off */ other is Function && this.name == other.name && this.arguments == other.arguments && this.additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         private var hashCode: Int = 0
 
         override fun hashCode(): Int {
             if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        name,
-                        arguments,
-                        additionalProperties,
-                    )
+                hashCode = /* spotless:off */ Objects.hash(name, arguments, additionalProperties) /* spotless:on */
             }
             return hashCode
         }
@@ -283,7 +275,7 @@ private constructor(
                 return true
             }
 
-            return other is Type && this.value == other.value
+            return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -326,24 +318,14 @@ private constructor(
             return true
         }
 
-        return other is ChatCompletionMessageToolCall &&
-            this.id == other.id &&
-            this.type == other.type &&
-            this.function == other.function &&
-            this.additionalProperties == other.additionalProperties
+        return /* spotless:off */ other is ChatCompletionMessageToolCall && this.id == other.id && this.type == other.type && this.function == other.function && this.additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     private var hashCode: Int = 0
 
     override fun hashCode(): Int {
         if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    id,
-                    type,
-                    function,
-                    additionalProperties,
-                )
+            hashCode = /* spotless:off */ Objects.hash(id, type, function, additionalProperties) /* spotless:on */
         }
         return hashCode
     }

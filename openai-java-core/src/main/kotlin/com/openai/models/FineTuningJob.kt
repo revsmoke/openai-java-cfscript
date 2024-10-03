@@ -690,24 +690,14 @@ private constructor(
                 return true
             }
 
-            return other is Error &&
-                this.code == other.code &&
-                this.message == other.message &&
-                this.param == other.param &&
-                this.additionalProperties == other.additionalProperties
+            return /* spotless:off */ other is Error && this.code == other.code && this.message == other.message && this.param == other.param && this.additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         private var hashCode: Int = 0
 
         override fun hashCode(): Int {
             if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        code,
-                        message,
-                        param,
-                        additionalProperties,
-                    )
+                hashCode = /* spotless:off */ Objects.hash(code, message, param, additionalProperties) /* spotless:on */
             }
             return hashCode
         }
@@ -858,13 +848,11 @@ private constructor(
                     return true
                 }
 
-                return other is NEpochs &&
-                    this.unionMember0 == other.unionMember0 &&
-                    this.long_ == other.long_
+                return /* spotless:off */ other is NEpochs && this.unionMember0 == other.unionMember0 && this.long_ == other.long_ /* spotless:on */
             }
 
             override fun hashCode(): Int {
-                return Objects.hash(unionMember0, long_)
+                return /* spotless:off */ Objects.hash(unionMember0, long_) /* spotless:on */
             }
 
             override fun toString(): String {
@@ -940,7 +928,7 @@ private constructor(
                         return true
                     }
 
-                    return other is UnionMember0 && this.value == other.value
+                    return /* spotless:off */ other is UnionMember0 && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -984,16 +972,14 @@ private constructor(
                 return true
             }
 
-            return other is Hyperparameters &&
-                this.nEpochs == other.nEpochs &&
-                this.additionalProperties == other.additionalProperties
+            return /* spotless:off */ other is Hyperparameters && this.nEpochs == other.nEpochs && this.additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         private var hashCode: Int = 0
 
         override fun hashCode(): Int {
             if (hashCode == 0) {
-                hashCode = Objects.hash(nEpochs, additionalProperties)
+                hashCode = /* spotless:off */ Objects.hash(nEpochs, additionalProperties) /* spotless:on */
             }
             return hashCode
         }
@@ -1015,7 +1001,7 @@ private constructor(
                 return true
             }
 
-            return other is Object && this.value == other.value
+            return /* spotless:off */ other is Object && this.value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -1066,7 +1052,7 @@ private constructor(
                 return true
             }
 
-            return other is Status && this.value == other.value
+            return /* spotless:off */ other is Status && this.value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -1139,52 +1125,14 @@ private constructor(
             return true
         }
 
-        return other is FineTuningJob &&
-            this.id == other.id &&
-            this.createdAt == other.createdAt &&
-            this.error == other.error &&
-            this.fineTunedModel == other.fineTunedModel &&
-            this.finishedAt == other.finishedAt &&
-            this.hyperparameters == other.hyperparameters &&
-            this.model == other.model &&
-            this.object_ == other.object_ &&
-            this.organizationId == other.organizationId &&
-            this.resultFiles == other.resultFiles &&
-            this.status == other.status &&
-            this.trainedTokens == other.trainedTokens &&
-            this.trainingFile == other.trainingFile &&
-            this.validationFile == other.validationFile &&
-            this.integrations == other.integrations &&
-            this.seed == other.seed &&
-            this.estimatedFinish == other.estimatedFinish &&
-            this.additionalProperties == other.additionalProperties
+        return /* spotless:off */ other is FineTuningJob && this.id == other.id && this.createdAt == other.createdAt && this.error == other.error && this.fineTunedModel == other.fineTunedModel && this.finishedAt == other.finishedAt && this.hyperparameters == other.hyperparameters && this.model == other.model && this.object_ == other.object_ && this.organizationId == other.organizationId && this.resultFiles == other.resultFiles && this.status == other.status && this.trainedTokens == other.trainedTokens && this.trainingFile == other.trainingFile && this.validationFile == other.validationFile && this.integrations == other.integrations && this.seed == other.seed && this.estimatedFinish == other.estimatedFinish && this.additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     private var hashCode: Int = 0
 
     override fun hashCode(): Int {
         if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    id,
-                    createdAt,
-                    error,
-                    fineTunedModel,
-                    finishedAt,
-                    hyperparameters,
-                    model,
-                    object_,
-                    organizationId,
-                    resultFiles,
-                    status,
-                    trainedTokens,
-                    trainingFile,
-                    validationFile,
-                    integrations,
-                    seed,
-                    estimatedFinish,
-                    additionalProperties,
-                )
+            hashCode = /* spotless:off */ Objects.hash(id, createdAt, error, fineTunedModel, finishedAt, hyperparameters, model, object_, organizationId, resultFiles, status, trainedTokens, trainingFile, validationFile, integrations, seed, estimatedFinish, additionalProperties) /* spotless:on */
         }
         return hashCode
     }

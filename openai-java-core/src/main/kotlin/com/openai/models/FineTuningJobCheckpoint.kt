@@ -406,32 +406,14 @@ private constructor(
                 return true
             }
 
-            return other is Metrics &&
-                this.step == other.step &&
-                this.trainLoss == other.trainLoss &&
-                this.trainMeanTokenAccuracy == other.trainMeanTokenAccuracy &&
-                this.validLoss == other.validLoss &&
-                this.validMeanTokenAccuracy == other.validMeanTokenAccuracy &&
-                this.fullValidLoss == other.fullValidLoss &&
-                this.fullValidMeanTokenAccuracy == other.fullValidMeanTokenAccuracy &&
-                this.additionalProperties == other.additionalProperties
+            return /* spotless:off */ other is Metrics && this.step == other.step && this.trainLoss == other.trainLoss && this.trainMeanTokenAccuracy == other.trainMeanTokenAccuracy && this.validLoss == other.validLoss && this.validMeanTokenAccuracy == other.validMeanTokenAccuracy && this.fullValidLoss == other.fullValidLoss && this.fullValidMeanTokenAccuracy == other.fullValidMeanTokenAccuracy && this.additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         private var hashCode: Int = 0
 
         override fun hashCode(): Int {
             if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        step,
-                        trainLoss,
-                        trainMeanTokenAccuracy,
-                        validLoss,
-                        validMeanTokenAccuracy,
-                        fullValidLoss,
-                        fullValidMeanTokenAccuracy,
-                        additionalProperties,
-                    )
+                hashCode = /* spotless:off */ Objects.hash(step, trainLoss, trainMeanTokenAccuracy, validLoss, validMeanTokenAccuracy, fullValidLoss, fullValidMeanTokenAccuracy, additionalProperties) /* spotless:on */
             }
             return hashCode
         }
@@ -453,7 +435,7 @@ private constructor(
                 return true
             }
 
-            return other is Object && this.value == other.value
+            return /* spotless:off */ other is Object && this.value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -497,32 +479,14 @@ private constructor(
             return true
         }
 
-        return other is FineTuningJobCheckpoint &&
-            this.id == other.id &&
-            this.createdAt == other.createdAt &&
-            this.fineTunedModelCheckpoint == other.fineTunedModelCheckpoint &&
-            this.stepNumber == other.stepNumber &&
-            this.metrics == other.metrics &&
-            this.fineTuningJobId == other.fineTuningJobId &&
-            this.object_ == other.object_ &&
-            this.additionalProperties == other.additionalProperties
+        return /* spotless:off */ other is FineTuningJobCheckpoint && this.id == other.id && this.createdAt == other.createdAt && this.fineTunedModelCheckpoint == other.fineTunedModelCheckpoint && this.stepNumber == other.stepNumber && this.metrics == other.metrics && this.fineTuningJobId == other.fineTuningJobId && this.object_ == other.object_ && this.additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     private var hashCode: Int = 0
 
     override fun hashCode(): Int {
         if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    id,
-                    createdAt,
-                    fineTunedModelCheckpoint,
-                    stepNumber,
-                    metrics,
-                    fineTuningJobId,
-                    object_,
-                    additionalProperties,
-                )
+            hashCode = /* spotless:off */ Objects.hash(id, createdAt, fineTunedModelCheckpoint, stepNumber, metrics, fineTuningJobId, object_, additionalProperties) /* spotless:on */
         }
         return hashCode
     }

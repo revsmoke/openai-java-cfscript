@@ -117,22 +117,11 @@ private constructor(
             return true
         }
 
-        return other is ChatCompletionMessageParam &&
-            this.chatCompletionSystemMessageParam == other.chatCompletionSystemMessageParam &&
-            this.chatCompletionUserMessageParam == other.chatCompletionUserMessageParam &&
-            this.chatCompletionAssistantMessageParam == other.chatCompletionAssistantMessageParam &&
-            this.chatCompletionToolMessageParam == other.chatCompletionToolMessageParam &&
-            this.chatCompletionFunctionMessageParam == other.chatCompletionFunctionMessageParam
+        return /* spotless:off */ other is ChatCompletionMessageParam && this.chatCompletionSystemMessageParam == other.chatCompletionSystemMessageParam && this.chatCompletionUserMessageParam == other.chatCompletionUserMessageParam && this.chatCompletionAssistantMessageParam == other.chatCompletionAssistantMessageParam && this.chatCompletionToolMessageParam == other.chatCompletionToolMessageParam && this.chatCompletionFunctionMessageParam == other.chatCompletionFunctionMessageParam /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            chatCompletionSystemMessageParam,
-            chatCompletionUserMessageParam,
-            chatCompletionAssistantMessageParam,
-            chatCompletionToolMessageParam,
-            chatCompletionFunctionMessageParam,
-        )
+        return /* spotless:off */ Objects.hash(chatCompletionSystemMessageParam, chatCompletionUserMessageParam, chatCompletionAssistantMessageParam, chatCompletionToolMessageParam, chatCompletionFunctionMessageParam) /* spotless:on */
     }
 
     override fun toString(): String {

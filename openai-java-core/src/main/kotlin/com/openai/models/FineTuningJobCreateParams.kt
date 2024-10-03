@@ -285,32 +285,14 @@ constructor(
                 return true
             }
 
-            return other is FineTuningJobCreateBody &&
-                this.model == other.model &&
-                this.trainingFile == other.trainingFile &&
-                this.hyperparameters == other.hyperparameters &&
-                this.integrations == other.integrations &&
-                this.seed == other.seed &&
-                this.suffix == other.suffix &&
-                this.validationFile == other.validationFile &&
-                this.additionalProperties == other.additionalProperties
+            return /* spotless:off */ other is FineTuningJobCreateBody && this.model == other.model && this.trainingFile == other.trainingFile && this.hyperparameters == other.hyperparameters && this.integrations == other.integrations && this.seed == other.seed && this.suffix == other.suffix && this.validationFile == other.validationFile && this.additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         private var hashCode: Int = 0
 
         override fun hashCode(): Int {
             if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        model,
-                        trainingFile,
-                        hyperparameters,
-                        integrations,
-                        seed,
-                        suffix,
-                        validationFile,
-                        additionalProperties,
-                    )
+                hashCode = /* spotless:off */ Objects.hash(model, trainingFile, hyperparameters, integrations, seed, suffix, validationFile, additionalProperties) /* spotless:on */
             }
             return hashCode
         }
@@ -330,32 +312,11 @@ constructor(
             return true
         }
 
-        return other is FineTuningJobCreateParams &&
-            this.model == other.model &&
-            this.trainingFile == other.trainingFile &&
-            this.hyperparameters == other.hyperparameters &&
-            this.integrations == other.integrations &&
-            this.seed == other.seed &&
-            this.suffix == other.suffix &&
-            this.validationFile == other.validationFile &&
-            this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders &&
-            this.additionalBodyProperties == other.additionalBodyProperties
+        return /* spotless:off */ other is FineTuningJobCreateParams && this.model == other.model && this.trainingFile == other.trainingFile && this.hyperparameters == other.hyperparameters && this.integrations == other.integrations && this.seed == other.seed && this.suffix == other.suffix && this.validationFile == other.validationFile && this.additionalQueryParams == other.additionalQueryParams && this.additionalHeaders == other.additionalHeaders && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            model,
-            trainingFile,
-            hyperparameters,
-            integrations,
-            seed,
-            suffix,
-            validationFile,
-            additionalQueryParams,
-            additionalHeaders,
-            additionalBodyProperties,
-        )
+        return /* spotless:off */ Objects.hash(model, trainingFile, hyperparameters, integrations, seed, suffix, validationFile, additionalQueryParams, additionalHeaders, additionalBodyProperties) /* spotless:on */
     }
 
     override fun toString() =
@@ -595,13 +556,11 @@ constructor(
                 return true
             }
 
-            return other is Model &&
-                this.string == other.string &&
-                this.unionMember1 == other.unionMember1
+            return /* spotless:off */ other is Model && this.string == other.string && this.unionMember1 == other.unionMember1 /* spotless:on */
         }
 
         override fun hashCode(): Int {
-            return Objects.hash(string, unionMember1)
+            return /* spotless:off */ Objects.hash(string, unionMember1) /* spotless:on */
         }
 
         override fun toString(): String {
@@ -676,7 +635,7 @@ constructor(
                     return true
                 }
 
-                return other is UnionMember1 && this.value == other.value
+                return /* spotless:off */ other is UnionMember1 && this.value == other.value /* spotless:on */
             }
 
             override fun hashCode() = value.hashCode()
@@ -882,13 +841,11 @@ constructor(
                     return true
                 }
 
-                return other is BatchSize &&
-                    this.unionMember0 == other.unionMember0 &&
-                    this.long_ == other.long_
+                return /* spotless:off */ other is BatchSize && this.unionMember0 == other.unionMember0 && this.long_ == other.long_ /* spotless:on */
             }
 
             override fun hashCode(): Int {
-                return Objects.hash(unionMember0, long_)
+                return /* spotless:off */ Objects.hash(unionMember0, long_) /* spotless:on */
             }
 
             override fun toString(): String {
@@ -964,7 +921,7 @@ constructor(
                         return true
                     }
 
-                    return other is UnionMember0 && this.value == other.value
+                    return /* spotless:off */ other is UnionMember0 && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -1050,13 +1007,11 @@ constructor(
                     return true
                 }
 
-                return other is LearningRateMultiplier &&
-                    this.unionMember0 == other.unionMember0 &&
-                    this.double_ == other.double_
+                return /* spotless:off */ other is LearningRateMultiplier && this.unionMember0 == other.unionMember0 && this.double_ == other.double_ /* spotless:on */
             }
 
             override fun hashCode(): Int {
-                return Objects.hash(unionMember0, double_)
+                return /* spotless:off */ Objects.hash(unionMember0, double_) /* spotless:on */
             }
 
             override fun toString(): String {
@@ -1134,7 +1089,7 @@ constructor(
                         return true
                     }
 
-                    return other is UnionMember0 && this.value == other.value
+                    return /* spotless:off */ other is UnionMember0 && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -1220,13 +1175,11 @@ constructor(
                     return true
                 }
 
-                return other is NEpochs &&
-                    this.unionMember0 == other.unionMember0 &&
-                    this.long_ == other.long_
+                return /* spotless:off */ other is NEpochs && this.unionMember0 == other.unionMember0 && this.long_ == other.long_ /* spotless:on */
             }
 
             override fun hashCode(): Int {
-                return Objects.hash(unionMember0, long_)
+                return /* spotless:off */ Objects.hash(unionMember0, long_) /* spotless:on */
             }
 
             override fun toString(): String {
@@ -1302,7 +1255,7 @@ constructor(
                         return true
                     }
 
-                    return other is UnionMember0 && this.value == other.value
+                    return /* spotless:off */ other is UnionMember0 && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -1346,24 +1299,14 @@ constructor(
                 return true
             }
 
-            return other is Hyperparameters &&
-                this.batchSize == other.batchSize &&
-                this.learningRateMultiplier == other.learningRateMultiplier &&
-                this.nEpochs == other.nEpochs &&
-                this.additionalProperties == other.additionalProperties
+            return /* spotless:off */ other is Hyperparameters && this.batchSize == other.batchSize && this.learningRateMultiplier == other.learningRateMultiplier && this.nEpochs == other.nEpochs && this.additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         private var hashCode: Int = 0
 
         override fun hashCode(): Int {
             if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        batchSize,
-                        learningRateMultiplier,
-                        nEpochs,
-                        additionalProperties,
-                    )
+                hashCode = /* spotless:off */ Objects.hash(batchSize, learningRateMultiplier, nEpochs, additionalProperties) /* spotless:on */
             }
             return hashCode
         }
@@ -1468,7 +1411,7 @@ constructor(
                     return true
                 }
 
-                return other is Type && this.value == other.value
+                return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
             }
 
             override fun hashCode() = value.hashCode()
@@ -1627,26 +1570,14 @@ constructor(
                     return true
                 }
 
-                return other is Wandb &&
-                    this.project == other.project &&
-                    this.name == other.name &&
-                    this.entity == other.entity &&
-                    this.tags == other.tags &&
-                    this.additionalProperties == other.additionalProperties
+                return /* spotless:off */ other is Wandb && this.project == other.project && this.name == other.name && this.entity == other.entity && this.tags == other.tags && this.additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             private var hashCode: Int = 0
 
             override fun hashCode(): Int {
                 if (hashCode == 0) {
-                    hashCode =
-                        Objects.hash(
-                            project,
-                            name,
-                            entity,
-                            tags,
-                            additionalProperties,
-                        )
+                    hashCode = /* spotless:off */ Objects.hash(project, name, entity, tags, additionalProperties) /* spotless:on */
                 }
                 return hashCode
             }
@@ -1660,22 +1591,14 @@ constructor(
                 return true
             }
 
-            return other is Integration &&
-                this.type == other.type &&
-                this.wandb == other.wandb &&
-                this.additionalProperties == other.additionalProperties
+            return /* spotless:off */ other is Integration && this.type == other.type && this.wandb == other.wandb && this.additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         private var hashCode: Int = 0
 
         override fun hashCode(): Int {
             if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        type,
-                        wandb,
-                        additionalProperties,
-                    )
+                hashCode = /* spotless:off */ Objects.hash(type, wandb, additionalProperties) /* spotless:on */
             }
             return hashCode
         }

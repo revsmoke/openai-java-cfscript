@@ -344,14 +344,14 @@ private constructor(
                     return true
                 }
 
-                return other is Schema && this.additionalProperties == other.additionalProperties
+                return /* spotless:off */ other is Schema && this.additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             private var hashCode: Int = 0
 
             override fun hashCode(): Int {
                 if (hashCode == 0) {
-                    hashCode = Objects.hash(additionalProperties)
+                    hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
                 }
                 return hashCode
             }
@@ -364,26 +364,14 @@ private constructor(
                 return true
             }
 
-            return other is JsonSchema &&
-                this.description == other.description &&
-                this.name == other.name &&
-                this.schema == other.schema &&
-                this.strict == other.strict &&
-                this.additionalProperties == other.additionalProperties
+            return /* spotless:off */ other is JsonSchema && this.description == other.description && this.name == other.name && this.schema == other.schema && this.strict == other.strict && this.additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         private var hashCode: Int = 0
 
         override fun hashCode(): Int {
             if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        description,
-                        name,
-                        schema,
-                        strict,
-                        additionalProperties,
-                    )
+                hashCode = /* spotless:off */ Objects.hash(description, name, schema, strict, additionalProperties) /* spotless:on */
             }
             return hashCode
         }
@@ -405,7 +393,7 @@ private constructor(
                 return true
             }
 
-            return other is Type && this.value == other.value
+            return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -448,22 +436,14 @@ private constructor(
             return true
         }
 
-        return other is ResponseFormatJsonSchema &&
-            this.type == other.type &&
-            this.jsonSchema == other.jsonSchema &&
-            this.additionalProperties == other.additionalProperties
+        return /* spotless:off */ other is ResponseFormatJsonSchema && this.type == other.type && this.jsonSchema == other.jsonSchema && this.additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     private var hashCode: Int = 0
 
     override fun hashCode(): Int {
         if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    type,
-                    jsonSchema,
-                    additionalProperties,
-                )
+            hashCode = /* spotless:off */ Objects.hash(type, jsonSchema, additionalProperties) /* spotless:on */
         }
         return hashCode
     }

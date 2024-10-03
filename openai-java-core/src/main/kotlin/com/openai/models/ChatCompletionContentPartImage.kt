@@ -225,7 +225,7 @@ private constructor(
                     return true
                 }
 
-                return other is Detail && this.value == other.value
+                return /* spotless:off */ other is Detail && this.value == other.value /* spotless:on */
             }
 
             override fun hashCode() = value.hashCode()
@@ -280,22 +280,14 @@ private constructor(
                 return true
             }
 
-            return other is ImageUrl &&
-                this.url == other.url &&
-                this.detail == other.detail &&
-                this.additionalProperties == other.additionalProperties
+            return /* spotless:off */ other is ImageUrl && this.url == other.url && this.detail == other.detail && this.additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         private var hashCode: Int = 0
 
         override fun hashCode(): Int {
             if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        url,
-                        detail,
-                        additionalProperties,
-                    )
+                hashCode = /* spotless:off */ Objects.hash(url, detail, additionalProperties) /* spotless:on */
             }
             return hashCode
         }
@@ -317,7 +309,7 @@ private constructor(
                 return true
             }
 
-            return other is Type && this.value == other.value
+            return /* spotless:off */ other is Type && this.value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -360,22 +352,14 @@ private constructor(
             return true
         }
 
-        return other is ChatCompletionContentPartImage &&
-            this.type == other.type &&
-            this.imageUrl == other.imageUrl &&
-            this.additionalProperties == other.additionalProperties
+        return /* spotless:off */ other is ChatCompletionContentPartImage && this.type == other.type && this.imageUrl == other.imageUrl && this.additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     private var hashCode: Int = 0
 
     override fun hashCode(): Int {
         if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    type,
-                    imageUrl,
-                    additionalProperties,
-                )
+            hashCode = /* spotless:off */ Objects.hash(type, imageUrl, additionalProperties) /* spotless:on */
         }
         return hashCode
     }

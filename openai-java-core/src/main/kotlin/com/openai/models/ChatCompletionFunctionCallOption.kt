@@ -95,16 +95,14 @@ private constructor(
             return true
         }
 
-        return other is ChatCompletionFunctionCallOption &&
-            this.name == other.name &&
-            this.additionalProperties == other.additionalProperties
+        return /* spotless:off */ other is ChatCompletionFunctionCallOption && this.name == other.name && this.additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     private var hashCode: Int = 0
 
     override fun hashCode(): Int {
         if (hashCode == 0) {
-            hashCode = Objects.hash(name, additionalProperties)
+            hashCode = /* spotless:off */ Objects.hash(name, additionalProperties) /* spotless:on */
         }
         return hashCode
     }

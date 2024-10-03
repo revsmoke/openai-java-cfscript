@@ -132,24 +132,14 @@ private constructor(
             return true
         }
 
-        return other is BatchRequestCounts &&
-            this.total == other.total &&
-            this.completed == other.completed &&
-            this.failed == other.failed &&
-            this.additionalProperties == other.additionalProperties
+        return /* spotless:off */ other is BatchRequestCounts && this.total == other.total && this.completed == other.completed && this.failed == other.failed && this.additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     private var hashCode: Int = 0
 
     override fun hashCode(): Int {
         if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    total,
-                    completed,
-                    failed,
-                    additionalProperties,
-                )
+            hashCode = /* spotless:off */ Objects.hash(total, completed, failed, additionalProperties) /* spotless:on */
         }
         return hashCode
     }

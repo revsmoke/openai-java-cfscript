@@ -117,24 +117,14 @@ private constructor(
             return true
         }
 
-        return other is ModelDeleted &&
-            this.id == other.id &&
-            this.deleted == other.deleted &&
-            this.object_ == other.object_ &&
-            this.additionalProperties == other.additionalProperties
+        return /* spotless:off */ other is ModelDeleted && this.id == other.id && this.deleted == other.deleted && this.object_ == other.object_ && this.additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     private var hashCode: Int = 0
 
     override fun hashCode(): Int {
         if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    id,
-                    deleted,
-                    object_,
-                    additionalProperties,
-                )
+            hashCode = /* spotless:off */ Objects.hash(id, deleted, object_, additionalProperties) /* spotless:on */
         }
         return hashCode
     }

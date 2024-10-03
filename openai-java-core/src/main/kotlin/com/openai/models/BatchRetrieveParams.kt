@@ -36,18 +36,11 @@ constructor(
             return true
         }
 
-        return other is BatchRetrieveParams &&
-            this.batchId == other.batchId &&
-            this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders
+        return /* spotless:off */ other is BatchRetrieveParams && this.batchId == other.batchId && this.additionalQueryParams == other.additionalQueryParams && this.additionalHeaders == other.additionalHeaders /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            batchId,
-            additionalQueryParams,
-            additionalHeaders,
-        )
+        return /* spotless:off */ Objects.hash(batchId, additionalQueryParams, additionalHeaders) /* spotless:on */
     }
 
     override fun toString() =

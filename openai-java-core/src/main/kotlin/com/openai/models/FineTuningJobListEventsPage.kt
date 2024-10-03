@@ -34,18 +34,11 @@ private constructor(
             return true
         }
 
-        return other is FineTuningJobListEventsPage &&
-            this.jobsService == other.jobsService &&
-            this.params == other.params &&
-            this.response == other.response
+        return /* spotless:off */ other is FineTuningJobListEventsPage && this.jobsService == other.jobsService && this.params == other.params && this.response == other.response /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            jobsService,
-            params,
-            response,
-        )
+        return /* spotless:off */ Objects.hash(jobsService, params, response) /* spotless:on */
     }
 
     override fun toString() =
@@ -115,13 +108,11 @@ private constructor(
                 return true
             }
 
-            return other is Response &&
-                this.data == other.data &&
-                this.additionalProperties == other.additionalProperties
+            return /* spotless:off */ other is Response && this.data == other.data && this.additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         override fun hashCode(): Int {
-            return Objects.hash(data, additionalProperties)
+            return /* spotless:off */ Objects.hash(data, additionalProperties) /* spotless:on */
         }
 
         override fun toString() =

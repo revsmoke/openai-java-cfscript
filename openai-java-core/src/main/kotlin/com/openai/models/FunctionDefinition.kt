@@ -227,26 +227,14 @@ private constructor(
             return true
         }
 
-        return other is FunctionDefinition &&
-            this.description == other.description &&
-            this.name == other.name &&
-            this.parameters == other.parameters &&
-            this.strict == other.strict &&
-            this.additionalProperties == other.additionalProperties
+        return /* spotless:off */ other is FunctionDefinition && this.description == other.description && this.name == other.name && this.parameters == other.parameters && this.strict == other.strict && this.additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     private var hashCode: Int = 0
 
     override fun hashCode(): Int {
         if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    description,
-                    name,
-                    parameters,
-                    strict,
-                    additionalProperties,
-                )
+            hashCode = /* spotless:off */ Objects.hash(description, name, parameters, strict, additionalProperties) /* spotless:on */
         }
         return hashCode
     }

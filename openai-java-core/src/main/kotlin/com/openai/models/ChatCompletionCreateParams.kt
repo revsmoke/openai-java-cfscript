@@ -807,70 +807,14 @@ constructor(
                 return true
             }
 
-            return other is ChatCompletionCreateBody &&
-                this.messages == other.messages &&
-                this.model == other.model &&
-                this.frequencyPenalty == other.frequencyPenalty &&
-                this.functionCall == other.functionCall &&
-                this.functions == other.functions &&
-                this.logitBias == other.logitBias &&
-                this.logprobs == other.logprobs &&
-                this.maxCompletionTokens == other.maxCompletionTokens &&
-                this.maxTokens == other.maxTokens &&
-                this.metadata == other.metadata &&
-                this.n == other.n &&
-                this.parallelToolCalls == other.parallelToolCalls &&
-                this.presencePenalty == other.presencePenalty &&
-                this.responseFormat == other.responseFormat &&
-                this.seed == other.seed &&
-                this.serviceTier == other.serviceTier &&
-                this.stop == other.stop &&
-                this.store == other.store &&
-                this.stream == other.stream &&
-                this.streamOptions == other.streamOptions &&
-                this.temperature == other.temperature &&
-                this.toolChoice == other.toolChoice &&
-                this.tools == other.tools &&
-                this.topLogprobs == other.topLogprobs &&
-                this.topP == other.topP &&
-                this.user == other.user &&
-                this.additionalProperties == other.additionalProperties
+            return /* spotless:off */ other is ChatCompletionCreateBody && this.messages == other.messages && this.model == other.model && this.frequencyPenalty == other.frequencyPenalty && this.functionCall == other.functionCall && this.functions == other.functions && this.logitBias == other.logitBias && this.logprobs == other.logprobs && this.maxCompletionTokens == other.maxCompletionTokens && this.maxTokens == other.maxTokens && this.metadata == other.metadata && this.n == other.n && this.parallelToolCalls == other.parallelToolCalls && this.presencePenalty == other.presencePenalty && this.responseFormat == other.responseFormat && this.seed == other.seed && this.serviceTier == other.serviceTier && this.stop == other.stop && this.store == other.store && this.stream == other.stream && this.streamOptions == other.streamOptions && this.temperature == other.temperature && this.toolChoice == other.toolChoice && this.tools == other.tools && this.topLogprobs == other.topLogprobs && this.topP == other.topP && this.user == other.user && this.additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         private var hashCode: Int = 0
 
         override fun hashCode(): Int {
             if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        messages,
-                        model,
-                        frequencyPenalty,
-                        functionCall,
-                        functions,
-                        logitBias,
-                        logprobs,
-                        maxCompletionTokens,
-                        maxTokens,
-                        metadata,
-                        n,
-                        parallelToolCalls,
-                        presencePenalty,
-                        responseFormat,
-                        seed,
-                        serviceTier,
-                        stop,
-                        store,
-                        stream,
-                        streamOptions,
-                        temperature,
-                        toolChoice,
-                        tools,
-                        topLogprobs,
-                        topP,
-                        user,
-                        additionalProperties,
-                    )
+                hashCode = /* spotless:off */ Objects.hash(messages, model, frequencyPenalty, functionCall, functions, logitBias, logprobs, maxCompletionTokens, maxTokens, metadata, n, parallelToolCalls, presencePenalty, responseFormat, seed, serviceTier, stop, store, stream, streamOptions, temperature, toolChoice, tools, topLogprobs, topP, user, additionalProperties) /* spotless:on */
             }
             return hashCode
         }
@@ -890,70 +834,11 @@ constructor(
             return true
         }
 
-        return other is ChatCompletionCreateParams &&
-            this.messages == other.messages &&
-            this.model == other.model &&
-            this.frequencyPenalty == other.frequencyPenalty &&
-            this.functionCall == other.functionCall &&
-            this.functions == other.functions &&
-            this.logitBias == other.logitBias &&
-            this.logprobs == other.logprobs &&
-            this.maxCompletionTokens == other.maxCompletionTokens &&
-            this.maxTokens == other.maxTokens &&
-            this.metadata == other.metadata &&
-            this.n == other.n &&
-            this.parallelToolCalls == other.parallelToolCalls &&
-            this.presencePenalty == other.presencePenalty &&
-            this.responseFormat == other.responseFormat &&
-            this.seed == other.seed &&
-            this.serviceTier == other.serviceTier &&
-            this.stop == other.stop &&
-            this.store == other.store &&
-            this.stream == other.stream &&
-            this.streamOptions == other.streamOptions &&
-            this.temperature == other.temperature &&
-            this.toolChoice == other.toolChoice &&
-            this.tools == other.tools &&
-            this.topLogprobs == other.topLogprobs &&
-            this.topP == other.topP &&
-            this.user == other.user &&
-            this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders &&
-            this.additionalBodyProperties == other.additionalBodyProperties
+        return /* spotless:off */ other is ChatCompletionCreateParams && this.messages == other.messages && this.model == other.model && this.frequencyPenalty == other.frequencyPenalty && this.functionCall == other.functionCall && this.functions == other.functions && this.logitBias == other.logitBias && this.logprobs == other.logprobs && this.maxCompletionTokens == other.maxCompletionTokens && this.maxTokens == other.maxTokens && this.metadata == other.metadata && this.n == other.n && this.parallelToolCalls == other.parallelToolCalls && this.presencePenalty == other.presencePenalty && this.responseFormat == other.responseFormat && this.seed == other.seed && this.serviceTier == other.serviceTier && this.stop == other.stop && this.store == other.store && this.stream == other.stream && this.streamOptions == other.streamOptions && this.temperature == other.temperature && this.toolChoice == other.toolChoice && this.tools == other.tools && this.topLogprobs == other.topLogprobs && this.topP == other.topP && this.user == other.user && this.additionalQueryParams == other.additionalQueryParams && this.additionalHeaders == other.additionalHeaders && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            messages,
-            model,
-            frequencyPenalty,
-            functionCall,
-            functions,
-            logitBias,
-            logprobs,
-            maxCompletionTokens,
-            maxTokens,
-            metadata,
-            n,
-            parallelToolCalls,
-            presencePenalty,
-            responseFormat,
-            seed,
-            serviceTier,
-            stop,
-            store,
-            stream,
-            streamOptions,
-            temperature,
-            toolChoice,
-            tools,
-            topLogprobs,
-            topP,
-            user,
-            additionalQueryParams,
-            additionalHeaders,
-            additionalBodyProperties,
-        )
+        return /* spotless:off */ Objects.hash(messages, model, frequencyPenalty, functionCall, functions, logitBias, logprobs, maxCompletionTokens, maxTokens, metadata, n, parallelToolCalls, presencePenalty, responseFormat, seed, serviceTier, stop, store, stream, streamOptions, temperature, toolChoice, tools, topLogprobs, topP, user, additionalQueryParams, additionalHeaders, additionalBodyProperties) /* spotless:on */
     }
 
     override fun toString() =
@@ -1602,13 +1487,11 @@ constructor(
                 return true
             }
 
-            return other is Model &&
-                this.string == other.string &&
-                this.chatModel == other.chatModel
+            return /* spotless:off */ other is Model && this.string == other.string && this.chatModel == other.chatModel /* spotless:on */
         }
 
         override fun hashCode(): Int {
-            return Objects.hash(string, chatModel)
+            return /* spotless:off */ Objects.hash(string, chatModel) /* spotless:on */
         }
 
         override fun toString(): String {
@@ -1727,13 +1610,11 @@ constructor(
                 return true
             }
 
-            return other is FunctionCall &&
-                this.unionMember0 == other.unionMember0 &&
-                this.functionCallOption == other.functionCallOption
+            return /* spotless:off */ other is FunctionCall && this.unionMember0 == other.unionMember0 && this.functionCallOption == other.functionCallOption /* spotless:on */
         }
 
         override fun hashCode(): Int {
-            return Objects.hash(unionMember0, functionCallOption)
+            return /* spotless:off */ Objects.hash(unionMember0, functionCallOption) /* spotless:on */
         }
 
         override fun toString(): String {
@@ -1815,7 +1696,7 @@ constructor(
                     return true
                 }
 
-                return other is UnionMember0 && this.value == other.value
+                return /* spotless:off */ other is UnionMember0 && this.value == other.value /* spotless:on */
             }
 
             override fun hashCode() = value.hashCode()
@@ -1970,24 +1851,14 @@ constructor(
                 return true
             }
 
-            return other is Function &&
-                this.description == other.description &&
-                this.name == other.name &&
-                this.parameters == other.parameters &&
-                this.additionalProperties == other.additionalProperties
+            return /* spotless:off */ other is Function && this.description == other.description && this.name == other.name && this.parameters == other.parameters && this.additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         private var hashCode: Int = 0
 
         override fun hashCode(): Int {
             if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        description,
-                        name,
-                        parameters,
-                        additionalProperties,
-                    )
+                hashCode = /* spotless:off */ Objects.hash(description, name, parameters, additionalProperties) /* spotless:on */
             }
             return hashCode
         }
@@ -2054,14 +1925,14 @@ constructor(
                 return true
             }
 
-            return other is LogitBias && this.additionalProperties == other.additionalProperties
+            return /* spotless:off */ other is LogitBias && this.additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         private var hashCode: Int = 0
 
         override fun hashCode(): Int {
             if (hashCode == 0) {
-                hashCode = Objects.hash(additionalProperties)
+                hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
             }
             return hashCode
         }
@@ -2122,14 +1993,14 @@ constructor(
                 return true
             }
 
-            return other is Metadata && this.additionalProperties == other.additionalProperties
+            return /* spotless:off */ other is Metadata && this.additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         private var hashCode: Int = 0
 
         override fun hashCode(): Int {
             if (hashCode == 0) {
-                hashCode = Objects.hash(additionalProperties)
+                hashCode = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */
             }
             return hashCode
         }
@@ -2207,18 +2078,11 @@ constructor(
                 return true
             }
 
-            return other is ResponseFormat &&
-                this.responseFormatText == other.responseFormatText &&
-                this.responseFormatJsonObject == other.responseFormatJsonObject &&
-                this.responseFormatJsonSchema == other.responseFormatJsonSchema
+            return /* spotless:off */ other is ResponseFormat && this.responseFormatText == other.responseFormatText && this.responseFormatJsonObject == other.responseFormatJsonObject && this.responseFormatJsonSchema == other.responseFormatJsonSchema /* spotless:on */
         }
 
         override fun hashCode(): Int {
-            return Objects.hash(
-                responseFormatText,
-                responseFormatJsonObject,
-                responseFormatJsonSchema,
-            )
+            return /* spotless:off */ Objects.hash(responseFormatText, responseFormatJsonObject, responseFormatJsonSchema) /* spotless:on */
         }
 
         override fun toString(): String {
@@ -2317,7 +2181,7 @@ constructor(
                 return true
             }
 
-            return other is ServiceTier && this.value == other.value
+            return /* spotless:off */ other is ServiceTier && this.value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -2408,11 +2272,11 @@ constructor(
                 return true
             }
 
-            return other is Stop && this.string == other.string && this.strings == other.strings
+            return /* spotless:off */ other is Stop && this.string == other.string && this.strings == other.strings /* spotless:on */
         }
 
         override fun hashCode(): Int {
-            return Objects.hash(string, strings)
+            return /* spotless:off */ Objects.hash(string, strings) /* spotless:on */
         }
 
         override fun toString(): String {

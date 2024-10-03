@@ -159,7 +159,7 @@ private constructor(
                 return true
             }
 
-            return other is Level && this.value == other.value
+            return /* spotless:off */ other is Level && this.value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -222,7 +222,7 @@ private constructor(
                 return true
             }
 
-            return other is Object && this.value == other.value
+            return /* spotless:off */ other is Object && this.value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -265,28 +265,14 @@ private constructor(
             return true
         }
 
-        return other is FineTuningJobEvent &&
-            this.id == other.id &&
-            this.createdAt == other.createdAt &&
-            this.level == other.level &&
-            this.message == other.message &&
-            this.object_ == other.object_ &&
-            this.additionalProperties == other.additionalProperties
+        return /* spotless:off */ other is FineTuningJobEvent && this.id == other.id && this.createdAt == other.createdAt && this.level == other.level && this.message == other.message && this.object_ == other.object_ && this.additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     private var hashCode: Int = 0
 
     override fun hashCode(): Int {
         if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    id,
-                    createdAt,
-                    level,
-                    message,
-                    object_,
-                    additionalProperties,
-                )
+            hashCode = /* spotless:off */ Objects.hash(id, createdAt, level, message, object_, additionalProperties) /* spotless:on */
         }
         return hashCode
     }

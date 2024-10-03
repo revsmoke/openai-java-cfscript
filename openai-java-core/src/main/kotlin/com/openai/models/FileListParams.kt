@@ -36,18 +36,11 @@ constructor(
             return true
         }
 
-        return other is FileListParams &&
-            this.purpose == other.purpose &&
-            this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders
+        return /* spotless:off */ other is FileListParams && this.purpose == other.purpose && this.additionalQueryParams == other.additionalQueryParams && this.additionalHeaders == other.additionalHeaders /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            purpose,
-            additionalQueryParams,
-            additionalHeaders,
-        )
+        return /* spotless:off */ Objects.hash(purpose, additionalQueryParams, additionalHeaders) /* spotless:on */
     }
 
     override fun toString() =

@@ -135,26 +135,14 @@ private constructor(
             return true
         }
 
-        return other is ErrorObject &&
-            this.code == other.code &&
-            this.message == other.message &&
-            this.param == other.param &&
-            this.type == other.type &&
-            this.additionalProperties == other.additionalProperties
+        return /* spotless:off */ other is ErrorObject && this.code == other.code && this.message == other.message && this.param == other.param && this.type == other.type && this.additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     private var hashCode: Int = 0
 
     override fun hashCode(): Int {
         if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    code,
-                    message,
-                    param,
-                    type,
-                    additionalProperties,
-                )
+            hashCode = /* spotless:off */ Objects.hash(code, message, param, type, additionalProperties) /* spotless:on */
         }
         return hashCode
     }

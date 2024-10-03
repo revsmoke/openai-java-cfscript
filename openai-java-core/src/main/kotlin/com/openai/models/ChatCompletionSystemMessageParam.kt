@@ -207,13 +207,11 @@ private constructor(
                 return true
             }
 
-            return other is Content &&
-                this.string == other.string &&
-                this.chatCompletionContentPartTexts == other.chatCompletionContentPartTexts
+            return /* spotless:off */ other is Content && this.string == other.string && this.chatCompletionContentPartTexts == other.chatCompletionContentPartTexts /* spotless:on */
         }
 
         override fun hashCode(): Int {
-            return Objects.hash(string, chatCompletionContentPartTexts)
+            return /* spotless:off */ Objects.hash(string, chatCompletionContentPartTexts) /* spotless:on */
         }
 
         override fun toString(): String {
@@ -298,7 +296,7 @@ private constructor(
                 return true
             }
 
-            return other is Role && this.value == other.value
+            return /* spotless:off */ other is Role && this.value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -341,24 +339,14 @@ private constructor(
             return true
         }
 
-        return other is ChatCompletionSystemMessageParam &&
-            this.content == other.content &&
-            this.role == other.role &&
-            this.name == other.name &&
-            this.additionalProperties == other.additionalProperties
+        return /* spotless:off */ other is ChatCompletionSystemMessageParam && this.content == other.content && this.role == other.role && this.name == other.name && this.additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     private var hashCode: Int = 0
 
     override fun hashCode(): Int {
         if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    content,
-                    role,
-                    name,
-                    additionalProperties,
-                )
+            hashCode = /* spotless:off */ Objects.hash(content, role, name, additionalProperties) /* spotless:on */
         }
         return hashCode
     }

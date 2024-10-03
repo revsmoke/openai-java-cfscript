@@ -78,13 +78,11 @@ private constructor(
             return true
         }
 
-        return other is ChatCompletionToolChoiceOption &&
-            this.unionMember0 == other.unionMember0 &&
-            this.chatCompletionNamedToolChoice == other.chatCompletionNamedToolChoice
+        return /* spotless:off */ other is ChatCompletionToolChoiceOption && this.unionMember0 == other.unionMember0 && this.chatCompletionNamedToolChoice == other.chatCompletionNamedToolChoice /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(unionMember0, chatCompletionNamedToolChoice)
+        return /* spotless:off */ Objects.hash(unionMember0, chatCompletionNamedToolChoice) /* spotless:on */
     }
 
     override fun toString(): String {
@@ -176,7 +174,7 @@ private constructor(
                 return true
             }
 
-            return other is UnionMember0 && this.value == other.value
+            return /* spotless:off */ other is UnionMember0 && this.value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()

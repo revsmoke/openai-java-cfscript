@@ -72,13 +72,11 @@ private constructor(
             return true
         }
 
-        return other is ChatCompletionContentPart &&
-            this.chatCompletionContentPartText == other.chatCompletionContentPartText &&
-            this.chatCompletionContentPartImage == other.chatCompletionContentPartImage
+        return /* spotless:off */ other is ChatCompletionContentPart && this.chatCompletionContentPartText == other.chatCompletionContentPartText && this.chatCompletionContentPartImage == other.chatCompletionContentPartImage /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(chatCompletionContentPartText, chatCompletionContentPartImage)
+        return /* spotless:off */ Objects.hash(chatCompletionContentPartText, chatCompletionContentPartImage) /* spotless:on */
     }
 
     override fun toString(): String {

@@ -188,26 +188,14 @@ private constructor(
             return true
         }
 
-        return other is FineTuningJobWandbIntegration &&
-            this.project == other.project &&
-            this.name == other.name &&
-            this.entity == other.entity &&
-            this.tags == other.tags &&
-            this.additionalProperties == other.additionalProperties
+        return /* spotless:off */ other is FineTuningJobWandbIntegration && this.project == other.project && this.name == other.name && this.entity == other.entity && this.tags == other.tags && this.additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     private var hashCode: Int = 0
 
     override fun hashCode(): Int {
         if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    project,
-                    name,
-                    entity,
-                    tags,
-                    additionalProperties,
-                )
+            hashCode = /* spotless:off */ Objects.hash(project, name, entity, tags, additionalProperties) /* spotless:on */
         }
         return hashCode
     }

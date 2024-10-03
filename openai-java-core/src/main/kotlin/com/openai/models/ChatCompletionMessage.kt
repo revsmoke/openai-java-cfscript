@@ -201,7 +201,7 @@ private constructor(
                 return true
             }
 
-            return other is Role && this.value == other.value
+            return /* spotless:off */ other is Role && this.value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -361,22 +361,14 @@ private constructor(
                 return true
             }
 
-            return other is FunctionCall &&
-                this.arguments == other.arguments &&
-                this.name == other.name &&
-                this.additionalProperties == other.additionalProperties
+            return /* spotless:off */ other is FunctionCall && this.arguments == other.arguments && this.name == other.name && this.additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         private var hashCode: Int = 0
 
         override fun hashCode(): Int {
             if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        arguments,
-                        name,
-                        additionalProperties,
-                    )
+                hashCode = /* spotless:off */ Objects.hash(arguments, name, additionalProperties) /* spotless:on */
             }
             return hashCode
         }
@@ -390,28 +382,14 @@ private constructor(
             return true
         }
 
-        return other is ChatCompletionMessage &&
-            this.content == other.content &&
-            this.refusal == other.refusal &&
-            this.toolCalls == other.toolCalls &&
-            this.role == other.role &&
-            this.functionCall == other.functionCall &&
-            this.additionalProperties == other.additionalProperties
+        return /* spotless:off */ other is ChatCompletionMessage && this.content == other.content && this.refusal == other.refusal && this.toolCalls == other.toolCalls && this.role == other.role && this.functionCall == other.functionCall && this.additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     private var hashCode: Int = 0
 
     override fun hashCode(): Int {
         if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    content,
-                    refusal,
-                    toolCalls,
-                    role,
-                    functionCall,
-                    additionalProperties,
-                )
+            hashCode = /* spotless:off */ Objects.hash(content, refusal, toolCalls, role, functionCall, additionalProperties) /* spotless:on */
         }
         return hashCode
     }

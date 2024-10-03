@@ -36,18 +36,11 @@ constructor(
             return true
         }
 
-        return other is ModelRetrieveParams &&
-            this.model == other.model &&
-            this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders
+        return /* spotless:off */ other is ModelRetrieveParams && this.model == other.model && this.additionalQueryParams == other.additionalQueryParams && this.additionalHeaders == other.additionalHeaders /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            model,
-            additionalQueryParams,
-            additionalHeaders,
-        )
+        return /* spotless:off */ Objects.hash(model, additionalQueryParams, additionalHeaders) /* spotless:on */
     }
 
     override fun toString() =
