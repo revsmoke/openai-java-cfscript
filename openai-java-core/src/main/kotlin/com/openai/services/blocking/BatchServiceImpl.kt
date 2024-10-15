@@ -4,9 +4,13 @@ package com.openai.services.blocking
 
 import com.openai.core.ClientOptions
 import com.openai.core.RequestOptions
+import com.openai.core.errorHandler
 import com.openai.core.http.HttpMethod
 import com.openai.core.http.HttpRequest
 import com.openai.core.http.HttpResponse.Handler
+import com.openai.core.json
+import com.openai.core.jsonHandler
+import com.openai.core.withErrorHandler
 import com.openai.errors.OpenAIError
 import com.openai.models.Batch
 import com.openai.models.BatchCancelParams
@@ -14,10 +18,6 @@ import com.openai.models.BatchCreateParams
 import com.openai.models.BatchListPage
 import com.openai.models.BatchListParams
 import com.openai.models.BatchRetrieveParams
-import com.openai.services.errorHandler
-import com.openai.services.json
-import com.openai.services.jsonHandler
-import com.openai.services.withErrorHandler
 
 class BatchServiceImpl
 constructor(

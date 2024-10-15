@@ -4,9 +4,13 @@ package com.openai.services.blocking.fineTuning
 
 import com.openai.core.ClientOptions
 import com.openai.core.RequestOptions
+import com.openai.core.errorHandler
 import com.openai.core.http.HttpMethod
 import com.openai.core.http.HttpRequest
 import com.openai.core.http.HttpResponse.Handler
+import com.openai.core.json
+import com.openai.core.jsonHandler
+import com.openai.core.withErrorHandler
 import com.openai.errors.OpenAIError
 import com.openai.models.FineTuningJob
 import com.openai.models.FineTuningJobCancelParams
@@ -18,10 +22,6 @@ import com.openai.models.FineTuningJobListParams
 import com.openai.models.FineTuningJobRetrieveParams
 import com.openai.services.blocking.fineTuning.jobs.CheckpointService
 import com.openai.services.blocking.fineTuning.jobs.CheckpointServiceImpl
-import com.openai.services.errorHandler
-import com.openai.services.json
-import com.openai.services.jsonHandler
-import com.openai.services.withErrorHandler
 
 class JobServiceImpl
 constructor(

@@ -1,6 +1,6 @@
 @file:JvmName("Handlers")
 
-package com.openai.services
+package com.openai.core
 
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef

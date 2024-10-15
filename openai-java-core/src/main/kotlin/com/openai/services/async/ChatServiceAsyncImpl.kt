@@ -3,11 +3,11 @@
 package com.openai.services.async
 
 import com.openai.core.ClientOptions
+import com.openai.core.errorHandler
 import com.openai.core.http.HttpResponse.Handler
 import com.openai.errors.OpenAIError
 import com.openai.services.async.chat.CompletionServiceAsync
 import com.openai.services.async.chat.CompletionServiceAsyncImpl
-import com.openai.services.errorHandler
 
 class ChatServiceAsyncImpl
 constructor(

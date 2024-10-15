@@ -4,15 +4,15 @@ package com.openai.services.async.fineTuning.jobs
 
 import com.openai.core.ClientOptions
 import com.openai.core.RequestOptions
+import com.openai.core.errorHandler
 import com.openai.core.http.HttpMethod
 import com.openai.core.http.HttpRequest
 import com.openai.core.http.HttpResponse.Handler
+import com.openai.core.jsonHandler
+import com.openai.core.withErrorHandler
 import com.openai.errors.OpenAIError
 import com.openai.models.FineTuningJobCheckpointListPageAsync
 import com.openai.models.FineTuningJobCheckpointListParams
-import com.openai.services.errorHandler
-import com.openai.services.jsonHandler
-import com.openai.services.withErrorHandler
 import java.util.concurrent.CompletableFuture
 
 class CheckpointServiceAsyncImpl

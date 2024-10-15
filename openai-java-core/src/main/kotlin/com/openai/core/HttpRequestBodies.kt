@@ -1,11 +1,8 @@
 @file:JvmName("HttpRequestBodies")
 
-package com.openai.services
+package com.openai.core
 
 import com.fasterxml.jackson.databind.json.JsonMapper
-import com.openai.core.Enum
-import com.openai.core.JsonValue
-import com.openai.core.MultipartFormValue
 import com.openai.core.http.HttpRequestBody
 import com.openai.errors.OpenAIException
 import java.io.ByteArrayOutputStream

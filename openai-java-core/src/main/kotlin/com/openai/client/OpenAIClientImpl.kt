@@ -3,11 +3,11 @@
 package com.openai.client
 
 import com.openai.core.ClientOptions
+import com.openai.core.errorHandler
 import com.openai.core.http.HttpResponse.Handler
 import com.openai.errors.OpenAIError
 import com.openai.models.*
 import com.openai.services.blocking.*
-import com.openai.services.errorHandler
 
 class OpenAIClientImpl
 constructor(

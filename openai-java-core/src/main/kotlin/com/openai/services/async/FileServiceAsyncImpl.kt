@@ -4,10 +4,16 @@ package com.openai.services.async
 
 import com.openai.core.ClientOptions
 import com.openai.core.RequestOptions
+import com.openai.core.binaryHandler
+import com.openai.core.errorHandler
 import com.openai.core.http.BinaryResponseContent
 import com.openai.core.http.HttpMethod
 import com.openai.core.http.HttpRequest
 import com.openai.core.http.HttpResponse.Handler
+import com.openai.core.json
+import com.openai.core.jsonHandler
+import com.openai.core.multipartFormData
+import com.openai.core.withErrorHandler
 import com.openai.errors.OpenAIError
 import com.openai.models.FileContentParams
 import com.openai.models.FileCreateParams
@@ -17,12 +23,6 @@ import com.openai.models.FileListPageAsync
 import com.openai.models.FileListParams
 import com.openai.models.FileObject
 import com.openai.models.FileRetrieveParams
-import com.openai.services.binaryHandler
-import com.openai.services.errorHandler
-import com.openai.services.json
-import com.openai.services.jsonHandler
-import com.openai.services.multipartFormData
-import com.openai.services.withErrorHandler
 import java.util.concurrent.CompletableFuture
 
 class FileServiceAsyncImpl
