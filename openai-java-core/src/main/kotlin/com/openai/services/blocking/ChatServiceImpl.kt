@@ -3,7 +3,7 @@
 package com.openai.services.blocking
 
 import com.openai.core.ClientOptions
-import com.openai.core.errorHandler
+import com.openai.core.handlers.errorHandler
 import com.openai.core.http.HttpResponse.Handler
 import com.openai.errors.OpenAIError
 import com.openai.services.blocking.chat.CompletionService
