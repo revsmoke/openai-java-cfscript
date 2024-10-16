@@ -3,9 +3,6 @@
 package com.openai.client
 
 import com.openai.core.ClientOptions
-import com.openai.core.handlers.errorHandler
-import com.openai.core.http.HttpResponse.Handler
-import com.openai.errors.OpenAIError
 import com.openai.models.*
 import com.openai.services.async.*
 
@@ -13,8 +10,6 @@ class OpenAIClientAsyncImpl
 constructor(
     private val clientOptions: ClientOptions,
 ) : OpenAIClientAsync {
-
-    private val errorHandler: Handler<OpenAIError> = errorHandler(clientOptions.jsonMapper)
 
     private val sync: OpenAIClient by lazy { OpenAIClientImpl(clientOptions) }
 
