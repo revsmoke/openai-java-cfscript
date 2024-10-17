@@ -13,7 +13,7 @@ class ChatCompletionAssistantMessageParamTest {
             ChatCompletionAssistantMessageParam.builder()
                 .role(ChatCompletionAssistantMessageParam.Role.ASSISTANT)
                 .audio(ChatCompletionAssistantMessageParam.Audio.builder().id("id").build())
-                .content(ChatCompletionAssistantMessageParam.Content.ofString("string"))
+                .content(ChatCompletionAssistantMessageParam.Content.ofTextContent("string"))
                 .functionCall(
                     ChatCompletionAssistantMessageParam.FunctionCall.builder()
                         .arguments("arguments")
@@ -43,7 +43,7 @@ class ChatCompletionAssistantMessageParamTest {
         assertThat(chatCompletionAssistantMessageParam.audio())
             .contains(ChatCompletionAssistantMessageParam.Audio.builder().id("id").build())
         assertThat(chatCompletionAssistantMessageParam.content())
-            .contains(ChatCompletionAssistantMessageParam.Content.ofString("string"))
+            .contains(ChatCompletionAssistantMessageParam.Content.ofTextContent("string"))
         assertThat(chatCompletionAssistantMessageParam.functionCall())
             .contains(
                 ChatCompletionAssistantMessageParam.FunctionCall.builder()

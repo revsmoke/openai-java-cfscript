@@ -103,18 +103,18 @@ class ChatCompletionTest {
                 .serviceTier(ChatCompletion.ServiceTier.SCALE)
                 .systemFingerprint("system_fingerprint")
                 .usage(
-                    ChatCompletion.Usage.builder()
+                    CompletionUsage.builder()
                         .completionTokens(123L)
                         .promptTokens(123L)
                         .totalTokens(123L)
                         .completionTokensDetails(
-                            ChatCompletion.Usage.CompletionTokensDetails.builder()
+                            CompletionUsage.CompletionTokensDetails.builder()
                                 .audioTokens(123L)
                                 .reasoningTokens(123L)
                                 .build()
                         )
                         .promptTokensDetails(
-                            ChatCompletion.Usage.PromptTokensDetails.builder()
+                            CompletionUsage.PromptTokensDetails.builder()
                                 .audioTokens(123L)
                                 .cachedTokens(123L)
                                 .build()
@@ -213,18 +213,18 @@ class ChatCompletionTest {
         assertThat(chatCompletion.systemFingerprint()).contains("system_fingerprint")
         assertThat(chatCompletion.usage())
             .contains(
-                ChatCompletion.Usage.builder()
+                CompletionUsage.builder()
                     .completionTokens(123L)
                     .promptTokens(123L)
                     .totalTokens(123L)
                     .completionTokensDetails(
-                        ChatCompletion.Usage.CompletionTokensDetails.builder()
+                        CompletionUsage.CompletionTokensDetails.builder()
                             .audioTokens(123L)
                             .reasoningTokens(123L)
                             .build()
                     )
                     .promptTokensDetails(
-                        ChatCompletion.Usage.PromptTokensDetails.builder()
+                        CompletionUsage.PromptTokensDetails.builder()
                             .audioTokens(123L)
                             .cachedTokens(123L)
                             .build()

@@ -155,46 +155,45 @@ private constructor(
     @JsonSerialize(using = Content.Serializer::class)
     class Content
     private constructor(
-        private val string: String? = null,
-        private val chatCompletionContentParts: List<ChatCompletionContentPart>? = null,
+        private val textContent: String? = null,
+        private val arrayOfContentParts: List<ChatCompletionContentPart>? = null,
         private val _json: JsonValue? = null,
     ) {
 
         private var validated: Boolean = false
 
         /** The text contents of the message. */
-        fun string(): Optional<String> = Optional.ofNullable(string)
+        fun textContent(): Optional<String> = Optional.ofNullable(textContent)
         /**
          * An array of content parts with a defined type. Supported options differ based on the
          * [model](https://platform.openai.com/docs/models) being used to generate the response. Can
          * contain text, image, or audio inputs.
          */
-        fun chatCompletionContentParts(): Optional<List<ChatCompletionContentPart>> =
-            Optional.ofNullable(chatCompletionContentParts)
+        fun arrayOfContentParts(): Optional<List<ChatCompletionContentPart>> =
+            Optional.ofNullable(arrayOfContentParts)
 
-        fun isString(): Boolean = string != null
+        fun isTextContent(): Boolean = textContent != null
 
-        fun isChatCompletionContentParts(): Boolean = chatCompletionContentParts != null
+        fun isArrayOfContentParts(): Boolean = arrayOfContentParts != null
 
-        fun asString(): String = string.getOrThrow("string")
+        fun asTextContent(): String = textContent.getOrThrow("textContent")
 
-        fun asChatCompletionContentParts(): List<ChatCompletionContentPart> =
-            chatCompletionContentParts.getOrThrow("chatCompletionContentParts")
+        fun asArrayOfContentParts(): List<ChatCompletionContentPart> =
+            arrayOfContentParts.getOrThrow("arrayOfContentParts")
 
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
         fun <T> accept(visitor: Visitor<T>): T {
             return when {
-                string != null -> visitor.visitString(string)
-                chatCompletionContentParts != null ->
-                    visitor.visitChatCompletionContentParts(chatCompletionContentParts)
+                textContent != null -> visitor.visitTextContent(textContent)
+                arrayOfContentParts != null -> visitor.visitArrayOfContentParts(arrayOfContentParts)
                 else -> visitor.unknown(_json)
             }
         }
 
         fun validate(): Content = apply {
             if (!validated) {
-                if (string == null && chatCompletionContentParts == null) {
+                if (textContent == null && arrayOfContentParts == null) {
                     throw OpenAIInvalidDataException("Unknown Content: $_json")
                 }
                 validated = true
@@ -206,18 +205,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Content && this.string == other.string && this.chatCompletionContentParts == other.chatCompletionContentParts /* spotless:on */
+            return /* spotless:off */ other is Content && this.textContent == other.textContent && this.arrayOfContentParts == other.arrayOfContentParts /* spotless:on */
         }
 
         override fun hashCode(): Int {
-            return /* spotless:off */ Objects.hash(string, chatCompletionContentParts) /* spotless:on */
+            return /* spotless:off */ Objects.hash(textContent, arrayOfContentParts) /* spotless:on */
         }
 
         override fun toString(): String {
             return when {
-                string != null -> "Content{string=$string}"
-                chatCompletionContentParts != null ->
-                    "Content{chatCompletionContentParts=$chatCompletionContentParts}"
+                textContent != null -> "Content{textContent=$textContent}"
+                arrayOfContentParts != null -> "Content{arrayOfContentParts=$arrayOfContentParts}"
                 _json != null -> "Content{_unknown=$_json}"
                 else -> throw IllegalStateException("Invalid Content")
             }
@@ -225,21 +223,18 @@ private constructor(
 
         companion object {
 
-            @JvmStatic fun ofString(string: String) = Content(string = string)
+            @JvmStatic fun ofTextContent(textContent: String) = Content(textContent = textContent)
 
             @JvmStatic
-            fun ofChatCompletionContentParts(
-                chatCompletionContentParts: List<ChatCompletionContentPart>
-            ) = Content(chatCompletionContentParts = chatCompletionContentParts)
+            fun ofArrayOfContentParts(arrayOfContentParts: List<ChatCompletionContentPart>) =
+                Content(arrayOfContentParts = arrayOfContentParts)
         }
 
         interface Visitor<out T> {
 
-            fun visitString(string: String): T
+            fun visitTextContent(textContent: String): T
 
-            fun visitChatCompletionContentParts(
-                chatCompletionContentParts: List<ChatCompletionContentPart>
-            ): T
+            fun visitArrayOfContentParts(arrayOfContentParts: List<ChatCompletionContentPart>): T
 
             fun unknown(json: JsonValue?): T {
                 throw OpenAIInvalidDataException("Unknown Content: $json")
@@ -251,10 +246,10 @@ private constructor(
             override fun ObjectCodec.deserialize(node: JsonNode): Content {
                 val json = JsonValue.fromJsonNode(node)
                 tryDeserialize(node, jacksonTypeRef<String>())?.let {
-                    return Content(string = it, _json = json)
+                    return Content(textContent = it, _json = json)
                 }
                 tryDeserialize(node, jacksonTypeRef<List<ChatCompletionContentPart>>())?.let {
-                    return Content(chatCompletionContentParts = it, _json = json)
+                    return Content(arrayOfContentParts = it, _json = json)
                 }
 
                 return Content(_json = json)
@@ -269,9 +264,9 @@ private constructor(
                 provider: SerializerProvider
             ) {
                 when {
-                    value.string != null -> generator.writeObject(value.string)
-                    value.chatCompletionContentParts != null ->
-                        generator.writeObject(value.chatCompletionContentParts)
+                    value.textContent != null -> generator.writeObject(value.textContent)
+                    value.arrayOfContentParts != null ->
+                        generator.writeObject(value.arrayOfContentParts)
                     value._json != null -> generator.writeObject(value._json)
                     else -> throw IllegalStateException("Invalid Content")
                 }

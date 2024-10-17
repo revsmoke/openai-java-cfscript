@@ -11,13 +11,13 @@ class ChatCompletionUserMessageParamTest {
     fun createChatCompletionUserMessageParam() {
         val chatCompletionUserMessageParam =
             ChatCompletionUserMessageParam.builder()
-                .content(ChatCompletionUserMessageParam.Content.ofString("string"))
+                .content(ChatCompletionUserMessageParam.Content.ofTextContent("string"))
                 .role(ChatCompletionUserMessageParam.Role.USER)
                 .name("name")
                 .build()
         assertThat(chatCompletionUserMessageParam).isNotNull
         assertThat(chatCompletionUserMessageParam.content())
-            .isEqualTo(ChatCompletionUserMessageParam.Content.ofString("string"))
+            .isEqualTo(ChatCompletionUserMessageParam.Content.ofTextContent("string"))
         assertThat(chatCompletionUserMessageParam.role())
             .isEqualTo(ChatCompletionUserMessageParam.Role.USER)
         assertThat(chatCompletionUserMessageParam.name()).contains("name")

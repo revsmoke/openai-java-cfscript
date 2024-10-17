@@ -11,9 +11,15 @@ interface OpenAIClientAsync {
 
     fun sync(): OpenAIClient
 
+    fun completions(): CompletionServiceAsync
+
     fun chat(): ChatServiceAsync
 
+    fun embeddings(): EmbeddingServiceAsync
+
     fun files(): FileServiceAsync
+
+    fun moderations(): ModerationServiceAsync
 
     fun models(): ModelServiceAsync
 

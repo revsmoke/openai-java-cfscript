@@ -101,18 +101,18 @@ class ChatCompletionChunkTest {
                 .serviceTier(ChatCompletionChunk.ServiceTier.SCALE)
                 .systemFingerprint("system_fingerprint")
                 .usage(
-                    ChatCompletionChunk.Usage.builder()
+                    CompletionUsage.builder()
                         .completionTokens(123L)
                         .promptTokens(123L)
                         .totalTokens(123L)
                         .completionTokensDetails(
-                            ChatCompletionChunk.Usage.CompletionTokensDetails.builder()
+                            CompletionUsage.CompletionTokensDetails.builder()
                                 .audioTokens(123L)
                                 .reasoningTokens(123L)
                                 .build()
                         )
                         .promptTokensDetails(
-                            ChatCompletionChunk.Usage.PromptTokensDetails.builder()
+                            CompletionUsage.PromptTokensDetails.builder()
                                 .audioTokens(123L)
                                 .cachedTokens(123L)
                                 .build()
@@ -209,18 +209,18 @@ class ChatCompletionChunkTest {
         assertThat(chatCompletionChunk.systemFingerprint()).contains("system_fingerprint")
         assertThat(chatCompletionChunk.usage())
             .contains(
-                ChatCompletionChunk.Usage.builder()
+                CompletionUsage.builder()
                     .completionTokens(123L)
                     .promptTokens(123L)
                     .totalTokens(123L)
                     .completionTokensDetails(
-                        ChatCompletionChunk.Usage.CompletionTokensDetails.builder()
+                        CompletionUsage.CompletionTokensDetails.builder()
                             .audioTokens(123L)
                             .reasoningTokens(123L)
                             .build()
                     )
                     .promptTokensDetails(
-                        ChatCompletionChunk.Usage.PromptTokensDetails.builder()
+                        CompletionUsage.PromptTokensDetails.builder()
                             .audioTokens(123L)
                             .cachedTokens(123L)
                             .build()

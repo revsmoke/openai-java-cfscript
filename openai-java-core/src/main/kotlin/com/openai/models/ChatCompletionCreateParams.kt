@@ -1338,7 +1338,7 @@ constructor(
         fun stop(string: String) = apply { this.stop = Stop.ofString(string) }
 
         /** Up to 4 sequences where the API will stop generating further tokens. */
-        fun stop(strings: List<String>) = apply { this.stop = Stop.ofStrings(strings) }
+        fun stopOfStrings(strings: List<String>) = apply { this.stop = Stop.ofStrings(strings) }
 
         /**
          * Whether or not to store the output of this chat completion request for use in our

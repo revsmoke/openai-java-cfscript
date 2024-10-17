@@ -13,9 +13,15 @@ constructor(
 
     private val async: OpenAIClientAsync by lazy { OpenAIClientAsyncImpl(clientOptions) }
 
+    private val completions: CompletionService by lazy { CompletionServiceImpl(clientOptions) }
+
     private val chat: ChatService by lazy { ChatServiceImpl(clientOptions) }
 
+    private val embeddings: EmbeddingService by lazy { EmbeddingServiceImpl(clientOptions) }
+
     private val files: FileService by lazy { FileServiceImpl(clientOptions) }
+
+    private val moderations: ModerationService by lazy { ModerationServiceImpl(clientOptions) }
 
     private val models: ModelService by lazy { ModelServiceImpl(clientOptions) }
 
@@ -25,9 +31,15 @@ constructor(
 
     override fun async(): OpenAIClientAsync = async
 
+    override fun completions(): CompletionService = completions
+
     override fun chat(): ChatService = chat
 
+    override fun embeddings(): EmbeddingService = embeddings
+
     override fun files(): FileService = files
+
+    override fun moderations(): ModerationService = moderations
 
     override fun models(): ModelService = models
 

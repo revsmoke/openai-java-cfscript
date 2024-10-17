@@ -421,9 +421,8 @@ private constructor(
     @JsonSerialize(using = Content.Serializer::class)
     class Content
     private constructor(
-        private val string: String? = null,
-        private val chatCompletionRequestAssistantMessageContentParts:
-            List<ChatCompletionRequestAssistantMessageContentPart>? =
+        private val textContent: String? = null,
+        private val arrayOfContentParts: List<ChatCompletionRequestAssistantMessageContentPart>? =
             null,
         private val _json: JsonValue? = null,
     ) {
@@ -431,44 +430,37 @@ private constructor(
         private var validated: Boolean = false
 
         /** The contents of the assistant message. */
-        fun string(): Optional<String> = Optional.ofNullable(string)
+        fun textContent(): Optional<String> = Optional.ofNullable(textContent)
         /**
          * An array of content parts with a defined type. Can be one or more of type `text`, or
          * exactly one of type `refusal`.
          */
-        fun chatCompletionRequestAssistantMessageContentParts():
+        fun arrayOfContentParts():
             Optional<List<ChatCompletionRequestAssistantMessageContentPart>> =
-            Optional.ofNullable(chatCompletionRequestAssistantMessageContentParts)
+            Optional.ofNullable(arrayOfContentParts)
 
-        fun isString(): Boolean = string != null
+        fun isTextContent(): Boolean = textContent != null
 
-        fun isChatCompletionRequestAssistantMessageContentParts(): Boolean =
-            chatCompletionRequestAssistantMessageContentParts != null
+        fun isArrayOfContentParts(): Boolean = arrayOfContentParts != null
 
-        fun asString(): String = string.getOrThrow("string")
+        fun asTextContent(): String = textContent.getOrThrow("textContent")
 
-        fun asChatCompletionRequestAssistantMessageContentParts():
-            List<ChatCompletionRequestAssistantMessageContentPart> =
-            chatCompletionRequestAssistantMessageContentParts.getOrThrow(
-                "chatCompletionRequestAssistantMessageContentParts"
-            )
+        fun asArrayOfContentParts(): List<ChatCompletionRequestAssistantMessageContentPart> =
+            arrayOfContentParts.getOrThrow("arrayOfContentParts")
 
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
         fun <T> accept(visitor: Visitor<T>): T {
             return when {
-                string != null -> visitor.visitString(string)
-                chatCompletionRequestAssistantMessageContentParts != null ->
-                    visitor.visitChatCompletionRequestAssistantMessageContentParts(
-                        chatCompletionRequestAssistantMessageContentParts
-                    )
+                textContent != null -> visitor.visitTextContent(textContent)
+                arrayOfContentParts != null -> visitor.visitArrayOfContentParts(arrayOfContentParts)
                 else -> visitor.unknown(_json)
             }
         }
 
         fun validate(): Content = apply {
             if (!validated) {
-                if (string == null && chatCompletionRequestAssistantMessageContentParts == null) {
+                if (textContent == null && arrayOfContentParts == null) {
                     throw OpenAIInvalidDataException("Unknown Content: $_json")
                 }
                 validated = true
@@ -480,18 +472,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Content && this.string == other.string && this.chatCompletionRequestAssistantMessageContentParts == other.chatCompletionRequestAssistantMessageContentParts /* spotless:on */
+            return /* spotless:off */ other is Content && this.textContent == other.textContent && this.arrayOfContentParts == other.arrayOfContentParts /* spotless:on */
         }
 
         override fun hashCode(): Int {
-            return /* spotless:off */ Objects.hash(string, chatCompletionRequestAssistantMessageContentParts) /* spotless:on */
+            return /* spotless:off */ Objects.hash(textContent, arrayOfContentParts) /* spotless:on */
         }
 
         override fun toString(): String {
             return when {
-                string != null -> "Content{string=$string}"
-                chatCompletionRequestAssistantMessageContentParts != null ->
-                    "Content{chatCompletionRequestAssistantMessageContentParts=$chatCompletionRequestAssistantMessageContentParts}"
+                textContent != null -> "Content{textContent=$textContent}"
+                arrayOfContentParts != null -> "Content{arrayOfContentParts=$arrayOfContentParts}"
                 _json != null -> "Content{_unknown=$_json}"
                 else -> throw IllegalStateException("Invalid Content")
             }
@@ -499,26 +490,20 @@ private constructor(
 
         companion object {
 
-            @JvmStatic fun ofString(string: String) = Content(string = string)
+            @JvmStatic fun ofTextContent(textContent: String) = Content(textContent = textContent)
 
             @JvmStatic
-            fun ofChatCompletionRequestAssistantMessageContentParts(
-                chatCompletionRequestAssistantMessageContentParts:
-                    List<ChatCompletionRequestAssistantMessageContentPart>
-            ) =
-                Content(
-                    chatCompletionRequestAssistantMessageContentParts =
-                        chatCompletionRequestAssistantMessageContentParts
-                )
+            fun ofArrayOfContentParts(
+                arrayOfContentParts: List<ChatCompletionRequestAssistantMessageContentPart>
+            ) = Content(arrayOfContentParts = arrayOfContentParts)
         }
 
         interface Visitor<out T> {
 
-            fun visitString(string: String): T
+            fun visitTextContent(textContent: String): T
 
-            fun visitChatCompletionRequestAssistantMessageContentParts(
-                chatCompletionRequestAssistantMessageContentParts:
-                    List<ChatCompletionRequestAssistantMessageContentPart>
+            fun visitArrayOfContentParts(
+                arrayOfContentParts: List<ChatCompletionRequestAssistantMessageContentPart>
             ): T
 
             fun unknown(json: JsonValue?): T {
@@ -531,17 +516,14 @@ private constructor(
             override fun ObjectCodec.deserialize(node: JsonNode): Content {
                 val json = JsonValue.fromJsonNode(node)
                 tryDeserialize(node, jacksonTypeRef<String>())?.let {
-                    return Content(string = it, _json = json)
+                    return Content(textContent = it, _json = json)
                 }
                 tryDeserialize(
                         node,
                         jacksonTypeRef<List<ChatCompletionRequestAssistantMessageContentPart>>()
                     )
                     ?.let {
-                        return Content(
-                            chatCompletionRequestAssistantMessageContentParts = it,
-                            _json = json
-                        )
+                        return Content(arrayOfContentParts = it, _json = json)
                     }
 
                 return Content(_json = json)
@@ -556,11 +538,9 @@ private constructor(
                 provider: SerializerProvider
             ) {
                 when {
-                    value.string != null -> generator.writeObject(value.string)
-                    value.chatCompletionRequestAssistantMessageContentParts != null ->
-                        generator.writeObject(
-                            value.chatCompletionRequestAssistantMessageContentParts
-                        )
+                    value.textContent != null -> generator.writeObject(value.textContent)
+                    value.arrayOfContentParts != null ->
+                        generator.writeObject(value.arrayOfContentParts)
                     value._json != null -> generator.writeObject(value._json)
                     else -> throw IllegalStateException("Invalid Content")
                 }
