@@ -14,6 +14,14 @@ class ChatCompletionMessageTest {
                 .content("content")
                 .refusal("refusal")
                 .role(ChatCompletionMessage.Role.ASSISTANT)
+                .audio(
+                    ChatCompletionAudio.builder()
+                        .id("id")
+                        .data("data")
+                        .expiresAt(123L)
+                        .transcript("transcript")
+                        .build()
+                )
                 .functionCall(
                     ChatCompletionMessage.FunctionCall.builder()
                         .arguments("arguments")
@@ -39,6 +47,15 @@ class ChatCompletionMessageTest {
         assertThat(chatCompletionMessage.content()).contains("content")
         assertThat(chatCompletionMessage.refusal()).contains("refusal")
         assertThat(chatCompletionMessage.role()).isEqualTo(ChatCompletionMessage.Role.ASSISTANT)
+        assertThat(chatCompletionMessage.audio())
+            .contains(
+                ChatCompletionAudio.builder()
+                    .id("id")
+                    .data("data")
+                    .expiresAt(123L)
+                    .transcript("transcript")
+                    .build()
+            )
         assertThat(chatCompletionMessage.functionCall())
             .contains(
                 ChatCompletionMessage.FunctionCall.builder()

@@ -44,9 +44,17 @@ private constructor(
 
         @JvmField val GPT_4O_2024_05_13 = ChatModel(JsonField.of("gpt-4o-2024-05-13"))
 
+        @JvmField val GPT_4O_REALTIME_PREVIEW = ChatModel(JsonField.of("gpt-4o-realtime-preview"))
+
         @JvmField
         val GPT_4O_REALTIME_PREVIEW_2024_10_01 =
             ChatModel(JsonField.of("gpt-4o-realtime-preview-2024-10-01"))
+
+        @JvmField val GPT_4O_AUDIO_PREVIEW = ChatModel(JsonField.of("gpt-4o-audio-preview"))
+
+        @JvmField
+        val GPT_4O_AUDIO_PREVIEW_2024_10_01 =
+            ChatModel(JsonField.of("gpt-4o-audio-preview-2024-10-01"))
 
         @JvmField val CHATGPT_4O_LATEST = ChatModel(JsonField.of("chatgpt-4o-latest"))
 
@@ -103,7 +111,10 @@ private constructor(
         GPT_4O,
         GPT_4O_2024_08_06,
         GPT_4O_2024_05_13,
+        GPT_4O_REALTIME_PREVIEW,
         GPT_4O_REALTIME_PREVIEW_2024_10_01,
+        GPT_4O_AUDIO_PREVIEW,
+        GPT_4O_AUDIO_PREVIEW_2024_10_01,
         CHATGPT_4O_LATEST,
         GPT_4O_MINI,
         GPT_4O_MINI_2024_07_18,
@@ -136,7 +147,10 @@ private constructor(
         GPT_4O,
         GPT_4O_2024_08_06,
         GPT_4O_2024_05_13,
+        GPT_4O_REALTIME_PREVIEW,
         GPT_4O_REALTIME_PREVIEW_2024_10_01,
+        GPT_4O_AUDIO_PREVIEW,
+        GPT_4O_AUDIO_PREVIEW_2024_10_01,
         CHATGPT_4O_LATEST,
         GPT_4O_MINI,
         GPT_4O_MINI_2024_07_18,
@@ -171,7 +185,10 @@ private constructor(
             GPT_4O -> Value.GPT_4O
             GPT_4O_2024_08_06 -> Value.GPT_4O_2024_08_06
             GPT_4O_2024_05_13 -> Value.GPT_4O_2024_05_13
+            GPT_4O_REALTIME_PREVIEW -> Value.GPT_4O_REALTIME_PREVIEW
             GPT_4O_REALTIME_PREVIEW_2024_10_01 -> Value.GPT_4O_REALTIME_PREVIEW_2024_10_01
+            GPT_4O_AUDIO_PREVIEW -> Value.GPT_4O_AUDIO_PREVIEW
+            GPT_4O_AUDIO_PREVIEW_2024_10_01 -> Value.GPT_4O_AUDIO_PREVIEW_2024_10_01
             CHATGPT_4O_LATEST -> Value.CHATGPT_4O_LATEST
             GPT_4O_MINI -> Value.GPT_4O_MINI
             GPT_4O_MINI_2024_07_18 -> Value.GPT_4O_MINI_2024_07_18
@@ -206,7 +223,10 @@ private constructor(
             GPT_4O -> Known.GPT_4O
             GPT_4O_2024_08_06 -> Known.GPT_4O_2024_08_06
             GPT_4O_2024_05_13 -> Known.GPT_4O_2024_05_13
+            GPT_4O_REALTIME_PREVIEW -> Known.GPT_4O_REALTIME_PREVIEW
             GPT_4O_REALTIME_PREVIEW_2024_10_01 -> Known.GPT_4O_REALTIME_PREVIEW_2024_10_01
+            GPT_4O_AUDIO_PREVIEW -> Known.GPT_4O_AUDIO_PREVIEW
+            GPT_4O_AUDIO_PREVIEW_2024_10_01 -> Known.GPT_4O_AUDIO_PREVIEW_2024_10_01
             CHATGPT_4O_LATEST -> Known.CHATGPT_4O_LATEST
             GPT_4O_MINI -> Known.GPT_4O_MINI
             GPT_4O_MINI_2024_07_18 -> Known.GPT_4O_MINI_2024_07_18

@@ -31,6 +31,7 @@ class ChatCompletionCreateParams
 constructor(
     private val messages: List<ChatCompletionMessageParam>,
     private val model: Model,
+    private val audio: ChatCompletionAudioParam?,
     private val frequencyPenalty: Double?,
     private val functionCall: FunctionCall?,
     private val functions: List<Function>?,
@@ -39,6 +40,7 @@ constructor(
     private val maxCompletionTokens: Long?,
     private val maxTokens: Long?,
     private val metadata: Metadata?,
+    private val modalities: List<ChatCompletionModality>?,
     private val n: Long?,
     private val parallelToolCalls: Boolean?,
     private val presencePenalty: Double?,
@@ -64,6 +66,8 @@ constructor(
 
     fun model(): Model = model
 
+    fun audio(): Optional<ChatCompletionAudioParam> = Optional.ofNullable(audio)
+
     fun frequencyPenalty(): Optional<Double> = Optional.ofNullable(frequencyPenalty)
 
     fun functionCall(): Optional<FunctionCall> = Optional.ofNullable(functionCall)
@@ -79,6 +83,8 @@ constructor(
     fun maxTokens(): Optional<Long> = Optional.ofNullable(maxTokens)
 
     fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata)
+
+    fun modalities(): Optional<List<ChatCompletionModality>> = Optional.ofNullable(modalities)
 
     fun n(): Optional<Long> = Optional.ofNullable(n)
 
@@ -117,6 +123,7 @@ constructor(
         return ChatCompletionCreateBody(
             messages,
             model,
+            audio,
             frequencyPenalty,
             functionCall,
             functions,
@@ -125,6 +132,7 @@ constructor(
             maxCompletionTokens,
             maxTokens,
             metadata,
+            modalities,
             n,
             parallelToolCalls,
             presencePenalty,
@@ -155,6 +163,7 @@ constructor(
     internal constructor(
         private val messages: List<ChatCompletionMessageParam>?,
         private val model: Model?,
+        private val audio: ChatCompletionAudioParam?,
         private val frequencyPenalty: Double?,
         private val functionCall: FunctionCall?,
         private val functions: List<Function>?,
@@ -163,6 +172,7 @@ constructor(
         private val maxCompletionTokens: Long?,
         private val maxTokens: Long?,
         private val metadata: Metadata?,
+        private val modalities: List<ChatCompletionModality>?,
         private val n: Long?,
         private val parallelToolCalls: Boolean?,
         private val presencePenalty: Double?,
@@ -198,6 +208,12 @@ constructor(
          * table for details on which models work with the Chat API.
          */
         @JsonProperty("model") fun model(): Model? = model
+
+        /**
+         * Parameters for audio output. Required when audio output is requested with `modalities:
+         * ["audio"]`. [Learn more](https://platform.openai.com/docs/guides/audio).
+         */
+        @JsonProperty("audio") fun audio(): ChatCompletionAudioParam? = audio
 
         /**
          * Number between -2.0 and 2.0. Positive values penalize new tokens based on their existing
@@ -266,9 +282,23 @@ constructor(
 
         /**
          * Developer-defined tags and values used for filtering completions in the
-         * [dashboard](https://platform.openai.com/completions).
+         * [dashboard](https://platform.openai.com/chat-completions).
          */
         @JsonProperty("metadata") fun metadata(): Metadata? = metadata
+
+        /**
+         * Output types that you would like the model to generate for this request. Most models are
+         * capable of generating text, which is the default:
+         *
+         * `["text"]`
+         *
+         * The `gpt-4o-audio-preview` model can also be used to
+         * [generate audio](https://platform.openai.com/docs/guides/audio). To request that this
+         * model generate both text and audio responses, you can use:
+         *
+         * `["text", "audio"]`
+         */
+        @JsonProperty("modalities") fun modalities(): List<ChatCompletionModality>? = modalities
 
         /**
          * How many chat completion choices to generate for each input message. Note that you will
@@ -344,8 +374,9 @@ constructor(
         @JsonProperty("stop") fun stop(): Stop? = stop
 
         /**
-         * Whether or not to store the output of this completion request for traffic logging in the
-         * [dashboard](https://platform.openai.com/completions).
+         * Whether or not to store the output of this chat completion request for use in our
+         * [model distillation](https://platform.openai.com/docs/guides/distillation) or
+         * [evals](https://platform.openai.com/docs/guides/evals) products.
          */
         @JsonProperty("store") fun store(): Boolean? = store
 
@@ -428,6 +459,7 @@ constructor(
 
             private var messages: List<ChatCompletionMessageParam>? = null
             private var model: Model? = null
+            private var audio: ChatCompletionAudioParam? = null
             private var frequencyPenalty: Double? = null
             private var functionCall: FunctionCall? = null
             private var functions: List<Function>? = null
@@ -436,6 +468,7 @@ constructor(
             private var maxCompletionTokens: Long? = null
             private var maxTokens: Long? = null
             private var metadata: Metadata? = null
+            private var modalities: List<ChatCompletionModality>? = null
             private var n: Long? = null
             private var parallelToolCalls: Boolean? = null
             private var presencePenalty: Double? = null
@@ -458,6 +491,7 @@ constructor(
             internal fun from(chatCompletionCreateBody: ChatCompletionCreateBody) = apply {
                 this.messages = chatCompletionCreateBody.messages
                 this.model = chatCompletionCreateBody.model
+                this.audio = chatCompletionCreateBody.audio
                 this.frequencyPenalty = chatCompletionCreateBody.frequencyPenalty
                 this.functionCall = chatCompletionCreateBody.functionCall
                 this.functions = chatCompletionCreateBody.functions
@@ -466,6 +500,7 @@ constructor(
                 this.maxCompletionTokens = chatCompletionCreateBody.maxCompletionTokens
                 this.maxTokens = chatCompletionCreateBody.maxTokens
                 this.metadata = chatCompletionCreateBody.metadata
+                this.modalities = chatCompletionCreateBody.modalities
                 this.n = chatCompletionCreateBody.n
                 this.parallelToolCalls = chatCompletionCreateBody.parallelToolCalls
                 this.presencePenalty = chatCompletionCreateBody.presencePenalty
@@ -504,6 +539,13 @@ constructor(
              * table for details on which models work with the Chat API.
              */
             @JsonProperty("model") fun model(model: Model) = apply { this.model = model }
+
+            /**
+             * Parameters for audio output. Required when audio output is requested with
+             * `modalities: ["audio"]`. [Learn more](https://platform.openai.com/docs/guides/audio).
+             */
+            @JsonProperty("audio")
+            fun audio(audio: ChatCompletionAudioParam) = apply { this.audio = audio }
 
             /**
              * Number between -2.0 and 2.0. Positive values penalize new tokens based on their
@@ -586,10 +628,27 @@ constructor(
 
             /**
              * Developer-defined tags and values used for filtering completions in the
-             * [dashboard](https://platform.openai.com/completions).
+             * [dashboard](https://platform.openai.com/chat-completions).
              */
             @JsonProperty("metadata")
             fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+
+            /**
+             * Output types that you would like the model to generate for this request. Most models
+             * are capable of generating text, which is the default:
+             *
+             * `["text"]`
+             *
+             * The `gpt-4o-audio-preview` model can also be used to
+             * [generate audio](https://platform.openai.com/docs/guides/audio). To request that this
+             * model generate both text and audio responses, you can use:
+             *
+             * `["text", "audio"]`
+             */
+            @JsonProperty("modalities")
+            fun modalities(modalities: List<ChatCompletionModality>) = apply {
+                this.modalities = modalities
+            }
 
             /**
              * How many chat completion choices to generate for each input message. Note that you
@@ -678,8 +737,9 @@ constructor(
             @JsonProperty("stop") fun stop(stop: Stop) = apply { this.stop = stop }
 
             /**
-             * Whether or not to store the output of this completion request for traffic logging in
-             * the [dashboard](https://platform.openai.com/completions).
+             * Whether or not to store the output of this chat completion request for use in our
+             * [model distillation](https://platform.openai.com/docs/guides/distillation) or
+             * [evals](https://platform.openai.com/docs/guides/evals) products.
              */
             @JsonProperty("store") fun store(store: Boolean) = apply { this.store = store }
 
@@ -774,6 +834,7 @@ constructor(
                     checkNotNull(messages) { "`messages` is required but was not set" }
                         .toUnmodifiable(),
                     checkNotNull(model) { "`model` is required but was not set" },
+                    audio,
                     frequencyPenalty,
                     functionCall,
                     functions?.toUnmodifiable(),
@@ -782,6 +843,7 @@ constructor(
                     maxCompletionTokens,
                     maxTokens,
                     metadata,
+                    modalities?.toUnmodifiable(),
                     n,
                     parallelToolCalls,
                     presencePenalty,
@@ -807,20 +869,20 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ChatCompletionCreateBody && this.messages == other.messages && this.model == other.model && this.frequencyPenalty == other.frequencyPenalty && this.functionCall == other.functionCall && this.functions == other.functions && this.logitBias == other.logitBias && this.logprobs == other.logprobs && this.maxCompletionTokens == other.maxCompletionTokens && this.maxTokens == other.maxTokens && this.metadata == other.metadata && this.n == other.n && this.parallelToolCalls == other.parallelToolCalls && this.presencePenalty == other.presencePenalty && this.responseFormat == other.responseFormat && this.seed == other.seed && this.serviceTier == other.serviceTier && this.stop == other.stop && this.store == other.store && this.stream == other.stream && this.streamOptions == other.streamOptions && this.temperature == other.temperature && this.toolChoice == other.toolChoice && this.tools == other.tools && this.topLogprobs == other.topLogprobs && this.topP == other.topP && this.user == other.user && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is ChatCompletionCreateBody && this.messages == other.messages && this.model == other.model && this.audio == other.audio && this.frequencyPenalty == other.frequencyPenalty && this.functionCall == other.functionCall && this.functions == other.functions && this.logitBias == other.logitBias && this.logprobs == other.logprobs && this.maxCompletionTokens == other.maxCompletionTokens && this.maxTokens == other.maxTokens && this.metadata == other.metadata && this.modalities == other.modalities && this.n == other.n && this.parallelToolCalls == other.parallelToolCalls && this.presencePenalty == other.presencePenalty && this.responseFormat == other.responseFormat && this.seed == other.seed && this.serviceTier == other.serviceTier && this.stop == other.stop && this.store == other.store && this.stream == other.stream && this.streamOptions == other.streamOptions && this.temperature == other.temperature && this.toolChoice == other.toolChoice && this.tools == other.tools && this.topLogprobs == other.topLogprobs && this.topP == other.topP && this.user == other.user && this.additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         private var hashCode: Int = 0
 
         override fun hashCode(): Int {
             if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(messages, model, frequencyPenalty, functionCall, functions, logitBias, logprobs, maxCompletionTokens, maxTokens, metadata, n, parallelToolCalls, presencePenalty, responseFormat, seed, serviceTier, stop, store, stream, streamOptions, temperature, toolChoice, tools, topLogprobs, topP, user, additionalProperties) /* spotless:on */
+                hashCode = /* spotless:off */ Objects.hash(messages, model, audio, frequencyPenalty, functionCall, functions, logitBias, logprobs, maxCompletionTokens, maxTokens, metadata, modalities, n, parallelToolCalls, presencePenalty, responseFormat, seed, serviceTier, stop, store, stream, streamOptions, temperature, toolChoice, tools, topLogprobs, topP, user, additionalProperties) /* spotless:on */
             }
             return hashCode
         }
 
         override fun toString() =
-            "ChatCompletionCreateBody{messages=$messages, model=$model, frequencyPenalty=$frequencyPenalty, functionCall=$functionCall, functions=$functions, logitBias=$logitBias, logprobs=$logprobs, maxCompletionTokens=$maxCompletionTokens, maxTokens=$maxTokens, metadata=$metadata, n=$n, parallelToolCalls=$parallelToolCalls, presencePenalty=$presencePenalty, responseFormat=$responseFormat, seed=$seed, serviceTier=$serviceTier, stop=$stop, store=$store, stream=$stream, streamOptions=$streamOptions, temperature=$temperature, toolChoice=$toolChoice, tools=$tools, topLogprobs=$topLogprobs, topP=$topP, user=$user, additionalProperties=$additionalProperties}"
+            "ChatCompletionCreateBody{messages=$messages, model=$model, audio=$audio, frequencyPenalty=$frequencyPenalty, functionCall=$functionCall, functions=$functions, logitBias=$logitBias, logprobs=$logprobs, maxCompletionTokens=$maxCompletionTokens, maxTokens=$maxTokens, metadata=$metadata, modalities=$modalities, n=$n, parallelToolCalls=$parallelToolCalls, presencePenalty=$presencePenalty, responseFormat=$responseFormat, seed=$seed, serviceTier=$serviceTier, stop=$stop, store=$store, stream=$stream, streamOptions=$streamOptions, temperature=$temperature, toolChoice=$toolChoice, tools=$tools, topLogprobs=$topLogprobs, topP=$topP, user=$user, additionalProperties=$additionalProperties}"
     }
 
     fun _additionalQueryParams(): Map<String, List<String>> = additionalQueryParams
@@ -834,15 +896,15 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is ChatCompletionCreateParams && this.messages == other.messages && this.model == other.model && this.frequencyPenalty == other.frequencyPenalty && this.functionCall == other.functionCall && this.functions == other.functions && this.logitBias == other.logitBias && this.logprobs == other.logprobs && this.maxCompletionTokens == other.maxCompletionTokens && this.maxTokens == other.maxTokens && this.metadata == other.metadata && this.n == other.n && this.parallelToolCalls == other.parallelToolCalls && this.presencePenalty == other.presencePenalty && this.responseFormat == other.responseFormat && this.seed == other.seed && this.serviceTier == other.serviceTier && this.stop == other.stop && this.store == other.store && this.stream == other.stream && this.streamOptions == other.streamOptions && this.temperature == other.temperature && this.toolChoice == other.toolChoice && this.tools == other.tools && this.topLogprobs == other.topLogprobs && this.topP == other.topP && this.user == other.user && this.additionalQueryParams == other.additionalQueryParams && this.additionalHeaders == other.additionalHeaders && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is ChatCompletionCreateParams && this.messages == other.messages && this.model == other.model && this.audio == other.audio && this.frequencyPenalty == other.frequencyPenalty && this.functionCall == other.functionCall && this.functions == other.functions && this.logitBias == other.logitBias && this.logprobs == other.logprobs && this.maxCompletionTokens == other.maxCompletionTokens && this.maxTokens == other.maxTokens && this.metadata == other.metadata && this.modalities == other.modalities && this.n == other.n && this.parallelToolCalls == other.parallelToolCalls && this.presencePenalty == other.presencePenalty && this.responseFormat == other.responseFormat && this.seed == other.seed && this.serviceTier == other.serviceTier && this.stop == other.stop && this.store == other.store && this.stream == other.stream && this.streamOptions == other.streamOptions && this.temperature == other.temperature && this.toolChoice == other.toolChoice && this.tools == other.tools && this.topLogprobs == other.topLogprobs && this.topP == other.topP && this.user == other.user && this.additionalQueryParams == other.additionalQueryParams && this.additionalHeaders == other.additionalHeaders && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(messages, model, frequencyPenalty, functionCall, functions, logitBias, logprobs, maxCompletionTokens, maxTokens, metadata, n, parallelToolCalls, presencePenalty, responseFormat, seed, serviceTier, stop, store, stream, streamOptions, temperature, toolChoice, tools, topLogprobs, topP, user, additionalQueryParams, additionalHeaders, additionalBodyProperties) /* spotless:on */
+        return /* spotless:off */ Objects.hash(messages, model, audio, frequencyPenalty, functionCall, functions, logitBias, logprobs, maxCompletionTokens, maxTokens, metadata, modalities, n, parallelToolCalls, presencePenalty, responseFormat, seed, serviceTier, stop, store, stream, streamOptions, temperature, toolChoice, tools, topLogprobs, topP, user, additionalQueryParams, additionalHeaders, additionalBodyProperties) /* spotless:on */
     }
 
     override fun toString() =
-        "ChatCompletionCreateParams{messages=$messages, model=$model, frequencyPenalty=$frequencyPenalty, functionCall=$functionCall, functions=$functions, logitBias=$logitBias, logprobs=$logprobs, maxCompletionTokens=$maxCompletionTokens, maxTokens=$maxTokens, metadata=$metadata, n=$n, parallelToolCalls=$parallelToolCalls, presencePenalty=$presencePenalty, responseFormat=$responseFormat, seed=$seed, serviceTier=$serviceTier, stop=$stop, store=$store, stream=$stream, streamOptions=$streamOptions, temperature=$temperature, toolChoice=$toolChoice, tools=$tools, topLogprobs=$topLogprobs, topP=$topP, user=$user, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
+        "ChatCompletionCreateParams{messages=$messages, model=$model, audio=$audio, frequencyPenalty=$frequencyPenalty, functionCall=$functionCall, functions=$functions, logitBias=$logitBias, logprobs=$logprobs, maxCompletionTokens=$maxCompletionTokens, maxTokens=$maxTokens, metadata=$metadata, modalities=$modalities, n=$n, parallelToolCalls=$parallelToolCalls, presencePenalty=$presencePenalty, responseFormat=$responseFormat, seed=$seed, serviceTier=$serviceTier, stop=$stop, store=$store, stream=$stream, streamOptions=$streamOptions, temperature=$temperature, toolChoice=$toolChoice, tools=$tools, topLogprobs=$topLogprobs, topP=$topP, user=$user, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -856,6 +918,7 @@ constructor(
 
         private var messages: MutableList<ChatCompletionMessageParam> = mutableListOf()
         private var model: Model? = null
+        private var audio: ChatCompletionAudioParam? = null
         private var frequencyPenalty: Double? = null
         private var functionCall: FunctionCall? = null
         private var functions: MutableList<Function> = mutableListOf()
@@ -864,6 +927,7 @@ constructor(
         private var maxCompletionTokens: Long? = null
         private var maxTokens: Long? = null
         private var metadata: Metadata? = null
+        private var modalities: MutableList<ChatCompletionModality> = mutableListOf()
         private var n: Long? = null
         private var parallelToolCalls: Boolean? = null
         private var presencePenalty: Double? = null
@@ -888,6 +952,7 @@ constructor(
         internal fun from(chatCompletionCreateParams: ChatCompletionCreateParams) = apply {
             this.messages(chatCompletionCreateParams.messages)
             this.model = chatCompletionCreateParams.model
+            this.audio = chatCompletionCreateParams.audio
             this.frequencyPenalty = chatCompletionCreateParams.frequencyPenalty
             this.functionCall = chatCompletionCreateParams.functionCall
             this.functions(chatCompletionCreateParams.functions ?: listOf())
@@ -896,6 +961,7 @@ constructor(
             this.maxCompletionTokens = chatCompletionCreateParams.maxCompletionTokens
             this.maxTokens = chatCompletionCreateParams.maxTokens
             this.metadata = chatCompletionCreateParams.metadata
+            this.modalities(chatCompletionCreateParams.modalities ?: listOf())
             this.n = chatCompletionCreateParams.n
             this.parallelToolCalls = chatCompletionCreateParams.parallelToolCalls
             this.presencePenalty = chatCompletionCreateParams.presencePenalty
@@ -960,6 +1026,12 @@ constructor(
          * table for details on which models work with the Chat API.
          */
         fun model(chatModel: ChatModel) = apply { this.model = Model.ofChatModel(chatModel) }
+
+        /**
+         * Parameters for audio output. Required when audio output is requested with `modalities:
+         * ["audio"]`. [Learn more](https://platform.openai.com/docs/guides/audio).
+         */
+        fun audio(audio: ChatCompletionAudioParam) = apply { this.audio = audio }
 
         /**
          * Number between -2.0 and 2.0. Positive values penalize new tokens based on their existing
@@ -1071,9 +1143,40 @@ constructor(
 
         /**
          * Developer-defined tags and values used for filtering completions in the
-         * [dashboard](https://platform.openai.com/completions).
+         * [dashboard](https://platform.openai.com/chat-completions).
          */
         fun metadata(metadata: Metadata) = apply { this.metadata = metadata }
+
+        /**
+         * Output types that you would like the model to generate for this request. Most models are
+         * capable of generating text, which is the default:
+         *
+         * `["text"]`
+         *
+         * The `gpt-4o-audio-preview` model can also be used to
+         * [generate audio](https://platform.openai.com/docs/guides/audio). To request that this
+         * model generate both text and audio responses, you can use:
+         *
+         * `["text", "audio"]`
+         */
+        fun modalities(modalities: List<ChatCompletionModality>) = apply {
+            this.modalities.clear()
+            this.modalities.addAll(modalities)
+        }
+
+        /**
+         * Output types that you would like the model to generate for this request. Most models are
+         * capable of generating text, which is the default:
+         *
+         * `["text"]`
+         *
+         * The `gpt-4o-audio-preview` model can also be used to
+         * [generate audio](https://platform.openai.com/docs/guides/audio). To request that this
+         * model generate both text and audio responses, you can use:
+         *
+         * `["text", "audio"]`
+         */
+        fun addModality(modality: ChatCompletionModality) = apply { this.modalities.add(modality) }
 
         /**
          * How many chat completion choices to generate for each input message. Note that you will
@@ -1238,8 +1341,9 @@ constructor(
         fun stop(strings: List<String>) = apply { this.stop = Stop.ofStrings(strings) }
 
         /**
-         * Whether or not to store the output of this completion request for traffic logging in the
-         * [dashboard](https://platform.openai.com/completions).
+         * Whether or not to store the output of this chat completion request for use in our
+         * [model distillation](https://platform.openai.com/docs/guides/distillation) or
+         * [evals](https://platform.openai.com/docs/guides/evals) products.
          */
         fun store(store: Boolean) = apply { this.store = store }
 
@@ -1410,6 +1514,7 @@ constructor(
                 checkNotNull(messages) { "`messages` is required but was not set" }
                     .toUnmodifiable(),
                 checkNotNull(model) { "`model` is required but was not set" },
+                audio,
                 frequencyPenalty,
                 functionCall,
                 if (functions.size == 0) null else functions.toUnmodifiable(),
@@ -1418,6 +1523,7 @@ constructor(
                 maxCompletionTokens,
                 maxTokens,
                 metadata,
+                if (modalities.size == 0) null else modalities.toUnmodifiable(),
                 n,
                 parallelToolCalls,
                 presencePenalty,
@@ -1942,7 +2048,7 @@ constructor(
 
     /**
      * Developer-defined tags and values used for filtering completions in the
-     * [dashboard](https://platform.openai.com/completions).
+     * [dashboard](https://platform.openai.com/chat-completions).
      */
     @JsonDeserialize(builder = Metadata.Builder::class)
     @NoAutoDetect

@@ -165,9 +165,9 @@ private constructor(
         /** The text contents of the message. */
         fun string(): Optional<String> = Optional.ofNullable(string)
         /**
-         * An array of content parts with a defined type, each can be of type `text` or `image_url`
-         * when passing in images. You can pass multiple images by adding multiple `image_url`
-         * content parts. Image input is only supported when using the `gpt-4o` model.
+         * An array of content parts with a defined type. Supported options differ based on the
+         * [model](https://platform.openai.com/docs/models) being used to generate the response. Can
+         * contain text, image, or audio inputs.
          */
         fun chatCompletionContentParts(): Optional<List<ChatCompletionContentPart>> =
             Optional.ofNullable(chatCompletionContentParts)

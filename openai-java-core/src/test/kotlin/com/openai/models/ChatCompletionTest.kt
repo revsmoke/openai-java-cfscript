@@ -64,6 +64,14 @@ class ChatCompletionTest {
                                     .content("content")
                                     .refusal("refusal")
                                     .role(ChatCompletionMessage.Role.ASSISTANT)
+                                    .audio(
+                                        ChatCompletionAudio.builder()
+                                            .id("id")
+                                            .data("data")
+                                            .expiresAt(123L)
+                                            .transcript("transcript")
+                                            .build()
+                                    )
                                     .functionCall(
                                         ChatCompletionMessage.FunctionCall.builder()
                                             .arguments("arguments")
@@ -166,6 +174,14 @@ class ChatCompletionTest {
                             .content("content")
                             .refusal("refusal")
                             .role(ChatCompletionMessage.Role.ASSISTANT)
+                            .audio(
+                                ChatCompletionAudio.builder()
+                                    .id("id")
+                                    .data("data")
+                                    .expiresAt(123L)
+                                    .transcript("transcript")
+                                    .build()
+                            )
                             .functionCall(
                                 ChatCompletionMessage.FunctionCall.builder()
                                     .arguments("arguments")

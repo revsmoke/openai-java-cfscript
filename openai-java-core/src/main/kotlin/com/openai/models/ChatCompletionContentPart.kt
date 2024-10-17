@@ -23,26 +23,37 @@ class ChatCompletionContentPart
 private constructor(
     private val chatCompletionContentPartText: ChatCompletionContentPartText? = null,
     private val chatCompletionContentPartImage: ChatCompletionContentPartImage? = null,
+    private val chatCompletionContentPartInputAudio: ChatCompletionContentPartInputAudio? = null,
     private val _json: JsonValue? = null,
 ) {
 
     private var validated: Boolean = false
 
+    /** Learn about [text inputs](https://platform.openai.com/docs/guides/text-generation). */
     fun chatCompletionContentPartText(): Optional<ChatCompletionContentPartText> =
         Optional.ofNullable(chatCompletionContentPartText)
-
+    /** Learn about [image inputs](https://platform.openai.com/docs/guides/vision). */
     fun chatCompletionContentPartImage(): Optional<ChatCompletionContentPartImage> =
         Optional.ofNullable(chatCompletionContentPartImage)
+    /** Learn about [audio inputs](https://platform.openai.com/docs/guides/audio). */
+    fun chatCompletionContentPartInputAudio(): Optional<ChatCompletionContentPartInputAudio> =
+        Optional.ofNullable(chatCompletionContentPartInputAudio)
 
     fun isChatCompletionContentPartText(): Boolean = chatCompletionContentPartText != null
 
     fun isChatCompletionContentPartImage(): Boolean = chatCompletionContentPartImage != null
+
+    fun isChatCompletionContentPartInputAudio(): Boolean =
+        chatCompletionContentPartInputAudio != null
 
     fun asChatCompletionContentPartText(): ChatCompletionContentPartText =
         chatCompletionContentPartText.getOrThrow("chatCompletionContentPartText")
 
     fun asChatCompletionContentPartImage(): ChatCompletionContentPartImage =
         chatCompletionContentPartImage.getOrThrow("chatCompletionContentPartImage")
+
+    fun asChatCompletionContentPartInputAudio(): ChatCompletionContentPartInputAudio =
+        chatCompletionContentPartInputAudio.getOrThrow("chatCompletionContentPartInputAudio")
 
     fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
@@ -52,17 +63,26 @@ private constructor(
                 visitor.visitChatCompletionContentPartText(chatCompletionContentPartText)
             chatCompletionContentPartImage != null ->
                 visitor.visitChatCompletionContentPartImage(chatCompletionContentPartImage)
+            chatCompletionContentPartInputAudio != null ->
+                visitor.visitChatCompletionContentPartInputAudio(
+                    chatCompletionContentPartInputAudio
+                )
             else -> visitor.unknown(_json)
         }
     }
 
     fun validate(): ChatCompletionContentPart = apply {
         if (!validated) {
-            if (chatCompletionContentPartText == null && chatCompletionContentPartImage == null) {
+            if (
+                chatCompletionContentPartText == null &&
+                    chatCompletionContentPartImage == null &&
+                    chatCompletionContentPartInputAudio == null
+            ) {
                 throw OpenAIInvalidDataException("Unknown ChatCompletionContentPart: $_json")
             }
             chatCompletionContentPartText?.validate()
             chatCompletionContentPartImage?.validate()
+            chatCompletionContentPartInputAudio?.validate()
             validated = true
         }
     }
@@ -72,11 +92,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ChatCompletionContentPart && this.chatCompletionContentPartText == other.chatCompletionContentPartText && this.chatCompletionContentPartImage == other.chatCompletionContentPartImage /* spotless:on */
+        return /* spotless:off */ other is ChatCompletionContentPart && this.chatCompletionContentPartText == other.chatCompletionContentPartText && this.chatCompletionContentPartImage == other.chatCompletionContentPartImage && this.chatCompletionContentPartInputAudio == other.chatCompletionContentPartInputAudio /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(chatCompletionContentPartText, chatCompletionContentPartImage) /* spotless:on */
+        return /* spotless:off */ Objects.hash(chatCompletionContentPartText, chatCompletionContentPartImage, chatCompletionContentPartInputAudio) /* spotless:on */
     }
 
     override fun toString(): String {
@@ -85,6 +105,8 @@ private constructor(
                 "ChatCompletionContentPart{chatCompletionContentPartText=$chatCompletionContentPartText}"
             chatCompletionContentPartImage != null ->
                 "ChatCompletionContentPart{chatCompletionContentPartImage=$chatCompletionContentPartImage}"
+            chatCompletionContentPartInputAudio != null ->
+                "ChatCompletionContentPart{chatCompletionContentPartInputAudio=$chatCompletionContentPartInputAudio}"
             _json != null -> "ChatCompletionContentPart{_unknown=$_json}"
             else -> throw IllegalStateException("Invalid ChatCompletionContentPart")
         }
@@ -104,6 +126,14 @@ private constructor(
             ChatCompletionContentPart(
                 chatCompletionContentPartImage = chatCompletionContentPartImage
             )
+
+        @JvmStatic
+        fun ofChatCompletionContentPartInputAudio(
+            chatCompletionContentPartInputAudio: ChatCompletionContentPartInputAudio
+        ) =
+            ChatCompletionContentPart(
+                chatCompletionContentPartInputAudio = chatCompletionContentPartInputAudio
+            )
     }
 
     interface Visitor<out T> {
@@ -114,6 +144,10 @@ private constructor(
 
         fun visitChatCompletionContentPartImage(
             chatCompletionContentPartImage: ChatCompletionContentPartImage
+        ): T
+
+        fun visitChatCompletionContentPartInputAudio(
+            chatCompletionContentPartInputAudio: ChatCompletionContentPartInputAudio
         ): T
 
         fun unknown(json: JsonValue?): T {
@@ -140,6 +174,15 @@ private constructor(
                         _json = json
                     )
                 }
+            tryDeserialize(node, jacksonTypeRef<ChatCompletionContentPartInputAudio>()) {
+                    it.validate()
+                }
+                ?.let {
+                    return ChatCompletionContentPart(
+                        chatCompletionContentPartInputAudio = it,
+                        _json = json
+                    )
+                }
 
             return ChatCompletionContentPart(_json = json)
         }
@@ -157,6 +200,8 @@ private constructor(
                     generator.writeObject(value.chatCompletionContentPartText)
                 value.chatCompletionContentPartImage != null ->
                     generator.writeObject(value.chatCompletionContentPartImage)
+                value.chatCompletionContentPartInputAudio != null ->
+                    generator.writeObject(value.chatCompletionContentPartInputAudio)
                 value._json != null -> generator.writeObject(value._json)
                 else -> throw IllegalStateException("Invalid ChatCompletionContentPart")
             }

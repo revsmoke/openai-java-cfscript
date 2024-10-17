@@ -28,6 +28,7 @@ private constructor(
     private val toolCalls: JsonField<List<ChatCompletionMessageToolCall>>,
     private val role: JsonField<Role>,
     private val functionCall: JsonField<FunctionCall>,
+    private val audio: JsonField<ChatCompletionAudio>,
     private val additionalProperties: Map<String, JsonValue>,
 ) {
 
@@ -53,6 +54,12 @@ private constructor(
     fun functionCall(): Optional<FunctionCall> =
         Optional.ofNullable(functionCall.getNullable("function_call"))
 
+    /**
+     * If the audio output modality is requested, this object contains data about the audio response
+     * from the model. [Learn more](https://platform.openai.com/docs/guides/audio).
+     */
+    fun audio(): Optional<ChatCompletionAudio> = Optional.ofNullable(audio.getNullable("audio"))
+
     /** The contents of the message. */
     @JsonProperty("content") @ExcludeMissing fun _content() = content
 
@@ -71,6 +78,12 @@ private constructor(
      */
     @JsonProperty("function_call") @ExcludeMissing fun _functionCall() = functionCall
 
+    /**
+     * If the audio output modality is requested, this object contains data about the audio response
+     * from the model. [Learn more](https://platform.openai.com/docs/guides/audio).
+     */
+    @JsonProperty("audio") @ExcludeMissing fun _audio() = audio
+
     @JsonAnyGetter
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -82,6 +95,7 @@ private constructor(
             toolCalls().map { it.forEach { it.validate() } }
             role()
             functionCall().map { it.validate() }
+            audio().map { it.validate() }
             validated = true
         }
     }
@@ -100,6 +114,7 @@ private constructor(
         private var toolCalls: JsonField<List<ChatCompletionMessageToolCall>> = JsonMissing.of()
         private var role: JsonField<Role> = JsonMissing.of()
         private var functionCall: JsonField<FunctionCall> = JsonMissing.of()
+        private var audio: JsonField<ChatCompletionAudio> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -109,6 +124,7 @@ private constructor(
             this.toolCalls = chatCompletionMessage.toolCalls
             this.role = chatCompletionMessage.role
             this.functionCall = chatCompletionMessage.functionCall
+            this.audio = chatCompletionMessage.audio
             additionalProperties(chatCompletionMessage.additionalProperties)
         }
 
@@ -163,6 +179,20 @@ private constructor(
             this.functionCall = functionCall
         }
 
+        /**
+         * If the audio output modality is requested, this object contains data about the audio
+         * response from the model. [Learn more](https://platform.openai.com/docs/guides/audio).
+         */
+        fun audio(audio: ChatCompletionAudio) = audio(JsonField.of(audio))
+
+        /**
+         * If the audio output modality is requested, this object contains data about the audio
+         * response from the model. [Learn more](https://platform.openai.com/docs/guides/audio).
+         */
+        @JsonProperty("audio")
+        @ExcludeMissing
+        fun audio(audio: JsonField<ChatCompletionAudio>) = apply { this.audio = audio }
+
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             this.additionalProperties.putAll(additionalProperties)
@@ -184,6 +214,7 @@ private constructor(
                 toolCalls.map { it.toUnmodifiable() },
                 role,
                 functionCall,
+                audio,
                 additionalProperties.toUnmodifiable(),
             )
     }
@@ -382,18 +413,18 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ChatCompletionMessage && this.content == other.content && this.refusal == other.refusal && this.toolCalls == other.toolCalls && this.role == other.role && this.functionCall == other.functionCall && this.additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is ChatCompletionMessage && this.content == other.content && this.refusal == other.refusal && this.toolCalls == other.toolCalls && this.role == other.role && this.functionCall == other.functionCall && this.audio == other.audio && this.additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     private var hashCode: Int = 0
 
     override fun hashCode(): Int {
         if (hashCode == 0) {
-            hashCode = /* spotless:off */ Objects.hash(content, refusal, toolCalls, role, functionCall, additionalProperties) /* spotless:on */
+            hashCode = /* spotless:off */ Objects.hash(content, refusal, toolCalls, role, functionCall, audio, additionalProperties) /* spotless:on */
         }
         return hashCode
     }
 
     override fun toString() =
-        "ChatCompletionMessage{content=$content, refusal=$refusal, toolCalls=$toolCalls, role=$role, functionCall=$functionCall, additionalProperties=$additionalProperties}"
+        "ChatCompletionMessage{content=$content, refusal=$refusal, toolCalls=$toolCalls, role=$role, functionCall=$functionCall, audio=$audio, additionalProperties=$additionalProperties}"
 }

@@ -17,6 +17,7 @@ import com.openai.core.toUnmodifiable
 import com.openai.errors.OpenAIInvalidDataException
 import java.util.Objects
 
+/** Learn about [text inputs](https://platform.openai.com/docs/guides/text-generation). */
 @JsonDeserialize(builder = ChatCompletionContentPartText.Builder::class)
 @NoAutoDetect
 class ChatCompletionContentPartText

@@ -12,6 +12,7 @@ class ChatCompletionAssistantMessageParamTest {
         val chatCompletionAssistantMessageParam =
             ChatCompletionAssistantMessageParam.builder()
                 .role(ChatCompletionAssistantMessageParam.Role.ASSISTANT)
+                .audio(ChatCompletionAssistantMessageParam.Audio.builder().id("id").build())
                 .content(ChatCompletionAssistantMessageParam.Content.ofString("string"))
                 .functionCall(
                     ChatCompletionAssistantMessageParam.FunctionCall.builder()
@@ -39,6 +40,8 @@ class ChatCompletionAssistantMessageParamTest {
         assertThat(chatCompletionAssistantMessageParam).isNotNull
         assertThat(chatCompletionAssistantMessageParam.role())
             .isEqualTo(ChatCompletionAssistantMessageParam.Role.ASSISTANT)
+        assertThat(chatCompletionAssistantMessageParam.audio())
+            .contains(ChatCompletionAssistantMessageParam.Audio.builder().id("id").build())
         assertThat(chatCompletionAssistantMessageParam.content())
             .contains(ChatCompletionAssistantMessageParam.Content.ofString("string"))
         assertThat(chatCompletionAssistantMessageParam.functionCall())

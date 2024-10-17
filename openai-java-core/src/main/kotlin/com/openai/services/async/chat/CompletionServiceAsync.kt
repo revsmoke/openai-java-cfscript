@@ -11,7 +11,12 @@ import java.util.concurrent.CompletableFuture
 
 interface CompletionServiceAsync {
 
-    /** Creates a model response for the given chat conversation. */
+    /**
+     * Creates a model response for the given chat conversation. Learn more in the
+     * [text generation](https://platform.openai.com/docs/guides/text-generation),
+     * [vision](https://platform.openai.com/docs/guides/vision), and
+     * [audio](https://platform.openai.com/docs/guides/audio) guides.
+     */
     @JvmOverloads
     fun create(
         params: ChatCompletionCreateParams,

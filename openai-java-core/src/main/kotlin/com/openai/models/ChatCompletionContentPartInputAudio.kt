@@ -16,38 +16,37 @@ import com.openai.core.NoAutoDetect
 import com.openai.core.toUnmodifiable
 import com.openai.errors.OpenAIInvalidDataException
 import java.util.Objects
-import java.util.Optional
 
-/** Learn about [image inputs](https://platform.openai.com/docs/guides/vision). */
-@JsonDeserialize(builder = ChatCompletionContentPartImage.Builder::class)
+/** Learn about [audio inputs](https://platform.openai.com/docs/guides/audio). */
+@JsonDeserialize(builder = ChatCompletionContentPartInputAudio.Builder::class)
 @NoAutoDetect
-class ChatCompletionContentPartImage
+class ChatCompletionContentPartInputAudio
 private constructor(
     private val type: JsonField<Type>,
-    private val imageUrl: JsonField<ImageUrl>,
+    private val inputAudio: JsonField<InputAudio>,
     private val additionalProperties: Map<String, JsonValue>,
 ) {
 
     private var validated: Boolean = false
 
-    /** The type of the content part. */
+    /** The type of the content part. Always `input_audio`. */
     fun type(): Type = type.getRequired("type")
 
-    fun imageUrl(): ImageUrl = imageUrl.getRequired("image_url")
+    fun inputAudio(): InputAudio = inputAudio.getRequired("input_audio")
 
-    /** The type of the content part. */
+    /** The type of the content part. Always `input_audio`. */
     @JsonProperty("type") @ExcludeMissing fun _type() = type
 
-    @JsonProperty("image_url") @ExcludeMissing fun _imageUrl() = imageUrl
+    @JsonProperty("input_audio") @ExcludeMissing fun _inputAudio() = inputAudio
 
     @JsonAnyGetter
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
-    fun validate(): ChatCompletionContentPartImage = apply {
+    fun validate(): ChatCompletionContentPartInputAudio = apply {
         if (!validated) {
             type()
-            imageUrl().validate()
+            inputAudio().validate()
             validated = true
         }
     }
@@ -62,29 +61,31 @@ private constructor(
     class Builder {
 
         private var type: JsonField<Type> = JsonMissing.of()
-        private var imageUrl: JsonField<ImageUrl> = JsonMissing.of()
+        private var inputAudio: JsonField<InputAudio> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(chatCompletionContentPartImage: ChatCompletionContentPartImage) = apply {
-            this.type = chatCompletionContentPartImage.type
-            this.imageUrl = chatCompletionContentPartImage.imageUrl
-            additionalProperties(chatCompletionContentPartImage.additionalProperties)
+        internal fun from(
+            chatCompletionContentPartInputAudio: ChatCompletionContentPartInputAudio
+        ) = apply {
+            this.type = chatCompletionContentPartInputAudio.type
+            this.inputAudio = chatCompletionContentPartInputAudio.inputAudio
+            additionalProperties(chatCompletionContentPartInputAudio.additionalProperties)
         }
 
-        /** The type of the content part. */
+        /** The type of the content part. Always `input_audio`. */
         fun type(type: Type) = type(JsonField.of(type))
 
-        /** The type of the content part. */
+        /** The type of the content part. Always `input_audio`. */
         @JsonProperty("type")
         @ExcludeMissing
         fun type(type: JsonField<Type>) = apply { this.type = type }
 
-        fun imageUrl(imageUrl: ImageUrl) = imageUrl(JsonField.of(imageUrl))
+        fun inputAudio(inputAudio: InputAudio) = inputAudio(JsonField.of(inputAudio))
 
-        @JsonProperty("image_url")
+        @JsonProperty("input_audio")
         @ExcludeMissing
-        fun imageUrl(imageUrl: JsonField<ImageUrl>) = apply { this.imageUrl = imageUrl }
+        fun inputAudio(inputAudio: JsonField<InputAudio>) = apply { this.inputAudio = inputAudio }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -100,51 +101,45 @@ private constructor(
             this.additionalProperties.putAll(additionalProperties)
         }
 
-        fun build(): ChatCompletionContentPartImage =
-            ChatCompletionContentPartImage(
+        fun build(): ChatCompletionContentPartInputAudio =
+            ChatCompletionContentPartInputAudio(
                 type,
-                imageUrl,
+                inputAudio,
                 additionalProperties.toUnmodifiable(),
             )
     }
 
-    @JsonDeserialize(builder = ImageUrl.Builder::class)
+    @JsonDeserialize(builder = InputAudio.Builder::class)
     @NoAutoDetect
-    class ImageUrl
+    class InputAudio
     private constructor(
-        private val url: JsonField<String>,
-        private val detail: JsonField<Detail>,
+        private val data: JsonField<String>,
+        private val format: JsonField<Format>,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
         private var validated: Boolean = false
 
-        /** Either a URL of the image or the base64 encoded image data. */
-        fun url(): String = url.getRequired("url")
+        /** Base64 encoded audio data. */
+        fun data(): String = data.getRequired("data")
 
-        /**
-         * Specifies the detail level of the image. Learn more in the
-         * [Vision guide](https://platform.openai.com/docs/guides/vision/low-or-high-fidelity-image-understanding).
-         */
-        fun detail(): Optional<Detail> = Optional.ofNullable(detail.getNullable("detail"))
+        /** The format of the encoded audio data. Currently supports "wav" and "mp3". */
+        fun format(): Format = format.getRequired("format")
 
-        /** Either a URL of the image or the base64 encoded image data. */
-        @JsonProperty("url") @ExcludeMissing fun _url() = url
+        /** Base64 encoded audio data. */
+        @JsonProperty("data") @ExcludeMissing fun _data() = data
 
-        /**
-         * Specifies the detail level of the image. Learn more in the
-         * [Vision guide](https://platform.openai.com/docs/guides/vision/low-or-high-fidelity-image-understanding).
-         */
-        @JsonProperty("detail") @ExcludeMissing fun _detail() = detail
+        /** The format of the encoded audio data. Currently supports "wav" and "mp3". */
+        @JsonProperty("format") @ExcludeMissing fun _format() = format
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
-        fun validate(): ImageUrl = apply {
+        fun validate(): InputAudio = apply {
             if (!validated) {
-                url()
-                detail()
+                data()
+                format()
                 validated = true
             }
         }
@@ -158,38 +153,32 @@ private constructor(
 
         class Builder {
 
-            private var url: JsonField<String> = JsonMissing.of()
-            private var detail: JsonField<Detail> = JsonMissing.of()
+            private var data: JsonField<String> = JsonMissing.of()
+            private var format: JsonField<Format> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(imageUrl: ImageUrl) = apply {
-                this.url = imageUrl.url
-                this.detail = imageUrl.detail
-                additionalProperties(imageUrl.additionalProperties)
+            internal fun from(inputAudio: InputAudio) = apply {
+                this.data = inputAudio.data
+                this.format = inputAudio.format
+                additionalProperties(inputAudio.additionalProperties)
             }
 
-            /** Either a URL of the image or the base64 encoded image data. */
-            fun url(url: String) = url(JsonField.of(url))
+            /** Base64 encoded audio data. */
+            fun data(data: String) = data(JsonField.of(data))
 
-            /** Either a URL of the image or the base64 encoded image data. */
-            @JsonProperty("url")
+            /** Base64 encoded audio data. */
+            @JsonProperty("data")
             @ExcludeMissing
-            fun url(url: JsonField<String>) = apply { this.url = url }
+            fun data(data: JsonField<String>) = apply { this.data = data }
 
-            /**
-             * Specifies the detail level of the image. Learn more in the
-             * [Vision guide](https://platform.openai.com/docs/guides/vision/low-or-high-fidelity-image-understanding).
-             */
-            fun detail(detail: Detail) = detail(JsonField.of(detail))
+            /** The format of the encoded audio data. Currently supports "wav" and "mp3". */
+            fun format(format: Format) = format(JsonField.of(format))
 
-            /**
-             * Specifies the detail level of the image. Learn more in the
-             * [Vision guide](https://platform.openai.com/docs/guides/vision/low-or-high-fidelity-image-understanding).
-             */
-            @JsonProperty("detail")
+            /** The format of the encoded audio data. Currently supports "wav" and "mp3". */
+            @JsonProperty("format")
             @ExcludeMissing
-            fun detail(detail: JsonField<Detail>) = apply { this.detail = detail }
+            fun format(format: JsonField<Format>) = apply { this.format = format }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -205,15 +194,15 @@ private constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): ImageUrl =
-                ImageUrl(
-                    url,
-                    detail,
+            fun build(): InputAudio =
+                InputAudio(
+                    data,
+                    format,
                     additionalProperties.toUnmodifiable(),
                 )
         }
 
-        class Detail
+        class Format
         @JsonCreator
         private constructor(
             private val value: JsonField<String>,
@@ -226,7 +215,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Detail && this.value == other.value /* spotless:on */
+                return /* spotless:off */ other is Format && this.value == other.value /* spotless:on */
             }
 
             override fun hashCode() = value.hashCode()
@@ -235,42 +224,36 @@ private constructor(
 
             companion object {
 
-                @JvmField val AUTO = Detail(JsonField.of("auto"))
+                @JvmField val WAV = Format(JsonField.of("wav"))
 
-                @JvmField val LOW = Detail(JsonField.of("low"))
+                @JvmField val MP3 = Format(JsonField.of("mp3"))
 
-                @JvmField val HIGH = Detail(JsonField.of("high"))
-
-                @JvmStatic fun of(value: String) = Detail(JsonField.of(value))
+                @JvmStatic fun of(value: String) = Format(JsonField.of(value))
             }
 
             enum class Known {
-                AUTO,
-                LOW,
-                HIGH,
+                WAV,
+                MP3,
             }
 
             enum class Value {
-                AUTO,
-                LOW,
-                HIGH,
+                WAV,
+                MP3,
                 _UNKNOWN,
             }
 
             fun value(): Value =
                 when (this) {
-                    AUTO -> Value.AUTO
-                    LOW -> Value.LOW
-                    HIGH -> Value.HIGH
+                    WAV -> Value.WAV
+                    MP3 -> Value.MP3
                     else -> Value._UNKNOWN
                 }
 
             fun known(): Known =
                 when (this) {
-                    AUTO -> Known.AUTO
-                    LOW -> Known.LOW
-                    HIGH -> Known.HIGH
-                    else -> throw OpenAIInvalidDataException("Unknown Detail: $value")
+                    WAV -> Known.WAV
+                    MP3 -> Known.MP3
+                    else -> throw OpenAIInvalidDataException("Unknown Format: $value")
                 }
 
             fun asString(): String = _value().asStringOrThrow()
@@ -281,20 +264,20 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ImageUrl && this.url == other.url && this.detail == other.detail && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is InputAudio && this.data == other.data && this.format == other.format && this.additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         private var hashCode: Int = 0
 
         override fun hashCode(): Int {
             if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(url, detail, additionalProperties) /* spotless:on */
+                hashCode = /* spotless:off */ Objects.hash(data, format, additionalProperties) /* spotless:on */
             }
             return hashCode
         }
 
         override fun toString() =
-            "ImageUrl{url=$url, detail=$detail, additionalProperties=$additionalProperties}"
+            "InputAudio{data=$data, format=$format, additionalProperties=$additionalProperties}"
     }
 
     class Type
@@ -319,29 +302,29 @@ private constructor(
 
         companion object {
 
-            @JvmField val IMAGE_URL = Type(JsonField.of("image_url"))
+            @JvmField val INPUT_AUDIO = Type(JsonField.of("input_audio"))
 
             @JvmStatic fun of(value: String) = Type(JsonField.of(value))
         }
 
         enum class Known {
-            IMAGE_URL,
+            INPUT_AUDIO,
         }
 
         enum class Value {
-            IMAGE_URL,
+            INPUT_AUDIO,
             _UNKNOWN,
         }
 
         fun value(): Value =
             when (this) {
-                IMAGE_URL -> Value.IMAGE_URL
+                INPUT_AUDIO -> Value.INPUT_AUDIO
                 else -> Value._UNKNOWN
             }
 
         fun known(): Known =
             when (this) {
-                IMAGE_URL -> Known.IMAGE_URL
+                INPUT_AUDIO -> Known.INPUT_AUDIO
                 else -> throw OpenAIInvalidDataException("Unknown Type: $value")
             }
 
@@ -353,18 +336,18 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ChatCompletionContentPartImage && this.type == other.type && this.imageUrl == other.imageUrl && this.additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is ChatCompletionContentPartInputAudio && this.type == other.type && this.inputAudio == other.inputAudio && this.additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     private var hashCode: Int = 0
 
     override fun hashCode(): Int {
         if (hashCode == 0) {
-            hashCode = /* spotless:off */ Objects.hash(type, imageUrl, additionalProperties) /* spotless:on */
+            hashCode = /* spotless:off */ Objects.hash(type, inputAudio, additionalProperties) /* spotless:on */
         }
         return hashCode
     }
 
     override fun toString() =
-        "ChatCompletionContentPartImage{type=$type, imageUrl=$imageUrl, additionalProperties=$additionalProperties}"
+        "ChatCompletionContentPartInputAudio{type=$type, inputAudio=$inputAudio, additionalProperties=$additionalProperties}"
 }
