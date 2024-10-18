@@ -16,6 +16,7 @@ import com.openai.core.getOrThrow
 import com.openai.errors.OpenAIInvalidDataException
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 @JsonDeserialize(using = ChatCompletionContentPart.Deserializer::class)
 @JsonSerialize(using = ChatCompletionContentPart.Serializer::class)
@@ -160,29 +161,43 @@ private constructor(
 
         override fun ObjectCodec.deserialize(node: JsonNode): ChatCompletionContentPart {
             val json = JsonValue.fromJsonNode(node)
-            tryDeserialize(node, jacksonTypeRef<ChatCompletionContentPartText>()) { it.validate() }
-                ?.let {
-                    return ChatCompletionContentPart(
-                        chatCompletionContentPartText = it,
-                        _json = json
-                    )
+            val type = json.asObject().getOrNull()?.get("type")?.asString()?.getOrNull()
+
+            when (type) {
+                "text" -> {
+                    tryDeserialize(node, jacksonTypeRef<ChatCompletionContentPartText>()) {
+                            it.validate()
+                        }
+                        ?.let {
+                            return ChatCompletionContentPart(
+                                chatCompletionContentPartText = it,
+                                _json = json
+                            )
+                        }
                 }
-            tryDeserialize(node, jacksonTypeRef<ChatCompletionContentPartImage>()) { it.validate() }
-                ?.let {
-                    return ChatCompletionContentPart(
-                        chatCompletionContentPartImage = it,
-                        _json = json
-                    )
+                "image_url" -> {
+                    tryDeserialize(node, jacksonTypeRef<ChatCompletionContentPartImage>()) {
+                            it.validate()
+                        }
+                        ?.let {
+                            return ChatCompletionContentPart(
+                                chatCompletionContentPartImage = it,
+                                _json = json
+                            )
+                        }
                 }
-            tryDeserialize(node, jacksonTypeRef<ChatCompletionContentPartInputAudio>()) {
-                    it.validate()
+                "input_audio" -> {
+                    tryDeserialize(node, jacksonTypeRef<ChatCompletionContentPartInputAudio>()) {
+                            it.validate()
+                        }
+                        ?.let {
+                            return ChatCompletionContentPart(
+                                chatCompletionContentPartInputAudio = it,
+                                _json = json
+                            )
+                        }
                 }
-                ?.let {
-                    return ChatCompletionContentPart(
-                        chatCompletionContentPartInputAudio = it,
-                        _json = json
-                    )
-                }
+            }
 
             return ChatCompletionContentPart(_json = json)
         }

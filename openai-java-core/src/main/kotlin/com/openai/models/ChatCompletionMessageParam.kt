@@ -16,6 +16,7 @@ import com.openai.core.getOrThrow
 import com.openai.errors.OpenAIInvalidDataException
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 @JsonDeserialize(using = ChatCompletionMessageParam.Deserializer::class)
 @JsonSerialize(using = ChatCompletionMessageParam.Serializer::class)
@@ -216,47 +217,65 @@ private constructor(
 
         override fun ObjectCodec.deserialize(node: JsonNode): ChatCompletionMessageParam {
             val json = JsonValue.fromJsonNode(node)
-            tryDeserialize(node, jacksonTypeRef<ChatCompletionSystemMessageParam>()) {
-                    it.validate()
+            val role = json.asObject().getOrNull()?.get("role")?.asString()?.getOrNull()
+
+            when (role) {
+                "system" -> {
+                    tryDeserialize(node, jacksonTypeRef<ChatCompletionSystemMessageParam>()) {
+                            it.validate()
+                        }
+                        ?.let {
+                            return ChatCompletionMessageParam(
+                                chatCompletionSystemMessageParam = it,
+                                _json = json
+                            )
+                        }
                 }
-                ?.let {
-                    return ChatCompletionMessageParam(
-                        chatCompletionSystemMessageParam = it,
-                        _json = json
-                    )
+                "user" -> {
+                    tryDeserialize(node, jacksonTypeRef<ChatCompletionUserMessageParam>()) {
+                            it.validate()
+                        }
+                        ?.let {
+                            return ChatCompletionMessageParam(
+                                chatCompletionUserMessageParam = it,
+                                _json = json
+                            )
+                        }
                 }
-            tryDeserialize(node, jacksonTypeRef<ChatCompletionUserMessageParam>()) { it.validate() }
-                ?.let {
-                    return ChatCompletionMessageParam(
-                        chatCompletionUserMessageParam = it,
-                        _json = json
-                    )
+                "assistant" -> {
+                    tryDeserialize(node, jacksonTypeRef<ChatCompletionAssistantMessageParam>()) {
+                            it.validate()
+                        }
+                        ?.let {
+                            return ChatCompletionMessageParam(
+                                chatCompletionAssistantMessageParam = it,
+                                _json = json
+                            )
+                        }
                 }
-            tryDeserialize(node, jacksonTypeRef<ChatCompletionAssistantMessageParam>()) {
-                    it.validate()
+                "tool" -> {
+                    tryDeserialize(node, jacksonTypeRef<ChatCompletionToolMessageParam>()) {
+                            it.validate()
+                        }
+                        ?.let {
+                            return ChatCompletionMessageParam(
+                                chatCompletionToolMessageParam = it,
+                                _json = json
+                            )
+                        }
                 }
-                ?.let {
-                    return ChatCompletionMessageParam(
-                        chatCompletionAssistantMessageParam = it,
-                        _json = json
-                    )
+                "function" -> {
+                    tryDeserialize(node, jacksonTypeRef<ChatCompletionFunctionMessageParam>()) {
+                            it.validate()
+                        }
+                        ?.let {
+                            return ChatCompletionMessageParam(
+                                chatCompletionFunctionMessageParam = it,
+                                _json = json
+                            )
+                        }
                 }
-            tryDeserialize(node, jacksonTypeRef<ChatCompletionToolMessageParam>()) { it.validate() }
-                ?.let {
-                    return ChatCompletionMessageParam(
-                        chatCompletionToolMessageParam = it,
-                        _json = json
-                    )
-                }
-            tryDeserialize(node, jacksonTypeRef<ChatCompletionFunctionMessageParam>()) {
-                    it.validate()
-                }
-                ?.let {
-                    return ChatCompletionMessageParam(
-                        chatCompletionFunctionMessageParam = it,
-                        _json = json
-                    )
-                }
+            }
 
             return ChatCompletionMessageParam(_json = json)
         }

@@ -16,6 +16,7 @@ import com.openai.core.getOrThrow
 import com.openai.errors.OpenAIInvalidDataException
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 @JsonDeserialize(using = ModerationMultiModalInput.Deserializer::class)
 @JsonSerialize(using = ModerationMultiModalInput.Serializer::class)
@@ -117,14 +118,27 @@ private constructor(
 
         override fun ObjectCodec.deserialize(node: JsonNode): ModerationMultiModalInput {
             val json = JsonValue.fromJsonNode(node)
-            tryDeserialize(node, jacksonTypeRef<ModerationImageUrlInput>()) { it.validate() }
-                ?.let {
-                    return ModerationMultiModalInput(moderationImageUrlInput = it, _json = json)
+            val type = json.asObject().getOrNull()?.get("type")?.asString()?.getOrNull()
+
+            when (type) {
+                "image_url" -> {
+                    tryDeserialize(node, jacksonTypeRef<ModerationImageUrlInput>()) {
+                            it.validate()
+                        }
+                        ?.let {
+                            return ModerationMultiModalInput(
+                                moderationImageUrlInput = it,
+                                _json = json
+                            )
+                        }
                 }
-            tryDeserialize(node, jacksonTypeRef<ModerationTextInput>()) { it.validate() }
-                ?.let {
-                    return ModerationMultiModalInput(moderationTextInput = it, _json = json)
+                "text" -> {
+                    tryDeserialize(node, jacksonTypeRef<ModerationTextInput>()) { it.validate() }
+                        ?.let {
+                            return ModerationMultiModalInput(moderationTextInput = it, _json = json)
+                        }
                 }
+            }
 
             return ModerationMultiModalInput(_json = json)
         }

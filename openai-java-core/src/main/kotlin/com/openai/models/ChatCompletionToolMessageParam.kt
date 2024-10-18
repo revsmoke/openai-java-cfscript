@@ -235,6 +235,7 @@ private constructor(
 
             override fun ObjectCodec.deserialize(node: JsonNode): Content {
                 val json = JsonValue.fromJsonNode(node)
+
                 tryDeserialize(node, jacksonTypeRef<String>())?.let {
                     return Content(textContent = it, _json = json)
                 }

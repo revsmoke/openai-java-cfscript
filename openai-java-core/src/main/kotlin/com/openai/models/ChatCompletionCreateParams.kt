@@ -1631,6 +1631,7 @@ constructor(
 
             override fun ObjectCodec.deserialize(node: JsonNode): Model {
                 val json = JsonValue.fromJsonNode(node)
+
                 tryDeserialize(node, jacksonTypeRef<String>())?.let {
                     return Model(string = it, _json = json)
                 }
@@ -1758,6 +1759,7 @@ constructor(
 
             override fun ObjectCodec.deserialize(node: JsonNode): FunctionCall {
                 val json = JsonValue.fromJsonNode(node)
+
                 tryDeserialize(node, jacksonTypeRef<UnionMember0>())?.let {
                     return FunctionCall(unionMember0 = it, _json = json)
                 }
@@ -2236,6 +2238,7 @@ constructor(
 
             override fun ObjectCodec.deserialize(node: JsonNode): ResponseFormat {
                 val json = JsonValue.fromJsonNode(node)
+
                 tryDeserialize(node, jacksonTypeRef<ResponseFormatText>()) { it.validate() }
                     ?.let {
                         return ResponseFormat(responseFormatText = it, _json = json)
@@ -2416,6 +2419,7 @@ constructor(
 
             override fun ObjectCodec.deserialize(node: JsonNode): Stop {
                 val json = JsonValue.fromJsonNode(node)
+
                 tryDeserialize(node, jacksonTypeRef<String>())?.let {
                     return Stop(string = it, _json = json)
                 }

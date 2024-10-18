@@ -595,6 +595,7 @@ constructor(
 
             override fun ObjectCodec.deserialize(node: JsonNode): Model {
                 val json = JsonValue.fromJsonNode(node)
+
                 tryDeserialize(node, jacksonTypeRef<String>())?.let {
                     return Model(string = it, _json = json)
                 }
@@ -881,6 +882,7 @@ constructor(
 
                 override fun ObjectCodec.deserialize(node: JsonNode): BatchSize {
                     val json = JsonValue.fromJsonNode(node)
+
                     tryDeserialize(node, jacksonTypeRef<UnionMember0>())?.let {
                         return BatchSize(unionMember0 = it, _json = json)
                     }
@@ -1048,6 +1050,7 @@ constructor(
 
                 override fun ObjectCodec.deserialize(node: JsonNode): LearningRateMultiplier {
                     val json = JsonValue.fromJsonNode(node)
+
                     tryDeserialize(node, jacksonTypeRef<UnionMember0>())?.let {
                         return LearningRateMultiplier(unionMember0 = it, _json = json)
                     }
@@ -1215,6 +1218,7 @@ constructor(
 
                 override fun ObjectCodec.deserialize(node: JsonNode): NEpochs {
                     val json = JsonValue.fromJsonNode(node)
+
                     tryDeserialize(node, jacksonTypeRef<UnionMember0>())?.let {
                         return NEpochs(unionMember0 = it, _json = json)
                     }

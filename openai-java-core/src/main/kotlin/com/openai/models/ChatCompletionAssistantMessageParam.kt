@@ -26,6 +26,7 @@ import com.openai.core.toUnmodifiable
 import com.openai.errors.OpenAIInvalidDataException
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 @JsonDeserialize(builder = ChatCompletionAssistantMessageParam.Builder::class)
 @NoAutoDetect
@@ -515,6 +516,7 @@ private constructor(
 
             override fun ObjectCodec.deserialize(node: JsonNode): Content {
                 val json = JsonValue.fromJsonNode(node)
+
                 tryDeserialize(node, jacksonTypeRef<String>())?.let {
                     return Content(textContent = it, _json = json)
                 }
@@ -682,24 +684,35 @@ private constructor(
                     node: JsonNode
                 ): ChatCompletionRequestAssistantMessageContentPart {
                     val json = JsonValue.fromJsonNode(node)
-                    tryDeserialize(node, jacksonTypeRef<ChatCompletionContentPartText>()) {
-                            it.validate()
+                    val type = json.asObject().getOrNull()?.get("type")?.asString()?.getOrNull()
+
+                    when (type) {
+                        "text" -> {
+                            tryDeserialize(node, jacksonTypeRef<ChatCompletionContentPartText>()) {
+                                    it.validate()
+                                }
+                                ?.let {
+                                    return ChatCompletionRequestAssistantMessageContentPart(
+                                        chatCompletionContentPartText = it,
+                                        _json = json
+                                    )
+                                }
                         }
-                        ?.let {
-                            return ChatCompletionRequestAssistantMessageContentPart(
-                                chatCompletionContentPartText = it,
-                                _json = json
-                            )
+                        "refusal" -> {
+                            tryDeserialize(
+                                    node,
+                                    jacksonTypeRef<ChatCompletionContentPartRefusal>()
+                                ) {
+                                    it.validate()
+                                }
+                                ?.let {
+                                    return ChatCompletionRequestAssistantMessageContentPart(
+                                        chatCompletionContentPartRefusal = it,
+                                        _json = json
+                                    )
+                                }
                         }
-                    tryDeserialize(node, jacksonTypeRef<ChatCompletionContentPartRefusal>()) {
-                            it.validate()
-                        }
-                        ?.let {
-                            return ChatCompletionRequestAssistantMessageContentPart(
-                                chatCompletionContentPartRefusal = it,
-                                _json = json
-                            )
-                        }
+                    }
 
                     return ChatCompletionRequestAssistantMessageContentPart(_json = json)
                 }

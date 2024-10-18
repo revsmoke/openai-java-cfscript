@@ -888,6 +888,7 @@ private constructor(
 
                 override fun ObjectCodec.deserialize(node: JsonNode): NEpochs {
                     val json = JsonValue.fromJsonNode(node)
+
                     tryDeserialize(node, jacksonTypeRef<UnionMember0>())?.let {
                         return NEpochs(unionMember0 = it, _json = json)
                     }

@@ -128,6 +128,7 @@ private constructor(
 
         override fun ObjectCodec.deserialize(node: JsonNode): ChatCompletionToolChoiceOption {
             val json = JsonValue.fromJsonNode(node)
+
             tryDeserialize(node, jacksonTypeRef<UnionMember0>())?.let {
                 return ChatCompletionToolChoiceOption(unionMember0 = it, _json = json)
             }
