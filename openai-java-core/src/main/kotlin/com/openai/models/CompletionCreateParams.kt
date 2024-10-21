@@ -41,7 +41,6 @@ constructor(
     private val presencePenalty: Double?,
     private val seed: Long?,
     private val stop: Stop?,
-    private val stream: Boolean?,
     private val streamOptions: ChatCompletionStreamOptions?,
     private val suffix: String?,
     private val temperature: Double?,
@@ -76,8 +75,6 @@ constructor(
 
     fun stop(): Optional<Stop> = Optional.ofNullable(stop)
 
-    fun stream(): Optional<Boolean> = Optional.ofNullable(stream)
-
     fun streamOptions(): Optional<ChatCompletionStreamOptions> = Optional.ofNullable(streamOptions)
 
     fun suffix(): Optional<String> = Optional.ofNullable(suffix)
@@ -103,7 +100,6 @@ constructor(
             presencePenalty,
             seed,
             stop,
-            stream,
             streamOptions,
             suffix,
             temperature,
@@ -133,7 +129,6 @@ constructor(
         private val presencePenalty: Double?,
         private val seed: Long?,
         private val stop: Stop?,
-        private val stream: Boolean?,
         private val streamOptions: ChatCompletionStreamOptions?,
         private val suffix: String?,
         private val temperature: Double?,
@@ -256,14 +251,6 @@ constructor(
          */
         @JsonProperty("stop") fun stop(): Stop? = stop
 
-        /**
-         * Whether to stream back partial progress. If set, tokens will be sent as data-only
-         * [server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#Event_stream_format)
-         * as they become available, with the stream terminated by a `data: [DONE]` message.
-         * [Example Python code](https://cookbook.openai.com/examples/how_to_stream_completions).
-         */
-        @JsonProperty("stream") fun stream(): Boolean? = stream
-
         /** Options for streaming response. Only set this when you set `stream: true`. */
         @JsonProperty("stream_options")
         fun streamOptions(): ChatCompletionStreamOptions? = streamOptions
@@ -325,7 +312,6 @@ constructor(
             private var presencePenalty: Double? = null
             private var seed: Long? = null
             private var stop: Stop? = null
-            private var stream: Boolean? = null
             private var streamOptions: ChatCompletionStreamOptions? = null
             private var suffix: String? = null
             private var temperature: Double? = null
@@ -347,7 +333,6 @@ constructor(
                 this.presencePenalty = completionCreateBody.presencePenalty
                 this.seed = completionCreateBody.seed
                 this.stop = completionCreateBody.stop
-                this.stream = completionCreateBody.stream
                 this.streamOptions = completionCreateBody.streamOptions
                 this.suffix = completionCreateBody.suffix
                 this.temperature = completionCreateBody.temperature
@@ -481,14 +466,6 @@ constructor(
              */
             @JsonProperty("stop") fun stop(stop: Stop) = apply { this.stop = stop }
 
-            /**
-             * Whether to stream back partial progress. If set, tokens will be sent as data-only
-             * [server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#Event_stream_format)
-             * as they become available, with the stream terminated by a `data: [DONE]` message.
-             * [Example Python code](https://cookbook.openai.com/examples/how_to_stream_completions).
-             */
-            @JsonProperty("stream") fun stream(stream: Boolean) = apply { this.stream = stream }
-
             /** Options for streaming response. Only set this when you set `stream: true`. */
             @JsonProperty("stream_options")
             fun streamOptions(streamOptions: ChatCompletionStreamOptions) = apply {
@@ -556,7 +533,6 @@ constructor(
                     presencePenalty,
                     seed,
                     stop,
-                    stream,
                     streamOptions,
                     suffix,
                     temperature,
@@ -571,20 +547,20 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is CompletionCreateBody && this.model == other.model && this.prompt == other.prompt && this.bestOf == other.bestOf && this.echo == other.echo && this.frequencyPenalty == other.frequencyPenalty && this.logitBias == other.logitBias && this.logprobs == other.logprobs && this.maxTokens == other.maxTokens && this.n == other.n && this.presencePenalty == other.presencePenalty && this.seed == other.seed && this.stop == other.stop && this.stream == other.stream && this.streamOptions == other.streamOptions && this.suffix == other.suffix && this.temperature == other.temperature && this.topP == other.topP && this.user == other.user && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is CompletionCreateBody && this.model == other.model && this.prompt == other.prompt && this.bestOf == other.bestOf && this.echo == other.echo && this.frequencyPenalty == other.frequencyPenalty && this.logitBias == other.logitBias && this.logprobs == other.logprobs && this.maxTokens == other.maxTokens && this.n == other.n && this.presencePenalty == other.presencePenalty && this.seed == other.seed && this.stop == other.stop && this.streamOptions == other.streamOptions && this.suffix == other.suffix && this.temperature == other.temperature && this.topP == other.topP && this.user == other.user && this.additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         private var hashCode: Int = 0
 
         override fun hashCode(): Int {
             if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(model, prompt, bestOf, echo, frequencyPenalty, logitBias, logprobs, maxTokens, n, presencePenalty, seed, stop, stream, streamOptions, suffix, temperature, topP, user, additionalProperties) /* spotless:on */
+                hashCode = /* spotless:off */ Objects.hash(model, prompt, bestOf, echo, frequencyPenalty, logitBias, logprobs, maxTokens, n, presencePenalty, seed, stop, streamOptions, suffix, temperature, topP, user, additionalProperties) /* spotless:on */
             }
             return hashCode
         }
 
         override fun toString() =
-            "CompletionCreateBody{model=$model, prompt=$prompt, bestOf=$bestOf, echo=$echo, frequencyPenalty=$frequencyPenalty, logitBias=$logitBias, logprobs=$logprobs, maxTokens=$maxTokens, n=$n, presencePenalty=$presencePenalty, seed=$seed, stop=$stop, stream=$stream, streamOptions=$streamOptions, suffix=$suffix, temperature=$temperature, topP=$topP, user=$user, additionalProperties=$additionalProperties}"
+            "CompletionCreateBody{model=$model, prompt=$prompt, bestOf=$bestOf, echo=$echo, frequencyPenalty=$frequencyPenalty, logitBias=$logitBias, logprobs=$logprobs, maxTokens=$maxTokens, n=$n, presencePenalty=$presencePenalty, seed=$seed, stop=$stop, streamOptions=$streamOptions, suffix=$suffix, temperature=$temperature, topP=$topP, user=$user, additionalProperties=$additionalProperties}"
     }
 
     fun _additionalQueryParams(): Map<String, List<String>> = additionalQueryParams
@@ -598,15 +574,15 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CompletionCreateParams && this.model == other.model && this.prompt == other.prompt && this.bestOf == other.bestOf && this.echo == other.echo && this.frequencyPenalty == other.frequencyPenalty && this.logitBias == other.logitBias && this.logprobs == other.logprobs && this.maxTokens == other.maxTokens && this.n == other.n && this.presencePenalty == other.presencePenalty && this.seed == other.seed && this.stop == other.stop && this.stream == other.stream && this.streamOptions == other.streamOptions && this.suffix == other.suffix && this.temperature == other.temperature && this.topP == other.topP && this.user == other.user && this.additionalQueryParams == other.additionalQueryParams && this.additionalHeaders == other.additionalHeaders && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CompletionCreateParams && this.model == other.model && this.prompt == other.prompt && this.bestOf == other.bestOf && this.echo == other.echo && this.frequencyPenalty == other.frequencyPenalty && this.logitBias == other.logitBias && this.logprobs == other.logprobs && this.maxTokens == other.maxTokens && this.n == other.n && this.presencePenalty == other.presencePenalty && this.seed == other.seed && this.stop == other.stop && this.streamOptions == other.streamOptions && this.suffix == other.suffix && this.temperature == other.temperature && this.topP == other.topP && this.user == other.user && this.additionalQueryParams == other.additionalQueryParams && this.additionalHeaders == other.additionalHeaders && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(model, prompt, bestOf, echo, frequencyPenalty, logitBias, logprobs, maxTokens, n, presencePenalty, seed, stop, stream, streamOptions, suffix, temperature, topP, user, additionalQueryParams, additionalHeaders, additionalBodyProperties) /* spotless:on */
+        return /* spotless:off */ Objects.hash(model, prompt, bestOf, echo, frequencyPenalty, logitBias, logprobs, maxTokens, n, presencePenalty, seed, stop, streamOptions, suffix, temperature, topP, user, additionalQueryParams, additionalHeaders, additionalBodyProperties) /* spotless:on */
     }
 
     override fun toString() =
-        "CompletionCreateParams{model=$model, prompt=$prompt, bestOf=$bestOf, echo=$echo, frequencyPenalty=$frequencyPenalty, logitBias=$logitBias, logprobs=$logprobs, maxTokens=$maxTokens, n=$n, presencePenalty=$presencePenalty, seed=$seed, stop=$stop, stream=$stream, streamOptions=$streamOptions, suffix=$suffix, temperature=$temperature, topP=$topP, user=$user, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
+        "CompletionCreateParams{model=$model, prompt=$prompt, bestOf=$bestOf, echo=$echo, frequencyPenalty=$frequencyPenalty, logitBias=$logitBias, logprobs=$logprobs, maxTokens=$maxTokens, n=$n, presencePenalty=$presencePenalty, seed=$seed, stop=$stop, streamOptions=$streamOptions, suffix=$suffix, temperature=$temperature, topP=$topP, user=$user, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -630,7 +606,6 @@ constructor(
         private var presencePenalty: Double? = null
         private var seed: Long? = null
         private var stop: Stop? = null
-        private var stream: Boolean? = null
         private var streamOptions: ChatCompletionStreamOptions? = null
         private var suffix: String? = null
         private var temperature: Double? = null
@@ -654,7 +629,6 @@ constructor(
             this.presencePenalty = completionCreateParams.presencePenalty
             this.seed = completionCreateParams.seed
             this.stop = completionCreateParams.stop
-            this.stream = completionCreateParams.stream
             this.streamOptions = completionCreateParams.streamOptions
             this.suffix = completionCreateParams.suffix
             this.temperature = completionCreateParams.temperature
@@ -861,14 +835,6 @@ constructor(
          */
         fun stopOfStrings(strings: List<String>) = apply { this.stop = Stop.ofStrings(strings) }
 
-        /**
-         * Whether to stream back partial progress. If set, tokens will be sent as data-only
-         * [server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#Event_stream_format)
-         * as they become available, with the stream terminated by a `data: [DONE]` message.
-         * [Example Python code](https://cookbook.openai.com/examples/how_to_stream_completions).
-         */
-        fun stream(stream: Boolean) = apply { this.stream = stream }
-
         /** Options for streaming response. Only set this when you set `stream: true`. */
         fun streamOptions(streamOptions: ChatCompletionStreamOptions) = apply {
             this.streamOptions = streamOptions
@@ -974,7 +940,6 @@ constructor(
                 presencePenalty,
                 seed,
                 stop,
-                stream,
                 streamOptions,
                 suffix,
                 temperature,

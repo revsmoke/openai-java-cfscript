@@ -49,7 +49,6 @@ constructor(
     private val serviceTier: ServiceTier?,
     private val stop: Stop?,
     private val store: Boolean?,
-    private val stream: Boolean?,
     private val streamOptions: ChatCompletionStreamOptions?,
     private val temperature: Double?,
     private val toolChoice: ChatCompletionToolChoiceOption?,
@@ -102,8 +101,6 @@ constructor(
 
     fun store(): Optional<Boolean> = Optional.ofNullable(store)
 
-    fun stream(): Optional<Boolean> = Optional.ofNullable(stream)
-
     fun streamOptions(): Optional<ChatCompletionStreamOptions> = Optional.ofNullable(streamOptions)
 
     fun temperature(): Optional<Double> = Optional.ofNullable(temperature)
@@ -141,7 +138,6 @@ constructor(
             serviceTier,
             stop,
             store,
-            stream,
             streamOptions,
             temperature,
             toolChoice,
@@ -181,7 +177,6 @@ constructor(
         private val serviceTier: ServiceTier?,
         private val stop: Stop?,
         private val store: Boolean?,
-        private val stream: Boolean?,
         private val streamOptions: ChatCompletionStreamOptions?,
         private val temperature: Double?,
         private val toolChoice: ChatCompletionToolChoiceOption?,
@@ -380,15 +375,6 @@ constructor(
          */
         @JsonProperty("store") fun store(): Boolean? = store
 
-        /**
-         * If set, partial message deltas will be sent, like in ChatGPT. Tokens will be sent as
-         * data-only
-         * [server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#Event_stream_format)
-         * as they become available, with the stream terminated by a `data: [DONE]` message.
-         * [Example Python code](https://cookbook.openai.com/examples/how_to_stream_completions).
-         */
-        @JsonProperty("stream") fun stream(): Boolean? = stream
-
         /** Options for streaming response. Only set this when you set `stream: true`. */
         @JsonProperty("stream_options")
         fun streamOptions(): ChatCompletionStreamOptions? = streamOptions
@@ -477,7 +463,6 @@ constructor(
             private var serviceTier: ServiceTier? = null
             private var stop: Stop? = null
             private var store: Boolean? = null
-            private var stream: Boolean? = null
             private var streamOptions: ChatCompletionStreamOptions? = null
             private var temperature: Double? = null
             private var toolChoice: ChatCompletionToolChoiceOption? = null
@@ -509,7 +494,6 @@ constructor(
                 this.serviceTier = chatCompletionCreateBody.serviceTier
                 this.stop = chatCompletionCreateBody.stop
                 this.store = chatCompletionCreateBody.store
-                this.stream = chatCompletionCreateBody.stream
                 this.streamOptions = chatCompletionCreateBody.streamOptions
                 this.temperature = chatCompletionCreateBody.temperature
                 this.toolChoice = chatCompletionCreateBody.toolChoice
@@ -743,15 +727,6 @@ constructor(
              */
             @JsonProperty("store") fun store(store: Boolean) = apply { this.store = store }
 
-            /**
-             * If set, partial message deltas will be sent, like in ChatGPT. Tokens will be sent as
-             * data-only
-             * [server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#Event_stream_format)
-             * as they become available, with the stream terminated by a `data: [DONE]` message.
-             * [Example Python code](https://cookbook.openai.com/examples/how_to_stream_completions).
-             */
-            @JsonProperty("stream") fun stream(stream: Boolean) = apply { this.stream = stream }
-
             /** Options for streaming response. Only set this when you set `stream: true`. */
             @JsonProperty("stream_options")
             fun streamOptions(streamOptions: ChatCompletionStreamOptions) = apply {
@@ -852,7 +827,6 @@ constructor(
                     serviceTier,
                     stop,
                     store,
-                    stream,
                     streamOptions,
                     temperature,
                     toolChoice,
@@ -869,20 +843,20 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ChatCompletionCreateBody && this.messages == other.messages && this.model == other.model && this.audio == other.audio && this.frequencyPenalty == other.frequencyPenalty && this.functionCall == other.functionCall && this.functions == other.functions && this.logitBias == other.logitBias && this.logprobs == other.logprobs && this.maxCompletionTokens == other.maxCompletionTokens && this.maxTokens == other.maxTokens && this.metadata == other.metadata && this.modalities == other.modalities && this.n == other.n && this.parallelToolCalls == other.parallelToolCalls && this.presencePenalty == other.presencePenalty && this.responseFormat == other.responseFormat && this.seed == other.seed && this.serviceTier == other.serviceTier && this.stop == other.stop && this.store == other.store && this.stream == other.stream && this.streamOptions == other.streamOptions && this.temperature == other.temperature && this.toolChoice == other.toolChoice && this.tools == other.tools && this.topLogprobs == other.topLogprobs && this.topP == other.topP && this.user == other.user && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is ChatCompletionCreateBody && this.messages == other.messages && this.model == other.model && this.audio == other.audio && this.frequencyPenalty == other.frequencyPenalty && this.functionCall == other.functionCall && this.functions == other.functions && this.logitBias == other.logitBias && this.logprobs == other.logprobs && this.maxCompletionTokens == other.maxCompletionTokens && this.maxTokens == other.maxTokens && this.metadata == other.metadata && this.modalities == other.modalities && this.n == other.n && this.parallelToolCalls == other.parallelToolCalls && this.presencePenalty == other.presencePenalty && this.responseFormat == other.responseFormat && this.seed == other.seed && this.serviceTier == other.serviceTier && this.stop == other.stop && this.store == other.store && this.streamOptions == other.streamOptions && this.temperature == other.temperature && this.toolChoice == other.toolChoice && this.tools == other.tools && this.topLogprobs == other.topLogprobs && this.topP == other.topP && this.user == other.user && this.additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         private var hashCode: Int = 0
 
         override fun hashCode(): Int {
             if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(messages, model, audio, frequencyPenalty, functionCall, functions, logitBias, logprobs, maxCompletionTokens, maxTokens, metadata, modalities, n, parallelToolCalls, presencePenalty, responseFormat, seed, serviceTier, stop, store, stream, streamOptions, temperature, toolChoice, tools, topLogprobs, topP, user, additionalProperties) /* spotless:on */
+                hashCode = /* spotless:off */ Objects.hash(messages, model, audio, frequencyPenalty, functionCall, functions, logitBias, logprobs, maxCompletionTokens, maxTokens, metadata, modalities, n, parallelToolCalls, presencePenalty, responseFormat, seed, serviceTier, stop, store, streamOptions, temperature, toolChoice, tools, topLogprobs, topP, user, additionalProperties) /* spotless:on */
             }
             return hashCode
         }
 
         override fun toString() =
-            "ChatCompletionCreateBody{messages=$messages, model=$model, audio=$audio, frequencyPenalty=$frequencyPenalty, functionCall=$functionCall, functions=$functions, logitBias=$logitBias, logprobs=$logprobs, maxCompletionTokens=$maxCompletionTokens, maxTokens=$maxTokens, metadata=$metadata, modalities=$modalities, n=$n, parallelToolCalls=$parallelToolCalls, presencePenalty=$presencePenalty, responseFormat=$responseFormat, seed=$seed, serviceTier=$serviceTier, stop=$stop, store=$store, stream=$stream, streamOptions=$streamOptions, temperature=$temperature, toolChoice=$toolChoice, tools=$tools, topLogprobs=$topLogprobs, topP=$topP, user=$user, additionalProperties=$additionalProperties}"
+            "ChatCompletionCreateBody{messages=$messages, model=$model, audio=$audio, frequencyPenalty=$frequencyPenalty, functionCall=$functionCall, functions=$functions, logitBias=$logitBias, logprobs=$logprobs, maxCompletionTokens=$maxCompletionTokens, maxTokens=$maxTokens, metadata=$metadata, modalities=$modalities, n=$n, parallelToolCalls=$parallelToolCalls, presencePenalty=$presencePenalty, responseFormat=$responseFormat, seed=$seed, serviceTier=$serviceTier, stop=$stop, store=$store, streamOptions=$streamOptions, temperature=$temperature, toolChoice=$toolChoice, tools=$tools, topLogprobs=$topLogprobs, topP=$topP, user=$user, additionalProperties=$additionalProperties}"
     }
 
     fun _additionalQueryParams(): Map<String, List<String>> = additionalQueryParams
@@ -896,15 +870,15 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is ChatCompletionCreateParams && this.messages == other.messages && this.model == other.model && this.audio == other.audio && this.frequencyPenalty == other.frequencyPenalty && this.functionCall == other.functionCall && this.functions == other.functions && this.logitBias == other.logitBias && this.logprobs == other.logprobs && this.maxCompletionTokens == other.maxCompletionTokens && this.maxTokens == other.maxTokens && this.metadata == other.metadata && this.modalities == other.modalities && this.n == other.n && this.parallelToolCalls == other.parallelToolCalls && this.presencePenalty == other.presencePenalty && this.responseFormat == other.responseFormat && this.seed == other.seed && this.serviceTier == other.serviceTier && this.stop == other.stop && this.store == other.store && this.stream == other.stream && this.streamOptions == other.streamOptions && this.temperature == other.temperature && this.toolChoice == other.toolChoice && this.tools == other.tools && this.topLogprobs == other.topLogprobs && this.topP == other.topP && this.user == other.user && this.additionalQueryParams == other.additionalQueryParams && this.additionalHeaders == other.additionalHeaders && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is ChatCompletionCreateParams && this.messages == other.messages && this.model == other.model && this.audio == other.audio && this.frequencyPenalty == other.frequencyPenalty && this.functionCall == other.functionCall && this.functions == other.functions && this.logitBias == other.logitBias && this.logprobs == other.logprobs && this.maxCompletionTokens == other.maxCompletionTokens && this.maxTokens == other.maxTokens && this.metadata == other.metadata && this.modalities == other.modalities && this.n == other.n && this.parallelToolCalls == other.parallelToolCalls && this.presencePenalty == other.presencePenalty && this.responseFormat == other.responseFormat && this.seed == other.seed && this.serviceTier == other.serviceTier && this.stop == other.stop && this.store == other.store && this.streamOptions == other.streamOptions && this.temperature == other.temperature && this.toolChoice == other.toolChoice && this.tools == other.tools && this.topLogprobs == other.topLogprobs && this.topP == other.topP && this.user == other.user && this.additionalQueryParams == other.additionalQueryParams && this.additionalHeaders == other.additionalHeaders && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(messages, model, audio, frequencyPenalty, functionCall, functions, logitBias, logprobs, maxCompletionTokens, maxTokens, metadata, modalities, n, parallelToolCalls, presencePenalty, responseFormat, seed, serviceTier, stop, store, stream, streamOptions, temperature, toolChoice, tools, topLogprobs, topP, user, additionalQueryParams, additionalHeaders, additionalBodyProperties) /* spotless:on */
+        return /* spotless:off */ Objects.hash(messages, model, audio, frequencyPenalty, functionCall, functions, logitBias, logprobs, maxCompletionTokens, maxTokens, metadata, modalities, n, parallelToolCalls, presencePenalty, responseFormat, seed, serviceTier, stop, store, streamOptions, temperature, toolChoice, tools, topLogprobs, topP, user, additionalQueryParams, additionalHeaders, additionalBodyProperties) /* spotless:on */
     }
 
     override fun toString() =
-        "ChatCompletionCreateParams{messages=$messages, model=$model, audio=$audio, frequencyPenalty=$frequencyPenalty, functionCall=$functionCall, functions=$functions, logitBias=$logitBias, logprobs=$logprobs, maxCompletionTokens=$maxCompletionTokens, maxTokens=$maxTokens, metadata=$metadata, modalities=$modalities, n=$n, parallelToolCalls=$parallelToolCalls, presencePenalty=$presencePenalty, responseFormat=$responseFormat, seed=$seed, serviceTier=$serviceTier, stop=$stop, store=$store, stream=$stream, streamOptions=$streamOptions, temperature=$temperature, toolChoice=$toolChoice, tools=$tools, topLogprobs=$topLogprobs, topP=$topP, user=$user, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
+        "ChatCompletionCreateParams{messages=$messages, model=$model, audio=$audio, frequencyPenalty=$frequencyPenalty, functionCall=$functionCall, functions=$functions, logitBias=$logitBias, logprobs=$logprobs, maxCompletionTokens=$maxCompletionTokens, maxTokens=$maxTokens, metadata=$metadata, modalities=$modalities, n=$n, parallelToolCalls=$parallelToolCalls, presencePenalty=$presencePenalty, responseFormat=$responseFormat, seed=$seed, serviceTier=$serviceTier, stop=$stop, store=$store, streamOptions=$streamOptions, temperature=$temperature, toolChoice=$toolChoice, tools=$tools, topLogprobs=$topLogprobs, topP=$topP, user=$user, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -936,7 +910,6 @@ constructor(
         private var serviceTier: ServiceTier? = null
         private var stop: Stop? = null
         private var store: Boolean? = null
-        private var stream: Boolean? = null
         private var streamOptions: ChatCompletionStreamOptions? = null
         private var temperature: Double? = null
         private var toolChoice: ChatCompletionToolChoiceOption? = null
@@ -970,7 +943,6 @@ constructor(
             this.serviceTier = chatCompletionCreateParams.serviceTier
             this.stop = chatCompletionCreateParams.stop
             this.store = chatCompletionCreateParams.store
-            this.stream = chatCompletionCreateParams.stream
             this.streamOptions = chatCompletionCreateParams.streamOptions
             this.temperature = chatCompletionCreateParams.temperature
             this.toolChoice = chatCompletionCreateParams.toolChoice
@@ -1347,15 +1319,6 @@ constructor(
          */
         fun store(store: Boolean) = apply { this.store = store }
 
-        /**
-         * If set, partial message deltas will be sent, like in ChatGPT. Tokens will be sent as
-         * data-only
-         * [server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#Event_stream_format)
-         * as they become available, with the stream terminated by a `data: [DONE]` message.
-         * [Example Python code](https://cookbook.openai.com/examples/how_to_stream_completions).
-         */
-        fun stream(stream: Boolean) = apply { this.stream = stream }
-
         /** Options for streaming response. Only set this when you set `stream: true`. */
         fun streamOptions(streamOptions: ChatCompletionStreamOptions) = apply {
             this.streamOptions = streamOptions
@@ -1532,7 +1495,6 @@ constructor(
                 serviceTier,
                 stop,
                 store,
-                stream,
                 streamOptions,
                 temperature,
                 toolChoice,

@@ -4,8 +4,11 @@
 
 package com.openai.services.blocking.chat
 
+import com.google.errorprone.annotations.MustBeClosed
 import com.openai.core.RequestOptions
+import com.openai.core.http.StreamResponse
 import com.openai.models.ChatCompletion
+import com.openai.models.ChatCompletionChunk
 import com.openai.models.ChatCompletionCreateParams
 
 interface CompletionService {
@@ -21,4 +24,17 @@ interface CompletionService {
         params: ChatCompletionCreateParams,
         requestOptions: RequestOptions = RequestOptions.none()
     ): ChatCompletion
+
+    /**
+     * Creates a model response for the given chat conversation. Learn more in the
+     * [text generation](https://platform.openai.com/docs/guides/text-generation),
+     * [vision](https://platform.openai.com/docs/guides/vision), and
+     * [audio](https://platform.openai.com/docs/guides/audio) guides.
+     */
+    @JvmOverloads
+    @MustBeClosed
+    fun createStreaming(
+        params: ChatCompletionCreateParams,
+        requestOptions: RequestOptions = RequestOptions.none()
+    ): StreamResponse<ChatCompletionChunk>
 }
