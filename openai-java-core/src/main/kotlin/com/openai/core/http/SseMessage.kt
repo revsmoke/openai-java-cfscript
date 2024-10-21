@@ -46,5 +46,5 @@ private constructor(
 
     override fun hashCode(): Int = Objects.hash(event, data, id, retry)
 
-    override fun toString(): String = "SseMessage {event=$event, data=$data, id=$id, retry=$retry}"
+    override fun toString(): String = "SseMessage{event=$event, data=$data, id=$id, retry=$retry}"
 }
