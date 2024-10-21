@@ -35,8 +35,8 @@ private object SseHandlerInternal : Handler<StreamResponse<SseMessage>> {
                         continue
                     }
 
-                    when (message.event) {
-                        null -> yield(message)
+                    if (message.event == null) {
+                        yield(message)
                     }
                 }
             }
