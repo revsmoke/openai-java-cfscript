@@ -1,5 +1,3 @@
-@file:JvmSynthetic
-
 package com.openai.core.http
 
 import com.google.common.util.concurrent.MoreExecutors
