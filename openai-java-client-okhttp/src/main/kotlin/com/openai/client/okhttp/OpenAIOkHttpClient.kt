@@ -23,7 +23,7 @@ class OpenAIOkHttpClient private constructor() {
 
         private var clientOptions: ClientOptions.Builder = ClientOptions.builder()
         private var baseUrl: String = ClientOptions.PRODUCTION_URL
-        // default timeout for client is 10 minutes
+        // The default timeout for the client is 10 minutes.
         private var timeout: Duration = Duration.ofSeconds(600)
         private var proxy: Proxy? = null
 
