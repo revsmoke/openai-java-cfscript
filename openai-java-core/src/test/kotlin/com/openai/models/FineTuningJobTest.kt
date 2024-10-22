@@ -25,8 +25,8 @@ class FineTuningJobTest {
                 .hyperparameters(
                     FineTuningJob.Hyperparameters.builder()
                         .nEpochs(
-                            FineTuningJob.Hyperparameters.NEpochs.ofBehavior(
-                                FineTuningJob.Hyperparameters.NEpochs.Behavior.AUTO
+                            FineTuningJob.Hyperparameters.NEpochs.ofUnionMember0(
+                                FineTuningJob.Hyperparameters.NEpochs.UnionMember0.AUTO
                             )
                         )
                         .build()
@@ -70,8 +70,8 @@ class FineTuningJobTest {
             .isEqualTo(
                 FineTuningJob.Hyperparameters.builder()
                     .nEpochs(
-                        FineTuningJob.Hyperparameters.NEpochs.ofBehavior(
-                            FineTuningJob.Hyperparameters.NEpochs.Behavior.AUTO
+                        FineTuningJob.Hyperparameters.NEpochs.ofUnionMember0(
+                            FineTuningJob.Hyperparameters.NEpochs.UnionMember0.AUTO
                         )
                     )
                     .build()

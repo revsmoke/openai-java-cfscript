@@ -805,22 +805,22 @@ private constructor(
         @JsonSerialize(using = NEpochs.Serializer::class)
         class NEpochs
         private constructor(
-            private val behavior: Behavior? = null,
+            private val unionMember0: UnionMember0? = null,
             private val integer: Long? = null,
             private val _json: JsonValue? = null,
         ) {
 
             private var validated: Boolean = false
 
-            fun behavior(): Optional<Behavior> = Optional.ofNullable(behavior)
+            fun unionMember0(): Optional<UnionMember0> = Optional.ofNullable(unionMember0)
 
             fun integer(): Optional<Long> = Optional.ofNullable(integer)
 
-            fun isBehavior(): Boolean = behavior != null
+            fun isUnionMember0(): Boolean = unionMember0 != null
 
             fun isInteger(): Boolean = integer != null
 
-            fun asBehavior(): Behavior = behavior.getOrThrow("behavior")
+            fun asUnionMember0(): UnionMember0 = unionMember0.getOrThrow("unionMember0")
 
             fun asInteger(): Long = integer.getOrThrow("integer")
 
@@ -828,7 +828,7 @@ private constructor(
 
             fun <T> accept(visitor: Visitor<T>): T {
                 return when {
-                    behavior != null -> visitor.visitBehavior(behavior)
+                    unionMember0 != null -> visitor.visitUnionMember0(unionMember0)
                     integer != null -> visitor.visitInteger(integer)
                     else -> visitor.unknown(_json)
                 }
@@ -836,7 +836,7 @@ private constructor(
 
             fun validate(): NEpochs = apply {
                 if (!validated) {
-                    if (behavior == null && integer == null) {
+                    if (unionMember0 == null && integer == null) {
                         throw OpenAIInvalidDataException("Unknown NEpochs: $_json")
                     }
                     validated = true
@@ -848,16 +848,16 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is NEpochs && this.behavior == other.behavior && this.integer == other.integer /* spotless:on */
+                return /* spotless:off */ other is NEpochs && this.unionMember0 == other.unionMember0 && this.integer == other.integer /* spotless:on */
             }
 
             override fun hashCode(): Int {
-                return /* spotless:off */ Objects.hash(behavior, integer) /* spotless:on */
+                return /* spotless:off */ Objects.hash(unionMember0, integer) /* spotless:on */
             }
 
             override fun toString(): String {
                 return when {
-                    behavior != null -> "NEpochs{behavior=$behavior}"
+                    unionMember0 != null -> "NEpochs{unionMember0=$unionMember0}"
                     integer != null -> "NEpochs{integer=$integer}"
                     _json != null -> "NEpochs{_unknown=$_json}"
                     else -> throw IllegalStateException("Invalid NEpochs")
@@ -866,14 +866,16 @@ private constructor(
 
             companion object {
 
-                @JvmStatic fun ofBehavior(behavior: Behavior) = NEpochs(behavior = behavior)
+                @JvmStatic
+                fun ofUnionMember0(unionMember0: UnionMember0) =
+                    NEpochs(unionMember0 = unionMember0)
 
                 @JvmStatic fun ofInteger(integer: Long) = NEpochs(integer = integer)
             }
 
             interface Visitor<out T> {
 
-                fun visitBehavior(behavior: Behavior): T
+                fun visitUnionMember0(unionMember0: UnionMember0): T
 
                 fun visitInteger(integer: Long): T
 
@@ -887,8 +889,8 @@ private constructor(
                 override fun ObjectCodec.deserialize(node: JsonNode): NEpochs {
                     val json = JsonValue.fromJsonNode(node)
 
-                    tryDeserialize(node, jacksonTypeRef<Behavior>())?.let {
-                        return NEpochs(behavior = it, _json = json)
+                    tryDeserialize(node, jacksonTypeRef<UnionMember0>())?.let {
+                        return NEpochs(unionMember0 = it, _json = json)
                     }
                     tryDeserialize(node, jacksonTypeRef<Long>())?.let {
                         return NEpochs(integer = it, _json = json)
@@ -906,7 +908,7 @@ private constructor(
                     provider: SerializerProvider
                 ) {
                     when {
-                        value.behavior != null -> generator.writeObject(value.behavior)
+                        value.unionMember0 != null -> generator.writeObject(value.unionMember0)
                         value.integer != null -> generator.writeObject(value.integer)
                         value._json != null -> generator.writeObject(value._json)
                         else -> throw IllegalStateException("Invalid NEpochs")
@@ -914,7 +916,7 @@ private constructor(
                 }
             }
 
-            class Behavior
+            class UnionMember0
             @JsonCreator
             private constructor(
                 private val value: JsonField<String>,
@@ -927,7 +929,7 @@ private constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is Behavior && this.value == other.value /* spotless:on */
+                    return /* spotless:off */ other is UnionMember0 && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -936,9 +938,9 @@ private constructor(
 
                 companion object {
 
-                    @JvmField val AUTO = Behavior(JsonField.of("auto"))
+                    @JvmField val AUTO = UnionMember0(JsonField.of("auto"))
 
-                    @JvmStatic fun of(value: String) = Behavior(JsonField.of(value))
+                    @JvmStatic fun of(value: String) = UnionMember0(JsonField.of(value))
                 }
 
                 enum class Known {
@@ -959,7 +961,7 @@ private constructor(
                 fun known(): Known =
                     when (this) {
                         AUTO -> Known.AUTO
-                        else -> throw OpenAIInvalidDataException("Unknown Behavior: $value")
+                        else -> throw OpenAIInvalidDataException("Unknown UnionMember0: $value")
                     }
 
                 fun asString(): String = _value().asStringOrThrow()
