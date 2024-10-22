@@ -23,8 +23,6 @@ constructor(
         EmbeddingServiceAsyncImpl(clientOptions)
     }
 
-    private val files: FileServiceAsync by lazy { FileServiceAsyncImpl(clientOptions) }
-
     private val moderations: ModerationServiceAsync by lazy {
         ModerationServiceAsyncImpl(clientOptions)
     }
@@ -44,8 +42,6 @@ constructor(
     override fun chat(): ChatServiceAsync = chat
 
     override fun embeddings(): EmbeddingServiceAsync = embeddings
-
-    override fun files(): FileServiceAsync = files
 
     override fun moderations(): ModerationServiceAsync = moderations
 

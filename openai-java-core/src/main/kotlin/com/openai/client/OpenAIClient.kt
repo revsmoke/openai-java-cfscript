@@ -17,8 +17,6 @@ interface OpenAIClient {
 
     fun embeddings(): EmbeddingService
 
-    fun files(): FileService
-
     fun moderations(): ModerationService
 
     fun models(): ModelService
