@@ -664,9 +664,7 @@ constructor(
          * [Model overview](https://platform.openai.com/docs/models/overview) for descriptions of
          * them.
          */
-        fun model(unionMember1: Model.UnionMember1) = apply {
-            this.model = Model.ofUnionMember1(unionMember1)
-        }
+        fun model(preset: Model.Preset) = apply { this.model = Model.ofPreset(preset) }
 
         /**
          * The prompt(s) to generate completions for, encoded as a string, array of strings, array
@@ -956,7 +954,7 @@ constructor(
     class Model
     private constructor(
         private val string: String? = null,
-        private val unionMember1: UnionMember1? = null,
+        private val preset: Preset? = null,
         private val _json: JsonValue? = null,
     ) {
 
@@ -964,29 +962,29 @@ constructor(
 
         fun string(): Optional<String> = Optional.ofNullable(string)
 
-        fun unionMember1(): Optional<UnionMember1> = Optional.ofNullable(unionMember1)
+        fun preset(): Optional<Preset> = Optional.ofNullable(preset)
 
         fun isString(): Boolean = string != null
 
-        fun isUnionMember1(): Boolean = unionMember1 != null
+        fun isPreset(): Boolean = preset != null
 
         fun asString(): String = string.getOrThrow("string")
 
-        fun asUnionMember1(): UnionMember1 = unionMember1.getOrThrow("unionMember1")
+        fun asPreset(): Preset = preset.getOrThrow("preset")
 
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
         fun <T> accept(visitor: Visitor<T>): T {
             return when {
                 string != null -> visitor.visitString(string)
-                unionMember1 != null -> visitor.visitUnionMember1(unionMember1)
+                preset != null -> visitor.visitPreset(preset)
                 else -> visitor.unknown(_json)
             }
         }
 
         fun validate(): Model = apply {
             if (!validated) {
-                if (string == null && unionMember1 == null) {
+                if (string == null && preset == null) {
                     throw OpenAIInvalidDataException("Unknown Model: $_json")
                 }
                 validated = true
@@ -998,17 +996,17 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Model && this.string == other.string && this.unionMember1 == other.unionMember1 /* spotless:on */
+            return /* spotless:off */ other is Model && this.string == other.string && this.preset == other.preset /* spotless:on */
         }
 
         override fun hashCode(): Int {
-            return /* spotless:off */ Objects.hash(string, unionMember1) /* spotless:on */
+            return /* spotless:off */ Objects.hash(string, preset) /* spotless:on */
         }
 
         override fun toString(): String {
             return when {
                 string != null -> "Model{string=$string}"
-                unionMember1 != null -> "Model{unionMember1=$unionMember1}"
+                preset != null -> "Model{preset=$preset}"
                 _json != null -> "Model{_unknown=$_json}"
                 else -> throw IllegalStateException("Invalid Model")
             }
@@ -1018,15 +1016,14 @@ constructor(
 
             @JvmStatic fun ofString(string: String) = Model(string = string)
 
-            @JvmStatic
-            fun ofUnionMember1(unionMember1: UnionMember1) = Model(unionMember1 = unionMember1)
+            @JvmStatic fun ofPreset(preset: Preset) = Model(preset = preset)
         }
 
         interface Visitor<out T> {
 
             fun visitString(string: String): T
 
-            fun visitUnionMember1(unionMember1: UnionMember1): T
+            fun visitPreset(preset: Preset): T
 
             fun unknown(json: JsonValue?): T {
                 throw OpenAIInvalidDataException("Unknown Model: $json")
@@ -1041,8 +1038,8 @@ constructor(
                 tryDeserialize(node, jacksonTypeRef<String>())?.let {
                     return Model(string = it, _json = json)
                 }
-                tryDeserialize(node, jacksonTypeRef<UnionMember1>())?.let {
-                    return Model(unionMember1 = it, _json = json)
+                tryDeserialize(node, jacksonTypeRef<Preset>())?.let {
+                    return Model(preset = it, _json = json)
                 }
 
                 return Model(_json = json)
@@ -1058,14 +1055,14 @@ constructor(
             ) {
                 when {
                     value.string != null -> generator.writeObject(value.string)
-                    value.unionMember1 != null -> generator.writeObject(value.unionMember1)
+                    value.preset != null -> generator.writeObject(value.preset)
                     value._json != null -> generator.writeObject(value._json)
                     else -> throw IllegalStateException("Invalid Model")
                 }
             }
         }
 
-        class UnionMember1
+        class Preset
         @JsonCreator
         private constructor(
             private val value: JsonField<String>,
@@ -1078,7 +1075,7 @@ constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is UnionMember1 && this.value == other.value /* spotless:on */
+                return /* spotless:off */ other is Preset && this.value == other.value /* spotless:on */
             }
 
             override fun hashCode() = value.hashCode()
@@ -1088,13 +1085,13 @@ constructor(
             companion object {
 
                 @JvmField
-                val GPT_3_5_TURBO_INSTRUCT = UnionMember1(JsonField.of("gpt-3.5-turbo-instruct"))
+                val GPT_3_5_TURBO_INSTRUCT = Preset(JsonField.of("gpt-3.5-turbo-instruct"))
 
-                @JvmField val DAVINCI_002 = UnionMember1(JsonField.of("davinci-002"))
+                @JvmField val DAVINCI_002 = Preset(JsonField.of("davinci-002"))
 
-                @JvmField val BABBAGE_002 = UnionMember1(JsonField.of("babbage-002"))
+                @JvmField val BABBAGE_002 = Preset(JsonField.of("babbage-002"))
 
-                @JvmStatic fun of(value: String) = UnionMember1(JsonField.of(value))
+                @JvmStatic fun of(value: String) = Preset(JsonField.of(value))
             }
 
             enum class Known {
@@ -1123,7 +1120,7 @@ constructor(
                     GPT_3_5_TURBO_INSTRUCT -> Known.GPT_3_5_TURBO_INSTRUCT
                     DAVINCI_002 -> Known.DAVINCI_002
                     BABBAGE_002 -> Known.BABBAGE_002
-                    else -> throw OpenAIInvalidDataException("Unknown UnionMember1: $value")
+                    else -> throw OpenAIInvalidDataException("Unknown Preset: $value")
                 }
 
             fun asString(): String = _value().asStringOrThrow()

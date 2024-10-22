@@ -24,7 +24,7 @@ import java.util.Optional
 @JsonSerialize(using = ChatCompletionToolChoiceOption.Serializer::class)
 class ChatCompletionToolChoiceOption
 private constructor(
-    private val unionMember0: UnionMember0? = null,
+    private val behavior: Behavior? = null,
     private val chatCompletionNamedToolChoice: ChatCompletionNamedToolChoice? = null,
     private val _json: JsonValue? = null,
 ) {
@@ -36,18 +36,18 @@ private constructor(
      * the model can pick between generating a message or calling one or more tools. `required`
      * means the model must call one or more tools.
      */
-    fun unionMember0(): Optional<UnionMember0> = Optional.ofNullable(unionMember0)
+    fun behavior(): Optional<Behavior> = Optional.ofNullable(behavior)
     /**
      * Specifies a tool the model should use. Use to force the model to call a specific function.
      */
     fun chatCompletionNamedToolChoice(): Optional<ChatCompletionNamedToolChoice> =
         Optional.ofNullable(chatCompletionNamedToolChoice)
 
-    fun isUnionMember0(): Boolean = unionMember0 != null
+    fun isBehavior(): Boolean = behavior != null
 
     fun isChatCompletionNamedToolChoice(): Boolean = chatCompletionNamedToolChoice != null
 
-    fun asUnionMember0(): UnionMember0 = unionMember0.getOrThrow("unionMember0")
+    fun asBehavior(): Behavior = behavior.getOrThrow("behavior")
 
     fun asChatCompletionNamedToolChoice(): ChatCompletionNamedToolChoice =
         chatCompletionNamedToolChoice.getOrThrow("chatCompletionNamedToolChoice")
@@ -56,7 +56,7 @@ private constructor(
 
     fun <T> accept(visitor: Visitor<T>): T {
         return when {
-            unionMember0 != null -> visitor.visitUnionMember0(unionMember0)
+            behavior != null -> visitor.visitBehavior(behavior)
             chatCompletionNamedToolChoice != null ->
                 visitor.visitChatCompletionNamedToolChoice(chatCompletionNamedToolChoice)
             else -> visitor.unknown(_json)
@@ -65,7 +65,7 @@ private constructor(
 
     fun validate(): ChatCompletionToolChoiceOption = apply {
         if (!validated) {
-            if (unionMember0 == null && chatCompletionNamedToolChoice == null) {
+            if (behavior == null && chatCompletionNamedToolChoice == null) {
                 throw OpenAIInvalidDataException("Unknown ChatCompletionToolChoiceOption: $_json")
             }
             chatCompletionNamedToolChoice?.validate()
@@ -78,16 +78,16 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ChatCompletionToolChoiceOption && this.unionMember0 == other.unionMember0 && this.chatCompletionNamedToolChoice == other.chatCompletionNamedToolChoice /* spotless:on */
+        return /* spotless:off */ other is ChatCompletionToolChoiceOption && this.behavior == other.behavior && this.chatCompletionNamedToolChoice == other.chatCompletionNamedToolChoice /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(unionMember0, chatCompletionNamedToolChoice) /* spotless:on */
+        return /* spotless:off */ Objects.hash(behavior, chatCompletionNamedToolChoice) /* spotless:on */
     }
 
     override fun toString(): String {
         return when {
-            unionMember0 != null -> "ChatCompletionToolChoiceOption{unionMember0=$unionMember0}"
+            behavior != null -> "ChatCompletionToolChoiceOption{behavior=$behavior}"
             chatCompletionNamedToolChoice != null ->
                 "ChatCompletionToolChoiceOption{chatCompletionNamedToolChoice=$chatCompletionNamedToolChoice}"
             _json != null -> "ChatCompletionToolChoiceOption{_unknown=$_json}"
@@ -98,8 +98,7 @@ private constructor(
     companion object {
 
         @JvmStatic
-        fun ofUnionMember0(unionMember0: UnionMember0) =
-            ChatCompletionToolChoiceOption(unionMember0 = unionMember0)
+        fun ofBehavior(behavior: Behavior) = ChatCompletionToolChoiceOption(behavior = behavior)
 
         @JvmStatic
         fun ofChatCompletionNamedToolChoice(
@@ -112,7 +111,7 @@ private constructor(
 
     interface Visitor<out T> {
 
-        fun visitUnionMember0(unionMember0: UnionMember0): T
+        fun visitBehavior(behavior: Behavior): T
 
         fun visitChatCompletionNamedToolChoice(
             chatCompletionNamedToolChoice: ChatCompletionNamedToolChoice
@@ -129,8 +128,8 @@ private constructor(
         override fun ObjectCodec.deserialize(node: JsonNode): ChatCompletionToolChoiceOption {
             val json = JsonValue.fromJsonNode(node)
 
-            tryDeserialize(node, jacksonTypeRef<UnionMember0>())?.let {
-                return ChatCompletionToolChoiceOption(unionMember0 = it, _json = json)
+            tryDeserialize(node, jacksonTypeRef<Behavior>())?.let {
+                return ChatCompletionToolChoiceOption(behavior = it, _json = json)
             }
             tryDeserialize(node, jacksonTypeRef<ChatCompletionNamedToolChoice>()) { it.validate() }
                 ?.let {
@@ -153,7 +152,7 @@ private constructor(
             provider: SerializerProvider
         ) {
             when {
-                value.unionMember0 != null -> generator.writeObject(value.unionMember0)
+                value.behavior != null -> generator.writeObject(value.behavior)
                 value.chatCompletionNamedToolChoice != null ->
                     generator.writeObject(value.chatCompletionNamedToolChoice)
                 value._json != null -> generator.writeObject(value._json)
@@ -162,7 +161,7 @@ private constructor(
         }
     }
 
-    class UnionMember0
+    class Behavior
     @JsonCreator
     private constructor(
         private val value: JsonField<String>,
@@ -175,7 +174,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is UnionMember0 && this.value == other.value /* spotless:on */
+            return /* spotless:off */ other is Behavior && this.value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -184,13 +183,13 @@ private constructor(
 
         companion object {
 
-            @JvmField val NONE = UnionMember0(JsonField.of("none"))
+            @JvmField val NONE = Behavior(JsonField.of("none"))
 
-            @JvmField val AUTO = UnionMember0(JsonField.of("auto"))
+            @JvmField val AUTO = Behavior(JsonField.of("auto"))
 
-            @JvmField val REQUIRED = UnionMember0(JsonField.of("required"))
+            @JvmField val REQUIRED = Behavior(JsonField.of("required"))
 
-            @JvmStatic fun of(value: String) = UnionMember0(JsonField.of(value))
+            @JvmStatic fun of(value: String) = Behavior(JsonField.of(value))
         }
 
         enum class Known {
@@ -219,7 +218,7 @@ private constructor(
                 NONE -> Known.NONE
                 AUTO -> Known.AUTO
                 REQUIRED -> Known.REQUIRED
-                else -> throw OpenAIInvalidDataException("Unknown UnionMember0: $value")
+                else -> throw OpenAIInvalidDataException("Unknown Behavior: $value")
             }
 
         fun asString(): String = _value().asStringOrThrow()
