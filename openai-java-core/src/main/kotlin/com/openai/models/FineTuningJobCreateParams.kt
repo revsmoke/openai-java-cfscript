@@ -373,9 +373,7 @@ constructor(
          * The name of the model to fine-tune. You can select one of the
          * [supported models](https://platform.openai.com/docs/guides/fine-tuning/which-models-can-be-fine-tuned).
          */
-        fun model(unionMember1: Model.UnionMember1) = apply {
-            this.model = Model.ofUnionMember1(unionMember1)
-        }
+        fun model(preset: Model.Preset) = apply { this.model = Model.ofPreset(preset) }
 
         /**
          * The ID of an uploaded file that contains training data.
@@ -514,7 +512,7 @@ constructor(
     class Model
     private constructor(
         private val string: String? = null,
-        private val unionMember1: UnionMember1? = null,
+        private val preset: Preset? = null,
         private val _json: JsonValue? = null,
     ) {
 
@@ -522,29 +520,29 @@ constructor(
 
         fun string(): Optional<String> = Optional.ofNullable(string)
 
-        fun unionMember1(): Optional<UnionMember1> = Optional.ofNullable(unionMember1)
+        fun preset(): Optional<Preset> = Optional.ofNullable(preset)
 
         fun isString(): Boolean = string != null
 
-        fun isUnionMember1(): Boolean = unionMember1 != null
+        fun isPreset(): Boolean = preset != null
 
         fun asString(): String = string.getOrThrow("string")
 
-        fun asUnionMember1(): UnionMember1 = unionMember1.getOrThrow("unionMember1")
+        fun asPreset(): Preset = preset.getOrThrow("preset")
 
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
         fun <T> accept(visitor: Visitor<T>): T {
             return when {
                 string != null -> visitor.visitString(string)
-                unionMember1 != null -> visitor.visitUnionMember1(unionMember1)
+                preset != null -> visitor.visitPreset(preset)
                 else -> visitor.unknown(_json)
             }
         }
 
         fun validate(): Model = apply {
             if (!validated) {
-                if (string == null && unionMember1 == null) {
+                if (string == null && preset == null) {
                     throw OpenAIInvalidDataException("Unknown Model: $_json")
                 }
                 validated = true
@@ -556,17 +554,17 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Model && this.string == other.string && this.unionMember1 == other.unionMember1 /* spotless:on */
+            return /* spotless:off */ other is Model && this.string == other.string && this.preset == other.preset /* spotless:on */
         }
 
         override fun hashCode(): Int {
-            return /* spotless:off */ Objects.hash(string, unionMember1) /* spotless:on */
+            return /* spotless:off */ Objects.hash(string, preset) /* spotless:on */
         }
 
         override fun toString(): String {
             return when {
                 string != null -> "Model{string=$string}"
-                unionMember1 != null -> "Model{unionMember1=$unionMember1}"
+                preset != null -> "Model{preset=$preset}"
                 _json != null -> "Model{_unknown=$_json}"
                 else -> throw IllegalStateException("Invalid Model")
             }
@@ -576,15 +574,14 @@ constructor(
 
             @JvmStatic fun ofString(string: String) = Model(string = string)
 
-            @JvmStatic
-            fun ofUnionMember1(unionMember1: UnionMember1) = Model(unionMember1 = unionMember1)
+            @JvmStatic fun ofPreset(preset: Preset) = Model(preset = preset)
         }
 
         interface Visitor<out T> {
 
             fun visitString(string: String): T
 
-            fun visitUnionMember1(unionMember1: UnionMember1): T
+            fun visitPreset(preset: Preset): T
 
             fun unknown(json: JsonValue?): T {
                 throw OpenAIInvalidDataException("Unknown Model: $json")
@@ -599,8 +596,8 @@ constructor(
                 tryDeserialize(node, jacksonTypeRef<String>())?.let {
                     return Model(string = it, _json = json)
                 }
-                tryDeserialize(node, jacksonTypeRef<UnionMember1>())?.let {
-                    return Model(unionMember1 = it, _json = json)
+                tryDeserialize(node, jacksonTypeRef<Preset>())?.let {
+                    return Model(preset = it, _json = json)
                 }
 
                 return Model(_json = json)
@@ -616,14 +613,14 @@ constructor(
             ) {
                 when {
                     value.string != null -> generator.writeObject(value.string)
-                    value.unionMember1 != null -> generator.writeObject(value.unionMember1)
+                    value.preset != null -> generator.writeObject(value.preset)
                     value._json != null -> generator.writeObject(value._json)
                     else -> throw IllegalStateException("Invalid Model")
                 }
             }
         }
 
-        class UnionMember1
+        class Preset
         @JsonCreator
         private constructor(
             private val value: JsonField<String>,
@@ -636,7 +633,7 @@ constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is UnionMember1 && this.value == other.value /* spotless:on */
+                return /* spotless:off */ other is Preset && this.value == other.value /* spotless:on */
             }
 
             override fun hashCode() = value.hashCode()
@@ -645,15 +642,15 @@ constructor(
 
             companion object {
 
-                @JvmField val BABBAGE_002 = UnionMember1(JsonField.of("babbage-002"))
+                @JvmField val BABBAGE_002 = Preset(JsonField.of("babbage-002"))
 
-                @JvmField val DAVINCI_002 = UnionMember1(JsonField.of("davinci-002"))
+                @JvmField val DAVINCI_002 = Preset(JsonField.of("davinci-002"))
 
-                @JvmField val GPT_3_5_TURBO = UnionMember1(JsonField.of("gpt-3.5-turbo"))
+                @JvmField val GPT_3_5_TURBO = Preset(JsonField.of("gpt-3.5-turbo"))
 
-                @JvmField val GPT_4O_MINI = UnionMember1(JsonField.of("gpt-4o-mini"))
+                @JvmField val GPT_4O_MINI = Preset(JsonField.of("gpt-4o-mini"))
 
-                @JvmStatic fun of(value: String) = UnionMember1(JsonField.of(value))
+                @JvmStatic fun of(value: String) = Preset(JsonField.of(value))
             }
 
             enum class Known {
@@ -686,7 +683,7 @@ constructor(
                     DAVINCI_002 -> Known.DAVINCI_002
                     GPT_3_5_TURBO -> Known.GPT_3_5_TURBO
                     GPT_4O_MINI -> Known.GPT_4O_MINI
-                    else -> throw OpenAIInvalidDataException("Unknown UnionMember1: $value")
+                    else -> throw OpenAIInvalidDataException("Unknown Preset: $value")
                 }
 
             fun asString(): String = _value().asStringOrThrow()
@@ -799,22 +796,22 @@ constructor(
         @JsonSerialize(using = BatchSize.Serializer::class)
         class BatchSize
         private constructor(
-            private val unionMember0: UnionMember0? = null,
+            private val behavior: Behavior? = null,
             private val integer: Long? = null,
             private val _json: JsonValue? = null,
         ) {
 
             private var validated: Boolean = false
 
-            fun unionMember0(): Optional<UnionMember0> = Optional.ofNullable(unionMember0)
+            fun behavior(): Optional<Behavior> = Optional.ofNullable(behavior)
 
             fun integer(): Optional<Long> = Optional.ofNullable(integer)
 
-            fun isUnionMember0(): Boolean = unionMember0 != null
+            fun isBehavior(): Boolean = behavior != null
 
             fun isInteger(): Boolean = integer != null
 
-            fun asUnionMember0(): UnionMember0 = unionMember0.getOrThrow("unionMember0")
+            fun asBehavior(): Behavior = behavior.getOrThrow("behavior")
 
             fun asInteger(): Long = integer.getOrThrow("integer")
 
@@ -822,7 +819,7 @@ constructor(
 
             fun <T> accept(visitor: Visitor<T>): T {
                 return when {
-                    unionMember0 != null -> visitor.visitUnionMember0(unionMember0)
+                    behavior != null -> visitor.visitBehavior(behavior)
                     integer != null -> visitor.visitInteger(integer)
                     else -> visitor.unknown(_json)
                 }
@@ -830,7 +827,7 @@ constructor(
 
             fun validate(): BatchSize = apply {
                 if (!validated) {
-                    if (unionMember0 == null && integer == null) {
+                    if (behavior == null && integer == null) {
                         throw OpenAIInvalidDataException("Unknown BatchSize: $_json")
                     }
                     validated = true
@@ -842,16 +839,16 @@ constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is BatchSize && this.unionMember0 == other.unionMember0 && this.integer == other.integer /* spotless:on */
+                return /* spotless:off */ other is BatchSize && this.behavior == other.behavior && this.integer == other.integer /* spotless:on */
             }
 
             override fun hashCode(): Int {
-                return /* spotless:off */ Objects.hash(unionMember0, integer) /* spotless:on */
+                return /* spotless:off */ Objects.hash(behavior, integer) /* spotless:on */
             }
 
             override fun toString(): String {
                 return when {
-                    unionMember0 != null -> "BatchSize{unionMember0=$unionMember0}"
+                    behavior != null -> "BatchSize{behavior=$behavior}"
                     integer != null -> "BatchSize{integer=$integer}"
                     _json != null -> "BatchSize{_unknown=$_json}"
                     else -> throw IllegalStateException("Invalid BatchSize")
@@ -860,16 +857,14 @@ constructor(
 
             companion object {
 
-                @JvmStatic
-                fun ofUnionMember0(unionMember0: UnionMember0) =
-                    BatchSize(unionMember0 = unionMember0)
+                @JvmStatic fun ofBehavior(behavior: Behavior) = BatchSize(behavior = behavior)
 
                 @JvmStatic fun ofInteger(integer: Long) = BatchSize(integer = integer)
             }
 
             interface Visitor<out T> {
 
-                fun visitUnionMember0(unionMember0: UnionMember0): T
+                fun visitBehavior(behavior: Behavior): T
 
                 fun visitInteger(integer: Long): T
 
@@ -883,8 +878,8 @@ constructor(
                 override fun ObjectCodec.deserialize(node: JsonNode): BatchSize {
                     val json = JsonValue.fromJsonNode(node)
 
-                    tryDeserialize(node, jacksonTypeRef<UnionMember0>())?.let {
-                        return BatchSize(unionMember0 = it, _json = json)
+                    tryDeserialize(node, jacksonTypeRef<Behavior>())?.let {
+                        return BatchSize(behavior = it, _json = json)
                     }
                     tryDeserialize(node, jacksonTypeRef<Long>())?.let {
                         return BatchSize(integer = it, _json = json)
@@ -902,7 +897,7 @@ constructor(
                     provider: SerializerProvider
                 ) {
                     when {
-                        value.unionMember0 != null -> generator.writeObject(value.unionMember0)
+                        value.behavior != null -> generator.writeObject(value.behavior)
                         value.integer != null -> generator.writeObject(value.integer)
                         value._json != null -> generator.writeObject(value._json)
                         else -> throw IllegalStateException("Invalid BatchSize")
@@ -910,7 +905,7 @@ constructor(
                 }
             }
 
-            class UnionMember0
+            class Behavior
             @JsonCreator
             private constructor(
                 private val value: JsonField<String>,
@@ -923,7 +918,7 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is UnionMember0 && this.value == other.value /* spotless:on */
+                    return /* spotless:off */ other is Behavior && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -932,9 +927,9 @@ constructor(
 
                 companion object {
 
-                    @JvmField val AUTO = UnionMember0(JsonField.of("auto"))
+                    @JvmField val AUTO = Behavior(JsonField.of("auto"))
 
-                    @JvmStatic fun of(value: String) = UnionMember0(JsonField.of(value))
+                    @JvmStatic fun of(value: String) = Behavior(JsonField.of(value))
                 }
 
                 enum class Known {
@@ -955,7 +950,7 @@ constructor(
                 fun known(): Known =
                     when (this) {
                         AUTO -> Known.AUTO
-                        else -> throw OpenAIInvalidDataException("Unknown UnionMember0: $value")
+                        else -> throw OpenAIInvalidDataException("Unknown Behavior: $value")
                     }
 
                 fun asString(): String = _value().asStringOrThrow()
@@ -966,22 +961,22 @@ constructor(
         @JsonSerialize(using = LearningRateMultiplier.Serializer::class)
         class LearningRateMultiplier
         private constructor(
-            private val unionMember0: UnionMember0? = null,
+            private val behavior: Behavior? = null,
             private val number: Double? = null,
             private val _json: JsonValue? = null,
         ) {
 
             private var validated: Boolean = false
 
-            fun unionMember0(): Optional<UnionMember0> = Optional.ofNullable(unionMember0)
+            fun behavior(): Optional<Behavior> = Optional.ofNullable(behavior)
 
             fun number(): Optional<Double> = Optional.ofNullable(number)
 
-            fun isUnionMember0(): Boolean = unionMember0 != null
+            fun isBehavior(): Boolean = behavior != null
 
             fun isNumber(): Boolean = number != null
 
-            fun asUnionMember0(): UnionMember0 = unionMember0.getOrThrow("unionMember0")
+            fun asBehavior(): Behavior = behavior.getOrThrow("behavior")
 
             fun asNumber(): Double = number.getOrThrow("number")
 
@@ -989,7 +984,7 @@ constructor(
 
             fun <T> accept(visitor: Visitor<T>): T {
                 return when {
-                    unionMember0 != null -> visitor.visitUnionMember0(unionMember0)
+                    behavior != null -> visitor.visitBehavior(behavior)
                     number != null -> visitor.visitNumber(number)
                     else -> visitor.unknown(_json)
                 }
@@ -997,7 +992,7 @@ constructor(
 
             fun validate(): LearningRateMultiplier = apply {
                 if (!validated) {
-                    if (unionMember0 == null && number == null) {
+                    if (behavior == null && number == null) {
                         throw OpenAIInvalidDataException("Unknown LearningRateMultiplier: $_json")
                     }
                     validated = true
@@ -1009,16 +1004,16 @@ constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is LearningRateMultiplier && this.unionMember0 == other.unionMember0 && this.number == other.number /* spotless:on */
+                return /* spotless:off */ other is LearningRateMultiplier && this.behavior == other.behavior && this.number == other.number /* spotless:on */
             }
 
             override fun hashCode(): Int {
-                return /* spotless:off */ Objects.hash(unionMember0, number) /* spotless:on */
+                return /* spotless:off */ Objects.hash(behavior, number) /* spotless:on */
             }
 
             override fun toString(): String {
                 return when {
-                    unionMember0 != null -> "LearningRateMultiplier{unionMember0=$unionMember0}"
+                    behavior != null -> "LearningRateMultiplier{behavior=$behavior}"
                     number != null -> "LearningRateMultiplier{number=$number}"
                     _json != null -> "LearningRateMultiplier{_unknown=$_json}"
                     else -> throw IllegalStateException("Invalid LearningRateMultiplier")
@@ -1028,15 +1023,14 @@ constructor(
             companion object {
 
                 @JvmStatic
-                fun ofUnionMember0(unionMember0: UnionMember0) =
-                    LearningRateMultiplier(unionMember0 = unionMember0)
+                fun ofBehavior(behavior: Behavior) = LearningRateMultiplier(behavior = behavior)
 
                 @JvmStatic fun ofNumber(number: Double) = LearningRateMultiplier(number = number)
             }
 
             interface Visitor<out T> {
 
-                fun visitUnionMember0(unionMember0: UnionMember0): T
+                fun visitBehavior(behavior: Behavior): T
 
                 fun visitNumber(number: Double): T
 
@@ -1051,8 +1045,8 @@ constructor(
                 override fun ObjectCodec.deserialize(node: JsonNode): LearningRateMultiplier {
                     val json = JsonValue.fromJsonNode(node)
 
-                    tryDeserialize(node, jacksonTypeRef<UnionMember0>())?.let {
-                        return LearningRateMultiplier(unionMember0 = it, _json = json)
+                    tryDeserialize(node, jacksonTypeRef<Behavior>())?.let {
+                        return LearningRateMultiplier(behavior = it, _json = json)
                     }
                     tryDeserialize(node, jacksonTypeRef<Double>())?.let {
                         return LearningRateMultiplier(number = it, _json = json)
@@ -1071,7 +1065,7 @@ constructor(
                     provider: SerializerProvider
                 ) {
                     when {
-                        value.unionMember0 != null -> generator.writeObject(value.unionMember0)
+                        value.behavior != null -> generator.writeObject(value.behavior)
                         value.number != null -> generator.writeObject(value.number)
                         value._json != null -> generator.writeObject(value._json)
                         else -> throw IllegalStateException("Invalid LearningRateMultiplier")
@@ -1079,7 +1073,7 @@ constructor(
                 }
             }
 
-            class UnionMember0
+            class Behavior
             @JsonCreator
             private constructor(
                 private val value: JsonField<String>,
@@ -1092,7 +1086,7 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is UnionMember0 && this.value == other.value /* spotless:on */
+                    return /* spotless:off */ other is Behavior && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -1101,9 +1095,9 @@ constructor(
 
                 companion object {
 
-                    @JvmField val AUTO = UnionMember0(JsonField.of("auto"))
+                    @JvmField val AUTO = Behavior(JsonField.of("auto"))
 
-                    @JvmStatic fun of(value: String) = UnionMember0(JsonField.of(value))
+                    @JvmStatic fun of(value: String) = Behavior(JsonField.of(value))
                 }
 
                 enum class Known {
@@ -1124,7 +1118,7 @@ constructor(
                 fun known(): Known =
                     when (this) {
                         AUTO -> Known.AUTO
-                        else -> throw OpenAIInvalidDataException("Unknown UnionMember0: $value")
+                        else -> throw OpenAIInvalidDataException("Unknown Behavior: $value")
                     }
 
                 fun asString(): String = _value().asStringOrThrow()
@@ -1135,22 +1129,22 @@ constructor(
         @JsonSerialize(using = NEpochs.Serializer::class)
         class NEpochs
         private constructor(
-            private val unionMember0: UnionMember0? = null,
+            private val behavior: Behavior? = null,
             private val integer: Long? = null,
             private val _json: JsonValue? = null,
         ) {
 
             private var validated: Boolean = false
 
-            fun unionMember0(): Optional<UnionMember0> = Optional.ofNullable(unionMember0)
+            fun behavior(): Optional<Behavior> = Optional.ofNullable(behavior)
 
             fun integer(): Optional<Long> = Optional.ofNullable(integer)
 
-            fun isUnionMember0(): Boolean = unionMember0 != null
+            fun isBehavior(): Boolean = behavior != null
 
             fun isInteger(): Boolean = integer != null
 
-            fun asUnionMember0(): UnionMember0 = unionMember0.getOrThrow("unionMember0")
+            fun asBehavior(): Behavior = behavior.getOrThrow("behavior")
 
             fun asInteger(): Long = integer.getOrThrow("integer")
 
@@ -1158,7 +1152,7 @@ constructor(
 
             fun <T> accept(visitor: Visitor<T>): T {
                 return when {
-                    unionMember0 != null -> visitor.visitUnionMember0(unionMember0)
+                    behavior != null -> visitor.visitBehavior(behavior)
                     integer != null -> visitor.visitInteger(integer)
                     else -> visitor.unknown(_json)
                 }
@@ -1166,7 +1160,7 @@ constructor(
 
             fun validate(): NEpochs = apply {
                 if (!validated) {
-                    if (unionMember0 == null && integer == null) {
+                    if (behavior == null && integer == null) {
                         throw OpenAIInvalidDataException("Unknown NEpochs: $_json")
                     }
                     validated = true
@@ -1178,16 +1172,16 @@ constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is NEpochs && this.unionMember0 == other.unionMember0 && this.integer == other.integer /* spotless:on */
+                return /* spotless:off */ other is NEpochs && this.behavior == other.behavior && this.integer == other.integer /* spotless:on */
             }
 
             override fun hashCode(): Int {
-                return /* spotless:off */ Objects.hash(unionMember0, integer) /* spotless:on */
+                return /* spotless:off */ Objects.hash(behavior, integer) /* spotless:on */
             }
 
             override fun toString(): String {
                 return when {
-                    unionMember0 != null -> "NEpochs{unionMember0=$unionMember0}"
+                    behavior != null -> "NEpochs{behavior=$behavior}"
                     integer != null -> "NEpochs{integer=$integer}"
                     _json != null -> "NEpochs{_unknown=$_json}"
                     else -> throw IllegalStateException("Invalid NEpochs")
@@ -1196,16 +1190,14 @@ constructor(
 
             companion object {
 
-                @JvmStatic
-                fun ofUnionMember0(unionMember0: UnionMember0) =
-                    NEpochs(unionMember0 = unionMember0)
+                @JvmStatic fun ofBehavior(behavior: Behavior) = NEpochs(behavior = behavior)
 
                 @JvmStatic fun ofInteger(integer: Long) = NEpochs(integer = integer)
             }
 
             interface Visitor<out T> {
 
-                fun visitUnionMember0(unionMember0: UnionMember0): T
+                fun visitBehavior(behavior: Behavior): T
 
                 fun visitInteger(integer: Long): T
 
@@ -1219,8 +1211,8 @@ constructor(
                 override fun ObjectCodec.deserialize(node: JsonNode): NEpochs {
                     val json = JsonValue.fromJsonNode(node)
 
-                    tryDeserialize(node, jacksonTypeRef<UnionMember0>())?.let {
-                        return NEpochs(unionMember0 = it, _json = json)
+                    tryDeserialize(node, jacksonTypeRef<Behavior>())?.let {
+                        return NEpochs(behavior = it, _json = json)
                     }
                     tryDeserialize(node, jacksonTypeRef<Long>())?.let {
                         return NEpochs(integer = it, _json = json)
@@ -1238,7 +1230,7 @@ constructor(
                     provider: SerializerProvider
                 ) {
                     when {
-                        value.unionMember0 != null -> generator.writeObject(value.unionMember0)
+                        value.behavior != null -> generator.writeObject(value.behavior)
                         value.integer != null -> generator.writeObject(value.integer)
                         value._json != null -> generator.writeObject(value._json)
                         else -> throw IllegalStateException("Invalid NEpochs")
@@ -1246,7 +1238,7 @@ constructor(
                 }
             }
 
-            class UnionMember0
+            class Behavior
             @JsonCreator
             private constructor(
                 private val value: JsonField<String>,
@@ -1259,7 +1251,7 @@ constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is UnionMember0 && this.value == other.value /* spotless:on */
+                    return /* spotless:off */ other is Behavior && this.value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -1268,9 +1260,9 @@ constructor(
 
                 companion object {
 
-                    @JvmField val AUTO = UnionMember0(JsonField.of("auto"))
+                    @JvmField val AUTO = Behavior(JsonField.of("auto"))
 
-                    @JvmStatic fun of(value: String) = UnionMember0(JsonField.of(value))
+                    @JvmStatic fun of(value: String) = Behavior(JsonField.of(value))
                 }
 
                 enum class Known {
@@ -1291,7 +1283,7 @@ constructor(
                 fun known(): Known =
                     when (this) {
                         AUTO -> Known.AUTO
-                        else -> throw OpenAIInvalidDataException("Unknown UnionMember0: $value")
+                        else -> throw OpenAIInvalidDataException("Unknown Behavior: $value")
                     }
 
                 fun asString(): String = _value().asStringOrThrow()

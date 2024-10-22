@@ -1041,8 +1041,8 @@ constructor(
          * `none` is the default when no functions are present. `auto` is the default if functions
          * are present.
          */
-        fun functionCall(unionMember0: FunctionCall.UnionMember0) = apply {
-            this.functionCall = FunctionCall.ofUnionMember0(unionMember0)
+        fun functionCall(behavior: FunctionCall.Behavior) = apply {
+            this.functionCall = FunctionCall.ofBehavior(behavior)
         }
 
         /**
@@ -1357,8 +1357,8 @@ constructor(
          * `none` is the default when no tools are present. `auto` is the default if tools are
          * present.
          */
-        fun toolChoice(unionMember0: ChatCompletionToolChoiceOption.UnionMember0) = apply {
-            this.toolChoice = ChatCompletionToolChoiceOption.ofUnionMember0(unionMember0)
+        fun toolChoice(behavior: ChatCompletionToolChoiceOption.Behavior) = apply {
+            this.toolChoice = ChatCompletionToolChoiceOption.ofBehavior(behavior)
         }
 
         /**
@@ -1626,7 +1626,7 @@ constructor(
     @JsonSerialize(using = FunctionCall.Serializer::class)
     class FunctionCall
     private constructor(
-        private val unionMember0: UnionMember0? = null,
+        private val behavior: Behavior? = null,
         private val functionCallOption: ChatCompletionFunctionCallOption? = null,
         private val _json: JsonValue? = null,
     ) {
@@ -1637,7 +1637,7 @@ constructor(
          * `none` means the model will not call a function and instead generates a message. `auto`
          * means the model can pick between generating a message or calling a function.
          */
-        fun unionMember0(): Optional<UnionMember0> = Optional.ofNullable(unionMember0)
+        fun behavior(): Optional<Behavior> = Optional.ofNullable(behavior)
         /**
          * Specifying a particular function via `{"name": "my_function"}` forces the model to call
          * that function.
@@ -1645,11 +1645,11 @@ constructor(
         fun functionCallOption(): Optional<ChatCompletionFunctionCallOption> =
             Optional.ofNullable(functionCallOption)
 
-        fun isUnionMember0(): Boolean = unionMember0 != null
+        fun isBehavior(): Boolean = behavior != null
 
         fun isFunctionCallOption(): Boolean = functionCallOption != null
 
-        fun asUnionMember0(): UnionMember0 = unionMember0.getOrThrow("unionMember0")
+        fun asBehavior(): Behavior = behavior.getOrThrow("behavior")
 
         fun asFunctionCallOption(): ChatCompletionFunctionCallOption =
             functionCallOption.getOrThrow("functionCallOption")
@@ -1658,7 +1658,7 @@ constructor(
 
         fun <T> accept(visitor: Visitor<T>): T {
             return when {
-                unionMember0 != null -> visitor.visitUnionMember0(unionMember0)
+                behavior != null -> visitor.visitBehavior(behavior)
                 functionCallOption != null -> visitor.visitFunctionCallOption(functionCallOption)
                 else -> visitor.unknown(_json)
             }
@@ -1666,7 +1666,7 @@ constructor(
 
         fun validate(): FunctionCall = apply {
             if (!validated) {
-                if (unionMember0 == null && functionCallOption == null) {
+                if (behavior == null && functionCallOption == null) {
                     throw OpenAIInvalidDataException("Unknown FunctionCall: $_json")
                 }
                 functionCallOption?.validate()
@@ -1679,16 +1679,16 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is FunctionCall && this.unionMember0 == other.unionMember0 && this.functionCallOption == other.functionCallOption /* spotless:on */
+            return /* spotless:off */ other is FunctionCall && this.behavior == other.behavior && this.functionCallOption == other.functionCallOption /* spotless:on */
         }
 
         override fun hashCode(): Int {
-            return /* spotless:off */ Objects.hash(unionMember0, functionCallOption) /* spotless:on */
+            return /* spotless:off */ Objects.hash(behavior, functionCallOption) /* spotless:on */
         }
 
         override fun toString(): String {
             return when {
-                unionMember0 != null -> "FunctionCall{unionMember0=$unionMember0}"
+                behavior != null -> "FunctionCall{behavior=$behavior}"
                 functionCallOption != null -> "FunctionCall{functionCallOption=$functionCallOption}"
                 _json != null -> "FunctionCall{_unknown=$_json}"
                 else -> throw IllegalStateException("Invalid FunctionCall")
@@ -1697,9 +1697,7 @@ constructor(
 
         companion object {
 
-            @JvmStatic
-            fun ofUnionMember0(unionMember0: UnionMember0) =
-                FunctionCall(unionMember0 = unionMember0)
+            @JvmStatic fun ofBehavior(behavior: Behavior) = FunctionCall(behavior = behavior)
 
             @JvmStatic
             fun ofFunctionCallOption(functionCallOption: ChatCompletionFunctionCallOption) =
@@ -1708,7 +1706,7 @@ constructor(
 
         interface Visitor<out T> {
 
-            fun visitUnionMember0(unionMember0: UnionMember0): T
+            fun visitBehavior(behavior: Behavior): T
 
             fun visitFunctionCallOption(functionCallOption: ChatCompletionFunctionCallOption): T
 
@@ -1722,8 +1720,8 @@ constructor(
             override fun ObjectCodec.deserialize(node: JsonNode): FunctionCall {
                 val json = JsonValue.fromJsonNode(node)
 
-                tryDeserialize(node, jacksonTypeRef<UnionMember0>())?.let {
-                    return FunctionCall(unionMember0 = it, _json = json)
+                tryDeserialize(node, jacksonTypeRef<Behavior>())?.let {
+                    return FunctionCall(behavior = it, _json = json)
                 }
                 tryDeserialize(node, jacksonTypeRef<ChatCompletionFunctionCallOption>()) {
                         it.validate()
@@ -1744,7 +1742,7 @@ constructor(
                 provider: SerializerProvider
             ) {
                 when {
-                    value.unionMember0 != null -> generator.writeObject(value.unionMember0)
+                    value.behavior != null -> generator.writeObject(value.behavior)
                     value.functionCallOption != null ->
                         generator.writeObject(value.functionCallOption)
                     value._json != null -> generator.writeObject(value._json)
@@ -1753,7 +1751,7 @@ constructor(
             }
         }
 
-        class UnionMember0
+        class Behavior
         @JsonCreator
         private constructor(
             private val value: JsonField<String>,
@@ -1766,7 +1764,7 @@ constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is UnionMember0 && this.value == other.value /* spotless:on */
+                return /* spotless:off */ other is Behavior && this.value == other.value /* spotless:on */
             }
 
             override fun hashCode() = value.hashCode()
@@ -1775,11 +1773,11 @@ constructor(
 
             companion object {
 
-                @JvmField val NONE = UnionMember0(JsonField.of("none"))
+                @JvmField val NONE = Behavior(JsonField.of("none"))
 
-                @JvmField val AUTO = UnionMember0(JsonField.of("auto"))
+                @JvmField val AUTO = Behavior(JsonField.of("auto"))
 
-                @JvmStatic fun of(value: String) = UnionMember0(JsonField.of(value))
+                @JvmStatic fun of(value: String) = Behavior(JsonField.of(value))
             }
 
             enum class Known {
@@ -1804,7 +1802,7 @@ constructor(
                 when (this) {
                     NONE -> Known.NONE
                     AUTO -> Known.AUTO
-                    else -> throw OpenAIInvalidDataException("Unknown UnionMember0: $value")
+                    else -> throw OpenAIInvalidDataException("Unknown Behavior: $value")
                 }
 
             fun asString(): String = _value().asStringOrThrow()
