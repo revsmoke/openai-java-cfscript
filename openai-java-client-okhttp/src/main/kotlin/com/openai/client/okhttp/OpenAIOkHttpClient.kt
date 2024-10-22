@@ -70,8 +70,8 @@ class OpenAIOkHttpClient private constructor() {
 
         fun fromEnv() = apply { clientOptions.fromEnv() }
 
-        fun build(): OpenAIClient {
-            return OpenAIClientImpl(
+        fun build(): OpenAIClient =
+            OpenAIClientImpl(
                 clientOptions
                     .httpClient(
                         OkHttpClient.builder()
@@ -82,6 +82,5 @@ class OpenAIOkHttpClient private constructor() {
                     )
                     .build()
             )
-        }
     }
 }
