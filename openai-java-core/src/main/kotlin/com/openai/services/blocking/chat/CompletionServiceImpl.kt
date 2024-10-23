@@ -63,8 +63,8 @@ constructor(
     }
 
     private val createStreamingHandler: Handler<StreamResponse<ChatCompletionChunk>> =
-        sseHandler()
-            .mapJson<ChatCompletionChunk>(clientOptions.jsonMapper)
+        sseHandler(clientOptions.jsonMapper)
+            .mapJson<ChatCompletionChunk>()
             .withErrorHandler(errorHandler)
 
     /**

@@ -4,6 +4,8 @@ import com.google.common.collect.ImmutableListMultimap
 import com.google.common.collect.ListMultimap
 import com.openai.core.http.HttpResponse
 import com.openai.core.http.SseMessage
+import com.openai.core.jsonMapper
+import com.openai.errors.OpenAIException
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 import java.nio.charset.StandardCharsets
@@ -13,16 +15,18 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 
 class SseHandlerTest {
+
     enum class TestCase(
         internal val body: String,
-        internal val expectedMessages: List<SseMessage>
+        internal val expectedMessages: List<SseMessage>? = null,
+        internal val expectedException: Exception? = null
     ) {
         DATA_MISSING_EVENT(
             buildString {
                 append("data: {\"foo\":true}\n")
                 append("\n")
             },
-            listOf(SseMessage.builder().data("{\"foo\":true}").build())
+            listOf(sseMessageBuilder().data("{\"foo\":true}").build())
         ),
         MULTIPLE_DATA_MISSING_EVENT(
             buildString {
@@ -32,8 +36,8 @@ class SseHandlerTest {
                 append("\n")
             },
             listOf(
-                SseMessage.builder().data("{\"foo\":true}").build(),
-                SseMessage.builder().data("{\"bar\":false}").build()
+                sseMessageBuilder().data("{\"foo\":true}").build(),
+                sseMessageBuilder().data("{\"bar\":false}").build()
             )
         ),
         DATA_JSON_ESCAPED_DOUBLE_NEW_LINE(
@@ -43,7 +47,7 @@ class SseHandlerTest {
                 append("data: true}\n")
                 append("\n\n")
             },
-            listOf(SseMessage.builder().data("{\n\"foo\":\ntrue}").build())
+            listOf(sseMessageBuilder().data("{\n\"foo\":\ntrue}").build())
         ),
         MULTIPLE_DATA_LINES(
             buildString {
@@ -52,7 +56,7 @@ class SseHandlerTest {
                 append("data: true}\n")
                 append("\n\n")
             },
-            listOf(SseMessage.builder().data("{\n\"foo\":\ntrue}").build())
+            listOf(sseMessageBuilder().data("{\n\"foo\":\ntrue}").build())
         ),
         SPECIAL_NEW_LINE_CHARACTER(
             buildString {
@@ -64,9 +68,9 @@ class SseHandlerTest {
                 append("\n")
             },
             listOf(
-                SseMessage.builder().data("{\"content\":\" culpa\"}").build(),
-                SseMessage.builder().data("{\"content\":\" \u2028\"}").build(),
-                SseMessage.builder().data("{\"content\":\"foo\"}").build()
+                sseMessageBuilder().data("{\"content\":\" culpa\"}").build(),
+                sseMessageBuilder().data("{\"content\":\" \u2028\"}").build(),
+                sseMessageBuilder().data("{\"content\":\"foo\"}").build()
             )
         ),
         MULTI_BYTE_CHARACTER(
@@ -74,7 +78,28 @@ class SseHandlerTest {
                 append("data: {\"content\":\"\u0438\u0437\u0432\u0435\u0441\u0442\u043d\u0438\"}\n")
                 append("\n")
             },
-            listOf(SseMessage.builder().data("{\"content\":\"известни\"}").build())
+            listOf(sseMessageBuilder().data("{\"content\":\"известни\"}").build())
+        ),
+        STRING_ERROR_PROPERTY(
+            buildString {
+                append("data: {\"error\":\"ERROR!\"}\n")
+                append("\n")
+            },
+            expectedException = OpenAIException("ERROR!")
+        ),
+        ERROR_PROPERTY_WITH_MESSAGE(
+            buildString {
+                append("data: {\"error\":{\"message\":\"ERROR!\"}}\n")
+                append("\n")
+            },
+            expectedException = OpenAIException("ERROR!")
+        ),
+        ERROR_PROPERTY_MALFORMED(
+            buildString {
+                append("data: {\"error\":42}\n")
+                append("\n")
+            },
+            expectedException = OpenAIException("An error occurred during streaming")
         )
     }
 
@@ -92,9 +117,24 @@ class SseHandlerTest {
 
                 override fun close() {}
             }
+        var messages: List<SseMessage>? = null
+        var exception: Exception? = null
 
-        val messages = sseHandler().handle(response).use { it.stream().collect(toList()) }
+        try {
+            messages =
+                sseHandler(jsonMapper()).handle(response).use { it.stream().collect(toList()) }
+        } catch (e: Exception) {
+            exception = e
+        }
 
-        assertThat(messages).containsExactlyElementsOf(testCase.expectedMessages)
+        if (testCase.expectedMessages != null) {
+            assertThat(messages).containsExactlyElementsOf(testCase.expectedMessages)
+        }
+        if (testCase.expectedException != null) {
+            assertThat(exception).isInstanceOf(testCase.expectedException.javaClass)
+            assertThat(exception).hasMessage(testCase.expectedException.message)
+        }
     }
 }
+
+private fun sseMessageBuilder() = SseMessage.builder().jsonMapper(jsonMapper())

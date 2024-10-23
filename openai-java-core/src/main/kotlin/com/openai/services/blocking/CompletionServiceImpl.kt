@@ -57,7 +57,7 @@ constructor(
     }
 
     private val createStreamingHandler: Handler<StreamResponse<Completion>> =
-        sseHandler().mapJson<Completion>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        sseHandler(clientOptions.jsonMapper).mapJson<Completion>().withErrorHandler(errorHandler)
 
     /** Creates a completion for the provided prompt and parameters. */
     override fun createStreaming(
