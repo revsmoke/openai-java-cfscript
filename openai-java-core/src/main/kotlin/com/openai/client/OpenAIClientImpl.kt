@@ -19,6 +19,10 @@ constructor(
 
     private val embeddings: EmbeddingService by lazy { EmbeddingServiceImpl(clientOptions) }
 
+    private val files: FileService by lazy { FileServiceImpl(clientOptions) }
+
+    private val images: ImageService by lazy { ImageServiceImpl(clientOptions) }
+
     private val moderations: ModerationService by lazy { ModerationServiceImpl(clientOptions) }
 
     private val models: ModelService by lazy { ModelServiceImpl(clientOptions) }
@@ -26,6 +30,8 @@ constructor(
     private val fineTuning: FineTuningService by lazy { FineTuningServiceImpl(clientOptions) }
 
     private val batches: BatchService by lazy { BatchServiceImpl(clientOptions) }
+
+    private val uploads: UploadService by lazy { UploadServiceImpl(clientOptions) }
 
     override fun async(): OpenAIClientAsync = async
 
@@ -35,6 +41,10 @@ constructor(
 
     override fun embeddings(): EmbeddingService = embeddings
 
+    override fun files(): FileService = files
+
+    override fun images(): ImageService = images
+
     override fun moderations(): ModerationService = moderations
 
     override fun models(): ModelService = models
@@ -42,4 +52,6 @@ constructor(
     override fun fineTuning(): FineTuningService = fineTuning
 
     override fun batches(): BatchService = batches
+
+    override fun uploads(): UploadService = uploads
 }

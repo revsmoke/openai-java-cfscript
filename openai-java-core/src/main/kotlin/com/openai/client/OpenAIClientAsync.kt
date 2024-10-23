@@ -15,6 +15,10 @@ interface OpenAIClientAsync {
 
     fun embeddings(): EmbeddingServiceAsync
 
+    fun files(): FileServiceAsync
+
+    fun images(): ImageServiceAsync
+
     fun moderations(): ModerationServiceAsync
 
     fun models(): ModelServiceAsync
@@ -22,4 +26,6 @@ interface OpenAIClientAsync {
     fun fineTuning(): FineTuningServiceAsync
 
     fun batches(): BatchServiceAsync
+
+    fun uploads(): UploadServiceAsync
 }

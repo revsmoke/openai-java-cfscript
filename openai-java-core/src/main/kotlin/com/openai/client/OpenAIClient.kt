@@ -15,6 +15,10 @@ interface OpenAIClient {
 
     fun embeddings(): EmbeddingService
 
+    fun files(): FileService
+
+    fun images(): ImageService
+
     fun moderations(): ModerationService
 
     fun models(): ModelService
@@ -22,4 +26,6 @@ interface OpenAIClient {
     fun fineTuning(): FineTuningService
 
     fun batches(): BatchService
+
+    fun uploads(): UploadService
 }
