@@ -3,6 +3,7 @@
 package com.openai.client
 
 import com.openai.core.ClientOptions
+import com.openai.core.getPackageVersion
 import com.openai.models.*
 import com.openai.services.blocking.*
 
@@ -11,27 +12,44 @@ constructor(
     private val clientOptions: ClientOptions,
 ) : OpenAIClient {
 
+    private val clientOptionsWithUserAgent =
+        if (clientOptions.headers.containsKey("User-Agent")) clientOptions
+        else
+            clientOptions
+                .toBuilder()
+                .putHeader("User-Agent", "${javaClass.simpleName}/Java ${getPackageVersion()}")
+                .build()
+
+    // Pass the original clientOptions so that this client sets its own User-Agent.
     private val async: OpenAIClientAsync by lazy { OpenAIClientAsyncImpl(clientOptions) }
 
-    private val completions: CompletionService by lazy { CompletionServiceImpl(clientOptions) }
+    private val completions: CompletionService by lazy {
+        CompletionServiceImpl(clientOptionsWithUserAgent)
+    }
 
-    private val chat: ChatService by lazy { ChatServiceImpl(clientOptions) }
+    private val chat: ChatService by lazy { ChatServiceImpl(clientOptionsWithUserAgent) }
 
-    private val embeddings: EmbeddingService by lazy { EmbeddingServiceImpl(clientOptions) }
+    private val embeddings: EmbeddingService by lazy {
+        EmbeddingServiceImpl(clientOptionsWithUserAgent)
+    }
 
-    private val files: FileService by lazy { FileServiceImpl(clientOptions) }
+    private val files: FileService by lazy { FileServiceImpl(clientOptionsWithUserAgent) }
 
-    private val images: ImageService by lazy { ImageServiceImpl(clientOptions) }
+    private val images: ImageService by lazy { ImageServiceImpl(clientOptionsWithUserAgent) }
 
-    private val moderations: ModerationService by lazy { ModerationServiceImpl(clientOptions) }
+    private val moderations: ModerationService by lazy {
+        ModerationServiceImpl(clientOptionsWithUserAgent)
+    }
 
-    private val models: ModelService by lazy { ModelServiceImpl(clientOptions) }
+    private val models: ModelService by lazy { ModelServiceImpl(clientOptionsWithUserAgent) }
 
-    private val fineTuning: FineTuningService by lazy { FineTuningServiceImpl(clientOptions) }
+    private val fineTuning: FineTuningService by lazy {
+        FineTuningServiceImpl(clientOptionsWithUserAgent)
+    }
 
-    private val batches: BatchService by lazy { BatchServiceImpl(clientOptions) }
+    private val batches: BatchService by lazy { BatchServiceImpl(clientOptionsWithUserAgent) }
 
-    private val uploads: UploadService by lazy { UploadServiceImpl(clientOptions) }
+    private val uploads: UploadService by lazy { UploadServiceImpl(clientOptionsWithUserAgent) }
 
     override fun async(): OpenAIClientAsync = async
 
