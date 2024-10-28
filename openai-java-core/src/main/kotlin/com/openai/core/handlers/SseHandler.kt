@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.json.JsonMapper
 import com.openai.core.JsonValue
 import com.openai.core.http.HttpResponse
 import com.openai.core.http.HttpResponse.Handler
+import com.openai.core.http.PhantomReachableClosingStreamResponse
 import com.openai.core.http.SseMessage
 import com.openai.core.http.StreamResponse
 import com.openai.errors.OpenAIException
@@ -58,14 +59,16 @@ internal fun sseHandler(jsonMapper: JsonMapper): Handler<StreamResponse<SseMessa
                 }
             }
 
-            return object : StreamResponse<SseMessage> {
-                override fun stream(): Stream<SseMessage> = sequence.asStream()
+            return PhantomReachableClosingStreamResponse(
+                object : StreamResponse<SseMessage> {
+                    override fun stream(): Stream<SseMessage> = sequence.asStream()
 
-                override fun close() {
-                    reader.close()
-                    response.close()
+                    override fun close() {
+                        reader.close()
+                        response.close()
+                    }
                 }
-            }
+            )
         }
     }
 

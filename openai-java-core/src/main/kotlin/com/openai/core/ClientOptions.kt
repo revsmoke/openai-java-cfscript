@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.json.JsonMapper
 import com.google.common.collect.ArrayListMultimap
 import com.google.common.collect.ListMultimap
 import com.openai.core.http.HttpClient
+import com.openai.core.http.PhantomReachableClosingHttpClient
 import com.openai.core.http.RetryingHttpClient
 import java.time.Clock
 
@@ -162,11 +163,13 @@ private constructor(
 
             return ClientOptions(
                 httpClient!!,
-                RetryingHttpClient.builder()
-                    .httpClient(httpClient!!)
-                    .clock(clock)
-                    .maxRetries(maxRetries)
-                    .build(),
+                PhantomReachableClosingHttpClient(
+                    RetryingHttpClient.builder()
+                        .httpClient(httpClient!!)
+                        .clock(clock)
+                        .maxRetries(maxRetries)
+                        .build()
+                ),
                 jsonMapper ?: jsonMapper(),
                 clock,
                 baseUrl,
