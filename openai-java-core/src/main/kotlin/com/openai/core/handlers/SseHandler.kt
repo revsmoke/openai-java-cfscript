@@ -18,8 +18,9 @@ internal fun sseHandler(jsonMapper: JsonMapper): Handler<StreamResponse<SseMessa
     object : Handler<StreamResponse<SseMessage>> {
 
         override fun handle(response: HttpResponse): StreamResponse<SseMessage> {
+            val reader = response.body().bufferedReader()
             val sequence = sequence {
-                response.body().bufferedReader().useLines { lines ->
+                reader.useLines { lines ->
                     val state = SseState(jsonMapper)
                     var done = false
                     for (line in lines) {
@@ -60,7 +61,10 @@ internal fun sseHandler(jsonMapper: JsonMapper): Handler<StreamResponse<SseMessa
             return object : StreamResponse<SseMessage> {
                 override fun stream(): Stream<SseMessage> = sequence.asStream()
 
-                override fun close() = response.close()
+                override fun close() {
+                    reader.close()
+                    response.close()
+                }
             }
         }
     }
