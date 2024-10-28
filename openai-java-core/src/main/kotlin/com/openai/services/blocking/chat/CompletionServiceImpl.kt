@@ -99,11 +99,11 @@ constructor(
         return clientOptions.httpClient.execute(request, requestOptions).let { response ->
             response
                 .let { createStreamingHandler.handle(it) }
-                .let { streamingResponse ->
+                .let { streamResponse ->
                     if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                        streamingResponse.map { it.validate() }
+                        streamResponse.map { it.validate() }
                     } else {
-                        streamingResponse
+                        streamResponse
                     }
                 }
         }
