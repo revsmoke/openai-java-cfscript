@@ -33,8 +33,8 @@ private constructor(
     private var validated: Boolean = false
 
     /**
-     * Specifies the voice type. Supported voices are `alloy`, `echo`, `fable`, `onyx`, `nova`, and
-     * `shimmer`.
+     * The voice the model uses to respond. Supported voices are `alloy`, `ash`, `ballad`, `coral`,
+     * `echo`, `sage`, `shimmer`, and `verse`.
      */
     fun voice(): Voice = voice.getRequired("voice")
 
@@ -44,8 +44,8 @@ private constructor(
     fun format(): Format = format.getRequired("format")
 
     /**
-     * Specifies the voice type. Supported voices are `alloy`, `echo`, `fable`, `onyx`, `nova`, and
-     * `shimmer`.
+     * The voice the model uses to respond. Supported voices are `alloy`, `ash`, `ballad`, `coral`,
+     * `echo`, `sage`, `shimmer`, and `verse`.
      */
     @JsonProperty("voice") @ExcludeMissing fun _voice() = voice
 
@@ -87,14 +87,14 @@ private constructor(
         }
 
         /**
-         * Specifies the voice type. Supported voices are `alloy`, `echo`, `fable`, `onyx`, `nova`,
-         * and `shimmer`.
+         * The voice the model uses to respond. Supported voices are `alloy`, `ash`, `ballad`,
+         * `coral`, `echo`, `sage`, `shimmer`, and `verse`.
          */
         fun voice(voice: Voice) = voice(JsonField.of(voice))
 
         /**
-         * Specifies the voice type. Supported voices are `alloy`, `echo`, `fable`, `onyx`, `nova`,
-         * and `shimmer`.
+         * The voice the model uses to respond. Supported voices are `alloy`, `ash`, `ballad`,
+         * `coral`, `echo`, `sage`, `shimmer`, and `verse`.
          */
         @JsonProperty("voice")
         @ExcludeMissing
@@ -235,57 +235,69 @@ private constructor(
 
             @JvmField val ALLOY = Voice(JsonField.of("alloy"))
 
+            @JvmField val ASH = Voice(JsonField.of("ash"))
+
+            @JvmField val BALLAD = Voice(JsonField.of("ballad"))
+
+            @JvmField val CORAL = Voice(JsonField.of("coral"))
+
             @JvmField val ECHO = Voice(JsonField.of("echo"))
 
-            @JvmField val FABLE = Voice(JsonField.of("fable"))
-
-            @JvmField val ONYX = Voice(JsonField.of("onyx"))
-
-            @JvmField val NOVA = Voice(JsonField.of("nova"))
+            @JvmField val SAGE = Voice(JsonField.of("sage"))
 
             @JvmField val SHIMMER = Voice(JsonField.of("shimmer"))
+
+            @JvmField val VERSE = Voice(JsonField.of("verse"))
 
             @JvmStatic fun of(value: String) = Voice(JsonField.of(value))
         }
 
         enum class Known {
             ALLOY,
+            ASH,
+            BALLAD,
+            CORAL,
             ECHO,
-            FABLE,
-            ONYX,
-            NOVA,
+            SAGE,
             SHIMMER,
+            VERSE,
         }
 
         enum class Value {
             ALLOY,
+            ASH,
+            BALLAD,
+            CORAL,
             ECHO,
-            FABLE,
-            ONYX,
-            NOVA,
+            SAGE,
             SHIMMER,
+            VERSE,
             _UNKNOWN,
         }
 
         fun value(): Value =
             when (this) {
                 ALLOY -> Value.ALLOY
+                ASH -> Value.ASH
+                BALLAD -> Value.BALLAD
+                CORAL -> Value.CORAL
                 ECHO -> Value.ECHO
-                FABLE -> Value.FABLE
-                ONYX -> Value.ONYX
-                NOVA -> Value.NOVA
+                SAGE -> Value.SAGE
                 SHIMMER -> Value.SHIMMER
+                VERSE -> Value.VERSE
                 else -> Value._UNKNOWN
             }
 
         fun known(): Known =
             when (this) {
                 ALLOY -> Known.ALLOY
+                ASH -> Known.ASH
+                BALLAD -> Known.BALLAD
+                CORAL -> Known.CORAL
                 ECHO -> Known.ECHO
-                FABLE -> Known.FABLE
-                ONYX -> Known.ONYX
-                NOVA -> Known.NOVA
+                SAGE -> Known.SAGE
                 SHIMMER -> Known.SHIMMER
+                VERSE -> Known.VERSE
                 else -> throw OpenAIInvalidDataException("Unknown Voice: $value")
             }
 
