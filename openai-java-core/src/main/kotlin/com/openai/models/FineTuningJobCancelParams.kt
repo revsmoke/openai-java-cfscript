@@ -4,7 +4,7 @@ package com.openai.models
 
 import com.openai.core.JsonValue
 import com.openai.core.NoAutoDetect
-import com.openai.core.toUnmodifiable
+import com.openai.core.toImmutable
 import com.openai.models.*
 import java.util.Objects
 import java.util.Optional
@@ -140,9 +140,9 @@ constructor(
         fun build(): FineTuningJobCancelParams =
             FineTuningJobCancelParams(
                 checkNotNull(fineTuningJobId) { "`fineTuningJobId` is required but was not set" },
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalBodyProperties.toImmutable(),
             )
     }
 }

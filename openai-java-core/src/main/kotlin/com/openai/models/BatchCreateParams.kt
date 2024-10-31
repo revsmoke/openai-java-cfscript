@@ -12,7 +12,7 @@ import com.openai.core.ExcludeMissing
 import com.openai.core.JsonField
 import com.openai.core.JsonValue
 import com.openai.core.NoAutoDetect
-import com.openai.core.toUnmodifiable
+import com.openai.core.toImmutable
 import com.openai.errors.OpenAIInvalidDataException
 import com.openai.models.*
 import java.util.Objects
@@ -180,7 +180,7 @@ constructor(
                     checkNotNull(endpoint) { "`endpoint` is required but was not set" },
                     checkNotNull(inputFileId) { "`inputFileId` is required but was not set" },
                     metadata,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -347,9 +347,9 @@ constructor(
                 checkNotNull(endpoint) { "`endpoint` is required but was not set" },
                 checkNotNull(inputFileId) { "`inputFileId` is required but was not set" },
                 metadata,
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -509,7 +509,7 @@ constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+            fun build(): Metadata = Metadata(additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {

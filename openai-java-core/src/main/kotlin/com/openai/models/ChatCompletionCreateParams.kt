@@ -21,7 +21,7 @@ import com.openai.core.JsonField
 import com.openai.core.JsonValue
 import com.openai.core.NoAutoDetect
 import com.openai.core.getOrThrow
-import com.openai.core.toUnmodifiable
+import com.openai.core.toImmutable
 import com.openai.errors.OpenAIInvalidDataException
 import com.openai.models.*
 import java.util.Objects
@@ -807,18 +807,18 @@ constructor(
             fun build(): ChatCompletionCreateBody =
                 ChatCompletionCreateBody(
                     checkNotNull(messages) { "`messages` is required but was not set" }
-                        .toUnmodifiable(),
+                        .toImmutable(),
                     checkNotNull(model) { "`model` is required but was not set" },
                     audio,
                     frequencyPenalty,
                     functionCall,
-                    functions?.toUnmodifiable(),
+                    functions?.toImmutable(),
                     logitBias,
                     logprobs,
                     maxCompletionTokens,
                     maxTokens,
                     metadata,
-                    modalities?.toUnmodifiable(),
+                    modalities?.toImmutable(),
                     n,
                     parallelToolCalls,
                     presencePenalty,
@@ -830,11 +830,11 @@ constructor(
                     streamOptions,
                     temperature,
                     toolChoice,
-                    tools?.toUnmodifiable(),
+                    tools?.toImmutable(),
                     topLogprobs,
                     topP,
                     user,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -1474,19 +1474,18 @@ constructor(
 
         fun build(): ChatCompletionCreateParams =
             ChatCompletionCreateParams(
-                checkNotNull(messages) { "`messages` is required but was not set" }
-                    .toUnmodifiable(),
+                checkNotNull(messages) { "`messages` is required but was not set" }.toImmutable(),
                 checkNotNull(model) { "`model` is required but was not set" },
                 audio,
                 frequencyPenalty,
                 functionCall,
-                if (functions.size == 0) null else functions.toUnmodifiable(),
+                if (functions.size == 0) null else functions.toImmutable(),
                 logitBias,
                 logprobs,
                 maxCompletionTokens,
                 maxTokens,
                 metadata,
-                if (modalities.size == 0) null else modalities.toUnmodifiable(),
+                if (modalities.size == 0) null else modalities.toImmutable(),
                 n,
                 parallelToolCalls,
                 presencePenalty,
@@ -1498,13 +1497,13 @@ constructor(
                 streamOptions,
                 temperature,
                 toolChoice,
-                if (tools.size == 0) null else tools.toUnmodifiable(),
+                if (tools.size == 0) null else tools.toImmutable(),
                 topLogprobs,
                 topP,
                 user,
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -1910,7 +1909,7 @@ constructor(
                     description,
                     checkNotNull(name) { "`name` is required but was not set" },
                     parameters,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -1985,7 +1984,7 @@ constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): LogitBias = LogitBias(additionalProperties.toUnmodifiable())
+            fun build(): LogitBias = LogitBias(additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {
@@ -2053,7 +2052,7 @@ constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): Metadata = Metadata(additionalProperties.toUnmodifiable())
+            fun build(): Metadata = Metadata(additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {

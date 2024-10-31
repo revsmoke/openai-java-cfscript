@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.openai.core.ExcludeMissing
 import com.openai.core.JsonValue
 import com.openai.core.NoAutoDetect
-import com.openai.core.toUnmodifiable
+import com.openai.core.toImmutable
 import com.openai.models.*
 import java.util.Objects
 
@@ -153,7 +153,7 @@ constructor(
                     checkNotNull(filename) { "`filename` is required but was not set" },
                     checkNotNull(mimeType) { "`mimeType` is required but was not set" },
                     checkNotNull(purpose) { "`purpose` is required but was not set" },
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -310,9 +310,9 @@ constructor(
                 checkNotNull(filename) { "`filename` is required but was not set" },
                 checkNotNull(mimeType) { "`mimeType` is required but was not set" },
                 checkNotNull(purpose) { "`purpose` is required but was not set" },
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalBodyProperties.toImmutable(),
             )
     }
 }

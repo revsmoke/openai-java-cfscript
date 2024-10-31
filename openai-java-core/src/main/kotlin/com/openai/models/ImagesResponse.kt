@@ -11,7 +11,7 @@ import com.openai.core.JsonField
 import com.openai.core.JsonMissing
 import com.openai.core.JsonValue
 import com.openai.core.NoAutoDetect
-import com.openai.core.toUnmodifiable
+import com.openai.core.toImmutable
 import java.util.Objects
 
 @JsonDeserialize(builder = ImagesResponse.Builder::class)
@@ -94,8 +94,8 @@ private constructor(
         fun build(): ImagesResponse =
             ImagesResponse(
                 created,
-                data.map { it.toUnmodifiable() },
-                additionalProperties.toUnmodifiable(),
+                data.map { it.toImmutable() },
+                additionalProperties.toImmutable(),
             )
     }
 

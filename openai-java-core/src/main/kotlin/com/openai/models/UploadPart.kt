@@ -13,7 +13,7 @@ import com.openai.core.JsonField
 import com.openai.core.JsonMissing
 import com.openai.core.JsonValue
 import com.openai.core.NoAutoDetect
-import com.openai.core.toUnmodifiable
+import com.openai.core.toImmutable
 import com.openai.errors.OpenAIInvalidDataException
 import java.util.Objects
 
@@ -143,7 +143,7 @@ private constructor(
                 createdAt,
                 uploadId,
                 object_,
-                additionalProperties.toUnmodifiable(),
+                additionalProperties.toImmutable(),
             )
     }
 

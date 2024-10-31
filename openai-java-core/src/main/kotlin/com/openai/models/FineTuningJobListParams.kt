@@ -3,7 +3,7 @@
 package com.openai.models
 
 import com.openai.core.NoAutoDetect
-import com.openai.core.toUnmodifiable
+import com.openai.core.toImmutable
 import com.openai.models.*
 import java.util.Objects
 import java.util.Optional
@@ -26,7 +26,7 @@ constructor(
         this.after?.let { params.put("after", listOf(it.toString())) }
         this.limit?.let { params.put("limit", listOf(it.toString())) }
         params.putAll(additionalQueryParams)
-        return params.toUnmodifiable()
+        return params.toImmutable()
     }
 
     @JvmSynthetic internal fun getHeaders(): Map<String, List<String>> = additionalHeaders
@@ -123,8 +123,8 @@ constructor(
             FineTuningJobListParams(
                 after,
                 limit,
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
             )
     }
 }

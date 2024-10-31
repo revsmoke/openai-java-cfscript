@@ -11,7 +11,7 @@ import com.openai.core.JsonField
 import com.openai.core.JsonMissing
 import com.openai.core.JsonValue
 import com.openai.core.NoAutoDetect
-import com.openai.core.toUnmodifiable
+import com.openai.core.toImmutable
 import com.openai.services.blocking.FileService
 import java.util.Objects
 import java.util.Optional
@@ -158,7 +158,7 @@ private constructor(
                 Response(
                     data,
                     object_,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
     }

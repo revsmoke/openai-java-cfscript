@@ -22,7 +22,7 @@ import com.openai.core.JsonMissing
 import com.openai.core.JsonValue
 import com.openai.core.NoAutoDetect
 import com.openai.core.getOrThrow
-import com.openai.core.toUnmodifiable
+import com.openai.core.toImmutable
 import com.openai.errors.OpenAIInvalidDataException
 import java.util.Objects
 import java.util.Optional
@@ -267,9 +267,9 @@ private constructor(
                 role,
                 name,
                 audio,
-                toolCalls.map { it.toUnmodifiable() },
+                toolCalls.map { it.toImmutable() },
                 functionCall,
-                additionalProperties.toUnmodifiable(),
+                additionalProperties.toImmutable(),
             )
     }
 
@@ -395,7 +395,7 @@ private constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): Audio = Audio(id, additionalProperties.toUnmodifiable())
+            fun build(): Audio = Audio(id, additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {
@@ -857,7 +857,7 @@ private constructor(
                 FunctionCall(
                     arguments,
                     name,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 

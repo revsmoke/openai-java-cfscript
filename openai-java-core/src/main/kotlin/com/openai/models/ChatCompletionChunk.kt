@@ -13,7 +13,7 @@ import com.openai.core.JsonField
 import com.openai.core.JsonMissing
 import com.openai.core.JsonValue
 import com.openai.core.NoAutoDetect
-import com.openai.core.toUnmodifiable
+import com.openai.core.toImmutable
 import com.openai.errors.OpenAIInvalidDataException
 import java.util.Objects
 import java.util.Optional
@@ -295,14 +295,14 @@ private constructor(
         fun build(): ChatCompletionChunk =
             ChatCompletionChunk(
                 id,
-                choices.map { it.toUnmodifiable() },
+                choices.map { it.toImmutable() },
                 created,
                 model,
                 serviceTier,
                 systemFingerprint,
                 object_,
                 usage,
-                additionalProperties.toUnmodifiable(),
+                additionalProperties.toImmutable(),
             )
     }
 
@@ -460,7 +460,7 @@ private constructor(
                     logprobs,
                     finishReason,
                     index,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -624,10 +624,10 @@ private constructor(
                     Delta(
                         content,
                         functionCall,
-                        toolCalls.map { it.toUnmodifiable() },
+                        toolCalls.map { it.toImmutable() },
                         role,
                         refusal,
-                        additionalProperties.toUnmodifiable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 
@@ -748,7 +748,7 @@ private constructor(
                         FunctionCall(
                             arguments,
                             name,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -963,7 +963,7 @@ private constructor(
                             id,
                             type,
                             function,
-                            additionalProperties.toUnmodifiable(),
+                            additionalProperties.toImmutable(),
                         )
                 }
 
@@ -1081,7 +1081,7 @@ private constructor(
                             Function(
                                 name,
                                 arguments,
-                                additionalProperties.toUnmodifiable(),
+                                additionalProperties.toImmutable(),
                             )
                     }
 
@@ -1372,9 +1372,9 @@ private constructor(
 
                 fun build(): Logprobs =
                     Logprobs(
-                        content.map { it.toUnmodifiable() },
-                        refusal.map { it.toUnmodifiable() },
-                        additionalProperties.toUnmodifiable(),
+                        content.map { it.toImmutable() },
+                        refusal.map { it.toImmutable() },
+                        additionalProperties.toImmutable(),
                     )
             }
 

@@ -13,7 +13,7 @@ import com.openai.core.JsonField
 import com.openai.core.JsonMissing
 import com.openai.core.JsonValue
 import com.openai.core.NoAutoDetect
-import com.openai.core.toUnmodifiable
+import com.openai.core.toImmutable
 import com.openai.errors.OpenAIInvalidDataException
 import java.util.Objects
 
@@ -154,7 +154,7 @@ private constructor(
                 categories,
                 categoryScores,
                 categoryAppliedInputTypes,
-                additionalProperties.toUnmodifiable(),
+                additionalProperties.toImmutable(),
             )
     }
 
@@ -603,7 +603,7 @@ private constructor(
                     sexualMinors,
                     violence,
                     violenceGraphic,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -948,20 +948,20 @@ private constructor(
 
             fun build(): CategoryAppliedInputTypes =
                 CategoryAppliedInputTypes(
-                    hate.map { it.toUnmodifiable() },
-                    hateThreatening.map { it.toUnmodifiable() },
-                    harassment.map { it.toUnmodifiable() },
-                    harassmentThreatening.map { it.toUnmodifiable() },
-                    illicit.map { it.toUnmodifiable() },
-                    illicitViolent.map { it.toUnmodifiable() },
-                    selfHarm.map { it.toUnmodifiable() },
-                    selfHarmIntent.map { it.toUnmodifiable() },
-                    selfHarmInstructions.map { it.toUnmodifiable() },
-                    sexual.map { it.toUnmodifiable() },
-                    sexualMinors.map { it.toUnmodifiable() },
-                    violence.map { it.toUnmodifiable() },
-                    violenceGraphic.map { it.toUnmodifiable() },
-                    additionalProperties.toUnmodifiable(),
+                    hate.map { it.toImmutable() },
+                    hateThreatening.map { it.toImmutable() },
+                    harassment.map { it.toImmutable() },
+                    harassmentThreatening.map { it.toImmutable() },
+                    illicit.map { it.toImmutable() },
+                    illicitViolent.map { it.toImmutable() },
+                    selfHarm.map { it.toImmutable() },
+                    selfHarmIntent.map { it.toImmutable() },
+                    selfHarmInstructions.map { it.toImmutable() },
+                    sexual.map { it.toImmutable() },
+                    sexualMinors.map { it.toImmutable() },
+                    violence.map { it.toImmutable() },
+                    violenceGraphic.map { it.toImmutable() },
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -2011,7 +2011,7 @@ private constructor(
                     sexualMinors,
                     violence,
                     violenceGraphic,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 

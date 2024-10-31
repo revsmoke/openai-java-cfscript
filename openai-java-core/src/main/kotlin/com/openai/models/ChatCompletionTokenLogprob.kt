@@ -11,7 +11,7 @@ import com.openai.core.JsonField
 import com.openai.core.JsonMissing
 import com.openai.core.JsonValue
 import com.openai.core.NoAutoDetect
-import com.openai.core.toUnmodifiable
+import com.openai.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
@@ -186,9 +186,9 @@ private constructor(
             ChatCompletionTokenLogprob(
                 token,
                 logprob,
-                bytes.map { it.toUnmodifiable() },
-                topLogprobs.map { it.toUnmodifiable() },
-                additionalProperties.toUnmodifiable(),
+                bytes.map { it.toImmutable() },
+                topLogprobs.map { it.toImmutable() },
+                additionalProperties.toImmutable(),
             )
     }
 
@@ -331,8 +331,8 @@ private constructor(
                 TopLogprob(
                     token,
                     logprob,
-                    bytes.map { it.toUnmodifiable() },
-                    additionalProperties.toUnmodifiable(),
+                    bytes.map { it.toImmutable() },
+                    additionalProperties.toImmutable(),
                 )
         }
 

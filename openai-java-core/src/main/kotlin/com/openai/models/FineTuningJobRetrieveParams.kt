@@ -3,7 +3,7 @@
 package com.openai.models
 
 import com.openai.core.NoAutoDetect
-import com.openai.core.toUnmodifiable
+import com.openai.core.toImmutable
 import com.openai.models.*
 import java.util.Objects
 
@@ -114,8 +114,8 @@ constructor(
         fun build(): FineTuningJobRetrieveParams =
             FineTuningJobRetrieveParams(
                 checkNotNull(fineTuningJobId) { "`fineTuningJobId` is required but was not set" },
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
             )
     }
 }

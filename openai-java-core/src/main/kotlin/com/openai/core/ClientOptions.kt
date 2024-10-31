@@ -176,8 +176,8 @@ private constructor(
                 apiKey!!,
                 organization,
                 project,
-                headers.toUnmodifiable(),
-                queryParams.toUnmodifiable(),
+                headers.toImmutable(),
+                queryParams.toImmutable(),
                 responseValidation,
                 maxRetries,
             )

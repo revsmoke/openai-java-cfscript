@@ -11,7 +11,7 @@ import com.openai.core.JsonField
 import com.openai.core.JsonMissing
 import com.openai.core.JsonValue
 import com.openai.core.NoAutoDetect
-import com.openai.core.toUnmodifiable
+import com.openai.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
@@ -178,8 +178,8 @@ private constructor(
                 project,
                 name,
                 entity,
-                tags.map { it.toUnmodifiable() },
-                additionalProperties.toUnmodifiable(),
+                tags.map { it.toImmutable() },
+                additionalProperties.toImmutable(),
             )
     }
 

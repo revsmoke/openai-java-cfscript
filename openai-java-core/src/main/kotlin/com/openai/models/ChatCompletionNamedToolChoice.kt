@@ -13,7 +13,7 @@ import com.openai.core.JsonField
 import com.openai.core.JsonMissing
 import com.openai.core.JsonValue
 import com.openai.core.NoAutoDetect
-import com.openai.core.toUnmodifiable
+import com.openai.core.toImmutable
 import com.openai.errors.OpenAIInvalidDataException
 import java.util.Objects
 
@@ -103,7 +103,7 @@ private constructor(
             ChatCompletionNamedToolChoice(
                 type,
                 function,
-                additionalProperties.toUnmodifiable(),
+                additionalProperties.toImmutable(),
             )
     }
 
@@ -174,7 +174,7 @@ private constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): Function = Function(name, additionalProperties.toUnmodifiable())
+            fun build(): Function = Function(name, additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {

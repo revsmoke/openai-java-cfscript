@@ -21,7 +21,7 @@ import com.openai.core.JsonField
 import com.openai.core.JsonValue
 import com.openai.core.NoAutoDetect
 import com.openai.core.getOrThrow
-import com.openai.core.toUnmodifiable
+import com.openai.core.toImmutable
 import com.openai.errors.OpenAIInvalidDataException
 import com.openai.models.*
 import java.util.Objects
@@ -272,11 +272,11 @@ constructor(
                     checkNotNull(model) { "`model` is required but was not set" },
                     checkNotNull(trainingFile) { "`trainingFile` is required but was not set" },
                     hyperparameters,
-                    integrations?.toUnmodifiable(),
+                    integrations?.toImmutable(),
                     seed,
                     suffix,
                     validationFile,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -497,13 +497,13 @@ constructor(
                 checkNotNull(model) { "`model` is required but was not set" },
                 checkNotNull(trainingFile) { "`trainingFile` is required but was not set" },
                 hyperparameters,
-                if (integrations.size == 0) null else integrations.toUnmodifiable(),
+                if (integrations.size == 0) null else integrations.toImmutable(),
                 seed,
                 suffix,
                 validationFile,
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -788,7 +788,7 @@ constructor(
                     batchSize,
                     learningRateMultiplier,
                     nEpochs,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -1390,7 +1390,7 @@ constructor(
                 Integration(
                     checkNotNull(type) { "`type` is required but was not set" },
                     checkNotNull(wandb) { "`wandb` is required but was not set" },
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -1556,8 +1556,8 @@ constructor(
                         checkNotNull(project) { "`project` is required but was not set" },
                         name,
                         entity,
-                        tags?.toUnmodifiable(),
-                        additionalProperties.toUnmodifiable(),
+                        tags?.toImmutable(),
+                        additionalProperties.toImmutable(),
                     )
             }
 

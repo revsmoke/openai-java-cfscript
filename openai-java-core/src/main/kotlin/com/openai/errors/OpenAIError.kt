@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.openai.core.JsonValue
 import com.openai.core.NoAutoDetect
-import com.openai.core.toUnmodifiable
+import com.openai.core.toImmutable
 import java.util.Objects
 
 @JsonDeserialize(builder = OpenAIError.Builder::class)
@@ -60,6 +60,6 @@ constructor(
             this.additionalProperties.putAll(additionalProperties)
         }
 
-        fun build(): OpenAIError = OpenAIError(additionalProperties.toUnmodifiable())
+        fun build(): OpenAIError = OpenAIError(additionalProperties.toImmutable())
     }
 }

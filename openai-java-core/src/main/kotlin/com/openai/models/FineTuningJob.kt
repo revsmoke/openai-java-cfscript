@@ -22,7 +22,7 @@ import com.openai.core.JsonMissing
 import com.openai.core.JsonValue
 import com.openai.core.NoAutoDetect
 import com.openai.core.getOrThrow
-import com.openai.core.toUnmodifiable
+import com.openai.core.toImmutable
 import com.openai.errors.OpenAIInvalidDataException
 import java.util.Objects
 import java.util.Optional
@@ -545,15 +545,15 @@ private constructor(
                 model,
                 object_,
                 organizationId,
-                resultFiles.map { it.toUnmodifiable() },
+                resultFiles.map { it.toImmutable() },
                 status,
                 trainedTokens,
                 trainingFile,
                 validationFile,
-                integrations.map { it.toUnmodifiable() },
+                integrations.map { it.toImmutable() },
                 seed,
                 estimatedFinish,
-                additionalProperties.toUnmodifiable(),
+                additionalProperties.toImmutable(),
             )
     }
 
@@ -681,7 +681,7 @@ private constructor(
                     code,
                     message,
                     param,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -798,7 +798,7 @@ private constructor(
             }
 
             fun build(): Hyperparameters =
-                Hyperparameters(nEpochs, additionalProperties.toUnmodifiable())
+                Hyperparameters(nEpochs, additionalProperties.toImmutable())
         }
 
         @JsonDeserialize(using = NEpochs.Deserializer::class)

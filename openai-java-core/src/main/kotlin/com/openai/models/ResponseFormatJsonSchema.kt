@@ -13,7 +13,7 @@ import com.openai.core.JsonField
 import com.openai.core.JsonMissing
 import com.openai.core.JsonValue
 import com.openai.core.NoAutoDetect
-import com.openai.core.toUnmodifiable
+import com.openai.core.toImmutable
 import com.openai.errors.OpenAIInvalidDataException
 import java.util.Objects
 import java.util.Optional
@@ -103,7 +103,7 @@ private constructor(
             ResponseFormatJsonSchema(
                 type,
                 jsonSchema,
-                additionalProperties.toUnmodifiable(),
+                additionalProperties.toImmutable(),
             )
     }
 
@@ -281,7 +281,7 @@ private constructor(
                     name,
                     schema,
                     strict,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -336,7 +336,7 @@ private constructor(
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun build(): Schema = Schema(additionalProperties.toUnmodifiable())
+                fun build(): Schema = Schema(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {

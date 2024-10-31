@@ -21,7 +21,7 @@ import com.openai.core.JsonField
 import com.openai.core.JsonValue
 import com.openai.core.NoAutoDetect
 import com.openai.core.getOrThrow
-import com.openai.core.toUnmodifiable
+import com.openai.core.toImmutable
 import com.openai.errors.OpenAIInvalidDataException
 import com.openai.models.*
 import java.util.Objects
@@ -538,7 +538,7 @@ constructor(
                     temperature,
                     topP,
                     user,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -943,9 +943,9 @@ constructor(
                 temperature,
                 topP,
                 user,
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -1342,7 +1342,7 @@ constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): LogitBias = LogitBias(additionalProperties.toUnmodifiable())
+            fun build(): LogitBias = LogitBias(additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {

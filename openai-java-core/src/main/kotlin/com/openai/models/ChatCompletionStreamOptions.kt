@@ -11,7 +11,7 @@ import com.openai.core.JsonField
 import com.openai.core.JsonMissing
 import com.openai.core.JsonValue
 import com.openai.core.NoAutoDetect
-import com.openai.core.toUnmodifiable
+import com.openai.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
@@ -107,7 +107,7 @@ private constructor(
         }
 
         fun build(): ChatCompletionStreamOptions =
-            ChatCompletionStreamOptions(includeUsage, additionalProperties.toUnmodifiable())
+            ChatCompletionStreamOptions(includeUsage, additionalProperties.toImmutable())
     }
 
     override fun equals(other: Any?): Boolean {

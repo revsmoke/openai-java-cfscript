@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.openai.core.ExcludeMissing
 import com.openai.core.JsonValue
 import com.openai.core.NoAutoDetect
-import com.openai.core.toUnmodifiable
+import com.openai.core.toImmutable
 import java.util.Objects
 
 /**
@@ -68,7 +68,7 @@ private constructor(
             this.additionalProperties.putAll(additionalProperties)
         }
 
-        fun build(): FunctionParameters = FunctionParameters(additionalProperties.toUnmodifiable())
+        fun build(): FunctionParameters = FunctionParameters(additionalProperties.toImmutable())
     }
 
     override fun equals(other: Any?): Boolean {

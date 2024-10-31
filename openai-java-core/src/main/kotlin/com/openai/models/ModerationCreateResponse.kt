@@ -11,7 +11,7 @@ import com.openai.core.JsonField
 import com.openai.core.JsonMissing
 import com.openai.core.JsonValue
 import com.openai.core.NoAutoDetect
-import com.openai.core.toUnmodifiable
+import com.openai.core.toImmutable
 import java.util.Objects
 
 /** Represents if a given text input is potentially harmful. */
@@ -120,8 +120,8 @@ private constructor(
             ModerationCreateResponse(
                 id,
                 model,
-                results.map { it.toUnmodifiable() },
-                additionalProperties.toUnmodifiable(),
+                results.map { it.toImmutable() },
+                additionalProperties.toImmutable(),
             )
     }
 
