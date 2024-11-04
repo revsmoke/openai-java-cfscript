@@ -101,6 +101,12 @@ class ServiceParamsTest {
                 .modalities(listOf(ChatCompletionModality.TEXT))
                 .n(123L)
                 .parallelToolCalls(true)
+                .prediction(
+                    ChatCompletionPredictionContent.builder()
+                        .content(ChatCompletionPredictionContent.Content.ofTextContent("string"))
+                        .type(ChatCompletionPredictionContent.Type.CONTENT)
+                        .build()
+                )
                 .presencePenalty(2.0)
                 .responseFormat(
                     ChatCompletionCreateParams.ResponseFormat.ofResponseFormatText(
@@ -241,8 +247,10 @@ class ServiceParamsTest {
                         .totalTokens(123L)
                         .completionTokensDetails(
                             CompletionUsage.CompletionTokensDetails.builder()
+                                .acceptedPredictionTokens(123L)
                                 .audioTokens(123L)
                                 .reasoningTokens(123L)
+                                .rejectedPredictionTokens(123L)
                                 .build()
                         )
                         .promptTokensDetails(

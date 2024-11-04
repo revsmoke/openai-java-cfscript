@@ -10,13 +10,27 @@ class FileListParamsTest {
 
     @Test
     fun createFileListParams() {
-        FileListParams.builder().purpose("purpose").build()
+        FileListParams.builder()
+            .after("after")
+            .limit(123L)
+            .order(FileListParams.Order.ASC)
+            .purpose("purpose")
+            .build()
     }
 
     @Test
     fun getQueryParams() {
-        val params = FileListParams.builder().purpose("purpose").build()
+        val params =
+            FileListParams.builder()
+                .after("after")
+                .limit(123L)
+                .order(FileListParams.Order.ASC)
+                .purpose("purpose")
+                .build()
         val expected = mutableMapOf<String, List<String>>()
+        expected.put("after", listOf("after"))
+        expected.put("limit", listOf("123"))
+        expected.put("order", listOf(FileListParams.Order.ASC.toString()))
         expected.put("purpose", listOf("purpose"))
         assertThat(params.getQueryParams()).isEqualTo(expected)
     }

@@ -54,6 +54,12 @@ class ChatCompletionCreateParamsTest {
             .modalities(listOf(ChatCompletionModality.TEXT))
             .n(123L)
             .parallelToolCalls(true)
+            .prediction(
+                ChatCompletionPredictionContent.builder()
+                    .content(ChatCompletionPredictionContent.Content.ofTextContent("string"))
+                    .type(ChatCompletionPredictionContent.Type.CONTENT)
+                    .build()
+            )
             .presencePenalty(2.0)
             .responseFormat(
                 ChatCompletionCreateParams.ResponseFormat.ofResponseFormatText(
@@ -139,6 +145,12 @@ class ChatCompletionCreateParamsTest {
                 .modalities(listOf(ChatCompletionModality.TEXT))
                 .n(123L)
                 .parallelToolCalls(true)
+                .prediction(
+                    ChatCompletionPredictionContent.builder()
+                        .content(ChatCompletionPredictionContent.Content.ofTextContent("string"))
+                        .type(ChatCompletionPredictionContent.Type.CONTENT)
+                        .build()
+                )
                 .presencePenalty(2.0)
                 .responseFormat(
                     ChatCompletionCreateParams.ResponseFormat.ofResponseFormatText(
@@ -225,6 +237,13 @@ class ChatCompletionCreateParamsTest {
         assertThat(body.modalities()).isEqualTo(listOf(ChatCompletionModality.TEXT))
         assertThat(body.n()).isEqualTo(123L)
         assertThat(body.parallelToolCalls()).isEqualTo(true)
+        assertThat(body.prediction())
+            .isEqualTo(
+                ChatCompletionPredictionContent.builder()
+                    .content(ChatCompletionPredictionContent.Content.ofTextContent("string"))
+                    .type(ChatCompletionPredictionContent.Type.CONTENT)
+                    .build()
+            )
         assertThat(body.presencePenalty()).isEqualTo(2.0)
         assertThat(body.responseFormat())
             .isEqualTo(

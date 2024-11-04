@@ -22,7 +22,7 @@ interface FileServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none()
     ): CompletableFuture<FileObject>
 
-    /** Returns a list of files that belong to the user's organization. */
+    /** Returns a list of files. */
     @JvmOverloads
     fun list(
         params: FileListParams,

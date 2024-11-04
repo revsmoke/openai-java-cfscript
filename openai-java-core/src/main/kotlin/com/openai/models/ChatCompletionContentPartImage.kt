@@ -124,7 +124,7 @@ private constructor(
 
         /**
          * Specifies the detail level of the image. Learn more in the
-         * [Vision guide](https://platform.openai.com/docs/guides/vision/low-or-high-fidelity-image-understanding).
+         * [Vision guide](https://platform.openai.com/docs/guides/vision#low-or-high-fidelity-image-understanding).
          */
         fun detail(): Optional<Detail> = Optional.ofNullable(detail.getNullable("detail"))
 
@@ -133,7 +133,7 @@ private constructor(
 
         /**
          * Specifies the detail level of the image. Learn more in the
-         * [Vision guide](https://platform.openai.com/docs/guides/vision/low-or-high-fidelity-image-understanding).
+         * [Vision guide](https://platform.openai.com/docs/guides/vision#low-or-high-fidelity-image-understanding).
          */
         @JsonProperty("detail") @ExcludeMissing fun _detail() = detail
 
@@ -179,13 +179,13 @@ private constructor(
 
             /**
              * Specifies the detail level of the image. Learn more in the
-             * [Vision guide](https://platform.openai.com/docs/guides/vision/low-or-high-fidelity-image-understanding).
+             * [Vision guide](https://platform.openai.com/docs/guides/vision#low-or-high-fidelity-image-understanding).
              */
             fun detail(detail: Detail) = detail(JsonField.of(detail))
 
             /**
              * Specifies the detail level of the image. Learn more in the
-             * [Vision guide](https://platform.openai.com/docs/guides/vision/low-or-high-fidelity-image-understanding).
+             * [Vision guide](https://platform.openai.com/docs/guides/vision#low-or-high-fidelity-image-understanding).
              */
             @JsonProperty("detail")
             @ExcludeMissing

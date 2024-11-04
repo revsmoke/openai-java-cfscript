@@ -54,7 +54,7 @@ constructor(
     private val listHandler: Handler<FileListPage.Response> =
         jsonHandler<FileListPage.Response>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-    /** Returns a list of files that belong to the user's organization. */
+    /** Returns a list of files. */
     override fun list(params: FileListParams, requestOptions: RequestOptions): FileListPage {
         val request =
             HttpRequest.builder()

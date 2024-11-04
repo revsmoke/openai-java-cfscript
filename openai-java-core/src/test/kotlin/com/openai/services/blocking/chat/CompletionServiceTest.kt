@@ -67,6 +67,14 @@ class CompletionServiceTest {
                     .modalities(listOf(ChatCompletionModality.TEXT))
                     .n(123L)
                     .parallelToolCalls(true)
+                    .prediction(
+                        ChatCompletionPredictionContent.builder()
+                            .content(
+                                ChatCompletionPredictionContent.Content.ofTextContent("string")
+                            )
+                            .type(ChatCompletionPredictionContent.Type.CONTENT)
+                            .build()
+                    )
                     .presencePenalty(2.0)
                     .responseFormat(
                         ChatCompletionCreateParams.ResponseFormat.ofResponseFormatText(
@@ -165,6 +173,14 @@ class CompletionServiceTest {
                     .modalities(listOf(ChatCompletionModality.TEXT))
                     .n(123L)
                     .parallelToolCalls(true)
+                    .prediction(
+                        ChatCompletionPredictionContent.builder()
+                            .content(
+                                ChatCompletionPredictionContent.Content.ofTextContent("string")
+                            )
+                            .type(ChatCompletionPredictionContent.Type.CONTENT)
+                            .build()
+                    )
                     .presencePenalty(2.0)
                     .responseFormat(
                         ChatCompletionCreateParams.ResponseFormat.ofResponseFormatText(

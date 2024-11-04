@@ -30,8 +30,6 @@ private constructor(
 
     fun data(): List<FileObject> = response().data()
 
-    fun object_(): String = response().object_()
-
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
@@ -52,7 +50,11 @@ private constructor(
     }
 
     fun getNextPageParams(): Optional<FileListParams> {
-        return Optional.empty()
+        if (!hasNextPage()) {
+            return Optional.empty()
+        }
+
+        return Optional.of(FileListParams.builder().from(params).after(data().last().id()).build())
     }
 
     fun getNextPage(): CompletableFuture<Optional<FileListPageAsync>> {
@@ -79,7 +81,6 @@ private constructor(
     class Response
     constructor(
         private val data: JsonField<List<FileObject>>,
-        private val object_: JsonField<String>,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
@@ -87,13 +88,8 @@ private constructor(
 
         fun data(): List<FileObject> = data.getNullable("data") ?: listOf()
 
-        fun object_(): String = object_.getRequired("object")
-
         @JsonProperty("data")
         fun _data(): Optional<JsonField<List<FileObject>>> = Optional.ofNullable(data)
-
-        @JsonProperty("object")
-        fun _object_(): Optional<JsonField<String>> = Optional.ofNullable(object_)
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -102,7 +98,6 @@ private constructor(
         fun validate(): Response = apply {
             if (!validated) {
                 data().map { it.validate() }
-                object_()
                 validated = true
             }
         }
@@ -114,15 +109,15 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Response && this.data == other.data && this.object_ == other.object_ && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Response && this.data == other.data && this.additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         override fun hashCode(): Int {
-            return /* spotless:off */ Objects.hash(data, object_, additionalProperties) /* spotless:on */
+            return /* spotless:off */ Objects.hash(data, additionalProperties) /* spotless:on */
         }
 
         override fun toString() =
-            "FileListPageAsync.Response{data=$data, object_=$object_, additionalProperties=$additionalProperties}"
+            "FileListPageAsync.Response{data=$data, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -132,13 +127,11 @@ private constructor(
         class Builder {
 
             private var data: JsonField<List<FileObject>> = JsonMissing.of()
-            private var object_: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(page: Response) = apply {
                 this.data = page.data
-                this.object_ = page.object_
                 this.additionalProperties.putAll(page.additionalProperties)
             }
 
@@ -147,22 +140,12 @@ private constructor(
             @JsonProperty("data")
             fun data(data: JsonField<List<FileObject>>) = apply { this.data = data }
 
-            fun object_(object_: String) = object_(JsonField.of(object_))
-
-            @JsonProperty("object")
-            fun object_(object_: JsonField<String>) = apply { this.object_ = object_ }
-
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 this.additionalProperties.put(key, value)
             }
 
-            fun build() =
-                Response(
-                    data,
-                    object_,
-                    additionalProperties.toImmutable(),
-                )
+            fun build() = Response(data, additionalProperties.toImmutable())
         }
     }
 

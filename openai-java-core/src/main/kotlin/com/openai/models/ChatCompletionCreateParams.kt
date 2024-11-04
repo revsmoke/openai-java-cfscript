@@ -45,6 +45,7 @@ constructor(
     private val modalities: List<ChatCompletionModality>?,
     private val n: Long?,
     private val parallelToolCalls: Boolean?,
+    private val prediction: ChatCompletionPredictionContent?,
     private val presencePenalty: Double?,
     private val responseFormat: ResponseFormat?,
     private val seed: Long?,
@@ -91,6 +92,8 @@ constructor(
 
     fun parallelToolCalls(): Optional<Boolean> = Optional.ofNullable(parallelToolCalls)
 
+    fun prediction(): Optional<ChatCompletionPredictionContent> = Optional.ofNullable(prediction)
+
     fun presencePenalty(): Optional<Double> = Optional.ofNullable(presencePenalty)
 
     fun responseFormat(): Optional<ResponseFormat> = Optional.ofNullable(responseFormat)
@@ -134,6 +137,7 @@ constructor(
             modalities,
             n,
             parallelToolCalls,
+            prediction,
             presencePenalty,
             responseFormat,
             seed,
@@ -173,6 +177,7 @@ constructor(
         private val modalities: List<ChatCompletionModality>?,
         private val n: Long?,
         private val parallelToolCalls: Boolean?,
+        private val prediction: ChatCompletionPredictionContent?,
         private val presencePenalty: Double?,
         private val responseFormat: ResponseFormat?,
         private val seed: Long?,
@@ -201,7 +206,7 @@ constructor(
 
         /**
          * ID of the model to use. See the
-         * [model endpoint compatibility](https://platform.openai.com/docs/models/model-endpoint-compatibility)
+         * [model endpoint compatibility](https://platform.openai.com/docs/models#model-endpoint-compatibility)
          * table for details on which models work with the Chat API.
          */
         @JsonProperty("model") fun model(): Model? = model
@@ -218,7 +223,7 @@ constructor(
          * verbatim.
          *
          * [See more information about frequency and presence
-         * penalties.](https://platform.openai.com/docs/guides/text-generation/parameter-details)
+         * penalties.](https://platform.openai.com/docs/guides/text-generation)
          */
         @JsonProperty("frequency_penalty") fun frequencyPenalty(): Double? = frequencyPenalty
 
@@ -306,25 +311,31 @@ constructor(
 
         /**
          * Whether to enable
-         * [parallel function calling](https://platform.openai.com/docs/guides/function-calling/parallel-function-calling)
+         * [parallel function calling](https://platform.openai.com/docs/guides/function-calling#configuring-parallel-function-calling)
          * during tool use.
          */
         @JsonProperty("parallel_tool_calls") fun parallelToolCalls(): Boolean? = parallelToolCalls
+
+        /**
+         * Static predicted output content, such as the content of a text file that is being
+         * regenerated.
+         */
+        @JsonProperty("prediction") fun prediction(): ChatCompletionPredictionContent? = prediction
 
         /**
          * Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they
          * appear in the text so far, increasing the model's likelihood to talk about new topics.
          *
          * [See more information about frequency and presence
-         * penalties.](https://platform.openai.com/docs/guides/text-generation/parameter-details)
+         * penalties.](https://platform.openai.com/docs/guides/text-generation)
          */
         @JsonProperty("presence_penalty") fun presencePenalty(): Double? = presencePenalty
 
         /**
          * An object specifying the format that the model must output. Compatible with
-         * [GPT-4o](https://platform.openai.com/docs/models/gpt-4o), [GPT-4o
-         * mini](https://platform.openai.com/docs/models/gpt-4o-mini),
-         * [GPT-4 Turbo](https://platform.openai.com/docs/models/gpt-4-and-gpt-4-turbo) and all
+         * [GPT-4o](https://platform.openai.com/docs/models#gpt-4o), [GPT-4o
+         * mini](https://platform.openai.com/docs/models#gpt-4o-mini),
+         * [GPT-4 Turbo](https://platform.openai.com/docs/models#gpt-4-turbo-and-gpt-4) and all
          * GPT-3.5 Turbo models newer than `gpt-3.5-turbo-1106`.
          *
          * Setting to `{ "type": "json_schema", "json_schema": {...} }` enables Structured Outputs
@@ -428,7 +439,7 @@ constructor(
         /**
          * A unique identifier representing your end-user, which can help OpenAI to monitor and
          * detect abuse.
-         * [Learn more](https://platform.openai.com/docs/guides/safety-best-practices/end-user-ids).
+         * [Learn more](https://platform.openai.com/docs/guides/safety-best-practices#end-user-ids).
          */
         @JsonProperty("user") fun user(): String? = user
 
@@ -459,6 +470,7 @@ constructor(
             private var modalities: List<ChatCompletionModality>? = null
             private var n: Long? = null
             private var parallelToolCalls: Boolean? = null
+            private var prediction: ChatCompletionPredictionContent? = null
             private var presencePenalty: Double? = null
             private var responseFormat: ResponseFormat? = null
             private var seed: Long? = null
@@ -490,6 +502,7 @@ constructor(
                 this.modalities = chatCompletionCreateBody.modalities
                 this.n = chatCompletionCreateBody.n
                 this.parallelToolCalls = chatCompletionCreateBody.parallelToolCalls
+                this.prediction = chatCompletionCreateBody.prediction
                 this.presencePenalty = chatCompletionCreateBody.presencePenalty
                 this.responseFormat = chatCompletionCreateBody.responseFormat
                 this.seed = chatCompletionCreateBody.seed
@@ -521,7 +534,7 @@ constructor(
 
             /**
              * ID of the model to use. See the
-             * [model endpoint compatibility](https://platform.openai.com/docs/models/model-endpoint-compatibility)
+             * [model endpoint compatibility](https://platform.openai.com/docs/models#model-endpoint-compatibility)
              * table for details on which models work with the Chat API.
              */
             @JsonProperty("model") fun model(model: Model) = apply { this.model = model }
@@ -539,7 +552,7 @@ constructor(
              * the same line verbatim.
              *
              * [See more information about frequency and presence
-             * penalties.](https://platform.openai.com/docs/guides/text-generation/parameter-details)
+             * penalties.](https://platform.openai.com/docs/guides/text-generation)
              */
             @JsonProperty("frequency_penalty")
             fun frequencyPenalty(frequencyPenalty: Double) = apply {
@@ -645,7 +658,7 @@ constructor(
 
             /**
              * Whether to enable
-             * [parallel function calling](https://platform.openai.com/docs/guides/function-calling/parallel-function-calling)
+             * [parallel function calling](https://platform.openai.com/docs/guides/function-calling#configuring-parallel-function-calling)
              * during tool use.
              */
             @JsonProperty("parallel_tool_calls")
@@ -654,12 +667,21 @@ constructor(
             }
 
             /**
+             * Static predicted output content, such as the content of a text file that is being
+             * regenerated.
+             */
+            @JsonProperty("prediction")
+            fun prediction(prediction: ChatCompletionPredictionContent) = apply {
+                this.prediction = prediction
+            }
+
+            /**
              * Number between -2.0 and 2.0. Positive values penalize new tokens based on whether
              * they appear in the text so far, increasing the model's likelihood to talk about new
              * topics.
              *
              * [See more information about frequency and presence
-             * penalties.](https://platform.openai.com/docs/guides/text-generation/parameter-details)
+             * penalties.](https://platform.openai.com/docs/guides/text-generation)
              */
             @JsonProperty("presence_penalty")
             fun presencePenalty(presencePenalty: Double) = apply {
@@ -668,9 +690,9 @@ constructor(
 
             /**
              * An object specifying the format that the model must output. Compatible with
-             * [GPT-4o](https://platform.openai.com/docs/models/gpt-4o), [GPT-4o
-             * mini](https://platform.openai.com/docs/models/gpt-4o-mini),
-             * [GPT-4 Turbo](https://platform.openai.com/docs/models/gpt-4-and-gpt-4-turbo) and all
+             * [GPT-4o](https://platform.openai.com/docs/models#gpt-4o), [GPT-4o
+             * mini](https://platform.openai.com/docs/models#gpt-4o-mini),
+             * [GPT-4 Turbo](https://platform.openai.com/docs/models#gpt-4-turbo-and-gpt-4) and all
              * GPT-3.5 Turbo models newer than `gpt-3.5-turbo-1106`.
              *
              * Setting to `{ "type": "json_schema", "json_schema": {...} }` enables Structured
@@ -788,7 +810,7 @@ constructor(
             /**
              * A unique identifier representing your end-user, which can help OpenAI to monitor and
              * detect abuse.
-             * [Learn more](https://platform.openai.com/docs/guides/safety-best-practices/end-user-ids).
+             * [Learn more](https://platform.openai.com/docs/guides/safety-best-practices#end-user-ids).
              */
             @JsonProperty("user") fun user(user: String) = apply { this.user = user }
 
@@ -823,6 +845,7 @@ constructor(
                     modalities?.toImmutable(),
                     n,
                     parallelToolCalls,
+                    prediction,
                     presencePenalty,
                     responseFormat,
                     seed,
@@ -845,20 +868,20 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ChatCompletionCreateBody && this.messages == other.messages && this.model == other.model && this.audio == other.audio && this.frequencyPenalty == other.frequencyPenalty && this.functionCall == other.functionCall && this.functions == other.functions && this.logitBias == other.logitBias && this.logprobs == other.logprobs && this.maxCompletionTokens == other.maxCompletionTokens && this.maxTokens == other.maxTokens && this.metadata == other.metadata && this.modalities == other.modalities && this.n == other.n && this.parallelToolCalls == other.parallelToolCalls && this.presencePenalty == other.presencePenalty && this.responseFormat == other.responseFormat && this.seed == other.seed && this.serviceTier == other.serviceTier && this.stop == other.stop && this.store == other.store && this.streamOptions == other.streamOptions && this.temperature == other.temperature && this.toolChoice == other.toolChoice && this.tools == other.tools && this.topLogprobs == other.topLogprobs && this.topP == other.topP && this.user == other.user && this.additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is ChatCompletionCreateBody && this.messages == other.messages && this.model == other.model && this.audio == other.audio && this.frequencyPenalty == other.frequencyPenalty && this.functionCall == other.functionCall && this.functions == other.functions && this.logitBias == other.logitBias && this.logprobs == other.logprobs && this.maxCompletionTokens == other.maxCompletionTokens && this.maxTokens == other.maxTokens && this.metadata == other.metadata && this.modalities == other.modalities && this.n == other.n && this.parallelToolCalls == other.parallelToolCalls && this.prediction == other.prediction && this.presencePenalty == other.presencePenalty && this.responseFormat == other.responseFormat && this.seed == other.seed && this.serviceTier == other.serviceTier && this.stop == other.stop && this.store == other.store && this.streamOptions == other.streamOptions && this.temperature == other.temperature && this.toolChoice == other.toolChoice && this.tools == other.tools && this.topLogprobs == other.topLogprobs && this.topP == other.topP && this.user == other.user && this.additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         private var hashCode: Int = 0
 
         override fun hashCode(): Int {
             if (hashCode == 0) {
-                hashCode = /* spotless:off */ Objects.hash(messages, model, audio, frequencyPenalty, functionCall, functions, logitBias, logprobs, maxCompletionTokens, maxTokens, metadata, modalities, n, parallelToolCalls, presencePenalty, responseFormat, seed, serviceTier, stop, store, streamOptions, temperature, toolChoice, tools, topLogprobs, topP, user, additionalProperties) /* spotless:on */
+                hashCode = /* spotless:off */ Objects.hash(messages, model, audio, frequencyPenalty, functionCall, functions, logitBias, logprobs, maxCompletionTokens, maxTokens, metadata, modalities, n, parallelToolCalls, prediction, presencePenalty, responseFormat, seed, serviceTier, stop, store, streamOptions, temperature, toolChoice, tools, topLogprobs, topP, user, additionalProperties) /* spotless:on */
             }
             return hashCode
         }
 
         override fun toString() =
-            "ChatCompletionCreateBody{messages=$messages, model=$model, audio=$audio, frequencyPenalty=$frequencyPenalty, functionCall=$functionCall, functions=$functions, logitBias=$logitBias, logprobs=$logprobs, maxCompletionTokens=$maxCompletionTokens, maxTokens=$maxTokens, metadata=$metadata, modalities=$modalities, n=$n, parallelToolCalls=$parallelToolCalls, presencePenalty=$presencePenalty, responseFormat=$responseFormat, seed=$seed, serviceTier=$serviceTier, stop=$stop, store=$store, streamOptions=$streamOptions, temperature=$temperature, toolChoice=$toolChoice, tools=$tools, topLogprobs=$topLogprobs, topP=$topP, user=$user, additionalProperties=$additionalProperties}"
+            "ChatCompletionCreateBody{messages=$messages, model=$model, audio=$audio, frequencyPenalty=$frequencyPenalty, functionCall=$functionCall, functions=$functions, logitBias=$logitBias, logprobs=$logprobs, maxCompletionTokens=$maxCompletionTokens, maxTokens=$maxTokens, metadata=$metadata, modalities=$modalities, n=$n, parallelToolCalls=$parallelToolCalls, prediction=$prediction, presencePenalty=$presencePenalty, responseFormat=$responseFormat, seed=$seed, serviceTier=$serviceTier, stop=$stop, store=$store, streamOptions=$streamOptions, temperature=$temperature, toolChoice=$toolChoice, tools=$tools, topLogprobs=$topLogprobs, topP=$topP, user=$user, additionalProperties=$additionalProperties}"
     }
 
     fun _additionalHeaders(): Map<String, List<String>> = additionalHeaders
@@ -872,15 +895,15 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is ChatCompletionCreateParams && this.messages == other.messages && this.model == other.model && this.audio == other.audio && this.frequencyPenalty == other.frequencyPenalty && this.functionCall == other.functionCall && this.functions == other.functions && this.logitBias == other.logitBias && this.logprobs == other.logprobs && this.maxCompletionTokens == other.maxCompletionTokens && this.maxTokens == other.maxTokens && this.metadata == other.metadata && this.modalities == other.modalities && this.n == other.n && this.parallelToolCalls == other.parallelToolCalls && this.presencePenalty == other.presencePenalty && this.responseFormat == other.responseFormat && this.seed == other.seed && this.serviceTier == other.serviceTier && this.stop == other.stop && this.store == other.store && this.streamOptions == other.streamOptions && this.temperature == other.temperature && this.toolChoice == other.toolChoice && this.tools == other.tools && this.topLogprobs == other.topLogprobs && this.topP == other.topP && this.user == other.user && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is ChatCompletionCreateParams && this.messages == other.messages && this.model == other.model && this.audio == other.audio && this.frequencyPenalty == other.frequencyPenalty && this.functionCall == other.functionCall && this.functions == other.functions && this.logitBias == other.logitBias && this.logprobs == other.logprobs && this.maxCompletionTokens == other.maxCompletionTokens && this.maxTokens == other.maxTokens && this.metadata == other.metadata && this.modalities == other.modalities && this.n == other.n && this.parallelToolCalls == other.parallelToolCalls && this.prediction == other.prediction && this.presencePenalty == other.presencePenalty && this.responseFormat == other.responseFormat && this.seed == other.seed && this.serviceTier == other.serviceTier && this.stop == other.stop && this.store == other.store && this.streamOptions == other.streamOptions && this.temperature == other.temperature && this.toolChoice == other.toolChoice && this.tools == other.tools && this.topLogprobs == other.topLogprobs && this.topP == other.topP && this.user == other.user && this.additionalHeaders == other.additionalHeaders && this.additionalQueryParams == other.additionalQueryParams && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return /* spotless:off */ Objects.hash(messages, model, audio, frequencyPenalty, functionCall, functions, logitBias, logprobs, maxCompletionTokens, maxTokens, metadata, modalities, n, parallelToolCalls, presencePenalty, responseFormat, seed, serviceTier, stop, store, streamOptions, temperature, toolChoice, tools, topLogprobs, topP, user, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+        return /* spotless:off */ Objects.hash(messages, model, audio, frequencyPenalty, functionCall, functions, logitBias, logprobs, maxCompletionTokens, maxTokens, metadata, modalities, n, parallelToolCalls, prediction, presencePenalty, responseFormat, seed, serviceTier, stop, store, streamOptions, temperature, toolChoice, tools, topLogprobs, topP, user, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
     }
 
     override fun toString() =
-        "ChatCompletionCreateParams{messages=$messages, model=$model, audio=$audio, frequencyPenalty=$frequencyPenalty, functionCall=$functionCall, functions=$functions, logitBias=$logitBias, logprobs=$logprobs, maxCompletionTokens=$maxCompletionTokens, maxTokens=$maxTokens, metadata=$metadata, modalities=$modalities, n=$n, parallelToolCalls=$parallelToolCalls, presencePenalty=$presencePenalty, responseFormat=$responseFormat, seed=$seed, serviceTier=$serviceTier, stop=$stop, store=$store, streamOptions=$streamOptions, temperature=$temperature, toolChoice=$toolChoice, tools=$tools, topLogprobs=$topLogprobs, topP=$topP, user=$user, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "ChatCompletionCreateParams{messages=$messages, model=$model, audio=$audio, frequencyPenalty=$frequencyPenalty, functionCall=$functionCall, functions=$functions, logitBias=$logitBias, logprobs=$logprobs, maxCompletionTokens=$maxCompletionTokens, maxTokens=$maxTokens, metadata=$metadata, modalities=$modalities, n=$n, parallelToolCalls=$parallelToolCalls, prediction=$prediction, presencePenalty=$presencePenalty, responseFormat=$responseFormat, seed=$seed, serviceTier=$serviceTier, stop=$stop, store=$store, streamOptions=$streamOptions, temperature=$temperature, toolChoice=$toolChoice, tools=$tools, topLogprobs=$topLogprobs, topP=$topP, user=$user, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -906,6 +929,7 @@ constructor(
         private var modalities: MutableList<ChatCompletionModality> = mutableListOf()
         private var n: Long? = null
         private var parallelToolCalls: Boolean? = null
+        private var prediction: ChatCompletionPredictionContent? = null
         private var presencePenalty: Double? = null
         private var responseFormat: ResponseFormat? = null
         private var seed: Long? = null
@@ -939,6 +963,7 @@ constructor(
             this.modalities(chatCompletionCreateParams.modalities ?: listOf())
             this.n = chatCompletionCreateParams.n
             this.parallelToolCalls = chatCompletionCreateParams.parallelToolCalls
+            this.prediction = chatCompletionCreateParams.prediction
             this.presencePenalty = chatCompletionCreateParams.presencePenalty
             this.responseFormat = chatCompletionCreateParams.responseFormat
             this.seed = chatCompletionCreateParams.seed
@@ -982,21 +1007,21 @@ constructor(
 
         /**
          * ID of the model to use. See the
-         * [model endpoint compatibility](https://platform.openai.com/docs/models/model-endpoint-compatibility)
+         * [model endpoint compatibility](https://platform.openai.com/docs/models#model-endpoint-compatibility)
          * table for details on which models work with the Chat API.
          */
         fun model(model: Model) = apply { this.model = model }
 
         /**
          * ID of the model to use. See the
-         * [model endpoint compatibility](https://platform.openai.com/docs/models/model-endpoint-compatibility)
+         * [model endpoint compatibility](https://platform.openai.com/docs/models#model-endpoint-compatibility)
          * table for details on which models work with the Chat API.
          */
         fun model(string: String) = apply { this.model = Model.ofString(string) }
 
         /**
          * ID of the model to use. See the
-         * [model endpoint compatibility](https://platform.openai.com/docs/models/model-endpoint-compatibility)
+         * [model endpoint compatibility](https://platform.openai.com/docs/models#model-endpoint-compatibility)
          * table for details on which models work with the Chat API.
          */
         fun model(chatModel: ChatModel) = apply { this.model = Model.ofChatModel(chatModel) }
@@ -1013,7 +1038,7 @@ constructor(
          * verbatim.
          *
          * [See more information about frequency and presence
-         * penalties.](https://platform.openai.com/docs/guides/text-generation/parameter-details)
+         * penalties.](https://platform.openai.com/docs/guides/text-generation)
          */
         fun frequencyPenalty(frequencyPenalty: Double) = apply {
             this.frequencyPenalty = frequencyPenalty
@@ -1161,7 +1186,7 @@ constructor(
 
         /**
          * Whether to enable
-         * [parallel function calling](https://platform.openai.com/docs/guides/function-calling/parallel-function-calling)
+         * [parallel function calling](https://platform.openai.com/docs/guides/function-calling#configuring-parallel-function-calling)
          * during tool use.
          */
         fun parallelToolCalls(parallelToolCalls: Boolean) = apply {
@@ -1169,11 +1194,19 @@ constructor(
         }
 
         /**
+         * Static predicted output content, such as the content of a text file that is being
+         * regenerated.
+         */
+        fun prediction(prediction: ChatCompletionPredictionContent) = apply {
+            this.prediction = prediction
+        }
+
+        /**
          * Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they
          * appear in the text so far, increasing the model's likelihood to talk about new topics.
          *
          * [See more information about frequency and presence
-         * penalties.](https://platform.openai.com/docs/guides/text-generation/parameter-details)
+         * penalties.](https://platform.openai.com/docs/guides/text-generation)
          */
         fun presencePenalty(presencePenalty: Double) = apply {
             this.presencePenalty = presencePenalty
@@ -1181,9 +1214,9 @@ constructor(
 
         /**
          * An object specifying the format that the model must output. Compatible with
-         * [GPT-4o](https://platform.openai.com/docs/models/gpt-4o), [GPT-4o
-         * mini](https://platform.openai.com/docs/models/gpt-4o-mini),
-         * [GPT-4 Turbo](https://platform.openai.com/docs/models/gpt-4-and-gpt-4-turbo) and all
+         * [GPT-4o](https://platform.openai.com/docs/models#gpt-4o), [GPT-4o
+         * mini](https://platform.openai.com/docs/models#gpt-4o-mini),
+         * [GPT-4 Turbo](https://platform.openai.com/docs/models#gpt-4-turbo-and-gpt-4) and all
          * GPT-3.5 Turbo models newer than `gpt-3.5-turbo-1106`.
          *
          * Setting to `{ "type": "json_schema", "json_schema": {...} }` enables Structured Outputs
@@ -1206,9 +1239,9 @@ constructor(
 
         /**
          * An object specifying the format that the model must output. Compatible with
-         * [GPT-4o](https://platform.openai.com/docs/models/gpt-4o), [GPT-4o
-         * mini](https://platform.openai.com/docs/models/gpt-4o-mini),
-         * [GPT-4 Turbo](https://platform.openai.com/docs/models/gpt-4-and-gpt-4-turbo) and all
+         * [GPT-4o](https://platform.openai.com/docs/models#gpt-4o), [GPT-4o
+         * mini](https://platform.openai.com/docs/models#gpt-4o-mini),
+         * [GPT-4 Turbo](https://platform.openai.com/docs/models#gpt-4-turbo-and-gpt-4) and all
          * GPT-3.5 Turbo models newer than `gpt-3.5-turbo-1106`.
          *
          * Setting to `{ "type": "json_schema", "json_schema": {...} }` enables Structured Outputs
@@ -1231,9 +1264,9 @@ constructor(
 
         /**
          * An object specifying the format that the model must output. Compatible with
-         * [GPT-4o](https://platform.openai.com/docs/models/gpt-4o), [GPT-4o
-         * mini](https://platform.openai.com/docs/models/gpt-4o-mini),
-         * [GPT-4 Turbo](https://platform.openai.com/docs/models/gpt-4-and-gpt-4-turbo) and all
+         * [GPT-4o](https://platform.openai.com/docs/models#gpt-4o), [GPT-4o
+         * mini](https://platform.openai.com/docs/models#gpt-4o-mini),
+         * [GPT-4 Turbo](https://platform.openai.com/docs/models#gpt-4-turbo-and-gpt-4) and all
          * GPT-3.5 Turbo models newer than `gpt-3.5-turbo-1106`.
          *
          * Setting to `{ "type": "json_schema", "json_schema": {...} }` enables Structured Outputs
@@ -1257,9 +1290,9 @@ constructor(
 
         /**
          * An object specifying the format that the model must output. Compatible with
-         * [GPT-4o](https://platform.openai.com/docs/models/gpt-4o), [GPT-4o
-         * mini](https://platform.openai.com/docs/models/gpt-4o-mini),
-         * [GPT-4 Turbo](https://platform.openai.com/docs/models/gpt-4-and-gpt-4-turbo) and all
+         * [GPT-4o](https://platform.openai.com/docs/models#gpt-4o), [GPT-4o
+         * mini](https://platform.openai.com/docs/models#gpt-4o-mini),
+         * [GPT-4 Turbo](https://platform.openai.com/docs/models#gpt-4-turbo-and-gpt-4) and all
          * GPT-3.5 Turbo models newer than `gpt-3.5-turbo-1106`.
          *
          * Setting to `{ "type": "json_schema", "json_schema": {...} }` enables Structured Outputs
@@ -1416,7 +1449,7 @@ constructor(
         /**
          * A unique identifier representing your end-user, which can help OpenAI to monitor and
          * detect abuse.
-         * [Learn more](https://platform.openai.com/docs/guides/safety-best-practices/end-user-ids).
+         * [Learn more](https://platform.openai.com/docs/guides/safety-best-practices#end-user-ids).
          */
         fun user(user: String) = apply { this.user = user }
 
@@ -1524,6 +1557,7 @@ constructor(
                 if (modalities.size == 0) null else modalities.toImmutable(),
                 n,
                 parallelToolCalls,
+                prediction,
                 presencePenalty,
                 responseFormat,
                 seed,

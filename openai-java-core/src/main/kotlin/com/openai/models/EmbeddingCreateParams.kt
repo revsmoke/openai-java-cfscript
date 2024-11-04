@@ -93,8 +93,7 @@ constructor(
          * ID of the model to use. You can use the
          * [List models](https://platform.openai.com/docs/api-reference/models/list) API to see all
          * of your available models, or see our
-         * [Model overview](https://platform.openai.com/docs/models/overview) for descriptions of
-         * them.
+         * [Model overview](https://platform.openai.com/docs/models) for descriptions of them.
          */
         @JsonProperty("model") fun model(): Model? = model
 
@@ -113,7 +112,7 @@ constructor(
         /**
          * A unique identifier representing your end-user, which can help OpenAI to monitor and
          * detect abuse.
-         * [Learn more](https://platform.openai.com/docs/guides/safety-best-practices/end-user-ids).
+         * [Learn more](https://platform.openai.com/docs/guides/safety-best-practices#end-user-ids).
          */
         @JsonProperty("user") fun user(): String? = user
 
@@ -162,8 +161,7 @@ constructor(
              * ID of the model to use. You can use the
              * [List models](https://platform.openai.com/docs/api-reference/models/list) API to see
              * all of your available models, or see our
-             * [Model overview](https://platform.openai.com/docs/models/overview) for descriptions
-             * of them.
+             * [Model overview](https://platform.openai.com/docs/models) for descriptions of them.
              */
             @JsonProperty("model") fun model(model: Model) = apply { this.model = model }
 
@@ -186,7 +184,7 @@ constructor(
             /**
              * A unique identifier representing your end-user, which can help OpenAI to monitor and
              * detect abuse.
-             * [Learn more](https://platform.openai.com/docs/guides/safety-best-practices/end-user-ids).
+             * [Learn more](https://platform.openai.com/docs/guides/safety-best-practices#end-user-ids).
              */
             @JsonProperty("user") fun user(user: String) = apply { this.user = user }
 
@@ -348,8 +346,7 @@ constructor(
          * ID of the model to use. You can use the
          * [List models](https://platform.openai.com/docs/api-reference/models/list) API to see all
          * of your available models, or see our
-         * [Model overview](https://platform.openai.com/docs/models/overview) for descriptions of
-         * them.
+         * [Model overview](https://platform.openai.com/docs/models) for descriptions of them.
          */
         fun model(model: Model) = apply { this.model = model }
 
@@ -357,8 +354,7 @@ constructor(
          * ID of the model to use. You can use the
          * [List models](https://platform.openai.com/docs/api-reference/models/list) API to see all
          * of your available models, or see our
-         * [Model overview](https://platform.openai.com/docs/models/overview) for descriptions of
-         * them.
+         * [Model overview](https://platform.openai.com/docs/models) for descriptions of them.
          */
         fun model(string: String) = apply { this.model = Model.ofString(string) }
 
@@ -366,8 +362,7 @@ constructor(
          * ID of the model to use. You can use the
          * [List models](https://platform.openai.com/docs/api-reference/models/list) API to see all
          * of your available models, or see our
-         * [Model overview](https://platform.openai.com/docs/models/overview) for descriptions of
-         * them.
+         * [Model overview](https://platform.openai.com/docs/models) for descriptions of them.
          */
         fun model(embeddingModel: EmbeddingModel) = apply {
             this.model = Model.ofEmbeddingModel(embeddingModel)
@@ -390,7 +385,7 @@ constructor(
         /**
          * A unique identifier representing your end-user, which can help OpenAI to monitor and
          * detect abuse.
-         * [Learn more](https://platform.openai.com/docs/guides/safety-best-practices/end-user-ids).
+         * [Learn more](https://platform.openai.com/docs/guides/safety-best-practices#end-user-ids).
          */
         fun user(user: String) = apply { this.user = user }
 

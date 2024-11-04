@@ -70,7 +70,7 @@ constructor(
         /**
          * The content moderation model you would like to use. Learn more in
          * [the moderation guide](https://platform.openai.com/docs/guides/moderation), and learn
-         * about available models [here](https://platform.openai.com/docs/models/moderation).
+         * about available models [here](https://platform.openai.com/docs/models#moderation).
          */
         @JsonProperty("model") fun model(): Model? = model
 
@@ -107,7 +107,7 @@ constructor(
             /**
              * The content moderation model you would like to use. Learn more in
              * [the moderation guide](https://platform.openai.com/docs/guides/moderation), and learn
-             * about available models [here](https://platform.openai.com/docs/models/moderation).
+             * about available models [here](https://platform.openai.com/docs/models#moderation).
              */
             @JsonProperty("model") fun model(model: Model) = apply { this.model = model }
 
@@ -229,21 +229,21 @@ constructor(
         /**
          * The content moderation model you would like to use. Learn more in
          * [the moderation guide](https://platform.openai.com/docs/guides/moderation), and learn
-         * about available models [here](https://platform.openai.com/docs/models/moderation).
+         * about available models [here](https://platform.openai.com/docs/models#moderation).
          */
         fun model(model: Model) = apply { this.model = model }
 
         /**
          * The content moderation model you would like to use. Learn more in
          * [the moderation guide](https://platform.openai.com/docs/guides/moderation), and learn
-         * about available models [here](https://platform.openai.com/docs/models/moderation).
+         * about available models [here](https://platform.openai.com/docs/models#moderation).
          */
         fun model(string: String) = apply { this.model = Model.ofString(string) }
 
         /**
          * The content moderation model you would like to use. Learn more in
          * [the moderation guide](https://platform.openai.com/docs/guides/moderation), and learn
-         * about available models [here](https://platform.openai.com/docs/models/moderation).
+         * about available models [here](https://platform.openai.com/docs/models#moderation).
          */
         fun model(moderationModel: ModerationModel) = apply {
             this.model = Model.ofModerationModel(moderationModel)

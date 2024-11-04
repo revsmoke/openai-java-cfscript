@@ -109,8 +109,10 @@ class ChatCompletionTest {
                         .totalTokens(123L)
                         .completionTokensDetails(
                             CompletionUsage.CompletionTokensDetails.builder()
+                                .acceptedPredictionTokens(123L)
                                 .audioTokens(123L)
                                 .reasoningTokens(123L)
+                                .rejectedPredictionTokens(123L)
                                 .build()
                         )
                         .promptTokensDetails(
@@ -219,8 +221,10 @@ class ChatCompletionTest {
                     .totalTokens(123L)
                     .completionTokensDetails(
                         CompletionUsage.CompletionTokensDetails.builder()
+                            .acceptedPredictionTokens(123L)
                             .audioTokens(123L)
                             .reasoningTokens(123L)
+                            .rejectedPredictionTokens(123L)
                             .build()
                     )
                     .promptTokensDetails(

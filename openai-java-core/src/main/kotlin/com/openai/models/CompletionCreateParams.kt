@@ -143,8 +143,7 @@ constructor(
          * ID of the model to use. You can use the
          * [List models](https://platform.openai.com/docs/api-reference/models/list) API to see all
          * of your available models, or see our
-         * [Model overview](https://platform.openai.com/docs/models/overview) for descriptions of
-         * them.
+         * [Model overview](https://platform.openai.com/docs/models) for descriptions of them.
          */
         @JsonProperty("model") fun model(): Model? = model
 
@@ -180,7 +179,7 @@ constructor(
          * verbatim.
          *
          * [See more information about frequency and presence
-         * penalties.](https://platform.openai.com/docs/guides/text-generation/parameter-details)
+         * penalties.](https://platform.openai.com/docs/guides/text-generation)
          */
         @JsonProperty("frequency_penalty") fun frequencyPenalty(): Double? = frequencyPenalty
 
@@ -234,7 +233,7 @@ constructor(
          * appear in the text so far, increasing the model's likelihood to talk about new topics.
          *
          * [See more information about frequency and presence
-         * penalties.](https://platform.openai.com/docs/guides/text-generation/parameter-details)
+         * penalties.](https://platform.openai.com/docs/guides/text-generation)
          */
         @JsonProperty("presence_penalty") fun presencePenalty(): Double? = presencePenalty
 
@@ -285,7 +284,7 @@ constructor(
         /**
          * A unique identifier representing your end-user, which can help OpenAI to monitor and
          * detect abuse.
-         * [Learn more](https://platform.openai.com/docs/guides/safety-best-practices/end-user-ids).
+         * [Learn more](https://platform.openai.com/docs/guides/safety-best-practices#end-user-ids).
          */
         @JsonProperty("user") fun user(): String? = user
 
@@ -347,8 +346,7 @@ constructor(
              * ID of the model to use. You can use the
              * [List models](https://platform.openai.com/docs/api-reference/models/list) API to see
              * all of your available models, or see our
-             * [Model overview](https://platform.openai.com/docs/models/overview) for descriptions
-             * of them.
+             * [Model overview](https://platform.openai.com/docs/models) for descriptions of them.
              */
             @JsonProperty("model") fun model(model: Model) = apply { this.model = model }
 
@@ -384,7 +382,7 @@ constructor(
              * the same line verbatim.
              *
              * [See more information about frequency and presence
-             * penalties.](https://platform.openai.com/docs/guides/text-generation/parameter-details)
+             * penalties.](https://platform.openai.com/docs/guides/text-generation)
              */
             @JsonProperty("frequency_penalty")
             fun frequencyPenalty(frequencyPenalty: Double) = apply {
@@ -445,7 +443,7 @@ constructor(
              * topics.
              *
              * [See more information about frequency and presence
-             * penalties.](https://platform.openai.com/docs/guides/text-generation/parameter-details)
+             * penalties.](https://platform.openai.com/docs/guides/text-generation)
              */
             @JsonProperty("presence_penalty")
             fun presencePenalty(presencePenalty: Double) = apply {
@@ -503,7 +501,7 @@ constructor(
             /**
              * A unique identifier representing your end-user, which can help OpenAI to monitor and
              * detect abuse.
-             * [Learn more](https://platform.openai.com/docs/guides/safety-best-practices/end-user-ids).
+             * [Learn more](https://platform.openai.com/docs/guides/safety-best-practices#end-user-ids).
              */
             @JsonProperty("user") fun user(user: String) = apply { this.user = user }
 
@@ -645,8 +643,7 @@ constructor(
          * ID of the model to use. You can use the
          * [List models](https://platform.openai.com/docs/api-reference/models/list) API to see all
          * of your available models, or see our
-         * [Model overview](https://platform.openai.com/docs/models/overview) for descriptions of
-         * them.
+         * [Model overview](https://platform.openai.com/docs/models) for descriptions of them.
          */
         fun model(model: Model) = apply { this.model = model }
 
@@ -654,8 +651,7 @@ constructor(
          * ID of the model to use. You can use the
          * [List models](https://platform.openai.com/docs/api-reference/models/list) API to see all
          * of your available models, or see our
-         * [Model overview](https://platform.openai.com/docs/models/overview) for descriptions of
-         * them.
+         * [Model overview](https://platform.openai.com/docs/models) for descriptions of them.
          */
         fun model(string: String) = apply { this.model = Model.ofString(string) }
 
@@ -663,8 +659,7 @@ constructor(
          * ID of the model to use. You can use the
          * [List models](https://platform.openai.com/docs/api-reference/models/list) API to see all
          * of your available models, or see our
-         * [Model overview](https://platform.openai.com/docs/models/overview) for descriptions of
-         * them.
+         * [Model overview](https://platform.openai.com/docs/models) for descriptions of them.
          */
         fun model(preset: Model.Preset) = apply { this.model = Model.ofPreset(preset) }
 
@@ -746,7 +741,7 @@ constructor(
          * verbatim.
          *
          * [See more information about frequency and presence
-         * penalties.](https://platform.openai.com/docs/guides/text-generation/parameter-details)
+         * penalties.](https://platform.openai.com/docs/guides/text-generation)
          */
         fun frequencyPenalty(frequencyPenalty: Double) = apply {
             this.frequencyPenalty = frequencyPenalty
@@ -802,7 +797,7 @@ constructor(
          * appear in the text so far, increasing the model's likelihood to talk about new topics.
          *
          * [See more information about frequency and presence
-         * penalties.](https://platform.openai.com/docs/guides/text-generation/parameter-details)
+         * penalties.](https://platform.openai.com/docs/guides/text-generation)
          */
         fun presencePenalty(presencePenalty: Double) = apply {
             this.presencePenalty = presencePenalty
@@ -868,7 +863,7 @@ constructor(
         /**
          * A unique identifier representing your end-user, which can help OpenAI to monitor and
          * detect abuse.
-         * [Learn more](https://platform.openai.com/docs/guides/safety-best-practices/end-user-ids).
+         * [Learn more](https://platform.openai.com/docs/guides/safety-best-practices#end-user-ids).
          */
         fun user(user: String) = apply { this.user = user }
 

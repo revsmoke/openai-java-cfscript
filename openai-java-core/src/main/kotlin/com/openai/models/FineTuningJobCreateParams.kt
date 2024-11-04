@@ -91,7 +91,7 @@ constructor(
 
         /**
          * The name of the model to fine-tune. You can select one of the
-         * [supported models](https://platform.openai.com/docs/guides/fine-tuning/which-models-can-be-fine-tuned).
+         * [supported models](https://platform.openai.com/docs/guides/fine-tuning#which-models-can-be-fine-tuned).
          */
         @JsonProperty("model") fun model(): Model? = model
 
@@ -186,7 +186,7 @@ constructor(
 
             /**
              * The name of the model to fine-tune. You can select one of the
-             * [supported models](https://platform.openai.com/docs/guides/fine-tuning/which-models-can-be-fine-tuned).
+             * [supported models](https://platform.openai.com/docs/guides/fine-tuning#which-models-can-be-fine-tuned).
              */
             @JsonProperty("model") fun model(model: Model) = apply { this.model = model }
 
@@ -361,19 +361,19 @@ constructor(
 
         /**
          * The name of the model to fine-tune. You can select one of the
-         * [supported models](https://platform.openai.com/docs/guides/fine-tuning/which-models-can-be-fine-tuned).
+         * [supported models](https://platform.openai.com/docs/guides/fine-tuning#which-models-can-be-fine-tuned).
          */
         fun model(model: Model) = apply { this.model = model }
 
         /**
          * The name of the model to fine-tune. You can select one of the
-         * [supported models](https://platform.openai.com/docs/guides/fine-tuning/which-models-can-be-fine-tuned).
+         * [supported models](https://platform.openai.com/docs/guides/fine-tuning#which-models-can-be-fine-tuned).
          */
         fun model(string: String) = apply { this.model = Model.ofString(string) }
 
         /**
          * The name of the model to fine-tune. You can select one of the
-         * [supported models](https://platform.openai.com/docs/guides/fine-tuning/which-models-can-be-fine-tuned).
+         * [supported models](https://platform.openai.com/docs/guides/fine-tuning#which-models-can-be-fine-tuned).
          */
         fun model(preset: Model.Preset) = apply { this.model = Model.ofPreset(preset) }
 
