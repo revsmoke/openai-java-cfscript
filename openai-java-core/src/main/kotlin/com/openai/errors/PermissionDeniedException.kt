@@ -1,9 +1,9 @@
 package com.openai.errors
 
-import com.google.common.collect.ListMultimap
+import com.openai.core.http.Headers
 
 class PermissionDeniedException(
-    headers: ListMultimap<String, String>,
+    headers: Headers,
     body: String,
     error: OpenAIError,
 ) : OpenAIServiceException(403, headers, body, error)

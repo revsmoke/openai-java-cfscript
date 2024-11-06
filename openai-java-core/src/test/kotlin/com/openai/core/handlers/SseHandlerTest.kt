@@ -1,7 +1,6 @@
 package com.openai.core.handlers
 
-import com.google.common.collect.ImmutableListMultimap
-import com.google.common.collect.ListMultimap
+import com.openai.core.http.Headers
 import com.openai.core.http.HttpResponse
 import com.openai.core.http.SseMessage
 import com.openai.core.jsonMapper
@@ -110,7 +109,7 @@ class SseHandlerTest {
             object : HttpResponse {
                 override fun statusCode(): Int = 0
 
-                override fun headers(): ListMultimap<String, String> = ImmutableListMultimap.of()
+                override fun headers(): Headers = Headers.builder().build()
 
                 override fun body(): InputStream =
                     ByteArrayInputStream(testCase.body.toByteArray(StandardCharsets.UTF_8))

@@ -1,9 +1,9 @@
 package com.openai.errors
 
-import com.google.common.collect.ListMultimap
+import com.openai.core.http.Headers
 
 class NotFoundException(
-    headers: ListMultimap<String, String>,
+    headers: Headers,
     body: String,
     error: OpenAIError,
 ) : OpenAIServiceException(404, headers, body, error)

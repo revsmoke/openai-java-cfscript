@@ -2,6 +2,7 @@
 
 package com.openai.models
 
+import com.openai.core.http.QueryParams
 import com.openai.models.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -25,10 +26,10 @@ class FineTuningJobCheckpointListParamsTest {
                 .after("after")
                 .limit(123L)
                 .build()
-        val expected = mutableMapOf<String, List<String>>()
-        expected.put("after", listOf("after"))
-        expected.put("limit", listOf("123"))
-        assertThat(params.getQueryParams()).isEqualTo(expected)
+        val expected = QueryParams.builder()
+        expected.put("after", "after")
+        expected.put("limit", "123")
+        assertThat(params.getQueryParams()).isEqualTo(expected.build())
     }
 
     @Test
@@ -37,8 +38,8 @@ class FineTuningJobCheckpointListParamsTest {
             FineTuningJobCheckpointListParams.builder()
                 .fineTuningJobId("ft-AF1WoRqd3aJAHsqc9NY7iL8F")
                 .build()
-        val expected = mutableMapOf<String, List<String>>()
-        assertThat(params.getQueryParams()).isEqualTo(expected)
+        val expected = QueryParams.builder()
+        assertThat(params.getQueryParams()).isEqualTo(expected.build())
     }
 
     @Test

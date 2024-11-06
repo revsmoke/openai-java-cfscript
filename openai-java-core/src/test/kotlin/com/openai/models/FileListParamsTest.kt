@@ -2,6 +2,7 @@
 
 package com.openai.models
 
+import com.openai.core.http.QueryParams
 import com.openai.models.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -27,18 +28,18 @@ class FileListParamsTest {
                 .order(FileListParams.Order.ASC)
                 .purpose("purpose")
                 .build()
-        val expected = mutableMapOf<String, List<String>>()
-        expected.put("after", listOf("after"))
-        expected.put("limit", listOf("123"))
-        expected.put("order", listOf(FileListParams.Order.ASC.toString()))
-        expected.put("purpose", listOf("purpose"))
-        assertThat(params.getQueryParams()).isEqualTo(expected)
+        val expected = QueryParams.builder()
+        expected.put("after", "after")
+        expected.put("limit", "123")
+        expected.put("order", FileListParams.Order.ASC.toString())
+        expected.put("purpose", "purpose")
+        assertThat(params.getQueryParams()).isEqualTo(expected.build())
     }
 
     @Test
     fun getQueryParamsWithoutOptionalFields() {
         val params = FileListParams.builder().build()
-        val expected = mutableMapOf<String, List<String>>()
-        assertThat(params.getQueryParams()).isEqualTo(expected)
+        val expected = QueryParams.builder()
+        assertThat(params.getQueryParams()).isEqualTo(expected.build())
     }
 }
