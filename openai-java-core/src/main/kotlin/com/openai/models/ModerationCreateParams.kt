@@ -4,6 +4,7 @@ package com.openai.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.core.ObjectCodec
@@ -14,7 +15,9 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.openai.core.BaseDeserializer
 import com.openai.core.BaseSerializer
+import com.openai.core.Enum
 import com.openai.core.ExcludeMissing
+import com.openai.core.JsonField
 import com.openai.core.JsonValue
 import com.openai.core.NoAutoDetect
 import com.openai.core.getOrThrow
@@ -238,16 +241,7 @@ constructor(
          * [the moderation guide](https://platform.openai.com/docs/guides/moderation), and learn
          * about available models [here](https://platform.openai.com/docs/models#moderation).
          */
-        fun model(string: String) = apply { this.model = Model.ofString(string) }
-
-        /**
-         * The content moderation model you would like to use. Learn more in
-         * [the moderation guide](https://platform.openai.com/docs/guides/moderation), and learn
-         * about available models [here](https://platform.openai.com/docs/models#moderation).
-         */
-        fun model(moderationModel: ModerationModel) = apply {
-            this.model = Model.ofModerationModel(moderationModel)
-        }
+        fun model(value: String) = apply { this.model = Model.of(value) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -521,119 +515,73 @@ constructor(
         }
     }
 
-    @JsonDeserialize(using = Model.Deserializer::class)
-    @JsonSerialize(using = Model.Serializer::class)
     class Model
+    @JsonCreator
     private constructor(
-        private val string: String? = null,
-        private val moderationModel: ModerationModel? = null,
-        private val _json: JsonValue? = null,
-    ) {
+        private val value: JsonField<String>,
+    ) : Enum {
 
-        private var validated: Boolean = false
-
-        fun string(): Optional<String> = Optional.ofNullable(string)
-
-        fun moderationModel(): Optional<ModerationModel> = Optional.ofNullable(moderationModel)
-
-        fun isString(): Boolean = string != null
-
-        fun isModerationModel(): Boolean = moderationModel != null
-
-        fun asString(): String = string.getOrThrow("string")
-
-        fun asModerationModel(): ModerationModel = moderationModel.getOrThrow("moderationModel")
-
-        fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
-
-        fun <T> accept(visitor: Visitor<T>): T {
-            return when {
-                string != null -> visitor.visitString(string)
-                moderationModel != null -> visitor.visitModerationModel(moderationModel)
-                else -> visitor.unknown(_json)
-            }
-        }
-
-        fun validate(): Model = apply {
-            if (!validated) {
-                if (string == null && moderationModel == null) {
-                    throw OpenAIInvalidDataException("Unknown Model: $_json")
-                }
-                validated = true
-            }
-        }
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
             }
 
-            return /* spotless:off */ other is Model && this.string == other.string && this.moderationModel == other.moderationModel /* spotless:on */
+            return /* spotless:off */ other is Model && this.value == other.value /* spotless:on */
         }
 
-        override fun hashCode(): Int {
-            return /* spotless:off */ Objects.hash(string, moderationModel) /* spotless:on */
-        }
+        override fun hashCode() = value.hashCode()
 
-        override fun toString(): String {
-            return when {
-                string != null -> "Model{string=$string}"
-                moderationModel != null -> "Model{moderationModel=$moderationModel}"
-                _json != null -> "Model{_unknown=$_json}"
-                else -> throw IllegalStateException("Invalid Model")
-            }
-        }
+        override fun toString() = value.toString()
 
         companion object {
 
-            @JvmStatic fun ofString(string: String) = Model(string = string)
+            @JvmField val OMNI_MODERATION_LATEST = Model(JsonField.of("omni-moderation-latest"))
 
-            @JvmStatic
-            fun ofModerationModel(moderationModel: ModerationModel) =
-                Model(moderationModel = moderationModel)
+            @JvmField
+            val OMNI_MODERATION_2024_09_26 = Model(JsonField.of("omni-moderation-2024-09-26"))
+
+            @JvmField val TEXT_MODERATION_LATEST = Model(JsonField.of("text-moderation-latest"))
+
+            @JvmField val TEXT_MODERATION_STABLE = Model(JsonField.of("text-moderation-stable"))
+
+            @JvmStatic fun of(value: String) = Model(JsonField.of(value))
         }
 
-        interface Visitor<out T> {
+        enum class Known {
+            OMNI_MODERATION_LATEST,
+            OMNI_MODERATION_2024_09_26,
+            TEXT_MODERATION_LATEST,
+            TEXT_MODERATION_STABLE,
+        }
 
-            fun visitString(string: String): T
+        enum class Value {
+            OMNI_MODERATION_LATEST,
+            OMNI_MODERATION_2024_09_26,
+            TEXT_MODERATION_LATEST,
+            TEXT_MODERATION_STABLE,
+            _UNKNOWN,
+        }
 
-            fun visitModerationModel(moderationModel: ModerationModel): T
-
-            fun unknown(json: JsonValue?): T {
-                throw OpenAIInvalidDataException("Unknown Model: $json")
+        fun value(): Value =
+            when (this) {
+                OMNI_MODERATION_LATEST -> Value.OMNI_MODERATION_LATEST
+                OMNI_MODERATION_2024_09_26 -> Value.OMNI_MODERATION_2024_09_26
+                TEXT_MODERATION_LATEST -> Value.TEXT_MODERATION_LATEST
+                TEXT_MODERATION_STABLE -> Value.TEXT_MODERATION_STABLE
+                else -> Value._UNKNOWN
             }
-        }
 
-        class Deserializer : BaseDeserializer<Model>(Model::class) {
-
-            override fun ObjectCodec.deserialize(node: JsonNode): Model {
-                val json = JsonValue.fromJsonNode(node)
-
-                tryDeserialize(node, jacksonTypeRef<String>())?.let {
-                    return Model(string = it, _json = json)
-                }
-                tryDeserialize(node, jacksonTypeRef<ModerationModel>())?.let {
-                    return Model(moderationModel = it, _json = json)
-                }
-
-                return Model(_json = json)
+        fun known(): Known =
+            when (this) {
+                OMNI_MODERATION_LATEST -> Known.OMNI_MODERATION_LATEST
+                OMNI_MODERATION_2024_09_26 -> Known.OMNI_MODERATION_2024_09_26
+                TEXT_MODERATION_LATEST -> Known.TEXT_MODERATION_LATEST
+                TEXT_MODERATION_STABLE -> Known.TEXT_MODERATION_STABLE
+                else -> throw OpenAIInvalidDataException("Unknown Model: $value")
             }
-        }
 
-        class Serializer : BaseSerializer<Model>(Model::class) {
-
-            override fun serialize(
-                value: Model,
-                generator: JsonGenerator,
-                provider: SerializerProvider
-            ) {
-                when {
-                    value.string != null -> generator.writeObject(value.string)
-                    value.moderationModel != null -> generator.writeObject(value.moderationModel)
-                    value._json != null -> generator.writeObject(value._json)
-                    else -> throw IllegalStateException("Invalid Model")
-                }
-            }
-        }
+        fun asString(): String = _value().asStringOrThrow()
     }
 }

@@ -24,7 +24,7 @@ class ChatCompletionCreateParamsTest {
                     )
                 )
             )
-            .model(ChatCompletionCreateParams.Model.ofString("string"))
+            .model(ChatCompletionCreateParams.Model.O1_PREVIEW)
             .audio(
                 ChatCompletionAudioParam.builder()
                     .format(ChatCompletionAudioParam.Format.WAV)
@@ -115,7 +115,7 @@ class ChatCompletionCreateParamsTest {
                         )
                     )
                 )
-                .model(ChatCompletionCreateParams.Model.ofString("string"))
+                .model(ChatCompletionCreateParams.Model.O1_PREVIEW)
                 .audio(
                     ChatCompletionAudioParam.builder()
                         .format(ChatCompletionAudioParam.Format.WAV)
@@ -203,7 +203,7 @@ class ChatCompletionCreateParamsTest {
                     )
                 )
             )
-        assertThat(body.model()).isEqualTo(ChatCompletionCreateParams.Model.ofString("string"))
+        assertThat(body.model()).isEqualTo(ChatCompletionCreateParams.Model.O1_PREVIEW)
         assertThat(body.audio())
             .isEqualTo(
                 ChatCompletionAudioParam.builder()
@@ -301,7 +301,7 @@ class ChatCompletionCreateParamsTest {
                         )
                     )
                 )
-                .model(ChatCompletionCreateParams.Model.ofString("string"))
+                .model(ChatCompletionCreateParams.Model.O1_PREVIEW)
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
@@ -318,6 +318,6 @@ class ChatCompletionCreateParamsTest {
                     )
                 )
             )
-        assertThat(body.model()).isEqualTo(ChatCompletionCreateParams.Model.ofString("string"))
+        assertThat(body.model()).isEqualTo(ChatCompletionCreateParams.Model.O1_PREVIEW)
     }
 }

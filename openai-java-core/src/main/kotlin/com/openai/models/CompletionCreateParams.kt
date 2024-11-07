@@ -653,15 +653,7 @@ constructor(
          * of your available models, or see our
          * [Model overview](https://platform.openai.com/docs/models) for descriptions of them.
          */
-        fun model(string: String) = apply { this.model = Model.ofString(string) }
-
-        /**
-         * ID of the model to use. You can use the
-         * [List models](https://platform.openai.com/docs/api-reference/models/list) API to see all
-         * of your available models, or see our
-         * [Model overview](https://platform.openai.com/docs/models) for descriptions of them.
-         */
-        fun model(preset: Model.Preset) = apply { this.model = Model.ofPreset(preset) }
+        fun model(value: String) = apply { this.model = Model.of(value) }
 
         /**
          * The prompt(s) to generate completions for, encoded as a string, array of strings, array
@@ -1012,182 +1004,67 @@ constructor(
             )
     }
 
-    @JsonDeserialize(using = Model.Deserializer::class)
-    @JsonSerialize(using = Model.Serializer::class)
     class Model
+    @JsonCreator
     private constructor(
-        private val string: String? = null,
-        private val preset: Preset? = null,
-        private val _json: JsonValue? = null,
-    ) {
+        private val value: JsonField<String>,
+    ) : Enum {
 
-        private var validated: Boolean = false
-
-        fun string(): Optional<String> = Optional.ofNullable(string)
-
-        fun preset(): Optional<Preset> = Optional.ofNullable(preset)
-
-        fun isString(): Boolean = string != null
-
-        fun isPreset(): Boolean = preset != null
-
-        fun asString(): String = string.getOrThrow("string")
-
-        fun asPreset(): Preset = preset.getOrThrow("preset")
-
-        fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
-
-        fun <T> accept(visitor: Visitor<T>): T {
-            return when {
-                string != null -> visitor.visitString(string)
-                preset != null -> visitor.visitPreset(preset)
-                else -> visitor.unknown(_json)
-            }
-        }
-
-        fun validate(): Model = apply {
-            if (!validated) {
-                if (string == null && preset == null) {
-                    throw OpenAIInvalidDataException("Unknown Model: $_json")
-                }
-                validated = true
-            }
-        }
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
             }
 
-            return /* spotless:off */ other is Model && this.string == other.string && this.preset == other.preset /* spotless:on */
+            return /* spotless:off */ other is Model && this.value == other.value /* spotless:on */
         }
 
-        override fun hashCode(): Int {
-            return /* spotless:off */ Objects.hash(string, preset) /* spotless:on */
-        }
+        override fun hashCode() = value.hashCode()
 
-        override fun toString(): String {
-            return when {
-                string != null -> "Model{string=$string}"
-                preset != null -> "Model{preset=$preset}"
-                _json != null -> "Model{_unknown=$_json}"
-                else -> throw IllegalStateException("Invalid Model")
-            }
-        }
+        override fun toString() = value.toString()
 
         companion object {
 
-            @JvmStatic fun ofString(string: String) = Model(string = string)
+            @JvmField val GPT_3_5_TURBO_INSTRUCT = Model(JsonField.of("gpt-3.5-turbo-instruct"))
 
-            @JvmStatic fun ofPreset(preset: Preset) = Model(preset = preset)
+            @JvmField val DAVINCI_002 = Model(JsonField.of("davinci-002"))
+
+            @JvmField val BABBAGE_002 = Model(JsonField.of("babbage-002"))
+
+            @JvmStatic fun of(value: String) = Model(JsonField.of(value))
         }
 
-        interface Visitor<out T> {
-
-            fun visitString(string: String): T
-
-            fun visitPreset(preset: Preset): T
-
-            fun unknown(json: JsonValue?): T {
-                throw OpenAIInvalidDataException("Unknown Model: $json")
-            }
+        enum class Known {
+            GPT_3_5_TURBO_INSTRUCT,
+            DAVINCI_002,
+            BABBAGE_002,
         }
 
-        class Deserializer : BaseDeserializer<Model>(Model::class) {
-
-            override fun ObjectCodec.deserialize(node: JsonNode): Model {
-                val json = JsonValue.fromJsonNode(node)
-
-                tryDeserialize(node, jacksonTypeRef<String>())?.let {
-                    return Model(string = it, _json = json)
-                }
-                tryDeserialize(node, jacksonTypeRef<Preset>())?.let {
-                    return Model(preset = it, _json = json)
-                }
-
-                return Model(_json = json)
-            }
+        enum class Value {
+            GPT_3_5_TURBO_INSTRUCT,
+            DAVINCI_002,
+            BABBAGE_002,
+            _UNKNOWN,
         }
 
-        class Serializer : BaseSerializer<Model>(Model::class) {
-
-            override fun serialize(
-                value: Model,
-                generator: JsonGenerator,
-                provider: SerializerProvider
-            ) {
-                when {
-                    value.string != null -> generator.writeObject(value.string)
-                    value.preset != null -> generator.writeObject(value.preset)
-                    value._json != null -> generator.writeObject(value._json)
-                    else -> throw IllegalStateException("Invalid Model")
-                }
-            }
-        }
-
-        class Preset
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
-
-            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return /* spotless:off */ other is Preset && this.value == other.value /* spotless:on */
+        fun value(): Value =
+            when (this) {
+                GPT_3_5_TURBO_INSTRUCT -> Value.GPT_3_5_TURBO_INSTRUCT
+                DAVINCI_002 -> Value.DAVINCI_002
+                BABBAGE_002 -> Value.BABBAGE_002
+                else -> Value._UNKNOWN
             }
 
-            override fun hashCode() = value.hashCode()
-
-            override fun toString() = value.toString()
-
-            companion object {
-
-                @JvmField
-                val GPT_3_5_TURBO_INSTRUCT = Preset(JsonField.of("gpt-3.5-turbo-instruct"))
-
-                @JvmField val DAVINCI_002 = Preset(JsonField.of("davinci-002"))
-
-                @JvmField val BABBAGE_002 = Preset(JsonField.of("babbage-002"))
-
-                @JvmStatic fun of(value: String) = Preset(JsonField.of(value))
+        fun known(): Known =
+            when (this) {
+                GPT_3_5_TURBO_INSTRUCT -> Known.GPT_3_5_TURBO_INSTRUCT
+                DAVINCI_002 -> Known.DAVINCI_002
+                BABBAGE_002 -> Known.BABBAGE_002
+                else -> throw OpenAIInvalidDataException("Unknown Model: $value")
             }
 
-            enum class Known {
-                GPT_3_5_TURBO_INSTRUCT,
-                DAVINCI_002,
-                BABBAGE_002,
-            }
-
-            enum class Value {
-                GPT_3_5_TURBO_INSTRUCT,
-                DAVINCI_002,
-                BABBAGE_002,
-                _UNKNOWN,
-            }
-
-            fun value(): Value =
-                when (this) {
-                    GPT_3_5_TURBO_INSTRUCT -> Value.GPT_3_5_TURBO_INSTRUCT
-                    DAVINCI_002 -> Value.DAVINCI_002
-                    BABBAGE_002 -> Value.BABBAGE_002
-                    else -> Value._UNKNOWN
-                }
-
-            fun known(): Known =
-                when (this) {
-                    GPT_3_5_TURBO_INSTRUCT -> Known.GPT_3_5_TURBO_INSTRUCT
-                    DAVINCI_002 -> Known.DAVINCI_002
-                    BABBAGE_002 -> Known.BABBAGE_002
-                    else -> throw OpenAIInvalidDataException("Unknown Preset: $value")
-                }
-
-            fun asString(): String = _value().asStringOrThrow()
-        }
+        fun asString(): String = _value().asStringOrThrow()
     }
 
     @JsonDeserialize(using = Prompt.Deserializer::class)

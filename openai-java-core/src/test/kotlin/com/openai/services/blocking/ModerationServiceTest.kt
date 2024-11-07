@@ -23,7 +23,7 @@ class ModerationServiceTest {
             moderationService.create(
                 ModerationCreateParams.builder()
                     .input(ModerationCreateParams.Input.ofString("I want to kill them."))
-                    .model(ModerationCreateParams.Model.ofString("string"))
+                    .model(ModerationCreateParams.Model.OMNI_MODERATION_LATEST)
                     .build()
             )
         println(moderationCreateResponse)

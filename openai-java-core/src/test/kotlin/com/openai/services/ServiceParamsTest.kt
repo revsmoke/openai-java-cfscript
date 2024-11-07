@@ -71,7 +71,7 @@ class ServiceParamsTest {
                         )
                     )
                 )
-                .model(ChatCompletionCreateParams.Model.ofString("string"))
+                .model(ChatCompletionCreateParams.Model.O1_PREVIEW)
                 .audio(
                     ChatCompletionAudioParam.builder()
                         .format(ChatCompletionAudioParam.Format.WAV)

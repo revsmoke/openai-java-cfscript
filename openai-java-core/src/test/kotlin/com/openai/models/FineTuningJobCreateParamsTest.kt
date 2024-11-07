@@ -11,7 +11,7 @@ class FineTuningJobCreateParamsTest {
     @Test
     fun createFineTuningJobCreateParams() {
         FineTuningJobCreateParams.builder()
-            .model(FineTuningJobCreateParams.Model.ofString("string"))
+            .model(FineTuningJobCreateParams.Model.BABBAGE_002)
             .trainingFile("file-abc123")
             .hyperparameters(
                 FineTuningJobCreateParams.Hyperparameters.builder()
@@ -59,7 +59,7 @@ class FineTuningJobCreateParamsTest {
     fun getBody() {
         val params =
             FineTuningJobCreateParams.builder()
-                .model(FineTuningJobCreateParams.Model.ofString("string"))
+                .model(FineTuningJobCreateParams.Model.BABBAGE_002)
                 .trainingFile("file-abc123")
                 .hyperparameters(
                     FineTuningJobCreateParams.Hyperparameters.builder()
@@ -104,7 +104,7 @@ class FineTuningJobCreateParamsTest {
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.model()).isEqualTo(FineTuningJobCreateParams.Model.ofString("string"))
+        assertThat(body.model()).isEqualTo(FineTuningJobCreateParams.Model.BABBAGE_002)
         assertThat(body.trainingFile()).isEqualTo("file-abc123")
         assertThat(body.hyperparameters())
             .isEqualTo(
@@ -153,12 +153,12 @@ class FineTuningJobCreateParamsTest {
     fun getBodyWithoutOptionalFields() {
         val params =
             FineTuningJobCreateParams.builder()
-                .model(FineTuningJobCreateParams.Model.ofString("string"))
+                .model(FineTuningJobCreateParams.Model.BABBAGE_002)
                 .trainingFile("file-abc123")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.model()).isEqualTo(FineTuningJobCreateParams.Model.ofString("string"))
+        assertThat(body.model()).isEqualTo(FineTuningJobCreateParams.Model.BABBAGE_002)
         assertThat(body.trainingFile()).isEqualTo("file-abc123")
     }
 }

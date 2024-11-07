@@ -6,21 +6,12 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.ObjectCodec
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.SerializerProvider
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
-import com.openai.core.BaseDeserializer
-import com.openai.core.BaseSerializer
 import com.openai.core.Enum
 import com.openai.core.ExcludeMissing
 import com.openai.core.JsonField
 import com.openai.core.JsonValue
 import com.openai.core.NoAutoDetect
-import com.openai.core.getOrThrow
 import com.openai.core.http.Headers
 import com.openai.core.http.QueryParams
 import com.openai.core.toImmutable
@@ -350,10 +341,7 @@ constructor(
         fun model(model: Model) = apply { this.model = model }
 
         /** The model to use for image generation. */
-        fun model(string: String) = apply { this.model = Model.ofString(string) }
-
-        /** The model to use for image generation. */
-        fun model(imageModel: ImageModel) = apply { this.model = Model.ofImageModel(imageModel) }
+        fun model(value: String) = apply { this.model = Model.of(value) }
 
         /**
          * The number of images to generate. Must be between 1 and 10. For `dall-e-3`, only `n=1` is
@@ -533,118 +521,61 @@ constructor(
             )
     }
 
-    @JsonDeserialize(using = Model.Deserializer::class)
-    @JsonSerialize(using = Model.Serializer::class)
     class Model
+    @JsonCreator
     private constructor(
-        private val string: String? = null,
-        private val imageModel: ImageModel? = null,
-        private val _json: JsonValue? = null,
-    ) {
+        private val value: JsonField<String>,
+    ) : Enum {
 
-        private var validated: Boolean = false
-
-        fun string(): Optional<String> = Optional.ofNullable(string)
-
-        fun imageModel(): Optional<ImageModel> = Optional.ofNullable(imageModel)
-
-        fun isString(): Boolean = string != null
-
-        fun isImageModel(): Boolean = imageModel != null
-
-        fun asString(): String = string.getOrThrow("string")
-
-        fun asImageModel(): ImageModel = imageModel.getOrThrow("imageModel")
-
-        fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
-
-        fun <T> accept(visitor: Visitor<T>): T {
-            return when {
-                string != null -> visitor.visitString(string)
-                imageModel != null -> visitor.visitImageModel(imageModel)
-                else -> visitor.unknown(_json)
-            }
-        }
-
-        fun validate(): Model = apply {
-            if (!validated) {
-                if (string == null && imageModel == null) {
-                    throw OpenAIInvalidDataException("Unknown Model: $_json")
-                }
-                validated = true
-            }
-        }
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
             }
 
-            return /* spotless:off */ other is Model && this.string == other.string && this.imageModel == other.imageModel /* spotless:on */
+            return /* spotless:off */ other is Model && this.value == other.value /* spotless:on */
         }
 
-        override fun hashCode(): Int {
-            return /* spotless:off */ Objects.hash(string, imageModel) /* spotless:on */
-        }
+        override fun hashCode() = value.hashCode()
 
-        override fun toString(): String {
-            return when {
-                string != null -> "Model{string=$string}"
-                imageModel != null -> "Model{imageModel=$imageModel}"
-                _json != null -> "Model{_unknown=$_json}"
-                else -> throw IllegalStateException("Invalid Model")
-            }
-        }
+        override fun toString() = value.toString()
 
         companion object {
 
-            @JvmStatic fun ofString(string: String) = Model(string = string)
+            @JvmField val DALL_E_2 = Model(JsonField.of("dall-e-2"))
 
-            @JvmStatic fun ofImageModel(imageModel: ImageModel) = Model(imageModel = imageModel)
+            @JvmField val DALL_E_3 = Model(JsonField.of("dall-e-3"))
+
+            @JvmStatic fun of(value: String) = Model(JsonField.of(value))
         }
 
-        interface Visitor<out T> {
+        enum class Known {
+            DALL_E_2,
+            DALL_E_3,
+        }
 
-            fun visitString(string: String): T
+        enum class Value {
+            DALL_E_2,
+            DALL_E_3,
+            _UNKNOWN,
+        }
 
-            fun visitImageModel(imageModel: ImageModel): T
-
-            fun unknown(json: JsonValue?): T {
-                throw OpenAIInvalidDataException("Unknown Model: $json")
+        fun value(): Value =
+            when (this) {
+                DALL_E_2 -> Value.DALL_E_2
+                DALL_E_3 -> Value.DALL_E_3
+                else -> Value._UNKNOWN
             }
-        }
 
-        class Deserializer : BaseDeserializer<Model>(Model::class) {
-
-            override fun ObjectCodec.deserialize(node: JsonNode): Model {
-                val json = JsonValue.fromJsonNode(node)
-
-                tryDeserialize(node, jacksonTypeRef<String>())?.let {
-                    return Model(string = it, _json = json)
-                }
-                tryDeserialize(node, jacksonTypeRef<ImageModel>())?.let {
-                    return Model(imageModel = it, _json = json)
-                }
-
-                return Model(_json = json)
+        fun known(): Known =
+            when (this) {
+                DALL_E_2 -> Known.DALL_E_2
+                DALL_E_3 -> Known.DALL_E_3
+                else -> throw OpenAIInvalidDataException("Unknown Model: $value")
             }
-        }
 
-        class Serializer : BaseSerializer<Model>(Model::class) {
-
-            override fun serialize(
-                value: Model,
-                generator: JsonGenerator,
-                provider: SerializerProvider
-            ) {
-                when {
-                    value.string != null -> generator.writeObject(value.string)
-                    value.imageModel != null -> generator.writeObject(value.imageModel)
-                    value._json != null -> generator.writeObject(value._json)
-                    else -> throw IllegalStateException("Invalid Model")
-                }
-            }
-        }
+        fun asString(): String = _value().asStringOrThrow()
     }
 
     class Quality

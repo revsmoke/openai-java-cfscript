@@ -356,17 +356,7 @@ constructor(
          * of your available models, or see our
          * [Model overview](https://platform.openai.com/docs/models) for descriptions of them.
          */
-        fun model(string: String) = apply { this.model = Model.ofString(string) }
-
-        /**
-         * ID of the model to use. You can use the
-         * [List models](https://platform.openai.com/docs/api-reference/models/list) API to see all
-         * of your available models, or see our
-         * [Model overview](https://platform.openai.com/docs/models) for descriptions of them.
-         */
-        fun model(embeddingModel: EmbeddingModel) = apply {
-            this.model = Model.ofEmbeddingModel(embeddingModel)
-        }
+        fun model(value: String) = apply { this.model = Model.of(value) }
 
         /**
          * The number of dimensions the resulting output embeddings should have. Only supported in
@@ -684,120 +674,67 @@ constructor(
         }
     }
 
-    @JsonDeserialize(using = Model.Deserializer::class)
-    @JsonSerialize(using = Model.Serializer::class)
     class Model
+    @JsonCreator
     private constructor(
-        private val string: String? = null,
-        private val embeddingModel: EmbeddingModel? = null,
-        private val _json: JsonValue? = null,
-    ) {
+        private val value: JsonField<String>,
+    ) : Enum {
 
-        private var validated: Boolean = false
-
-        fun string(): Optional<String> = Optional.ofNullable(string)
-
-        fun embeddingModel(): Optional<EmbeddingModel> = Optional.ofNullable(embeddingModel)
-
-        fun isString(): Boolean = string != null
-
-        fun isEmbeddingModel(): Boolean = embeddingModel != null
-
-        fun asString(): String = string.getOrThrow("string")
-
-        fun asEmbeddingModel(): EmbeddingModel = embeddingModel.getOrThrow("embeddingModel")
-
-        fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
-
-        fun <T> accept(visitor: Visitor<T>): T {
-            return when {
-                string != null -> visitor.visitString(string)
-                embeddingModel != null -> visitor.visitEmbeddingModel(embeddingModel)
-                else -> visitor.unknown(_json)
-            }
-        }
-
-        fun validate(): Model = apply {
-            if (!validated) {
-                if (string == null && embeddingModel == null) {
-                    throw OpenAIInvalidDataException("Unknown Model: $_json")
-                }
-                validated = true
-            }
-        }
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
             }
 
-            return /* spotless:off */ other is Model && this.string == other.string && this.embeddingModel == other.embeddingModel /* spotless:on */
+            return /* spotless:off */ other is Model && this.value == other.value /* spotless:on */
         }
 
-        override fun hashCode(): Int {
-            return /* spotless:off */ Objects.hash(string, embeddingModel) /* spotless:on */
-        }
+        override fun hashCode() = value.hashCode()
 
-        override fun toString(): String {
-            return when {
-                string != null -> "Model{string=$string}"
-                embeddingModel != null -> "Model{embeddingModel=$embeddingModel}"
-                _json != null -> "Model{_unknown=$_json}"
-                else -> throw IllegalStateException("Invalid Model")
-            }
-        }
+        override fun toString() = value.toString()
 
         companion object {
 
-            @JvmStatic fun ofString(string: String) = Model(string = string)
+            @JvmField val TEXT_EMBEDDING_ADA_002 = Model(JsonField.of("text-embedding-ada-002"))
 
-            @JvmStatic
-            fun ofEmbeddingModel(embeddingModel: EmbeddingModel) =
-                Model(embeddingModel = embeddingModel)
+            @JvmField val TEXT_EMBEDDING_3_SMALL = Model(JsonField.of("text-embedding-3-small"))
+
+            @JvmField val TEXT_EMBEDDING_3_LARGE = Model(JsonField.of("text-embedding-3-large"))
+
+            @JvmStatic fun of(value: String) = Model(JsonField.of(value))
         }
 
-        interface Visitor<out T> {
+        enum class Known {
+            TEXT_EMBEDDING_ADA_002,
+            TEXT_EMBEDDING_3_SMALL,
+            TEXT_EMBEDDING_3_LARGE,
+        }
 
-            fun visitString(string: String): T
+        enum class Value {
+            TEXT_EMBEDDING_ADA_002,
+            TEXT_EMBEDDING_3_SMALL,
+            TEXT_EMBEDDING_3_LARGE,
+            _UNKNOWN,
+        }
 
-            fun visitEmbeddingModel(embeddingModel: EmbeddingModel): T
-
-            fun unknown(json: JsonValue?): T {
-                throw OpenAIInvalidDataException("Unknown Model: $json")
+        fun value(): Value =
+            when (this) {
+                TEXT_EMBEDDING_ADA_002 -> Value.TEXT_EMBEDDING_ADA_002
+                TEXT_EMBEDDING_3_SMALL -> Value.TEXT_EMBEDDING_3_SMALL
+                TEXT_EMBEDDING_3_LARGE -> Value.TEXT_EMBEDDING_3_LARGE
+                else -> Value._UNKNOWN
             }
-        }
 
-        class Deserializer : BaseDeserializer<Model>(Model::class) {
-
-            override fun ObjectCodec.deserialize(node: JsonNode): Model {
-                val json = JsonValue.fromJsonNode(node)
-
-                tryDeserialize(node, jacksonTypeRef<String>())?.let {
-                    return Model(string = it, _json = json)
-                }
-                tryDeserialize(node, jacksonTypeRef<EmbeddingModel>())?.let {
-                    return Model(embeddingModel = it, _json = json)
-                }
-
-                return Model(_json = json)
+        fun known(): Known =
+            when (this) {
+                TEXT_EMBEDDING_ADA_002 -> Known.TEXT_EMBEDDING_ADA_002
+                TEXT_EMBEDDING_3_SMALL -> Known.TEXT_EMBEDDING_3_SMALL
+                TEXT_EMBEDDING_3_LARGE -> Known.TEXT_EMBEDDING_3_LARGE
+                else -> throw OpenAIInvalidDataException("Unknown Model: $value")
             }
-        }
 
-        class Serializer : BaseSerializer<Model>(Model::class) {
-
-            override fun serialize(
-                value: Model,
-                generator: JsonGenerator,
-                provider: SerializerProvider
-            ) {
-                when {
-                    value.string != null -> generator.writeObject(value.string)
-                    value.embeddingModel != null -> generator.writeObject(value.embeddingModel)
-                    value._json != null -> generator.writeObject(value._json)
-                    else -> throw IllegalStateException("Invalid Model")
-                }
-            }
-        }
+        fun asString(): String = _value().asStringOrThrow()
     }
 
     class EncodingFormat

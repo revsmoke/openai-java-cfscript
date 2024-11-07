@@ -60,7 +60,7 @@ class ErrorHandlingTest {
     fun jobsCreate200() {
         val params =
             FineTuningJobCreateParams.builder()
-                .model(FineTuningJobCreateParams.Model.ofString("string"))
+                .model(FineTuningJobCreateParams.Model.BABBAGE_002)
                 .trainingFile("file-abc123")
                 .hyperparameters(
                     FineTuningJobCreateParams.Hyperparameters.builder()
@@ -162,7 +162,7 @@ class ErrorHandlingTest {
     fun jobsCreate400() {
         val params =
             FineTuningJobCreateParams.builder()
-                .model(FineTuningJobCreateParams.Model.ofString("string"))
+                .model(FineTuningJobCreateParams.Model.BABBAGE_002)
                 .trainingFile("file-abc123")
                 .hyperparameters(
                     FineTuningJobCreateParams.Hyperparameters.builder()
@@ -221,7 +221,7 @@ class ErrorHandlingTest {
     fun jobsCreate401() {
         val params =
             FineTuningJobCreateParams.builder()
-                .model(FineTuningJobCreateParams.Model.ofString("string"))
+                .model(FineTuningJobCreateParams.Model.BABBAGE_002)
                 .trainingFile("file-abc123")
                 .hyperparameters(
                     FineTuningJobCreateParams.Hyperparameters.builder()
@@ -280,7 +280,7 @@ class ErrorHandlingTest {
     fun jobsCreate403() {
         val params =
             FineTuningJobCreateParams.builder()
-                .model(FineTuningJobCreateParams.Model.ofString("string"))
+                .model(FineTuningJobCreateParams.Model.BABBAGE_002)
                 .trainingFile("file-abc123")
                 .hyperparameters(
                     FineTuningJobCreateParams.Hyperparameters.builder()
@@ -339,7 +339,7 @@ class ErrorHandlingTest {
     fun jobsCreate404() {
         val params =
             FineTuningJobCreateParams.builder()
-                .model(FineTuningJobCreateParams.Model.ofString("string"))
+                .model(FineTuningJobCreateParams.Model.BABBAGE_002)
                 .trainingFile("file-abc123")
                 .hyperparameters(
                     FineTuningJobCreateParams.Hyperparameters.builder()
@@ -398,7 +398,7 @@ class ErrorHandlingTest {
     fun jobsCreate422() {
         val params =
             FineTuningJobCreateParams.builder()
-                .model(FineTuningJobCreateParams.Model.ofString("string"))
+                .model(FineTuningJobCreateParams.Model.BABBAGE_002)
                 .trainingFile("file-abc123")
                 .hyperparameters(
                     FineTuningJobCreateParams.Hyperparameters.builder()
@@ -461,7 +461,7 @@ class ErrorHandlingTest {
     fun jobsCreate429() {
         val params =
             FineTuningJobCreateParams.builder()
-                .model(FineTuningJobCreateParams.Model.ofString("string"))
+                .model(FineTuningJobCreateParams.Model.BABBAGE_002)
                 .trainingFile("file-abc123")
                 .hyperparameters(
                     FineTuningJobCreateParams.Hyperparameters.builder()
@@ -520,7 +520,7 @@ class ErrorHandlingTest {
     fun jobsCreate500() {
         val params =
             FineTuningJobCreateParams.builder()
-                .model(FineTuningJobCreateParams.Model.ofString("string"))
+                .model(FineTuningJobCreateParams.Model.BABBAGE_002)
                 .trainingFile("file-abc123")
                 .hyperparameters(
                     FineTuningJobCreateParams.Hyperparameters.builder()
@@ -579,7 +579,7 @@ class ErrorHandlingTest {
     fun unexpectedStatusCode() {
         val params =
             FineTuningJobCreateParams.builder()
-                .model(FineTuningJobCreateParams.Model.ofString("string"))
+                .model(FineTuningJobCreateParams.Model.BABBAGE_002)
                 .trainingFile("file-abc123")
                 .hyperparameters(
                     FineTuningJobCreateParams.Hyperparameters.builder()
@@ -643,7 +643,7 @@ class ErrorHandlingTest {
     fun invalidBody() {
         val params =
             FineTuningJobCreateParams.builder()
-                .model(FineTuningJobCreateParams.Model.ofString("string"))
+                .model(FineTuningJobCreateParams.Model.BABBAGE_002)
                 .trainingFile("file-abc123")
                 .hyperparameters(
                     FineTuningJobCreateParams.Hyperparameters.builder()
@@ -701,7 +701,7 @@ class ErrorHandlingTest {
     fun invalidErrorBody() {
         val params =
             FineTuningJobCreateParams.builder()
-                .model(FineTuningJobCreateParams.Model.ofString("string"))
+                .model(FineTuningJobCreateParams.Model.BABBAGE_002)
                 .trainingFile("file-abc123")
                 .hyperparameters(
                     FineTuningJobCreateParams.Hyperparameters.builder()

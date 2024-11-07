@@ -24,7 +24,7 @@ class JobServiceTest {
         val fineTuningJob =
             jobService.create(
                 FineTuningJobCreateParams.builder()
-                    .model(FineTuningJobCreateParams.Model.ofString("string"))
+                    .model(FineTuningJobCreateParams.Model.BABBAGE_002)
                     .trainingFile("file-abc123")
                     .hyperparameters(
                         FineTuningJobCreateParams.Hyperparameters.builder()

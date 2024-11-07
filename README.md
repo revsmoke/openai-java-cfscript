@@ -78,7 +78,7 @@ import com.openai.models.ChatCompletionCreateParams;
 import java.util.List;
 
 ChatCompletionCreateParams params = ChatCompletionCreateParams.builder()
-    .model(ChatCompletionCreateParams.Model.ofString("gpt-3.5-turbo"))
+    .model("gpt-3.5-turbo")
     .build();
 ChatCompletion chatCompletion = client.chat().completions().create(params);
 ```
