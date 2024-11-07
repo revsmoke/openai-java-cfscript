@@ -11,7 +11,7 @@ public final class Main {
     public static void main(String[] args) {
         OpenAIClient client = OpenAIOkHttpClient.fromEnv();
         CompletionCreateParams completionCreateParams = CompletionCreateParams.builder()
-                .model(CompletionCreateParams.Model.Preset.GPT_3_5_TURBO_INSTRUCT)
+                .model(CompletionCreateParams.Model.GPT_3_5_TURBO_INSTRUCT)
                 .maxTokens(1024)
                 .prompt("Tell me a story about building the best SDK!")
                 .build();
