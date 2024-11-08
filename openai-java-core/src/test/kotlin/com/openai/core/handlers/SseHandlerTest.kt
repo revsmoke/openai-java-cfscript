@@ -10,6 +10,8 @@ import java.io.InputStream
 import java.nio.charset.StandardCharsets
 import java.util.stream.Collectors.toList
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.catchThrowable
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 
@@ -105,17 +107,7 @@ class SseHandlerTest {
     @ParameterizedTest
     @EnumSource
     fun handle(testCase: TestCase) {
-        val response =
-            object : HttpResponse {
-                override fun statusCode(): Int = 0
-
-                override fun headers(): Headers = Headers.builder().build()
-
-                override fun body(): InputStream =
-                    ByteArrayInputStream(testCase.body.toByteArray(StandardCharsets.UTF_8))
-
-                override fun close() {}
-            }
+        val response = httpResponse(testCase.body)
         var messages: List<SseMessage>? = null
         var exception: Exception? = null
 
@@ -134,6 +126,32 @@ class SseHandlerTest {
             assertThat(exception).hasMessage(testCase.expectedException.message)
         }
     }
+
+    @Test
+    fun cannotReuseStream() {
+        val response = httpResponse("body")
+        val streamResponse = sseHandler(jsonMapper()).handle(response)
+
+        val throwable =
+            streamResponse.use {
+                it.stream().collect(toList())
+                catchThrowable { it.stream().collect(toList()) }
+            }
+
+        assertThat(throwable).isInstanceOf(IllegalStateException::class.java)
+    }
 }
+
+private fun httpResponse(body: String): HttpResponse =
+    object : HttpResponse {
+        override fun statusCode(): Int = 0
+
+        override fun headers(): Headers = Headers.builder().build()
+
+        override fun body(): InputStream =
+            ByteArrayInputStream(body.toByteArray(StandardCharsets.UTF_8))
+
+        override fun close() {}
+    }
 
 private fun sseMessageBuilder() = SseMessage.builder().jsonMapper(jsonMapper())

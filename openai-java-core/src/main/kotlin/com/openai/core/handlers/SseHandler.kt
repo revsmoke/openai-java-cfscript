@@ -20,44 +20,50 @@ internal fun sseHandler(jsonMapper: JsonMapper): Handler<StreamResponse<SseMessa
 
         override fun handle(response: HttpResponse): StreamResponse<SseMessage> {
             val reader = response.body().bufferedReader()
-            val sequence = sequence {
-                reader.useLines { lines ->
-                    val state = SseState(jsonMapper)
-                    var done = false
-                    for (line in lines) {
-                        // Stop emitting messages, but iterate through the full stream.
-                        if (done) {
-                            continue
-                        }
-                        val message = state.decode(line) ?: continue
+            val sequence =
+                sequence {
+                        reader.useLines { lines ->
+                            val state = SseState(jsonMapper)
+                            var done = false
+                            for (line in lines) {
+                                // Stop emitting messages, but iterate through the full stream.
+                                if (done) {
+                                    continue
+                                }
+                                val message = state.decode(line) ?: continue
 
-                        if (message.data.startsWith("[DONE]")) {
-                            // In this case we don't break because we still want to iterate through
-                            // the full stream.
-                            done = true
-                            continue
-                        }
+                                if (message.data.startsWith("[DONE]")) {
+                                    // In this case we don't break because we still want to iterate
+                                    // through the full stream.
+                                    done = true
+                                    continue
+                                }
 
-                        if (message.event == null) {
-                            val error =
-                                message.json<JsonValue>().asObject().getOrNull()?.get("error")
-                            if (error != null) {
-                                val errorMessage =
-                                    error.asString().getOrNull()
-                                        ?: error
+                                if (message.event == null) {
+                                    val error =
+                                        message
+                                            .json<JsonValue>()
                                             .asObject()
                                             .getOrNull()
-                                            ?.get("message")
-                                            ?.asString()
-                                            ?.getOrNull()
-                                        ?: "An error occurred during streaming"
-                                throw OpenAIException(errorMessage)
+                                            ?.get("error")
+                                    if (error != null) {
+                                        val errorMessage =
+                                            error.asString().getOrNull()
+                                                ?: error
+                                                    .asObject()
+                                                    .getOrNull()
+                                                    ?.get("message")
+                                                    ?.asString()
+                                                    ?.getOrNull()
+                                                ?: "An error occurred during streaming"
+                                        throw OpenAIException(errorMessage)
+                                    }
+                                    yield(message)
+                                }
                             }
-                            yield(message)
                         }
                     }
-                }
-            }
+                    .constrainOnce()
 
             return PhantomReachableClosingStreamResponse(
                 object : StreamResponse<SseMessage> {
