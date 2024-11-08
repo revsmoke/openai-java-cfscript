@@ -33,9 +33,9 @@ configure<PublishingExtension> {
                 }
 
                 scm {
-                    connection.set("scm:git:git://github.com/stainless-sdks/openai-java.git")
-                    developerConnection.set("scm:git:git://github.com/stainless-sdks/openai-java.git")
-                    url.set("https://github.com/stainless-sdks/openai-java")
+                    connection.set("scm:git:git://github.com/openai/openai-java.git")
+                    developerConnection.set("scm:git:git://github.com/openai/openai-java.git")
+                    url.set("https://github.com/openai/openai-java")
                 }
 
                 versionMapping {

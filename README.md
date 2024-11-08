@@ -1,6 +1,10 @@
 # OpenAI Java API Library
 
+<!-- x-release-please-start-version -->
+
 [![Maven Central](https://img.shields.io/maven-central/v/com.openai/openai-java)](https://central.sonatype.com/artifact/com.openai/openai-java/0.0.1)
+
+<!-- x-release-please-end -->
 
 The OpenAI Java SDK provides convenient access to the OpenAI REST API from applications written in Java. It includes helper classes with helpful types and documentation for every request and response property.
 
@@ -18,6 +22,8 @@ The REST API documentation can be found on [platform.openai.com](https://platfo
 
 #### Gradle
 
+<!-- x-release-please-start-version -->
+
 ```kotlin
 implementation("com.openai:openai-java:0.0.1")
 ```
@@ -31,6 +37,8 @@ implementation("com.openai:openai-java:0.0.1")
     <version>0.0.1</version>
 </dependency>
 ```
+
+<!-- x-release-please-end -->
 
 ### Configure the client
 
@@ -329,7 +337,7 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/openai-java/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/openai/openai-java/issues) with questions, bugs, or suggestions.
 
 ## Requirements
 
