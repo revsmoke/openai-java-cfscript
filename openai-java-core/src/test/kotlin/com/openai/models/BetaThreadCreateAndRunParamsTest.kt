@@ -18,48 +18,26 @@ class BetaThreadCreateAndRunParamsTest {
             .metadata(JsonValue.from(mapOf<String, Any>()))
             .model(ChatModel.GPT_4O)
             .parallelToolCalls(true)
-            .responseFormat(
-                AssistantResponseFormatOption.ofBehavior(
-                    AssistantResponseFormatOption.Behavior.AUTO
-                )
-            )
+            .responseFormat(AssistantResponseFormatOption.Behavior.AUTO)
             .temperature(1.0)
             .thread(
                 BetaThreadCreateAndRunParams.Thread.builder()
-                    .messages(
-                        listOf(
-                            BetaThreadCreateAndRunParams.Thread.Message.builder()
-                                .content(
-                                    BetaThreadCreateAndRunParams.Thread.Message.Content
-                                        .ofTextContent("string")
-                                )
-                                .role(BetaThreadCreateAndRunParams.Thread.Message.Role.USER)
-                                .attachments(
-                                    listOf(
-                                        BetaThreadCreateAndRunParams.Thread.Message.Attachment
-                                            .builder()
-                                            .fileId("file_id")
-                                            .tools(
-                                                listOf(
-                                                    BetaThreadCreateAndRunParams.Thread.Message
-                                                        .Attachment
-                                                        .Tool
-                                                        .ofCodeInterpreterTool(
-                                                            CodeInterpreterTool.builder()
-                                                                .type(
-                                                                    CodeInterpreterTool.Type
-                                                                        .CODE_INTERPRETER
-                                                                )
-                                                                .build()
-                                                        )
-                                                )
-                                            )
+                    .addMessage(
+                        BetaThreadCreateAndRunParams.Thread.Message.builder()
+                            .content("string")
+                            .role(BetaThreadCreateAndRunParams.Thread.Message.Role.USER)
+                            .addAttachment(
+                                BetaThreadCreateAndRunParams.Thread.Message.Attachment.builder()
+                                    .fileId("file_id")
+                                    .addTool(
+                                        CodeInterpreterTool.builder()
+                                            .type(CodeInterpreterTool.Type.CODE_INTERPRETER)
                                             .build()
                                     )
-                                )
-                                .metadata(JsonValue.from(mapOf<String, Any>()))
-                                .build()
-                        )
+                                    .build()
+                            )
+                            .metadata(JsonValue.from(mapOf<String, Any>()))
+                            .build()
                     )
                     .metadata(JsonValue.from(mapOf<String, Any>()))
                     .toolResources(
@@ -67,35 +45,25 @@ class BetaThreadCreateAndRunParamsTest {
                             .codeInterpreter(
                                 BetaThreadCreateAndRunParams.Thread.ToolResources.CodeInterpreter
                                     .builder()
-                                    .fileIds(listOf("string"))
+                                    .addFileId("string")
                                     .build()
                             )
                             .fileSearch(
                                 BetaThreadCreateAndRunParams.Thread.ToolResources.FileSearch
                                     .builder()
-                                    .vectorStoreIds(listOf("string"))
-                                    .vectorStores(
-                                        listOf(
-                                            BetaThreadCreateAndRunParams.Thread.ToolResources
-                                                .FileSearch
-                                                .VectorStore
-                                                .builder()
-                                                .chunkingStrategy(
-                                                    FileChunkingStrategyParam
-                                                        .ofAutoFileChunkingStrategyParam(
-                                                            AutoFileChunkingStrategyParam.builder()
-                                                                .type(
-                                                                    AutoFileChunkingStrategyParam
-                                                                        .Type
-                                                                        .AUTO
-                                                                )
-                                                                .build()
-                                                        )
-                                                )
-                                                .fileIds(listOf("string"))
-                                                .metadata(JsonValue.from(mapOf<String, Any>()))
-                                                .build()
-                                        )
+                                    .addVectorStoreId("string")
+                                    .addVectorStore(
+                                        BetaThreadCreateAndRunParams.Thread.ToolResources.FileSearch
+                                            .VectorStore
+                                            .builder()
+                                            .chunkingStrategy(
+                                                AutoFileChunkingStrategyParam.builder()
+                                                    .type(AutoFileChunkingStrategyParam.Type.AUTO)
+                                                    .build()
+                                            )
+                                            .addFileId("string")
+                                            .metadata(JsonValue.from(mapOf<String, Any>()))
+                                            .build()
                                     )
                                     .build()
                             )
@@ -103,31 +71,25 @@ class BetaThreadCreateAndRunParamsTest {
                     )
                     .build()
             )
-            .toolChoice(
-                AssistantToolChoiceOption.ofBehavior(AssistantToolChoiceOption.Behavior.NONE)
-            )
+            .toolChoice(AssistantToolChoiceOption.Behavior.NONE)
             .toolResources(
                 BetaThreadCreateAndRunParams.ToolResources.builder()
                     .codeInterpreter(
                         BetaThreadCreateAndRunParams.ToolResources.CodeInterpreter.builder()
-                            .fileIds(listOf("string"))
+                            .addFileId("string")
                             .build()
                     )
                     .fileSearch(
                         BetaThreadCreateAndRunParams.ToolResources.FileSearch.builder()
-                            .vectorStoreIds(listOf("string"))
+                            .addVectorStoreId("string")
                             .build()
                     )
                     .build()
             )
-            .tools(
-                listOf(
-                    BetaThreadCreateAndRunParams.Tool.ofCodeInterpreterTool(
-                        CodeInterpreterTool.builder()
-                            .type(CodeInterpreterTool.Type.CODE_INTERPRETER)
-                            .build()
-                    )
-                )
+            .addTool(
+                CodeInterpreterTool.builder()
+                    .type(CodeInterpreterTool.Type.CODE_INTERPRETER)
+                    .build()
             )
             .topP(1.0)
             .truncationStrategy(
@@ -150,48 +112,26 @@ class BetaThreadCreateAndRunParamsTest {
                 .metadata(JsonValue.from(mapOf<String, Any>()))
                 .model(ChatModel.GPT_4O)
                 .parallelToolCalls(true)
-                .responseFormat(
-                    AssistantResponseFormatOption.ofBehavior(
-                        AssistantResponseFormatOption.Behavior.AUTO
-                    )
-                )
+                .responseFormat(AssistantResponseFormatOption.Behavior.AUTO)
                 .temperature(1.0)
                 .thread(
                     BetaThreadCreateAndRunParams.Thread.builder()
-                        .messages(
-                            listOf(
-                                BetaThreadCreateAndRunParams.Thread.Message.builder()
-                                    .content(
-                                        BetaThreadCreateAndRunParams.Thread.Message.Content
-                                            .ofTextContent("string")
-                                    )
-                                    .role(BetaThreadCreateAndRunParams.Thread.Message.Role.USER)
-                                    .attachments(
-                                        listOf(
-                                            BetaThreadCreateAndRunParams.Thread.Message.Attachment
-                                                .builder()
-                                                .fileId("file_id")
-                                                .tools(
-                                                    listOf(
-                                                        BetaThreadCreateAndRunParams.Thread.Message
-                                                            .Attachment
-                                                            .Tool
-                                                            .ofCodeInterpreterTool(
-                                                                CodeInterpreterTool.builder()
-                                                                    .type(
-                                                                        CodeInterpreterTool.Type
-                                                                            .CODE_INTERPRETER
-                                                                    )
-                                                                    .build()
-                                                            )
-                                                    )
-                                                )
+                        .addMessage(
+                            BetaThreadCreateAndRunParams.Thread.Message.builder()
+                                .content("string")
+                                .role(BetaThreadCreateAndRunParams.Thread.Message.Role.USER)
+                                .addAttachment(
+                                    BetaThreadCreateAndRunParams.Thread.Message.Attachment.builder()
+                                        .fileId("file_id")
+                                        .addTool(
+                                            CodeInterpreterTool.builder()
+                                                .type(CodeInterpreterTool.Type.CODE_INTERPRETER)
                                                 .build()
                                         )
-                                    )
-                                    .metadata(JsonValue.from(mapOf<String, Any>()))
-                                    .build()
-                            )
+                                        .build()
+                                )
+                                .metadata(JsonValue.from(mapOf<String, Any>()))
+                                .build()
                         )
                         .metadata(JsonValue.from(mapOf<String, Any>()))
                         .toolResources(
@@ -200,36 +140,28 @@ class BetaThreadCreateAndRunParamsTest {
                                     BetaThreadCreateAndRunParams.Thread.ToolResources
                                         .CodeInterpreter
                                         .builder()
-                                        .fileIds(listOf("string"))
+                                        .addFileId("string")
                                         .build()
                                 )
                                 .fileSearch(
                                     BetaThreadCreateAndRunParams.Thread.ToolResources.FileSearch
                                         .builder()
-                                        .vectorStoreIds(listOf("string"))
-                                        .vectorStores(
-                                            listOf(
-                                                BetaThreadCreateAndRunParams.Thread.ToolResources
-                                                    .FileSearch
-                                                    .VectorStore
-                                                    .builder()
-                                                    .chunkingStrategy(
-                                                        FileChunkingStrategyParam
-                                                            .ofAutoFileChunkingStrategyParam(
-                                                                AutoFileChunkingStrategyParam
-                                                                    .builder()
-                                                                    .type(
-                                                                        AutoFileChunkingStrategyParam
-                                                                            .Type
-                                                                            .AUTO
-                                                                    )
-                                                                    .build()
-                                                            )
-                                                    )
-                                                    .fileIds(listOf("string"))
-                                                    .metadata(JsonValue.from(mapOf<String, Any>()))
-                                                    .build()
-                                            )
+                                        .addVectorStoreId("string")
+                                        .addVectorStore(
+                                            BetaThreadCreateAndRunParams.Thread.ToolResources
+                                                .FileSearch
+                                                .VectorStore
+                                                .builder()
+                                                .chunkingStrategy(
+                                                    AutoFileChunkingStrategyParam.builder()
+                                                        .type(
+                                                            AutoFileChunkingStrategyParam.Type.AUTO
+                                                        )
+                                                        .build()
+                                                )
+                                                .addFileId("string")
+                                                .metadata(JsonValue.from(mapOf<String, Any>()))
+                                                .build()
                                         )
                                         .build()
                                 )
@@ -237,31 +169,25 @@ class BetaThreadCreateAndRunParamsTest {
                         )
                         .build()
                 )
-                .toolChoice(
-                    AssistantToolChoiceOption.ofBehavior(AssistantToolChoiceOption.Behavior.NONE)
-                )
+                .toolChoice(AssistantToolChoiceOption.Behavior.NONE)
                 .toolResources(
                     BetaThreadCreateAndRunParams.ToolResources.builder()
                         .codeInterpreter(
                             BetaThreadCreateAndRunParams.ToolResources.CodeInterpreter.builder()
-                                .fileIds(listOf("string"))
+                                .addFileId("string")
                                 .build()
                         )
                         .fileSearch(
                             BetaThreadCreateAndRunParams.ToolResources.FileSearch.builder()
-                                .vectorStoreIds(listOf("string"))
+                                .addVectorStoreId("string")
                                 .build()
                         )
                         .build()
                 )
-                .tools(
-                    listOf(
-                        BetaThreadCreateAndRunParams.Tool.ofCodeInterpreterTool(
-                            CodeInterpreterTool.builder()
-                                .type(CodeInterpreterTool.Type.CODE_INTERPRETER)
-                                .build()
-                        )
-                    )
+                .addTool(
+                    CodeInterpreterTool.builder()
+                        .type(CodeInterpreterTool.Type.CODE_INTERPRETER)
+                        .build()
                 )
                 .topP(1.0)
                 .truncationStrategy(
@@ -290,40 +216,22 @@ class BetaThreadCreateAndRunParamsTest {
         assertThat(body.thread())
             .contains(
                 BetaThreadCreateAndRunParams.Thread.builder()
-                    .messages(
-                        listOf(
-                            BetaThreadCreateAndRunParams.Thread.Message.builder()
-                                .content(
-                                    BetaThreadCreateAndRunParams.Thread.Message.Content
-                                        .ofTextContent("string")
-                                )
-                                .role(BetaThreadCreateAndRunParams.Thread.Message.Role.USER)
-                                .attachments(
-                                    listOf(
-                                        BetaThreadCreateAndRunParams.Thread.Message.Attachment
-                                            .builder()
-                                            .fileId("file_id")
-                                            .tools(
-                                                listOf(
-                                                    BetaThreadCreateAndRunParams.Thread.Message
-                                                        .Attachment
-                                                        .Tool
-                                                        .ofCodeInterpreterTool(
-                                                            CodeInterpreterTool.builder()
-                                                                .type(
-                                                                    CodeInterpreterTool.Type
-                                                                        .CODE_INTERPRETER
-                                                                )
-                                                                .build()
-                                                        )
-                                                )
-                                            )
+                    .addMessage(
+                        BetaThreadCreateAndRunParams.Thread.Message.builder()
+                            .content("string")
+                            .role(BetaThreadCreateAndRunParams.Thread.Message.Role.USER)
+                            .addAttachment(
+                                BetaThreadCreateAndRunParams.Thread.Message.Attachment.builder()
+                                    .fileId("file_id")
+                                    .addTool(
+                                        CodeInterpreterTool.builder()
+                                            .type(CodeInterpreterTool.Type.CODE_INTERPRETER)
                                             .build()
                                     )
-                                )
-                                .metadata(JsonValue.from(mapOf<String, Any>()))
-                                .build()
-                        )
+                                    .build()
+                            )
+                            .metadata(JsonValue.from(mapOf<String, Any>()))
+                            .build()
                     )
                     .metadata(JsonValue.from(mapOf<String, Any>()))
                     .toolResources(
@@ -331,35 +239,25 @@ class BetaThreadCreateAndRunParamsTest {
                             .codeInterpreter(
                                 BetaThreadCreateAndRunParams.Thread.ToolResources.CodeInterpreter
                                     .builder()
-                                    .fileIds(listOf("string"))
+                                    .addFileId("string")
                                     .build()
                             )
                             .fileSearch(
                                 BetaThreadCreateAndRunParams.Thread.ToolResources.FileSearch
                                     .builder()
-                                    .vectorStoreIds(listOf("string"))
-                                    .vectorStores(
-                                        listOf(
-                                            BetaThreadCreateAndRunParams.Thread.ToolResources
-                                                .FileSearch
-                                                .VectorStore
-                                                .builder()
-                                                .chunkingStrategy(
-                                                    FileChunkingStrategyParam
-                                                        .ofAutoFileChunkingStrategyParam(
-                                                            AutoFileChunkingStrategyParam.builder()
-                                                                .type(
-                                                                    AutoFileChunkingStrategyParam
-                                                                        .Type
-                                                                        .AUTO
-                                                                )
-                                                                .build()
-                                                        )
-                                                )
-                                                .fileIds(listOf("string"))
-                                                .metadata(JsonValue.from(mapOf<String, Any>()))
-                                                .build()
-                                        )
+                                    .addVectorStoreId("string")
+                                    .addVectorStore(
+                                        BetaThreadCreateAndRunParams.Thread.ToolResources.FileSearch
+                                            .VectorStore
+                                            .builder()
+                                            .chunkingStrategy(
+                                                AutoFileChunkingStrategyParam.builder()
+                                                    .type(AutoFileChunkingStrategyParam.Type.AUTO)
+                                                    .build()
+                                            )
+                                            .addFileId("string")
+                                            .metadata(JsonValue.from(mapOf<String, Any>()))
+                                            .build()
                                     )
                                     .build()
                             )
@@ -374,12 +272,12 @@ class BetaThreadCreateAndRunParamsTest {
                 BetaThreadCreateAndRunParams.ToolResources.builder()
                     .codeInterpreter(
                         BetaThreadCreateAndRunParams.ToolResources.CodeInterpreter.builder()
-                            .fileIds(listOf("string"))
+                            .addFileId("string")
                             .build()
                     )
                     .fileSearch(
                         BetaThreadCreateAndRunParams.ToolResources.FileSearch.builder()
-                            .vectorStoreIds(listOf("string"))
+                            .addVectorStoreId("string")
                             .build()
                     )
                     .build()

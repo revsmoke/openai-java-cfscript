@@ -6,7 +6,6 @@ import com.openai.TestServerExtension
 import com.openai.client.okhttp.OpenAIOkHttpClient
 import com.openai.core.JsonValue
 import com.openai.models.AssistantResponseFormatOption
-import com.openai.models.AssistantTool
 import com.openai.models.AssistantToolChoiceOption
 import com.openai.models.BetaThreadRunCancelParams
 import com.openai.models.BetaThreadRunCreateParams
@@ -36,44 +35,24 @@ class RunServiceTest {
                 BetaThreadRunCreateParams.builder()
                     .threadId("thread_id")
                     .assistantId("assistant_id")
-                    .include(
-                        listOf(RunStepInclude.STEP_DETAILS_TOOL_CALLS_FILE_SEARCH_RESULTS_CONTENT)
-                    )
+                    .addInclude(RunStepInclude.STEP_DETAILS_TOOL_CALLS_FILE_SEARCH_RESULTS_CONTENT)
                     .additionalInstructions("additional_instructions")
-                    .additionalMessages(
-                        listOf(
-                            BetaThreadRunCreateParams.AdditionalMessage.builder()
-                                .content(
-                                    BetaThreadRunCreateParams.AdditionalMessage.Content
-                                        .ofTextContent("string")
-                                )
-                                .role(BetaThreadRunCreateParams.AdditionalMessage.Role.USER)
-                                .attachments(
-                                    listOf(
-                                        BetaThreadRunCreateParams.AdditionalMessage.Attachment
-                                            .builder()
-                                            .fileId("file_id")
-                                            .tools(
-                                                listOf(
-                                                    BetaThreadRunCreateParams.AdditionalMessage
-                                                        .Attachment
-                                                        .Tool
-                                                        .ofCodeInterpreterTool(
-                                                            CodeInterpreterTool.builder()
-                                                                .type(
-                                                                    CodeInterpreterTool.Type
-                                                                        .CODE_INTERPRETER
-                                                                )
-                                                                .build()
-                                                        )
-                                                )
-                                            )
+                    .addAdditionalMessage(
+                        BetaThreadRunCreateParams.AdditionalMessage.builder()
+                            .content("string")
+                            .role(BetaThreadRunCreateParams.AdditionalMessage.Role.USER)
+                            .addAttachment(
+                                BetaThreadRunCreateParams.AdditionalMessage.Attachment.builder()
+                                    .fileId("file_id")
+                                    .addTool(
+                                        CodeInterpreterTool.builder()
+                                            .type(CodeInterpreterTool.Type.CODE_INTERPRETER)
                                             .build()
                                     )
-                                )
-                                .metadata(JsonValue.from(mapOf<String, Any>()))
-                                .build()
-                        )
+                                    .build()
+                            )
+                            .metadata(JsonValue.from(mapOf<String, Any>()))
+                            .build()
                     )
                     .instructions("instructions")
                     .maxCompletionTokens(256L)
@@ -81,25 +60,13 @@ class RunServiceTest {
                     .metadata(JsonValue.from(mapOf<String, Any>()))
                     .model(ChatModel.GPT_4O)
                     .parallelToolCalls(true)
-                    .responseFormat(
-                        AssistantResponseFormatOption.ofBehavior(
-                            AssistantResponseFormatOption.Behavior.AUTO
-                        )
-                    )
+                    .responseFormat(AssistantResponseFormatOption.Behavior.AUTO)
                     .temperature(1.0)
-                    .toolChoice(
-                        AssistantToolChoiceOption.ofBehavior(
-                            AssistantToolChoiceOption.Behavior.NONE
-                        )
-                    )
-                    .tools(
-                        listOf(
-                            AssistantTool.ofCodeInterpreterTool(
-                                CodeInterpreterTool.builder()
-                                    .type(CodeInterpreterTool.Type.CODE_INTERPRETER)
-                                    .build()
-                            )
-                        )
+                    .toolChoice(AssistantToolChoiceOption.Behavior.NONE)
+                    .addTool(
+                        CodeInterpreterTool.builder()
+                            .type(CodeInterpreterTool.Type.CODE_INTERPRETER)
+                            .build()
                     )
                     .topP(1.0)
                     .truncationStrategy(
@@ -128,44 +95,24 @@ class RunServiceTest {
                 BetaThreadRunCreateParams.builder()
                     .threadId("thread_id")
                     .assistantId("assistant_id")
-                    .include(
-                        listOf(RunStepInclude.STEP_DETAILS_TOOL_CALLS_FILE_SEARCH_RESULTS_CONTENT)
-                    )
+                    .addInclude(RunStepInclude.STEP_DETAILS_TOOL_CALLS_FILE_SEARCH_RESULTS_CONTENT)
                     .additionalInstructions("additional_instructions")
-                    .additionalMessages(
-                        listOf(
-                            BetaThreadRunCreateParams.AdditionalMessage.builder()
-                                .content(
-                                    BetaThreadRunCreateParams.AdditionalMessage.Content
-                                        .ofTextContent("string")
-                                )
-                                .role(BetaThreadRunCreateParams.AdditionalMessage.Role.USER)
-                                .attachments(
-                                    listOf(
-                                        BetaThreadRunCreateParams.AdditionalMessage.Attachment
-                                            .builder()
-                                            .fileId("file_id")
-                                            .tools(
-                                                listOf(
-                                                    BetaThreadRunCreateParams.AdditionalMessage
-                                                        .Attachment
-                                                        .Tool
-                                                        .ofCodeInterpreterTool(
-                                                            CodeInterpreterTool.builder()
-                                                                .type(
-                                                                    CodeInterpreterTool.Type
-                                                                        .CODE_INTERPRETER
-                                                                )
-                                                                .build()
-                                                        )
-                                                )
-                                            )
+                    .addAdditionalMessage(
+                        BetaThreadRunCreateParams.AdditionalMessage.builder()
+                            .content("string")
+                            .role(BetaThreadRunCreateParams.AdditionalMessage.Role.USER)
+                            .addAttachment(
+                                BetaThreadRunCreateParams.AdditionalMessage.Attachment.builder()
+                                    .fileId("file_id")
+                                    .addTool(
+                                        CodeInterpreterTool.builder()
+                                            .type(CodeInterpreterTool.Type.CODE_INTERPRETER)
                                             .build()
                                     )
-                                )
-                                .metadata(JsonValue.from(mapOf<String, Any>()))
-                                .build()
-                        )
+                                    .build()
+                            )
+                            .metadata(JsonValue.from(mapOf<String, Any>()))
+                            .build()
                     )
                     .instructions("instructions")
                     .maxCompletionTokens(256L)
@@ -173,25 +120,13 @@ class RunServiceTest {
                     .metadata(JsonValue.from(mapOf<String, Any>()))
                     .model(ChatModel.GPT_4O)
                     .parallelToolCalls(true)
-                    .responseFormat(
-                        AssistantResponseFormatOption.ofBehavior(
-                            AssistantResponseFormatOption.Behavior.AUTO
-                        )
-                    )
+                    .responseFormat(AssistantResponseFormatOption.Behavior.AUTO)
                     .temperature(1.0)
-                    .toolChoice(
-                        AssistantToolChoiceOption.ofBehavior(
-                            AssistantToolChoiceOption.Behavior.NONE
-                        )
-                    )
-                    .tools(
-                        listOf(
-                            AssistantTool.ofCodeInterpreterTool(
-                                CodeInterpreterTool.builder()
-                                    .type(CodeInterpreterTool.Type.CODE_INTERPRETER)
-                                    .build()
-                            )
-                        )
+                    .toolChoice(AssistantToolChoiceOption.Behavior.NONE)
+                    .addTool(
+                        CodeInterpreterTool.builder()
+                            .type(CodeInterpreterTool.Type.CODE_INTERPRETER)
+                            .build()
                     )
                     .topP(1.0)
                     .truncationStrategy(
@@ -290,13 +225,11 @@ class RunServiceTest {
                 BetaThreadRunSubmitToolOutputsParams.builder()
                     .threadId("thread_id")
                     .runId("run_id")
-                    .toolOutputs(
-                        listOf(
-                            BetaThreadRunSubmitToolOutputsParams.ToolOutput.builder()
-                                .output("output")
-                                .toolCallId("tool_call_id")
-                                .build()
-                        )
+                    .addToolOutput(
+                        BetaThreadRunSubmitToolOutputsParams.ToolOutput.builder()
+                            .output("output")
+                            .toolCallId("tool_call_id")
+                            .build()
                     )
                     .build()
             )
@@ -318,13 +251,11 @@ class RunServiceTest {
                 BetaThreadRunSubmitToolOutputsParams.builder()
                     .threadId("thread_id")
                     .runId("run_id")
-                    .toolOutputs(
-                        listOf(
-                            BetaThreadRunSubmitToolOutputsParams.ToolOutput.builder()
-                                .output("output")
-                                .toolCallId("tool_call_id")
-                                .build()
-                        )
+                    .addToolOutput(
+                        BetaThreadRunSubmitToolOutputsParams.ToolOutput.builder()
+                            .output("output")
+                            .toolCallId("tool_call_id")
+                            .build()
                     )
                     .build()
             )

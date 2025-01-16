@@ -14,21 +14,17 @@ class MessageDeltaEventTest {
                 .id("id")
                 .delta(
                     MessageDelta.builder()
-                        .content(
-                            listOf(
-                                MessageContentDelta.ofImageFileDeltaBlock(
-                                    ImageFileDeltaBlock.builder()
-                                        .index(0L)
-                                        .type(ImageFileDeltaBlock.Type.IMAGE_FILE)
-                                        .imageFile(
-                                            ImageFileDelta.builder()
-                                                .detail(ImageFileDelta.Detail.AUTO)
-                                                .fileId("file_id")
-                                                .build()
-                                        )
+                        .addContent(
+                            ImageFileDeltaBlock.builder()
+                                .index(0L)
+                                .type(ImageFileDeltaBlock.Type.IMAGE_FILE)
+                                .imageFile(
+                                    ImageFileDelta.builder()
+                                        .detail(ImageFileDelta.Detail.AUTO)
+                                        .fileId("file_id")
                                         .build()
                                 )
-                            )
+                                .build()
                         )
                         .role(MessageDelta.Role.USER)
                         .build()
@@ -40,21 +36,17 @@ class MessageDeltaEventTest {
         assertThat(messageDeltaEvent.delta())
             .isEqualTo(
                 MessageDelta.builder()
-                    .content(
-                        listOf(
-                            MessageContentDelta.ofImageFileDeltaBlock(
-                                ImageFileDeltaBlock.builder()
-                                    .index(0L)
-                                    .type(ImageFileDeltaBlock.Type.IMAGE_FILE)
-                                    .imageFile(
-                                        ImageFileDelta.builder()
-                                            .detail(ImageFileDelta.Detail.AUTO)
-                                            .fileId("file_id")
-                                            .build()
-                                    )
+                    .addContent(
+                        ImageFileDeltaBlock.builder()
+                            .index(0L)
+                            .type(ImageFileDeltaBlock.Type.IMAGE_FILE)
+                            .imageFile(
+                                ImageFileDelta.builder()
+                                    .detail(ImageFileDelta.Detail.AUTO)
+                                    .fileId("file_id")
                                     .build()
                             )
-                        )
+                            .build()
                     )
                     .role(MessageDelta.Role.USER)
                     .build()

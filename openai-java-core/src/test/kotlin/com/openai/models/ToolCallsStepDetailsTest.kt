@@ -11,41 +11,28 @@ class ToolCallsStepDetailsTest {
     fun createToolCallsStepDetails() {
         val toolCallsStepDetails =
             ToolCallsStepDetails.builder()
-                .toolCalls(
-                    listOf(
-                        ToolCall.ofCodeInterpreterToolCall(
-                            CodeInterpreterToolCall.builder()
-                                .id("id")
-                                .codeInterpreter(
-                                    CodeInterpreterToolCall.CodeInterpreter.builder()
-                                        .input("input")
-                                        .outputs(
-                                            listOf(
-                                                CodeInterpreterToolCall.CodeInterpreter.Output
-                                                    .ofLogs(
-                                                        CodeInterpreterToolCall.CodeInterpreter
-                                                            .Output
-                                                            .LogsOutput
-                                                            .builder()
-                                                            .logs("logs")
-                                                            .type(
-                                                                CodeInterpreterToolCall
-                                                                    .CodeInterpreter
-                                                                    .Output
-                                                                    .LogsOutput
-                                                                    .Type
-                                                                    .LOGS
-                                                            )
-                                                            .build()
-                                                    )
-                                            )
+                .addToolCall(
+                    CodeInterpreterToolCall.builder()
+                        .id("id")
+                        .codeInterpreter(
+                            CodeInterpreterToolCall.CodeInterpreter.builder()
+                                .input("input")
+                                .addOutput(
+                                    CodeInterpreterToolCall.CodeInterpreter.Output.LogsOutput
+                                        .builder()
+                                        .logs("logs")
+                                        .type(
+                                            CodeInterpreterToolCall.CodeInterpreter.Output
+                                                .LogsOutput
+                                                .Type
+                                                .LOGS
                                         )
                                         .build()
                                 )
-                                .type(CodeInterpreterToolCall.Type.CODE_INTERPRETER)
                                 .build()
                         )
-                    )
+                        .type(CodeInterpreterToolCall.Type.CODE_INTERPRETER)
+                        .build()
                 )
                 .type(ToolCallsStepDetails.Type.TOOL_CALLS)
                 .build()
@@ -58,22 +45,17 @@ class ToolCallsStepDetailsTest {
                         .codeInterpreter(
                             CodeInterpreterToolCall.CodeInterpreter.builder()
                                 .input("input")
-                                .outputs(
-                                    listOf(
-                                        CodeInterpreterToolCall.CodeInterpreter.Output.ofLogs(
+                                .addOutput(
+                                    CodeInterpreterToolCall.CodeInterpreter.Output.LogsOutput
+                                        .builder()
+                                        .logs("logs")
+                                        .type(
                                             CodeInterpreterToolCall.CodeInterpreter.Output
                                                 .LogsOutput
-                                                .builder()
-                                                .logs("logs")
-                                                .type(
-                                                    CodeInterpreterToolCall.CodeInterpreter.Output
-                                                        .LogsOutput
-                                                        .Type
-                                                        .LOGS
-                                                )
-                                                .build()
+                                                .Type
+                                                .LOGS
                                         )
-                                    )
+                                        .build()
                                 )
                                 .build()
                         )

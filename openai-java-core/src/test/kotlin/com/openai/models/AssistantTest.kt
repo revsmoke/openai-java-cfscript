@@ -20,31 +20,23 @@ class AssistantTest {
                 .model("model")
                 .name("name")
                 .object_(Assistant.Object.ASSISTANT)
-                .tools(
-                    listOf(
-                        AssistantTool.ofCodeInterpreterTool(
-                            CodeInterpreterTool.builder()
-                                .type(CodeInterpreterTool.Type.CODE_INTERPRETER)
-                                .build()
-                        )
-                    )
+                .addTool(
+                    CodeInterpreterTool.builder()
+                        .type(CodeInterpreterTool.Type.CODE_INTERPRETER)
+                        .build()
                 )
-                .responseFormat(
-                    AssistantResponseFormatOption.ofBehavior(
-                        AssistantResponseFormatOption.Behavior.AUTO
-                    )
-                )
+                .responseFormat(AssistantResponseFormatOption.Behavior.AUTO)
                 .temperature(1.0)
                 .toolResources(
                     Assistant.ToolResources.builder()
                         .codeInterpreter(
                             Assistant.ToolResources.CodeInterpreter.builder()
-                                .fileIds(listOf("string"))
+                                .addFileId("string")
                                 .build()
                         )
                         .fileSearch(
                             Assistant.ToolResources.FileSearch.builder()
-                                .vectorStoreIds(listOf("string"))
+                                .addVectorStoreId("string")
                                 .build()
                         )
                         .build()
@@ -80,12 +72,12 @@ class AssistantTest {
                 Assistant.ToolResources.builder()
                     .codeInterpreter(
                         Assistant.ToolResources.CodeInterpreter.builder()
-                            .fileIds(listOf("string"))
+                            .addFileId("string")
                             .build()
                     )
                     .fileSearch(
                         Assistant.ToolResources.FileSearch.builder()
-                            .vectorStoreIds(listOf("string"))
+                            .addVectorStoreId("string")
                             .build()
                     )
                     .build()

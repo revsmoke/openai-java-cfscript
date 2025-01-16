@@ -11,22 +11,16 @@ class TextTest {
     fun createText() {
         val text =
             Text.builder()
-                .annotations(
-                    listOf(
-                        Annotation.ofFileCitationAnnotation(
-                            FileCitationAnnotation.builder()
-                                .endIndex(0L)
-                                .fileCitation(
-                                    FileCitationAnnotation.FileCitation.builder()
-                                        .fileId("file_id")
-                                        .build()
-                                )
-                                .startIndex(0L)
-                                .text("text")
-                                .type(FileCitationAnnotation.Type.FILE_CITATION)
-                                .build()
+                .addAnnotation(
+                    FileCitationAnnotation.builder()
+                        .endIndex(0L)
+                        .fileCitation(
+                            FileCitationAnnotation.FileCitation.builder().fileId("file_id").build()
                         )
-                    )
+                        .startIndex(0L)
+                        .text("text")
+                        .type(FileCitationAnnotation.Type.FILE_CITATION)
+                        .build()
                 )
                 .value("value")
                 .build()

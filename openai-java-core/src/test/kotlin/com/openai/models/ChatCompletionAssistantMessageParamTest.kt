@@ -13,7 +13,7 @@ class ChatCompletionAssistantMessageParamTest {
             ChatCompletionAssistantMessageParam.builder()
                 .role(ChatCompletionAssistantMessageParam.Role.ASSISTANT)
                 .audio(ChatCompletionAssistantMessageParam.Audio.builder().id("id").build())
-                .content(ChatCompletionAssistantMessageParam.Content.ofTextContent("string"))
+                .content("string")
                 .functionCall(
                     ChatCompletionAssistantMessageParam.FunctionCall.builder()
                         .arguments("arguments")
@@ -22,19 +22,17 @@ class ChatCompletionAssistantMessageParamTest {
                 )
                 .name("name")
                 .refusal("refusal")
-                .toolCalls(
-                    listOf(
-                        ChatCompletionMessageToolCall.builder()
-                            .id("id")
-                            .function(
-                                ChatCompletionMessageToolCall.Function.builder()
-                                    .arguments("arguments")
-                                    .name("name")
-                                    .build()
-                            )
-                            .type(ChatCompletionMessageToolCall.Type.FUNCTION)
-                            .build()
-                    )
+                .addToolCall(
+                    ChatCompletionMessageToolCall.builder()
+                        .id("id")
+                        .function(
+                            ChatCompletionMessageToolCall.Function.builder()
+                                .arguments("arguments")
+                                .name("name")
+                                .build()
+                        )
+                        .type(ChatCompletionMessageToolCall.Type.FUNCTION)
+                        .build()
                 )
                 .build()
         assertThat(chatCompletionAssistantMessageParam).isNotNull

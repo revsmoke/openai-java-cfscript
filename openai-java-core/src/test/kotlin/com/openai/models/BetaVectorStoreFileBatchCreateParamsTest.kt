@@ -11,13 +11,11 @@ class BetaVectorStoreFileBatchCreateParamsTest {
     fun createBetaVectorStoreFileBatchCreateParams() {
         BetaVectorStoreFileBatchCreateParams.builder()
             .vectorStoreId("vs_abc123")
-            .fileIds(listOf("string"))
+            .addFileId("string")
             .chunkingStrategy(
-                FileChunkingStrategyParam.ofAutoFileChunkingStrategyParam(
-                    AutoFileChunkingStrategyParam.builder()
-                        .type(AutoFileChunkingStrategyParam.Type.AUTO)
-                        .build()
-                )
+                AutoFileChunkingStrategyParam.builder()
+                    .type(AutoFileChunkingStrategyParam.Type.AUTO)
+                    .build()
             )
             .build()
     }
@@ -27,13 +25,11 @@ class BetaVectorStoreFileBatchCreateParamsTest {
         val params =
             BetaVectorStoreFileBatchCreateParams.builder()
                 .vectorStoreId("vs_abc123")
-                .fileIds(listOf("string"))
+                .addFileId("string")
                 .chunkingStrategy(
-                    FileChunkingStrategyParam.ofAutoFileChunkingStrategyParam(
-                        AutoFileChunkingStrategyParam.builder()
-                            .type(AutoFileChunkingStrategyParam.Type.AUTO)
-                            .build()
-                    )
+                    AutoFileChunkingStrategyParam.builder()
+                        .type(AutoFileChunkingStrategyParam.Type.AUTO)
+                        .build()
                 )
                 .build()
         val body = params.getBody()
@@ -54,7 +50,7 @@ class BetaVectorStoreFileBatchCreateParamsTest {
         val params =
             BetaVectorStoreFileBatchCreateParams.builder()
                 .vectorStoreId("vs_abc123")
-                .fileIds(listOf("string"))
+                .addFileId("string")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
@@ -66,7 +62,7 @@ class BetaVectorStoreFileBatchCreateParamsTest {
         val params =
             BetaVectorStoreFileBatchCreateParams.builder()
                 .vectorStoreId("vs_abc123")
-                .fileIds(listOf("string"))
+                .addFileId("string")
                 .build()
         assertThat(params).isNotNull
         // path param "vectorStoreId"

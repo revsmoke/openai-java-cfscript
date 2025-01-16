@@ -11,18 +11,12 @@ class ChatCompletionCreateParamsTest {
     @Test
     fun createChatCompletionCreateParams() {
         ChatCompletionCreateParams.builder()
-            .messages(
-                listOf(
-                    ChatCompletionMessageParam.ofChatCompletionDeveloperMessageParam(
-                        ChatCompletionDeveloperMessageParam.builder()
-                            .content(
-                                ChatCompletionDeveloperMessageParam.Content.ofTextContent("string")
-                            )
-                            .role(ChatCompletionDeveloperMessageParam.Role.DEVELOPER)
-                            .name("name")
-                            .build()
-                    )
-                )
+            .addMessage(
+                ChatCompletionDeveloperMessageParam.builder()
+                    .content("string")
+                    .role(ChatCompletionDeveloperMessageParam.Role.DEVELOPER)
+                    .name("name")
+                    .build()
             )
             .model(ChatModel.O1)
             .audio(
@@ -32,23 +26,17 @@ class ChatCompletionCreateParamsTest {
                     .build()
             )
             .frequencyPenalty(-2.0)
-            .functionCall(
-                ChatCompletionCreateParams.FunctionCall.ofBehavior(
-                    ChatCompletionCreateParams.FunctionCall.Behavior.NONE
-                )
-            )
-            .functions(
-                listOf(
-                    ChatCompletionCreateParams.Function.builder()
-                        .name("name")
-                        .description("description")
-                        .parameters(
-                            FunctionParameters.builder()
-                                .putAdditionalProperty("foo", JsonValue.from("bar"))
-                                .build()
-                        )
-                        .build()
-                )
+            .functionCall(ChatCompletionCreateParams.FunctionCall.Behavior.NONE)
+            .addFunction(
+                ChatCompletionCreateParams.Function.builder()
+                    .name("name")
+                    .description("description")
+                    .parameters(
+                        FunctionParameters.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .build()
+                    )
+                    .build()
             )
             .logitBias(
                 ChatCompletionCreateParams.LogitBias.builder()
@@ -63,35 +51,114 @@ class ChatCompletionCreateParamsTest {
                     .putAdditionalProperty("foo", JsonValue.from("string"))
                     .build()
             )
-            .modalities(listOf(ChatCompletionModality.TEXT))
+            .addModality(ChatCompletionModality.TEXT)
             .n(1L)
             .parallelToolCalls(true)
             .prediction(
                 ChatCompletionPredictionContent.builder()
-                    .content(ChatCompletionPredictionContent.Content.ofTextContent("string"))
+                    .content("string")
                     .type(ChatCompletionPredictionContent.Type.CONTENT)
                     .build()
             )
             .presencePenalty(-2.0)
             .reasoningEffort(ChatCompletionReasoningEffort.LOW)
-            .responseFormat(
-                ChatCompletionCreateParams.ResponseFormat.ofResponseFormatText(
-                    ResponseFormatText.builder().type(ResponseFormatText.Type.TEXT).build()
-                )
-            )
+            .responseFormat(ResponseFormatText.builder().type(ResponseFormatText.Type.TEXT).build())
             .seed(-9007199254740991L)
             .serviceTier(ChatCompletionCreateParams.ServiceTier.AUTO)
-            .stop(ChatCompletionCreateParams.Stop.ofString("string"))
+            .stop("string")
             .store(true)
             .streamOptions(ChatCompletionStreamOptions.builder().includeUsage(true).build())
             .temperature(1.0)
-            .toolChoice(
-                ChatCompletionToolChoiceOption.ofBehavior(
-                    ChatCompletionToolChoiceOption.Behavior.NONE
-                )
+            .toolChoice(ChatCompletionToolChoiceOption.Behavior.NONE)
+            .addTool(
+                ChatCompletionTool.builder()
+                    .function(
+                        FunctionDefinition.builder()
+                            .name("name")
+                            .description("description")
+                            .parameters(
+                                FunctionParameters.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                    .build()
+                            )
+                            .strict(true)
+                            .build()
+                    )
+                    .type(ChatCompletionTool.Type.FUNCTION)
+                    .build()
             )
-            .tools(
-                listOf(
+            .topLogprobs(0L)
+            .topP(1.0)
+            .user("user-1234")
+            .build()
+    }
+
+    @Test
+    fun getBody() {
+        val params =
+            ChatCompletionCreateParams.builder()
+                .addMessage(
+                    ChatCompletionDeveloperMessageParam.builder()
+                        .content("string")
+                        .role(ChatCompletionDeveloperMessageParam.Role.DEVELOPER)
+                        .name("name")
+                        .build()
+                )
+                .model(ChatModel.O1)
+                .audio(
+                    ChatCompletionAudioParam.builder()
+                        .format(ChatCompletionAudioParam.Format.WAV)
+                        .voice(ChatCompletionAudioParam.Voice.ALLOY)
+                        .build()
+                )
+                .frequencyPenalty(-2.0)
+                .functionCall(ChatCompletionCreateParams.FunctionCall.Behavior.NONE)
+                .addFunction(
+                    ChatCompletionCreateParams.Function.builder()
+                        .name("name")
+                        .description("description")
+                        .parameters(
+                            FunctionParameters.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                .build()
+                        )
+                        .build()
+                )
+                .logitBias(
+                    ChatCompletionCreateParams.LogitBias.builder()
+                        .putAdditionalProperty("foo", JsonValue.from(0))
+                        .build()
+                )
+                .logprobs(true)
+                .maxCompletionTokens(0L)
+                .maxTokens(0L)
+                .metadata(
+                    ChatCompletionCreateParams.Metadata.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
+                .addModality(ChatCompletionModality.TEXT)
+                .n(1L)
+                .parallelToolCalls(true)
+                .prediction(
+                    ChatCompletionPredictionContent.builder()
+                        .content("string")
+                        .type(ChatCompletionPredictionContent.Type.CONTENT)
+                        .build()
+                )
+                .presencePenalty(-2.0)
+                .reasoningEffort(ChatCompletionReasoningEffort.LOW)
+                .responseFormat(
+                    ResponseFormatText.builder().type(ResponseFormatText.Type.TEXT).build()
+                )
+                .seed(-9007199254740991L)
+                .serviceTier(ChatCompletionCreateParams.ServiceTier.AUTO)
+                .stop("string")
+                .store(true)
+                .streamOptions(ChatCompletionStreamOptions.builder().includeUsage(true).build())
+                .temperature(1.0)
+                .toolChoice(ChatCompletionToolChoiceOption.Behavior.NONE)
+                .addTool(
                     ChatCompletionTool.builder()
                         .function(
                             FunctionDefinition.builder()
@@ -108,117 +175,6 @@ class ChatCompletionCreateParamsTest {
                         .type(ChatCompletionTool.Type.FUNCTION)
                         .build()
                 )
-            )
-            .topLogprobs(0L)
-            .topP(1.0)
-            .user("user-1234")
-            .build()
-    }
-
-    @Test
-    fun getBody() {
-        val params =
-            ChatCompletionCreateParams.builder()
-                .messages(
-                    listOf(
-                        ChatCompletionMessageParam.ofChatCompletionDeveloperMessageParam(
-                            ChatCompletionDeveloperMessageParam.builder()
-                                .content(
-                                    ChatCompletionDeveloperMessageParam.Content.ofTextContent(
-                                        "string"
-                                    )
-                                )
-                                .role(ChatCompletionDeveloperMessageParam.Role.DEVELOPER)
-                                .name("name")
-                                .build()
-                        )
-                    )
-                )
-                .model(ChatModel.O1)
-                .audio(
-                    ChatCompletionAudioParam.builder()
-                        .format(ChatCompletionAudioParam.Format.WAV)
-                        .voice(ChatCompletionAudioParam.Voice.ALLOY)
-                        .build()
-                )
-                .frequencyPenalty(-2.0)
-                .functionCall(
-                    ChatCompletionCreateParams.FunctionCall.ofBehavior(
-                        ChatCompletionCreateParams.FunctionCall.Behavior.NONE
-                    )
-                )
-                .functions(
-                    listOf(
-                        ChatCompletionCreateParams.Function.builder()
-                            .name("name")
-                            .description("description")
-                            .parameters(
-                                FunctionParameters.builder()
-                                    .putAdditionalProperty("foo", JsonValue.from("bar"))
-                                    .build()
-                            )
-                            .build()
-                    )
-                )
-                .logitBias(
-                    ChatCompletionCreateParams.LogitBias.builder()
-                        .putAdditionalProperty("foo", JsonValue.from(0))
-                        .build()
-                )
-                .logprobs(true)
-                .maxCompletionTokens(0L)
-                .maxTokens(0L)
-                .metadata(
-                    ChatCompletionCreateParams.Metadata.builder()
-                        .putAdditionalProperty("foo", JsonValue.from("string"))
-                        .build()
-                )
-                .modalities(listOf(ChatCompletionModality.TEXT))
-                .n(1L)
-                .parallelToolCalls(true)
-                .prediction(
-                    ChatCompletionPredictionContent.builder()
-                        .content(ChatCompletionPredictionContent.Content.ofTextContent("string"))
-                        .type(ChatCompletionPredictionContent.Type.CONTENT)
-                        .build()
-                )
-                .presencePenalty(-2.0)
-                .reasoningEffort(ChatCompletionReasoningEffort.LOW)
-                .responseFormat(
-                    ChatCompletionCreateParams.ResponseFormat.ofResponseFormatText(
-                        ResponseFormatText.builder().type(ResponseFormatText.Type.TEXT).build()
-                    )
-                )
-                .seed(-9007199254740991L)
-                .serviceTier(ChatCompletionCreateParams.ServiceTier.AUTO)
-                .stop(ChatCompletionCreateParams.Stop.ofString("string"))
-                .store(true)
-                .streamOptions(ChatCompletionStreamOptions.builder().includeUsage(true).build())
-                .temperature(1.0)
-                .toolChoice(
-                    ChatCompletionToolChoiceOption.ofBehavior(
-                        ChatCompletionToolChoiceOption.Behavior.NONE
-                    )
-                )
-                .tools(
-                    listOf(
-                        ChatCompletionTool.builder()
-                            .function(
-                                FunctionDefinition.builder()
-                                    .name("name")
-                                    .description("description")
-                                    .parameters(
-                                        FunctionParameters.builder()
-                                            .putAdditionalProperty("foo", JsonValue.from("bar"))
-                                            .build()
-                                    )
-                                    .strict(true)
-                                    .build()
-                            )
-                            .type(ChatCompletionTool.Type.FUNCTION)
-                            .build()
-                    )
-                )
                 .topLogprobs(0L)
                 .topP(1.0)
                 .user("user-1234")
@@ -230,9 +186,7 @@ class ChatCompletionCreateParamsTest {
                 listOf(
                     ChatCompletionMessageParam.ofChatCompletionDeveloperMessageParam(
                         ChatCompletionDeveloperMessageParam.builder()
-                            .content(
-                                ChatCompletionDeveloperMessageParam.Content.ofTextContent("string")
-                            )
+                            .content("string")
                             .role(ChatCompletionDeveloperMessageParam.Role.DEVELOPER)
                             .name("name")
                             .build()
@@ -289,7 +243,7 @@ class ChatCompletionCreateParamsTest {
         assertThat(body.prediction())
             .contains(
                 ChatCompletionPredictionContent.builder()
-                    .content(ChatCompletionPredictionContent.Content.ofTextContent("string"))
+                    .content("string")
                     .type(ChatCompletionPredictionContent.Type.CONTENT)
                     .build()
             )
@@ -343,19 +297,11 @@ class ChatCompletionCreateParamsTest {
     fun getBodyWithoutOptionalFields() {
         val params =
             ChatCompletionCreateParams.builder()
-                .messages(
-                    listOf(
-                        ChatCompletionMessageParam.ofChatCompletionDeveloperMessageParam(
-                            ChatCompletionDeveloperMessageParam.builder()
-                                .content(
-                                    ChatCompletionDeveloperMessageParam.Content.ofTextContent(
-                                        "string"
-                                    )
-                                )
-                                .role(ChatCompletionDeveloperMessageParam.Role.DEVELOPER)
-                                .build()
-                        )
-                    )
+                .addMessage(
+                    ChatCompletionDeveloperMessageParam.builder()
+                        .content("string")
+                        .role(ChatCompletionDeveloperMessageParam.Role.DEVELOPER)
+                        .build()
                 )
                 .model(ChatModel.O1)
                 .build()
@@ -366,9 +312,7 @@ class ChatCompletionCreateParamsTest {
                 listOf(
                     ChatCompletionMessageParam.ofChatCompletionDeveloperMessageParam(
                         ChatCompletionDeveloperMessageParam.builder()
-                            .content(
-                                ChatCompletionDeveloperMessageParam.Content.ofTextContent("string")
-                            )
+                            .content("string")
                             .role(ChatCompletionDeveloperMessageParam.Role.DEVELOPER)
                             .build()
                     )

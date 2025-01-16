@@ -15,21 +15,14 @@ class CodeInterpreterToolCallTest {
                 .codeInterpreter(
                     CodeInterpreterToolCall.CodeInterpreter.builder()
                         .input("input")
-                        .outputs(
-                            listOf(
-                                CodeInterpreterToolCall.CodeInterpreter.Output.ofLogs(
-                                    CodeInterpreterToolCall.CodeInterpreter.Output.LogsOutput
-                                        .builder()
-                                        .logs("logs")
-                                        .type(
-                                            CodeInterpreterToolCall.CodeInterpreter.Output
-                                                .LogsOutput
-                                                .Type
-                                                .LOGS
-                                        )
-                                        .build()
+                        .addOutput(
+                            CodeInterpreterToolCall.CodeInterpreter.Output.LogsOutput.builder()
+                                .logs("logs")
+                                .type(
+                                    CodeInterpreterToolCall.CodeInterpreter.Output.LogsOutput.Type
+                                        .LOGS
                                 )
-                            )
+                                .build()
                         )
                         .build()
                 )
@@ -41,19 +34,13 @@ class CodeInterpreterToolCallTest {
             .isEqualTo(
                 CodeInterpreterToolCall.CodeInterpreter.builder()
                     .input("input")
-                    .outputs(
-                        listOf(
-                            CodeInterpreterToolCall.CodeInterpreter.Output.ofLogs(
-                                CodeInterpreterToolCall.CodeInterpreter.Output.LogsOutput.builder()
-                                    .logs("logs")
-                                    .type(
-                                        CodeInterpreterToolCall.CodeInterpreter.Output.LogsOutput
-                                            .Type
-                                            .LOGS
-                                    )
-                                    .build()
+                    .addOutput(
+                        CodeInterpreterToolCall.CodeInterpreter.Output.LogsOutput.builder()
+                            .logs("logs")
+                            .type(
+                                CodeInterpreterToolCall.CodeInterpreter.Output.LogsOutput.Type.LOGS
                             )
-                        )
+                            .build()
                     )
                     .build()
             )

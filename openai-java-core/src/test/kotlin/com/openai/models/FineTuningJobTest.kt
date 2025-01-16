@@ -24,47 +24,35 @@ class FineTuningJobTest {
                 .finishedAt(0L)
                 .hyperparameters(
                     FineTuningJob.Hyperparameters.builder()
-                        .batchSize(
-                            FineTuningJob.Hyperparameters.BatchSize.ofAuto(
-                                FineTuningJob.Hyperparameters.BatchSize.Auto.AUTO
-                            )
-                        )
+                        .batchSize(FineTuningJob.Hyperparameters.BatchSize.Auto.AUTO)
                         .learningRateMultiplier(
-                            FineTuningJob.Hyperparameters.LearningRateMultiplier.ofAuto(
-                                FineTuningJob.Hyperparameters.LearningRateMultiplier.Auto.AUTO
-                            )
+                            FineTuningJob.Hyperparameters.LearningRateMultiplier.Auto.AUTO
                         )
-                        .nEpochs(
-                            FineTuningJob.Hyperparameters.NEpochs.ofBehavior(
-                                FineTuningJob.Hyperparameters.NEpochs.Behavior.AUTO
-                            )
-                        )
+                        .nEpochs(FineTuningJob.Hyperparameters.NEpochs.Behavior.AUTO)
                         .build()
                 )
                 .model("model")
                 .object_(FineTuningJob.Object.FINE_TUNING_JOB)
                 .organizationId("organization_id")
-                .resultFiles(listOf("file-abc123"))
+                .addResultFile("file-abc123")
                 .seed(0L)
                 .status(FineTuningJob.Status.VALIDATING_FILES)
                 .trainedTokens(0L)
                 .trainingFile("training_file")
                 .validationFile("validation_file")
                 .estimatedFinish(0L)
-                .integrations(
-                    listOf(
-                        FineTuningJobWandbIntegrationObject.builder()
-                            .type(FineTuningJobWandbIntegrationObject.Type.WANDB)
-                            .wandb(
-                                FineTuningJobWandbIntegration.builder()
-                                    .project("my-wandb-project")
-                                    .entity("entity")
-                                    .name("name")
-                                    .tags(listOf("custom-tag"))
-                                    .build()
-                            )
-                            .build()
-                    )
+                .addIntegration(
+                    FineTuningJobWandbIntegrationObject.builder()
+                        .type(FineTuningJobWandbIntegrationObject.Type.WANDB)
+                        .wandb(
+                            FineTuningJobWandbIntegration.builder()
+                                .project("my-wandb-project")
+                                .entity("entity")
+                                .name("name")
+                                .addTag("custom-tag")
+                                .build()
+                        )
+                        .build()
                 )
                 .method(
                     FineTuningJob.Method.builder()
@@ -73,36 +61,21 @@ class FineTuningJobTest {
                                 .hyperparameters(
                                     FineTuningJob.Method.Dpo.Hyperparameters.builder()
                                         .batchSize(
-                                            FineTuningJob.Method.Dpo.Hyperparameters.BatchSize
-                                                .ofAuto(
-                                                    FineTuningJob.Method.Dpo.Hyperparameters
-                                                        .BatchSize
-                                                        .Auto
-                                                        .AUTO
-                                                )
+                                            FineTuningJob.Method.Dpo.Hyperparameters.BatchSize.Auto
+                                                .AUTO
                                         )
                                         .beta(
-                                            FineTuningJob.Method.Dpo.Hyperparameters.Beta.ofAuto(
-                                                FineTuningJob.Method.Dpo.Hyperparameters.Beta.Auto
-                                                    .AUTO
-                                            )
+                                            FineTuningJob.Method.Dpo.Hyperparameters.Beta.Auto.AUTO
                                         )
                                         .learningRateMultiplier(
                                             FineTuningJob.Method.Dpo.Hyperparameters
                                                 .LearningRateMultiplier
-                                                .ofAuto(
-                                                    FineTuningJob.Method.Dpo.Hyperparameters
-                                                        .LearningRateMultiplier
-                                                        .Auto
-                                                        .AUTO
-                                                )
+                                                .Auto
+                                                .AUTO
                                         )
                                         .nEpochs(
-                                            FineTuningJob.Method.Dpo.Hyperparameters.NEpochs.ofAuto(
-                                                FineTuningJob.Method.Dpo.Hyperparameters.NEpochs
-                                                    .Auto
-                                                    .AUTO
-                                            )
+                                            FineTuningJob.Method.Dpo.Hyperparameters.NEpochs.Auto
+                                                .AUTO
                                         )
                                         .build()
                                 )
@@ -115,31 +88,19 @@ class FineTuningJobTest {
                                         .batchSize(
                                             FineTuningJob.Method.Supervised.Hyperparameters
                                                 .BatchSize
-                                                .ofAuto(
-                                                    FineTuningJob.Method.Supervised.Hyperparameters
-                                                        .BatchSize
-                                                        .Auto
-                                                        .AUTO
-                                                )
+                                                .Auto
+                                                .AUTO
                                         )
                                         .learningRateMultiplier(
                                             FineTuningJob.Method.Supervised.Hyperparameters
                                                 .LearningRateMultiplier
-                                                .ofAuto(
-                                                    FineTuningJob.Method.Supervised.Hyperparameters
-                                                        .LearningRateMultiplier
-                                                        .Auto
-                                                        .AUTO
-                                                )
+                                                .Auto
+                                                .AUTO
                                         )
                                         .nEpochs(
                                             FineTuningJob.Method.Supervised.Hyperparameters.NEpochs
-                                                .ofAuto(
-                                                    FineTuningJob.Method.Supervised.Hyperparameters
-                                                        .NEpochs
-                                                        .Auto
-                                                        .AUTO
-                                                )
+                                                .Auto
+                                                .AUTO
                                         )
                                         .build()
                                 )
@@ -161,21 +122,11 @@ class FineTuningJobTest {
         assertThat(fineTuningJob.hyperparameters())
             .isEqualTo(
                 FineTuningJob.Hyperparameters.builder()
-                    .batchSize(
-                        FineTuningJob.Hyperparameters.BatchSize.ofAuto(
-                            FineTuningJob.Hyperparameters.BatchSize.Auto.AUTO
-                        )
-                    )
+                    .batchSize(FineTuningJob.Hyperparameters.BatchSize.Auto.AUTO)
                     .learningRateMultiplier(
-                        FineTuningJob.Hyperparameters.LearningRateMultiplier.ofAuto(
-                            FineTuningJob.Hyperparameters.LearningRateMultiplier.Auto.AUTO
-                        )
+                        FineTuningJob.Hyperparameters.LearningRateMultiplier.Auto.AUTO
                     )
-                    .nEpochs(
-                        FineTuningJob.Hyperparameters.NEpochs.ofBehavior(
-                            FineTuningJob.Hyperparameters.NEpochs.Behavior.AUTO
-                        )
-                    )
+                    .nEpochs(FineTuningJob.Hyperparameters.NEpochs.Behavior.AUTO)
                     .build()
             )
         assertThat(fineTuningJob.model()).isEqualTo("model")
@@ -197,7 +148,7 @@ class FineTuningJobTest {
                             .project("my-wandb-project")
                             .entity("entity")
                             .name("name")
-                            .tags(listOf("custom-tag"))
+                            .addTag("custom-tag")
                             .build()
                     )
                     .build()
@@ -210,31 +161,17 @@ class FineTuningJobTest {
                             .hyperparameters(
                                 FineTuningJob.Method.Dpo.Hyperparameters.builder()
                                     .batchSize(
-                                        FineTuningJob.Method.Dpo.Hyperparameters.BatchSize.ofAuto(
-                                            FineTuningJob.Method.Dpo.Hyperparameters.BatchSize.Auto
-                                                .AUTO
-                                        )
+                                        FineTuningJob.Method.Dpo.Hyperparameters.BatchSize.Auto.AUTO
                                     )
-                                    .beta(
-                                        FineTuningJob.Method.Dpo.Hyperparameters.Beta.ofAuto(
-                                            FineTuningJob.Method.Dpo.Hyperparameters.Beta.Auto.AUTO
-                                        )
-                                    )
+                                    .beta(FineTuningJob.Method.Dpo.Hyperparameters.Beta.Auto.AUTO)
                                     .learningRateMultiplier(
                                         FineTuningJob.Method.Dpo.Hyperparameters
                                             .LearningRateMultiplier
-                                            .ofAuto(
-                                                FineTuningJob.Method.Dpo.Hyperparameters
-                                                    .LearningRateMultiplier
-                                                    .Auto
-                                                    .AUTO
-                                            )
+                                            .Auto
+                                            .AUTO
                                     )
                                     .nEpochs(
-                                        FineTuningJob.Method.Dpo.Hyperparameters.NEpochs.ofAuto(
-                                            FineTuningJob.Method.Dpo.Hyperparameters.NEpochs.Auto
-                                                .AUTO
-                                        )
+                                        FineTuningJob.Method.Dpo.Hyperparameters.NEpochs.Auto.AUTO
                                     )
                                     .build()
                             )
@@ -246,31 +183,18 @@ class FineTuningJobTest {
                                 FineTuningJob.Method.Supervised.Hyperparameters.builder()
                                     .batchSize(
                                         FineTuningJob.Method.Supervised.Hyperparameters.BatchSize
-                                            .ofAuto(
-                                                FineTuningJob.Method.Supervised.Hyperparameters
-                                                    .BatchSize
-                                                    .Auto
-                                                    .AUTO
-                                            )
+                                            .Auto
+                                            .AUTO
                                     )
                                     .learningRateMultiplier(
                                         FineTuningJob.Method.Supervised.Hyperparameters
                                             .LearningRateMultiplier
-                                            .ofAuto(
-                                                FineTuningJob.Method.Supervised.Hyperparameters
-                                                    .LearningRateMultiplier
-                                                    .Auto
-                                                    .AUTO
-                                            )
+                                            .Auto
+                                            .AUTO
                                     )
                                     .nEpochs(
-                                        FineTuningJob.Method.Supervised.Hyperparameters.NEpochs
-                                            .ofAuto(
-                                                FineTuningJob.Method.Supervised.Hyperparameters
-                                                    .NEpochs
-                                                    .Auto
-                                                    .AUTO
-                                            )
+                                        FineTuningJob.Method.Supervised.Hyperparameters.NEpochs.Auto
+                                            .AUTO
                                     )
                                     .build()
                             )

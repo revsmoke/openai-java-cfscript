@@ -11,6 +11,7 @@ import com.openai.core.JsonField
 import com.openai.core.JsonMissing
 import com.openai.core.JsonValue
 import com.openai.core.NoAutoDetect
+import com.openai.core.checkRequired
 import com.openai.core.http.Headers
 import com.openai.core.http.QueryParams
 import com.openai.core.immutableEmptyMap
@@ -213,10 +214,12 @@ constructor(
              * The chunking strategy used to chunk the file(s). If not set, will use the `auto`
              * strategy. Only applicable if `file_ids` is non-empty.
              */
-            fun chunkingStrategy(staticFileChunkingStrategyParam: StaticFileChunkingStrategyParam) =
+            fun chunkingStrategy(
+                staticFileChunkingStrategyObjectParam: StaticFileChunkingStrategyObjectParam
+            ) =
                 chunkingStrategy(
-                    FileChunkingStrategyParam.ofStaticFileChunkingStrategyParam(
-                        staticFileChunkingStrategyParam
+                    FileChunkingStrategyParam.ofStaticFileChunkingStrategyObjectParam(
+                        staticFileChunkingStrategyObjectParam
                     )
                 )
 
@@ -241,8 +244,7 @@ constructor(
 
             fun build(): BetaVectorStoreFileBatchCreateBody =
                 BetaVectorStoreFileBatchCreateBody(
-                    checkNotNull(fileIds) { "`fileIds` is required but was not set" }
-                        .map { it.toImmutable() },
+                    checkRequired("fileIds", fileIds).map { it.toImmutable() },
                     chunkingStrategy,
                     additionalProperties.toImmutable(),
                 )
@@ -341,10 +343,9 @@ constructor(
          * The chunking strategy used to chunk the file(s). If not set, will use the `auto`
          * strategy. Only applicable if `file_ids` is non-empty.
          */
-        fun chunkingStrategy(staticFileChunkingStrategyParam: StaticFileChunkingStrategyParam) =
-            apply {
-                body.chunkingStrategy(staticFileChunkingStrategyParam)
-            }
+        fun chunkingStrategy(
+            staticFileChunkingStrategyObjectParam: StaticFileChunkingStrategyObjectParam
+        ) = apply { body.chunkingStrategy(staticFileChunkingStrategyObjectParam) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             body.additionalProperties(additionalBodyProperties)
@@ -465,7 +466,7 @@ constructor(
 
         fun build(): BetaVectorStoreFileBatchCreateParams =
             BetaVectorStoreFileBatchCreateParams(
-                checkNotNull(vectorStoreId) { "`vectorStoreId` is required but was not set" },
+                checkRequired("vectorStoreId", vectorStoreId),
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),

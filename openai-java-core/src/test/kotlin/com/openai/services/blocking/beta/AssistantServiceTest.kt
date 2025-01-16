@@ -6,7 +6,6 @@ import com.openai.TestServerExtension
 import com.openai.client.okhttp.OpenAIOkHttpClient
 import com.openai.core.JsonValue
 import com.openai.models.AssistantResponseFormatOption
-import com.openai.models.AssistantTool
 import com.openai.models.AutoFileChunkingStrategyParam
 import com.openai.models.BetaAssistantCreateParams
 import com.openai.models.BetaAssistantDeleteParams
@@ -15,7 +14,6 @@ import com.openai.models.BetaAssistantRetrieveParams
 import com.openai.models.BetaAssistantUpdateParams
 import com.openai.models.ChatModel
 import com.openai.models.CodeInterpreterTool
-import com.openai.models.FileChunkingStrategyParam
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
@@ -38,56 +36,39 @@ class AssistantServiceTest {
                     .instructions("instructions")
                     .metadata(JsonValue.from(mapOf<String, Any>()))
                     .name("name")
-                    .responseFormat(
-                        AssistantResponseFormatOption.ofBehavior(
-                            AssistantResponseFormatOption.Behavior.AUTO
-                        )
-                    )
+                    .responseFormat(AssistantResponseFormatOption.Behavior.AUTO)
                     .temperature(1.0)
                     .toolResources(
                         BetaAssistantCreateParams.ToolResources.builder()
                             .codeInterpreter(
                                 BetaAssistantCreateParams.ToolResources.CodeInterpreter.builder()
-                                    .fileIds(listOf("string"))
+                                    .addFileId("string")
                                     .build()
                             )
                             .fileSearch(
                                 BetaAssistantCreateParams.ToolResources.FileSearch.builder()
-                                    .vectorStoreIds(listOf("string"))
-                                    .vectorStores(
-                                        listOf(
-                                            BetaAssistantCreateParams.ToolResources.FileSearch
-                                                .VectorStore
-                                                .builder()
-                                                .chunkingStrategy(
-                                                    FileChunkingStrategyParam
-                                                        .ofAutoFileChunkingStrategyParam(
-                                                            AutoFileChunkingStrategyParam.builder()
-                                                                .type(
-                                                                    AutoFileChunkingStrategyParam
-                                                                        .Type
-                                                                        .AUTO
-                                                                )
-                                                                .build()
-                                                        )
-                                                )
-                                                .fileIds(listOf("string"))
-                                                .metadata(JsonValue.from(mapOf<String, Any>()))
-                                                .build()
-                                        )
+                                    .addVectorStoreId("string")
+                                    .addVectorStore(
+                                        BetaAssistantCreateParams.ToolResources.FileSearch
+                                            .VectorStore
+                                            .builder()
+                                            .chunkingStrategy(
+                                                AutoFileChunkingStrategyParam.builder()
+                                                    .type(AutoFileChunkingStrategyParam.Type.AUTO)
+                                                    .build()
+                                            )
+                                            .addFileId("string")
+                                            .metadata(JsonValue.from(mapOf<String, Any>()))
+                                            .build()
                                     )
                                     .build()
                             )
                             .build()
                     )
-                    .tools(
-                        listOf(
-                            AssistantTool.ofCodeInterpreterTool(
-                                CodeInterpreterTool.builder()
-                                    .type(CodeInterpreterTool.Type.CODE_INTERPRETER)
-                                    .build()
-                            )
-                        )
+                    .addTool(
+                        CodeInterpreterTool.builder()
+                            .type(CodeInterpreterTool.Type.CODE_INTERPRETER)
+                            .build()
                     )
                     .topP(1.0)
                     .build()
@@ -129,34 +110,26 @@ class AssistantServiceTest {
                     .metadata(JsonValue.from(mapOf<String, Any>()))
                     .model("model")
                     .name("name")
-                    .responseFormat(
-                        AssistantResponseFormatOption.ofBehavior(
-                            AssistantResponseFormatOption.Behavior.AUTO
-                        )
-                    )
+                    .responseFormat(AssistantResponseFormatOption.Behavior.AUTO)
                     .temperature(1.0)
                     .toolResources(
                         BetaAssistantUpdateParams.ToolResources.builder()
                             .codeInterpreter(
                                 BetaAssistantUpdateParams.ToolResources.CodeInterpreter.builder()
-                                    .fileIds(listOf("string"))
+                                    .addFileId("string")
                                     .build()
                             )
                             .fileSearch(
                                 BetaAssistantUpdateParams.ToolResources.FileSearch.builder()
-                                    .vectorStoreIds(listOf("string"))
+                                    .addVectorStoreId("string")
                                     .build()
                             )
                             .build()
                     )
-                    .tools(
-                        listOf(
-                            AssistantTool.ofCodeInterpreterTool(
-                                CodeInterpreterTool.builder()
-                                    .type(CodeInterpreterTool.Type.CODE_INTERPRETER)
-                                    .build()
-                            )
-                        )
+                    .addTool(
+                        CodeInterpreterTool.builder()
+                            .type(CodeInterpreterTool.Type.CODE_INTERPRETER)
+                            .build()
                     )
                     .topP(1.0)
                     .build()

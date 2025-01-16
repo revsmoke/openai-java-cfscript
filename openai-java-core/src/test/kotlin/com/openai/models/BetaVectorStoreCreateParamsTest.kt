@@ -12,11 +12,9 @@ class BetaVectorStoreCreateParamsTest {
     fun createBetaVectorStoreCreateParams() {
         BetaVectorStoreCreateParams.builder()
             .chunkingStrategy(
-                FileChunkingStrategyParam.ofAutoFileChunkingStrategyParam(
-                    AutoFileChunkingStrategyParam.builder()
-                        .type(AutoFileChunkingStrategyParam.Type.AUTO)
-                        .build()
-                )
+                AutoFileChunkingStrategyParam.builder()
+                    .type(AutoFileChunkingStrategyParam.Type.AUTO)
+                    .build()
             )
             .expiresAfter(
                 BetaVectorStoreCreateParams.ExpiresAfter.builder()
@@ -24,7 +22,7 @@ class BetaVectorStoreCreateParamsTest {
                     .days(1L)
                     .build()
             )
-            .fileIds(listOf("string"))
+            .addFileId("string")
             .metadata(JsonValue.from(mapOf<String, Any>()))
             .name("name")
             .build()
@@ -35,11 +33,9 @@ class BetaVectorStoreCreateParamsTest {
         val params =
             BetaVectorStoreCreateParams.builder()
                 .chunkingStrategy(
-                    FileChunkingStrategyParam.ofAutoFileChunkingStrategyParam(
-                        AutoFileChunkingStrategyParam.builder()
-                            .type(AutoFileChunkingStrategyParam.Type.AUTO)
-                            .build()
-                    )
+                    AutoFileChunkingStrategyParam.builder()
+                        .type(AutoFileChunkingStrategyParam.Type.AUTO)
+                        .build()
                 )
                 .expiresAfter(
                     BetaVectorStoreCreateParams.ExpiresAfter.builder()
@@ -47,7 +43,7 @@ class BetaVectorStoreCreateParamsTest {
                         .days(1L)
                         .build()
                 )
-                .fileIds(listOf("string"))
+                .addFileId("string")
                 .metadata(JsonValue.from(mapOf<String, Any>()))
                 .name("name")
                 .build()

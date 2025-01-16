@@ -9,13 +9,11 @@
 
 <!-- x-release-please-start-version -->
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.openai/openai-java)](https://central.sonatype.com/artifact/com.openai/openai-java/0.11.3)
+[![Maven Central](https://img.shields.io/maven-central/v/com.openai/openai-java)](https://central.sonatype.com/artifact/com.openai/openai-java/0.11.4)
 
 <!-- x-release-please-end -->
 
 The OpenAI Java SDK provides convenient access to the OpenAI REST API from applications written in Java. It includes helper classes with helpful types and documentation for every request and response property.
-
-The OpenAI Java SDK is similar to the OpenAI Kotlin SDK but with minor differences that make it more ergonomic for use in Java, such as `Optional` instead of nullable values, `Stream` instead of `Sequence`, and `CompletableFuture` instead of suspend functions.
 
 ## Documentation
 
@@ -32,7 +30,7 @@ The REST API documentation can be found on [platform.openai.com](https://platfo
 <!-- x-release-please-start-version -->
 
 ```kotlin
-implementation("com.openai:openai-java:0.11.3")
+implementation("com.openai:openai-java:0.11.4")
 ```
 
 #### Maven
@@ -41,7 +39,7 @@ implementation("com.openai:openai-java:0.11.3")
 <dependency>
     <groupId>com.openai</groupId>
     <artifactId>openai-java</artifactId>
-    <version>0.11.3</version>
+    <version>0.11.4</version>
 </dependency>
 ```
 
@@ -92,16 +90,14 @@ To create a new chat completion, first use the `ChatCompletionCreateParams` buil
 ```java
 import com.openai.models.ChatCompletion;
 import com.openai.models.ChatCompletionCreateParams;
-import com.openai.models.ChatCompletionMessageParam;
 import com.openai.models.ChatCompletionUserMessageParam;
 import com.openai.models.ChatModel;
-import java.util.List;
 
 ChatCompletionCreateParams params = ChatCompletionCreateParams.builder()
-    .messages(List.of(ChatCompletionMessageParam.ofChatCompletionUserMessageParam(ChatCompletionUserMessageParam.builder()
+    .addMessage(ChatCompletionUserMessageParam.builder()
         .role(ChatCompletionUserMessageParam.Role.USER)
-        .content(ChatCompletionUserMessageParam.Content.ofTextContent("Say this is a test"))
-        .build())))
+        .content("Say this is a test")
+        .build())
     .model(ChatModel.O1)
     .build();
 ChatCompletion chatCompletion = client.chat().completions().create(params);

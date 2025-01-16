@@ -41,44 +41,32 @@ class RunTest {
                     Run.RequiredAction.builder()
                         .submitToolOutputs(
                             Run.RequiredAction.SubmitToolOutputs.builder()
-                                .toolCalls(
-                                    listOf(
-                                        RequiredActionFunctionToolCall.builder()
-                                            .id("id")
-                                            .function(
-                                                RequiredActionFunctionToolCall.Function.builder()
-                                                    .arguments("arguments")
-                                                    .name("name")
-                                                    .build()
-                                            )
-                                            .type(RequiredActionFunctionToolCall.Type.FUNCTION)
-                                            .build()
-                                    )
+                                .addToolCall(
+                                    RequiredActionFunctionToolCall.builder()
+                                        .id("id")
+                                        .function(
+                                            RequiredActionFunctionToolCall.Function.builder()
+                                                .arguments("arguments")
+                                                .name("name")
+                                                .build()
+                                        )
+                                        .type(RequiredActionFunctionToolCall.Type.FUNCTION)
+                                        .build()
                                 )
                                 .build()
                         )
                         .type(Run.RequiredAction.Type.SUBMIT_TOOL_OUTPUTS)
                         .build()
                 )
-                .responseFormat(
-                    AssistantResponseFormatOption.ofBehavior(
-                        AssistantResponseFormatOption.Behavior.AUTO
-                    )
-                )
+                .responseFormat(AssistantResponseFormatOption.Behavior.AUTO)
                 .startedAt(0L)
                 .status(RunStatus.QUEUED)
                 .threadId("thread_id")
-                .toolChoice(
-                    AssistantToolChoiceOption.ofBehavior(AssistantToolChoiceOption.Behavior.NONE)
-                )
-                .tools(
-                    listOf(
-                        AssistantTool.ofCodeInterpreterTool(
-                            CodeInterpreterTool.builder()
-                                .type(CodeInterpreterTool.Type.CODE_INTERPRETER)
-                                .build()
-                        )
-                    )
+                .toolChoice(AssistantToolChoiceOption.Behavior.NONE)
+                .addTool(
+                    CodeInterpreterTool.builder()
+                        .type(CodeInterpreterTool.Type.CODE_INTERPRETER)
+                        .build()
                 )
                 .truncationStrategy(
                     Run.TruncationStrategy.builder()
@@ -129,19 +117,17 @@ class RunTest {
                 Run.RequiredAction.builder()
                     .submitToolOutputs(
                         Run.RequiredAction.SubmitToolOutputs.builder()
-                            .toolCalls(
-                                listOf(
-                                    RequiredActionFunctionToolCall.builder()
-                                        .id("id")
-                                        .function(
-                                            RequiredActionFunctionToolCall.Function.builder()
-                                                .arguments("arguments")
-                                                .name("name")
-                                                .build()
-                                        )
-                                        .type(RequiredActionFunctionToolCall.Type.FUNCTION)
-                                        .build()
-                                )
+                            .addToolCall(
+                                RequiredActionFunctionToolCall.builder()
+                                    .id("id")
+                                    .function(
+                                        RequiredActionFunctionToolCall.Function.builder()
+                                            .arguments("arguments")
+                                            .name("name")
+                                            .build()
+                                    )
+                                    .type(RequiredActionFunctionToolCall.Type.FUNCTION)
+                                    .build()
                             )
                             .build()
                     )

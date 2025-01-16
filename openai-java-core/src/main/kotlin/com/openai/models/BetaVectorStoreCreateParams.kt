@@ -12,6 +12,7 @@ import com.openai.core.JsonField
 import com.openai.core.JsonMissing
 import com.openai.core.JsonValue
 import com.openai.core.NoAutoDetect
+import com.openai.core.checkRequired
 import com.openai.core.http.Headers
 import com.openai.core.http.QueryParams
 import com.openai.core.immutableEmptyMap
@@ -229,10 +230,12 @@ constructor(
              * The chunking strategy used to chunk the file(s). If not set, will use the `auto`
              * strategy. Only applicable if `file_ids` is non-empty.
              */
-            fun chunkingStrategy(staticFileChunkingStrategyParam: StaticFileChunkingStrategyParam) =
+            fun chunkingStrategy(
+                staticFileChunkingStrategyObjectParam: StaticFileChunkingStrategyObjectParam
+            ) =
                 chunkingStrategy(
-                    FileChunkingStrategyParam.ofStaticFileChunkingStrategyParam(
-                        staticFileChunkingStrategyParam
+                    FileChunkingStrategyParam.ofStaticFileChunkingStrategyObjectParam(
+                        staticFileChunkingStrategyObjectParam
                     )
                 )
 
@@ -385,10 +388,9 @@ constructor(
          * The chunking strategy used to chunk the file(s). If not set, will use the `auto`
          * strategy. Only applicable if `file_ids` is non-empty.
          */
-        fun chunkingStrategy(staticFileChunkingStrategyParam: StaticFileChunkingStrategyParam) =
-            apply {
-                body.chunkingStrategy(staticFileChunkingStrategyParam)
-            }
+        fun chunkingStrategy(
+            staticFileChunkingStrategyObjectParam: StaticFileChunkingStrategyObjectParam
+        ) = apply { body.chunkingStrategy(staticFileChunkingStrategyObjectParam) }
 
         /** The expiration policy for a vector store. */
         fun expiresAfter(expiresAfter: ExpiresAfter) = apply { body.expiresAfter(expiresAfter) }
@@ -660,8 +662,8 @@ constructor(
 
             fun build(): ExpiresAfter =
                 ExpiresAfter(
-                    checkNotNull(anchor) { "`anchor` is required but was not set" },
-                    checkNotNull(days) { "`days` is required but was not set" },
+                    checkRequired("anchor", anchor),
+                    checkRequired("days", days),
                     additionalProperties.toImmutable(),
                 )
         }

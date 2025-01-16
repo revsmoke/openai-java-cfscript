@@ -23,7 +23,6 @@ import com.openai.models.ChatCompletionAudioParam
 import com.openai.models.ChatCompletionCreateParams
 import com.openai.models.ChatCompletionDeveloperMessageParam
 import com.openai.models.ChatCompletionMessage
-import com.openai.models.ChatCompletionMessageParam
 import com.openai.models.ChatCompletionMessageToolCall
 import com.openai.models.ChatCompletionModality
 import com.openai.models.ChatCompletionPredictionContent
@@ -74,20 +73,12 @@ class ServiceParamsTest {
 
         val params =
             ChatCompletionCreateParams.builder()
-                .messages(
-                    listOf(
-                        ChatCompletionMessageParam.ofChatCompletionDeveloperMessageParam(
-                            ChatCompletionDeveloperMessageParam.builder()
-                                .content(
-                                    ChatCompletionDeveloperMessageParam.Content.ofTextContent(
-                                        "string"
-                                    )
-                                )
-                                .role(ChatCompletionDeveloperMessageParam.Role.DEVELOPER)
-                                .name("name")
-                                .build()
-                        )
-                    )
+                .addMessage(
+                    ChatCompletionDeveloperMessageParam.builder()
+                        .content("string")
+                        .role(ChatCompletionDeveloperMessageParam.Role.DEVELOPER)
+                        .name("name")
+                        .build()
                 )
                 .model(ChatModel.O1)
                 .audio(
@@ -97,23 +88,17 @@ class ServiceParamsTest {
                         .build()
                 )
                 .frequencyPenalty(-2.0)
-                .functionCall(
-                    ChatCompletionCreateParams.FunctionCall.ofBehavior(
-                        ChatCompletionCreateParams.FunctionCall.Behavior.NONE
-                    )
-                )
-                .functions(
-                    listOf(
-                        ChatCompletionCreateParams.Function.builder()
-                            .name("name")
-                            .description("description")
-                            .parameters(
-                                FunctionParameters.builder()
-                                    .putAdditionalProperty("foo", JsonValue.from("bar"))
-                                    .build()
-                            )
-                            .build()
-                    )
+                .functionCall(ChatCompletionCreateParams.FunctionCall.Behavior.NONE)
+                .addFunction(
+                    ChatCompletionCreateParams.Function.builder()
+                        .name("name")
+                        .description("description")
+                        .parameters(
+                            FunctionParameters.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                .build()
+                        )
+                        .build()
                 )
                 .logitBias(
                     ChatCompletionCreateParams.LogitBias.builder()
@@ -128,51 +113,43 @@ class ServiceParamsTest {
                         .putAdditionalProperty("foo", JsonValue.from("string"))
                         .build()
                 )
-                .modalities(listOf(ChatCompletionModality.TEXT))
+                .addModality(ChatCompletionModality.TEXT)
                 .n(1L)
                 .parallelToolCalls(true)
                 .prediction(
                     ChatCompletionPredictionContent.builder()
-                        .content(ChatCompletionPredictionContent.Content.ofTextContent("string"))
+                        .content("string")
                         .type(ChatCompletionPredictionContent.Type.CONTENT)
                         .build()
                 )
                 .presencePenalty(-2.0)
                 .reasoningEffort(ChatCompletionReasoningEffort.LOW)
                 .responseFormat(
-                    ChatCompletionCreateParams.ResponseFormat.ofResponseFormatText(
-                        ResponseFormatText.builder().type(ResponseFormatText.Type.TEXT).build()
-                    )
+                    ResponseFormatText.builder().type(ResponseFormatText.Type.TEXT).build()
                 )
                 .seed(-9007199254740991L)
                 .serviceTier(ChatCompletionCreateParams.ServiceTier.AUTO)
-                .stop(ChatCompletionCreateParams.Stop.ofString("string"))
+                .stop("string")
                 .store(true)
                 .streamOptions(ChatCompletionStreamOptions.builder().includeUsage(true).build())
                 .temperature(1.0)
-                .toolChoice(
-                    ChatCompletionToolChoiceOption.ofBehavior(
-                        ChatCompletionToolChoiceOption.Behavior.NONE
-                    )
-                )
-                .tools(
-                    listOf(
-                        ChatCompletionTool.builder()
-                            .function(
-                                FunctionDefinition.builder()
-                                    .name("name")
-                                    .description("description")
-                                    .parameters(
-                                        FunctionParameters.builder()
-                                            .putAdditionalProperty("foo", JsonValue.from("bar"))
-                                            .build()
-                                    )
-                                    .strict(true)
-                                    .build()
-                            )
-                            .type(ChatCompletionTool.Type.FUNCTION)
-                            .build()
-                    )
+                .toolChoice(ChatCompletionToolChoiceOption.Behavior.NONE)
+                .addTool(
+                    ChatCompletionTool.builder()
+                        .function(
+                            FunctionDefinition.builder()
+                                .name("name")
+                                .description("description")
+                                .parameters(
+                                    FunctionParameters.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                        .build()
+                                )
+                                .strict(true)
+                                .build()
+                        )
+                        .type(ChatCompletionTool.Type.FUNCTION)
+                        .build()
                 )
                 .topLogprobs(0L)
                 .topP(1.0)
@@ -185,90 +162,76 @@ class ServiceParamsTest {
         val apiResponse =
             ChatCompletion.builder()
                 .id("id")
-                .choices(
-                    listOf(
-                        ChatCompletion.Choice.builder()
-                            .finishReason(ChatCompletion.Choice.FinishReason.STOP)
-                            .index(0L)
-                            .logprobs(
-                                ChatCompletion.Choice.Logprobs.builder()
-                                    .content(
-                                        listOf(
-                                            ChatCompletionTokenLogprob.builder()
+                .addChoice(
+                    ChatCompletion.Choice.builder()
+                        .finishReason(ChatCompletion.Choice.FinishReason.STOP)
+                        .index(0L)
+                        .logprobs(
+                            ChatCompletion.Choice.Logprobs.builder()
+                                .addContent(
+                                    ChatCompletionTokenLogprob.builder()
+                                        .token("token")
+                                        .addByte(0L)
+                                        .logprob(0.0)
+                                        .addTopLogprob(
+                                            ChatCompletionTokenLogprob.TopLogprob.builder()
                                                 .token("token")
-                                                .bytes(listOf(0L))
+                                                .addByte(0L)
                                                 .logprob(0.0)
-                                                .topLogprobs(
-                                                    listOf(
-                                                        ChatCompletionTokenLogprob.TopLogprob
-                                                            .builder()
-                                                            .token("token")
-                                                            .bytes(listOf(0L))
-                                                            .logprob(0.0)
-                                                            .build()
-                                                    )
-                                                )
                                                 .build()
                                         )
-                                    )
-                                    .refusal(
-                                        listOf(
-                                            ChatCompletionTokenLogprob.builder()
+                                        .build()
+                                )
+                                .addRefusal(
+                                    ChatCompletionTokenLogprob.builder()
+                                        .token("token")
+                                        .addByte(0L)
+                                        .logprob(0.0)
+                                        .addTopLogprob(
+                                            ChatCompletionTokenLogprob.TopLogprob.builder()
                                                 .token("token")
-                                                .bytes(listOf(0L))
+                                                .addByte(0L)
                                                 .logprob(0.0)
-                                                .topLogprobs(
-                                                    listOf(
-                                                        ChatCompletionTokenLogprob.TopLogprob
-                                                            .builder()
-                                                            .token("token")
-                                                            .bytes(listOf(0L))
-                                                            .logprob(0.0)
-                                                            .build()
-                                                    )
-                                                )
                                                 .build()
                                         )
-                                    )
-                                    .build()
-                            )
-                            .message(
-                                ChatCompletionMessage.builder()
-                                    .content("content")
-                                    .refusal("refusal")
-                                    .role(ChatCompletionMessage.Role.ASSISTANT)
-                                    .audio(
-                                        ChatCompletionAudio.builder()
-                                            .id("id")
-                                            .data("data")
-                                            .expiresAt(0L)
-                                            .transcript("transcript")
-                                            .build()
-                                    )
-                                    .functionCall(
-                                        ChatCompletionMessage.FunctionCall.builder()
-                                            .arguments("arguments")
-                                            .name("name")
-                                            .build()
-                                    )
-                                    .toolCalls(
-                                        listOf(
-                                            ChatCompletionMessageToolCall.builder()
-                                                .id("id")
-                                                .function(
-                                                    ChatCompletionMessageToolCall.Function.builder()
-                                                        .arguments("arguments")
-                                                        .name("name")
-                                                        .build()
-                                                )
-                                                .type(ChatCompletionMessageToolCall.Type.FUNCTION)
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .message(
+                            ChatCompletionMessage.builder()
+                                .content("content")
+                                .refusal("refusal")
+                                .role(ChatCompletionMessage.Role.ASSISTANT)
+                                .audio(
+                                    ChatCompletionAudio.builder()
+                                        .id("id")
+                                        .data("data")
+                                        .expiresAt(0L)
+                                        .transcript("transcript")
+                                        .build()
+                                )
+                                .functionCall(
+                                    ChatCompletionMessage.FunctionCall.builder()
+                                        .arguments("arguments")
+                                        .name("name")
+                                        .build()
+                                )
+                                .addToolCall(
+                                    ChatCompletionMessageToolCall.builder()
+                                        .id("id")
+                                        .function(
+                                            ChatCompletionMessageToolCall.Function.builder()
+                                                .arguments("arguments")
+                                                .name("name")
                                                 .build()
                                         )
-                                    )
-                                    .build()
-                            )
-                            .build()
-                    )
+                                        .type(ChatCompletionMessageToolCall.Type.FUNCTION)
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .build()
                 )
                 .created(0L)
                 .model("model")

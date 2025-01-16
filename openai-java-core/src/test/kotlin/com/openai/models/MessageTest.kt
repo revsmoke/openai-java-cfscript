@@ -14,37 +14,27 @@ class MessageTest {
             Message.builder()
                 .id("id")
                 .assistantId("assistant_id")
-                .attachments(
-                    listOf(
-                        Message.Attachment.builder()
-                            .fileId("file_id")
-                            .tools(
-                                listOf(
-                                    Message.Attachment.Tool.ofCodeInterpreterTool(
-                                        CodeInterpreterTool.builder()
-                                            .type(CodeInterpreterTool.Type.CODE_INTERPRETER)
-                                            .build()
-                                    )
-                                )
-                            )
-                            .build()
-                    )
-                )
-                .completedAt(0L)
-                .content(
-                    listOf(
-                        MessageContent.ofImageFileContentBlock(
-                            ImageFileContentBlock.builder()
-                                .imageFile(
-                                    ImageFile.builder()
-                                        .fileId("file_id")
-                                        .detail(ImageFile.Detail.AUTO)
-                                        .build()
-                                )
-                                .type(ImageFileContentBlock.Type.IMAGE_FILE)
+                .addAttachment(
+                    Message.Attachment.builder()
+                        .fileId("file_id")
+                        .addTool(
+                            CodeInterpreterTool.builder()
+                                .type(CodeInterpreterTool.Type.CODE_INTERPRETER)
                                 .build()
                         )
-                    )
+                        .build()
+                )
+                .completedAt(0L)
+                .addContent(
+                    ImageFileContentBlock.builder()
+                        .imageFile(
+                            ImageFile.builder()
+                                .fileId("file_id")
+                                .detail(ImageFile.Detail.AUTO)
+                                .build()
+                        )
+                        .type(ImageFileContentBlock.Type.IMAGE_FILE)
+                        .build()
                 )
                 .createdAt(0L)
                 .incompleteAt(0L)
@@ -67,14 +57,10 @@ class MessageTest {
             .containsExactly(
                 Message.Attachment.builder()
                     .fileId("file_id")
-                    .tools(
-                        listOf(
-                            Message.Attachment.Tool.ofCodeInterpreterTool(
-                                CodeInterpreterTool.builder()
-                                    .type(CodeInterpreterTool.Type.CODE_INTERPRETER)
-                                    .build()
-                            )
-                        )
+                    .addTool(
+                        CodeInterpreterTool.builder()
+                            .type(CodeInterpreterTool.Type.CODE_INTERPRETER)
+                            .build()
                     )
                     .build()
             )
