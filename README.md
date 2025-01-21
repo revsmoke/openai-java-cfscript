@@ -1,7 +1,7 @@
 # OpenAI Java API Library
 
 > [!NOTE]  
-> The OpenAI Java API Library is currently in _alpha_.
+> The OpenAI Java API Library is currently in _beta_.
 >
 > There may be frequent breaking changes.
 >
