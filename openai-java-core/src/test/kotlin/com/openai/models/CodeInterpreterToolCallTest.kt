@@ -15,11 +15,7 @@ class CodeInterpreterToolCallTest {
                 .codeInterpreter(
                     CodeInterpreterToolCall.CodeInterpreter.builder()
                         .input("input")
-                        .addOutput(
-                            CodeInterpreterToolCall.CodeInterpreter.Output.LogsOutput.builder()
-                                .logs("logs")
-                                .build()
-                        )
+                        .addLogsOutput("logs")
                         .build()
                 )
                 .build()
@@ -29,11 +25,7 @@ class CodeInterpreterToolCallTest {
             .isEqualTo(
                 CodeInterpreterToolCall.CodeInterpreter.builder()
                     .input("input")
-                    .addOutput(
-                        CodeInterpreterToolCall.CodeInterpreter.Output.LogsOutput.builder()
-                            .logs("logs")
-                            .build()
-                    )
+                    .addLogsOutput("logs")
                     .build()
             )
     }

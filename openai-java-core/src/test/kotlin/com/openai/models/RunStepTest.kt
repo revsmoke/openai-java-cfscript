@@ -28,13 +28,9 @@ class RunStepTest {
                 .metadata(JsonValue.from(mapOf<String, Any>()))
                 .runId("run_id")
                 .status(RunStep.Status.IN_PROGRESS)
-                .stepDetails(
-                    MessageCreationStepDetails.builder()
-                        .messageCreation(
-                            MessageCreationStepDetails.MessageCreation.builder()
-                                .messageId("message_id")
-                                .build()
-                        )
+                .messageCreationStepDetails(
+                    MessageCreationStepDetails.MessageCreation.builder()
+                        .messageId("message_id")
                         .build()
                 )
                 .threadId("thread_id")

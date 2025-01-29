@@ -17,12 +17,7 @@ class ToolCallsStepDetailsTest {
                         .codeInterpreter(
                             CodeInterpreterToolCall.CodeInterpreter.builder()
                                 .input("input")
-                                .addOutput(
-                                    CodeInterpreterToolCall.CodeInterpreter.Output.LogsOutput
-                                        .builder()
-                                        .logs("logs")
-                                        .build()
-                                )
+                                .addLogsOutput("logs")
                                 .build()
                         )
                         .build()
@@ -37,12 +32,7 @@ class ToolCallsStepDetailsTest {
                         .codeInterpreter(
                             CodeInterpreterToolCall.CodeInterpreter.builder()
                                 .input("input")
-                                .addOutput(
-                                    CodeInterpreterToolCall.CodeInterpreter.Output.LogsOutput
-                                        .builder()
-                                        .logs("logs")
-                                        .build()
-                                )
+                                .addLogsOutput("logs")
                                 .build()
                         )
                         .build()
