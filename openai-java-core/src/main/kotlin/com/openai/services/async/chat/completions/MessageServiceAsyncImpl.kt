@@ -40,7 +40,7 @@ internal constructor(
                 .method(HttpMethod.GET)
                 .addPathSegments("chat", "completions", params.getPathParam(0), "messages")
                 .build()
-                .prepareAsync(clientOptions, params)
+                .prepareAsync(clientOptions, params, null)
         return request
             .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
             .thenApply { response ->

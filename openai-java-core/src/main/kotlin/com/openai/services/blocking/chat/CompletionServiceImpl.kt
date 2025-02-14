@@ -138,7 +138,7 @@ internal constructor(
                 .method(HttpMethod.GET)
                 .addPathSegments("chat", "completions", params.getPathParam(0))
                 .build()
-                .prepare(clientOptions, params)
+                .prepare(clientOptions, params, null)
         val response = clientOptions.httpClient.execute(request, requestOptions)
         return response
             .use { retrieveHandler.handle(it) }
@@ -167,7 +167,7 @@ internal constructor(
                 .addPathSegments("chat", "completions", params.getPathParam(0))
                 .body(json(clientOptions.jsonMapper, params._body()))
                 .build()
-                .prepare(clientOptions, params)
+                .prepare(clientOptions, params, null)
         val response = clientOptions.httpClient.execute(request, requestOptions)
         return response
             .use { updateHandler.handle(it) }
@@ -195,7 +195,7 @@ internal constructor(
                 .addPathSegments("chat", "completions", params.getPathParam(0))
                 .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
                 .build()
-                .prepare(clientOptions, params)
+                .prepare(clientOptions, params, null)
         val response = clientOptions.httpClient.execute(request, requestOptions)
         return response
             .use { deleteHandler.handle(it) }
