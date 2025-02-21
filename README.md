@@ -9,8 +9,8 @@
 
 <!-- x-release-please-start-version -->
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.openai/openai-java)](https://central.sonatype.com/artifact/com.openai/openai-java/0.26.0)
-[![javadoc](https://javadoc.io/badge2/com.openai/openai-java/0.26.0/javadoc.svg)](https://javadoc.io/doc/com.openai/openai-java/0.26.0)
+[![Maven Central](https://img.shields.io/maven-central/v/com.openai/openai-java)](https://central.sonatype.com/artifact/com.openai/openai-java/0.26.1)
+[![javadoc](https://javadoc.io/badge2/com.openai/openai-java/0.26.1/javadoc.svg)](https://javadoc.io/doc/com.openai/openai-java/0.26.1)
 
 <!-- x-release-please-end -->
 
@@ -25,7 +25,7 @@ The REST API documentation can be found on [platform.openai.com](https://platfor
 ### Gradle
 
 ```kotlin
-implementation("com.openai:openai-java:0.26.0")
+implementation("com.openai:openai-java:0.26.1")
 ```
 
 ### Maven
@@ -34,7 +34,7 @@ implementation("com.openai:openai-java:0.26.0")
 <dependency>
     <groupId>com.openai</groupId>
     <artifactId>openai-java</artifactId>
-    <version>0.26.0</version>
+    <version>0.26.1</version>
 </dependency>
 ```
 
@@ -118,6 +118,14 @@ See this table for the available options:
 To send a request to the OpenAI API, build an instance of some `Params` class and pass it to the corresponding client method. When the response is received, it will be deserialized into an instance of a Java class.
 
 For example, `client.chat().completions().create(...)` should be called with an instance of `ChatCompletionCreateParams`, and it will return an instance of `ChatCompletion`.
+
+## Immutability
+
+Each class in the SDK has an associated [builder](https://blogs.oracle.com/javamagazine/post/exploring-joshua-blochs-builder-design-pattern-in-java) or factory method for constructing it.
+
+Each class is [immutable](https://docs.oracle.com/javase/tutorial/essential/concurrency/immutable.html) once constructed. If the class has an associated builder, then it has a `toBuilder()` method, which can be used to convert it back to a builder for making a modified copy.
+
+Because each class is immutable, builder modification will _never_ affect already built class instances.
 
 ## Asynchronous execution
 
