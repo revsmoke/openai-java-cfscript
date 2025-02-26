@@ -49,6 +49,8 @@ private constructor(
 
     companion object {
 
+        @JvmStatic fun none(): BatchListParams = builder().build()
+
         @JvmStatic fun builder() = Builder()
     }
 

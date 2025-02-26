@@ -353,6 +353,8 @@ private constructor(
 
     companion object {
 
+        @JvmStatic fun none(): BetaThreadCreateParams = builder().build()
+
         @JvmStatic fun builder() = Builder()
     }
 

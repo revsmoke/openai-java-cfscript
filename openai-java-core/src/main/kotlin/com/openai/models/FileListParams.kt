@@ -66,6 +66,8 @@ private constructor(
 
     companion object {
 
+        @JvmStatic fun none(): FileListParams = builder().build()
+
         @JvmStatic fun builder() = Builder()
     }
 

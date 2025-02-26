@@ -30,6 +30,8 @@ private constructor(
 
     companion object {
 
+        @JvmStatic fun none(): ModelListParams = builder().build()
+
         @JvmStatic fun builder() = Builder()
     }
 
