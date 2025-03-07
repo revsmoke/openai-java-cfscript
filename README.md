@@ -292,7 +292,7 @@ import java.net.URL;
 
 FileCreateParams params = FileCreateParams.builder()
     .purpose(FilePurpose.FINE_TUNE)
-    .file(new URL("https://example.com").openStream())
+    .file(new URL("https://example.com/input.jsonl").openStream())
     .build();
 FileObject fileObject = client.files().create(params);
 ```
@@ -324,7 +324,7 @@ import java.net.URL;
 FileCreateParams params = FileCreateParams.builder()
     .purpose(FilePurpose.FINE_TUNE)
     .file(MultipartField.<InputStream>builder()
-        .value(new URL("https://example.com").openStream())
+        .value(new URL("https://example.com/input.jsonl").openStream())
         .filename("input.jsonl")
         .build())
     .build();
