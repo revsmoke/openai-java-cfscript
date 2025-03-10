@@ -2,8 +2,8 @@ package com.openai.example;
 
 import com.openai.client.OpenAIClientAsync;
 import com.openai.client.okhttp.OpenAIOkHttpClientAsync;
-import com.openai.models.EmbeddingCreateParams;
-import com.openai.models.EmbeddingModel;
+import com.openai.models.embeddings.EmbeddingCreateParams;
+import com.openai.models.embeddings.EmbeddingModel;
 
 public final class EmbeddingsAsyncExample {
     private EmbeddingsAsyncExample() {}

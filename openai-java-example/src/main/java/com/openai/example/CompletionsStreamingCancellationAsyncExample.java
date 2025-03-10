@@ -3,9 +3,9 @@ package com.openai.example;
 import com.openai.client.OpenAIClientAsync;
 import com.openai.client.okhttp.OpenAIOkHttpClientAsync;
 import com.openai.core.http.AsyncStreamResponse;
-import com.openai.models.ChatCompletionChunk;
-import com.openai.models.ChatCompletionCreateParams;
 import com.openai.models.ChatModel;
+import com.openai.models.chat.completions.ChatCompletionChunk;
+import com.openai.models.chat.completions.ChatCompletionCreateParams;
 
 public final class CompletionsStreamingCancellationAsyncExample {
     private CompletionsStreamingCancellationAsyncExample() {}

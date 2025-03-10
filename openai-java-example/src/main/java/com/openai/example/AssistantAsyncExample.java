@@ -2,7 +2,19 @@ package com.openai.example;
 
 import com.openai.client.OpenAIClientAsync;
 import com.openai.client.okhttp.OpenAIOkHttpClientAsync;
-import com.openai.models.*;
+import com.openai.models.ChatModel;
+import com.openai.models.beta.assistants.Assistant;
+import com.openai.models.beta.assistants.AssistantCreateParams;
+import com.openai.models.beta.assistants.AssistantDeleteParams;
+import com.openai.models.beta.assistants.CodeInterpreterTool;
+import com.openai.models.beta.threads.messages.Message;
+import com.openai.models.beta.threads.messages.MessageCreateParams;
+import com.openai.models.beta.threads.messages.MessageListPageAsync;
+import com.openai.models.beta.threads.messages.MessageListParams;
+import com.openai.models.beta.threads.runs.Run;
+import com.openai.models.beta.threads.runs.RunCreateParams;
+import com.openai.models.beta.threads.runs.RunRetrieveParams;
+import com.openai.models.beta.threads.runs.RunStatus;
 import java.util.concurrent.CompletableFuture;
 
 public final class AssistantAsyncExample {
@@ -16,7 +28,7 @@ public final class AssistantAsyncExample {
 
         CompletableFuture<Assistant> assistantFuture = client.beta()
                 .assistants()
-                .create(BetaAssistantCreateParams.builder()
+                .create(AssistantCreateParams.builder()
                         .name("Math Tutor")
                         .instructions("You are a personal math tutor. Write and run code to answer math questions.")
                         // TODO: Update this example once we support `addCodeInterpreterTool()` or similar.
@@ -25,14 +37,13 @@ public final class AssistantAsyncExample {
                         .build());
         CompletableFuture<String> threadIdFuture = client.beta()
                 .threads()
-                // TODO: Update this example once we support `.create()` without arguments.
-                .create(BetaThreadCreateParams.builder().build())
+                .create()
                 .thenComposeAsync(thread -> client.beta()
                         .threads()
                         .messages()
-                        .create(BetaThreadMessageCreateParams.builder()
+                        .create(MessageCreateParams.builder()
                                 .threadId(thread.id())
-                                .role(BetaThreadMessageCreateParams.Role.USER)
+                                .role(MessageCreateParams.Role.USER)
                                 .content("I need to solve the equation `3x + 11 = 14`. Can you help me?")
                                 .build()))
                 .thenApply(Message::threadId);
@@ -41,7 +52,7 @@ public final class AssistantAsyncExample {
                 .thenComposeAsync(unused -> client.beta()
                         .threads()
                         .runs()
-                        .create(BetaThreadRunCreateParams.builder()
+                        .create(RunCreateParams.builder()
                                 .threadId(threadIdFuture.join())
                                 .assistantId(assistantFuture.join().id())
                                 .instructions("Please address the user as Jane Doe. The user has a premium account.")
@@ -57,7 +68,7 @@ public final class AssistantAsyncExample {
                     return listThreadMessages(client, run.threadId())
                             .thenComposeAsync(unused -> client.beta()
                                     .assistants()
-                                    .delete(BetaAssistantDeleteParams.builder()
+                                    .delete(AssistantDeleteParams.builder()
                                             .assistantId(assistantFuture.join().id())
                                             .build()))
                             .thenAccept(assistantDeleted ->
@@ -82,7 +93,7 @@ public final class AssistantAsyncExample {
         return client.beta()
                 .threads()
                 .runs()
-                .retrieve(BetaThreadRunRetrieveParams.builder()
+                .retrieve(RunRetrieveParams.builder()
                         .threadId(run.threadId())
                         .runId(run.id())
                         .build())
@@ -90,12 +101,12 @@ public final class AssistantAsyncExample {
     }
 
     private static CompletableFuture<Void> listThreadMessages(OpenAIClientAsync client, String threadId) {
-        CompletableFuture<BetaThreadMessageListPageAsync> pageFuture = client.beta()
+        CompletableFuture<MessageListPageAsync> pageFuture = client.beta()
                 .threads()
                 .messages()
-                .list(BetaThreadMessageListParams.builder()
+                .list(MessageListParams.builder()
                         .threadId(threadId)
-                        .order(BetaThreadMessageListParams.Order.ASC)
+                        .order(MessageListParams.Order.ASC)
                         .build());
         return pageFuture.thenComposeAsync(page -> page.autoPager()
                 .forEach(

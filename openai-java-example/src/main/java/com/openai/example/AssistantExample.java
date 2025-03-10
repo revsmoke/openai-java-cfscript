@@ -2,8 +2,16 @@ package com.openai.example;
 
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
-import com.openai.models.*;
-import com.openai.models.Thread;
+import com.openai.models.ChatModel;
+import com.openai.models.beta.assistants.*;
+import com.openai.models.beta.threads.Thread;
+import com.openai.models.beta.threads.messages.MessageCreateParams;
+import com.openai.models.beta.threads.messages.MessageListPage;
+import com.openai.models.beta.threads.messages.MessageListParams;
+import com.openai.models.beta.threads.runs.Run;
+import com.openai.models.beta.threads.runs.RunCreateParams;
+import com.openai.models.beta.threads.runs.RunRetrieveParams;
+import com.openai.models.beta.threads.runs.RunStatus;
 
 public final class AssistantExample {
     private AssistantExample() {}
@@ -16,29 +24,27 @@ public final class AssistantExample {
 
         Assistant assistant = client.beta()
                 .assistants()
-                .create(BetaAssistantCreateParams.builder()
+                .create(AssistantCreateParams.builder()
                         .name("Math Tutor")
                         .instructions("You are a personal math tutor. Write and run code to answer math questions.")
                         // TODO: Update this example once we support `addCodeInterpreterTool()` or similar.
                         .addTool(CodeInterpreterTool.builder().build())
                         .model(ChatModel.GPT_4O_MINI)
                         .build());
-        Thread thread =
-                // TODO: Update this example once we support `.create()` without arguments.
-                client.beta().threads().create(BetaThreadCreateParams.builder().build());
+        Thread thread = client.beta().threads().create();
         client.beta()
                 .threads()
                 .messages()
-                .create(BetaThreadMessageCreateParams.builder()
+                .create(MessageCreateParams.builder()
                         .threadId(thread.id())
-                        .role(BetaThreadMessageCreateParams.Role.USER)
+                        .role(MessageCreateParams.Role.USER)
                         .content("I need to solve the equation `3x + 11 = 14`. Can you help me?")
                         .build());
 
         Run run = client.beta()
                 .threads()
                 .runs()
-                .create(BetaThreadRunCreateParams.builder()
+                .create(RunCreateParams.builder()
                         .threadId(thread.id())
                         .assistantId(assistant.id())
                         .instructions("Please address the user as Jane Doe. The user has a premium account.")
@@ -49,7 +55,7 @@ public final class AssistantExample {
             run = client.beta()
                     .threads()
                     .runs()
-                    .retrieve(BetaThreadRunRetrieveParams.builder()
+                    .retrieve(RunRetrieveParams.builder()
                             .threadId(thread.id())
                             .runId(run.id())
                             .build());
@@ -60,12 +66,12 @@ public final class AssistantExample {
             return;
         }
 
-        BetaThreadMessageListPage page = client.beta()
+        MessageListPage page = client.beta()
                 .threads()
                 .messages()
-                .list(BetaThreadMessageListParams.builder()
+                .list(MessageListParams.builder()
                         .threadId(thread.id())
-                        .order(BetaThreadMessageListParams.Order.ASC)
+                        .order(MessageListParams.Order.ASC)
                         .build());
         page.autoPager().stream().forEach(currentMessage -> {
             System.out.println(currentMessage.role().toString().toUpperCase());
@@ -77,7 +83,7 @@ public final class AssistantExample {
 
         AssistantDeleted assistantDeleted = client.beta()
                 .assistants()
-                .delete(BetaAssistantDeleteParams.builder()
+                .delete(AssistantDeleteParams.builder()
                         .assistantId(assistant.id())
                         .build());
         System.out.println("Assistant deleted: " + assistantDeleted.deleted());
