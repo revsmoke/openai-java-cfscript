@@ -51,9 +51,9 @@ See the [`openai-java-example`](openai-java-example/src/main/java/com/openai/exa
 ```java
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
-import com.openai.models.ChatCompletion;
-import com.openai.models.ChatCompletionCreateParams;
 import com.openai.models.ChatModel;
+import com.openai.models.chat.completions.ChatCompletion;
+import com.openai.models.chat.completions.ChatCompletionCreateParams;
 
 // Configures using the `OPENAI_API_KEY`, `OPENAI_ORG_ID` and `OPENAI_PROJECT_ID` environment variables
 OpenAIClient client = OpenAIOkHttpClient.fromEnv();
@@ -134,9 +134,9 @@ The default client is synchronous. To switch to asynchronous execution, call the
 ```java
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
-import com.openai.models.ChatCompletion;
-import com.openai.models.ChatCompletionCreateParams;
 import com.openai.models.ChatModel;
+import com.openai.models.chat.completions.ChatCompletion;
+import com.openai.models.chat.completions.ChatCompletionCreateParams;
 import java.util.concurrent.CompletableFuture;
 
 // Configures using the `OPENAI_API_KEY`, `OPENAI_ORG_ID` and `OPENAI_PROJECT_ID` environment variables
@@ -154,9 +154,9 @@ Or create an asynchronous client from the beginning:
 ```java
 import com.openai.client.OpenAIClientAsync;
 import com.openai.client.okhttp.OpenAIOkHttpClientAsync;
-import com.openai.models.ChatCompletion;
-import com.openai.models.ChatCompletionCreateParams;
 import com.openai.models.ChatModel;
+import com.openai.models.chat.completions.ChatCompletion;
+import com.openai.models.chat.completions.ChatCompletionCreateParams;
 import java.util.concurrent.CompletableFuture;
 
 // Configures using the `OPENAI_API_KEY`, `OPENAI_ORG_ID` and `OPENAI_PROJECT_ID` environment variables
@@ -181,7 +181,7 @@ These streaming methods return [`StreamResponse`](openai-java-core/src/main/kotl
 
 ```java
 import com.openai.core.http.StreamResponse;
-import com.openai.models.ChatCompletionChunk;
+import com.openai.models.chat.completions.ChatCompletionChunk;
 
 try (StreamResponse<ChatCompletionChunk> streamResponse = client.chat().completions().createStreaming(params)) {
     streamResponse.stream().forEach(chunk -> {
@@ -195,7 +195,7 @@ Or [`AsyncStreamResponse`](openai-java-core/src/main/kotlin/com/openai/core/http
 
 ```java
 import com.openai.core.http.AsyncStreamResponse;
-import com.openai.models.ChatCompletionChunk;
+import com.openai.models.chat.completions.ChatCompletionChunk;
 import java.util.Optional;
 
 client.async().chat().completions().createStreaming(params).subscribe(chunk -> {
@@ -270,9 +270,9 @@ The SDK defines methods that accept files.
 To upload a file, pass a [`Path`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Path.html):
 
 ```java
-import com.openai.models.FileCreateParams;
-import com.openai.models.FileObject;
-import com.openai.models.FilePurpose;
+import com.openai.models.files.FileCreateParams;
+import com.openai.models.files.FileObject;
+import com.openai.models.files.FilePurpose;
 import java.nio.file.Paths;
 
 FileCreateParams params = FileCreateParams.builder()
@@ -285,9 +285,9 @@ FileObject fileObject = client.files().create(params);
 Or an arbitrary [`InputStream`](https://docs.oracle.com/javase/8/docs/api/java/io/InputStream.html):
 
 ```java
-import com.openai.models.FileCreateParams;
-import com.openai.models.FileObject;
-import com.openai.models.FilePurpose;
+import com.openai.models.files.FileCreateParams;
+import com.openai.models.files.FileObject;
+import com.openai.models.files.FilePurpose;
 import java.net.URL;
 
 FileCreateParams params = FileCreateParams.builder()
@@ -300,9 +300,9 @@ FileObject fileObject = client.files().create(params);
 Or a `byte[]` array:
 
 ```java
-import com.openai.models.FileCreateParams;
-import com.openai.models.FileObject;
-import com.openai.models.FilePurpose;
+import com.openai.models.files.FileCreateParams;
+import com.openai.models.files.FileObject;
+import com.openai.models.files.FilePurpose;
 
 FileCreateParams params = FileCreateParams.builder()
     .purpose(FilePurpose.FINE_TUNE)
@@ -315,9 +315,9 @@ Note that when passing a non-`Path` its filename is unknown so it will not be in
 
 ```java
 import com.openai.core.MultipartField;
-import com.openai.models.FileCreateParams;
-import com.openai.models.FileObject;
-import com.openai.models.FilePurpose;
+import com.openai.models.files.FileCreateParams;
+import com.openai.models.files.FileObject;
+import com.openai.models.files.FilePurpose;
 import java.io.InputStream;
 import java.net.URL;
 
@@ -339,7 +339,7 @@ These methods return [`HttpResponse`](openai-java-core/src/main/kotlin/com/opena
 
 ```java
 import com.openai.core.http.HttpResponse;
-import com.openai.models.FileContentParams;
+import com.openai.models.files.FileContentParams;
 
 FileContentParams params = FileContentParams.builder()
     .fileId("file_id")
@@ -391,9 +391,9 @@ To access this data, prefix any HTTP method call on a client or service with `wi
 ```java
 import com.openai.core.http.Headers;
 import com.openai.core.http.HttpResponseFor;
-import com.openai.models.ChatCompletion;
-import com.openai.models.ChatCompletionCreateParams;
 import com.openai.models.ChatModel;
+import com.openai.models.chat.completions.ChatCompletion;
+import com.openai.models.chat.completions.ChatCompletionCreateParams;
 
 ChatCompletionCreateParams params = ChatCompletionCreateParams.builder()
     .addUserMessage("Say this is a test")
@@ -408,7 +408,7 @@ Headers headers = chatCompletion.headers();
 You can still deserialize the response into an instance of a Java class if needed:
 
 ```java
-import com.openai.models.ChatCompletion;
+import com.openai.models.chat.completions.ChatCompletion;
 
 ChatCompletion parsedChatCompletion = chatCompletion.parse();
 ```
@@ -447,11 +447,11 @@ To iterate through all results across all pages, you can use `autoPager`, which 
 ### Synchronous
 
 ```java
-import com.openai.models.FineTuningJob;
-import com.openai.models.FineTuningJobListPage;
+import com.openai.models.finetuning.jobs.FineTuningJob;
+import com.openai.models.finetuning.jobs.JobListPage;
 
 // As an Iterable:
-FineTuningJobListPage page = client.fineTuning().jobs().list(params);
+JobListPage page = client.fineTuning().jobs().list(params);
 for (FineTuningJob job : page.autoPager()) {
     System.out.println(job);
 };
@@ -475,10 +475,10 @@ asyncClient.fineTuning().jobs().list(params).autoPager()
 If none of the above helpers meet your needs, you can also manually request pages one-by-one. A page of results has a `data()` method to fetch the list of objects, as well as top-level `response` and other methods to fetch top-level data about the page. It also has methods `hasNextPage`, `getNextPage`, and `getNextPageParams` methods to help with pagination.
 
 ```java
-import com.openai.models.FineTuningJob;
-import com.openai.models.FineTuningJobListPage;
+import com.openai.models.finetuning.jobs.FineTuningJob;
+import com.openai.models.finetuning.jobs.JobListPage;
 
-FineTuningJobListPage page = client.fineTuning().jobs().list(params);
+JobListPage page = client.fineTuning().jobs().list(params);
 while (page != null) {
     for (FineTuningJob job : page.data()) {
         System.out.println(job);
@@ -556,9 +556,9 @@ Requests time out after 10 minutes by default.
 To set a custom timeout, configure the method call using the `timeout` method:
 
 ```java
-import com.openai.models.ChatCompletion;
-import com.openai.models.ChatCompletionCreateParams;
 import com.openai.models.ChatModel;
+import com.openai.models.chat.completions.ChatCompletion;
+import com.openai.models.chat.completions.ChatCompletionCreateParams;
 
 ChatCompletion chatCompletion = client.chat().completions().create(
   params, RequestOptions.builder().timeout(Duration.ofSeconds(30)).build()
@@ -608,7 +608,7 @@ To set undocumented parameters, call the `putAdditionalHeader`, `putAdditionalQu
 
 ```java
 import com.openai.core.JsonValue;
-import com.openai.models.ChatCompletionCreateParams;
+import com.openai.models.chat.completions.ChatCompletionCreateParams;
 
 ChatCompletionCreateParams params = ChatCompletionCreateParams.builder()
     .putAdditionalHeader("Secret-Header", "42")
@@ -623,7 +623,7 @@ To set undocumented parameters on _nested_ headers, query params, or body classe
 
 ```java
 import com.openai.core.JsonValue;
-import com.openai.models.ChatCompletionCreateParams;
+import com.openai.models.chat.completions.ChatCompletionCreateParams;
 
 ChatCompletionCreateParams params = ChatCompletionCreateParams.builder()
     .responseFormat(ChatCompletionCreateParams.ResponseFormat.builder()
@@ -638,7 +638,7 @@ To set a documented parameter or property to an undocumented or not yet supporte
 
 ```java
 import com.openai.core.JsonValue;
-import com.openai.models.ChatCompletionCreateParams;
+import com.openai.models.chat.completions.ChatCompletionCreateParams;
 
 ChatCompletionCreateParams params = ChatCompletionCreateParams.builder()
     .addUserMessage("Say this is a test")
@@ -721,7 +721,7 @@ To access a property's raw JSON value, which may be undocumented, call its `_` p
 
 ```java
 import com.openai.core.JsonField;
-import com.openai.models.ChatCompletionMessageParam;
+import com.openai.models.chat.completions.ChatCompletionMessageParam;
 import java.util.Optional;
 
 JsonField<List<ChatCompletionMessageParam>> messages = client.chat().completions().create(params)._messages();
@@ -749,7 +749,7 @@ By default, the SDK will not throw an exception in this case. It will throw [`Op
 If you would prefer to check that the response is completely well-typed upfront, then either call `validate()`:
 
 ```java
-import com.openai.models.ChatCompletion;
+import com.openai.models.chat.completions.ChatCompletion;
 
 ChatCompletion chatCompletion = client.chat().completions().create(params).validate();
 ```
@@ -757,9 +757,9 @@ ChatCompletion chatCompletion = client.chat().completions().create(params).valid
 Or configure the method call to validate the response using the `responseValidation` method:
 
 ```java
-import com.openai.models.ChatCompletion;
-import com.openai.models.ChatCompletionCreateParams;
 import com.openai.models.ChatModel;
+import com.openai.models.chat.completions.ChatCompletion;
+import com.openai.models.chat.completions.ChatCompletionCreateParams;
 
 ChatCompletion chatCompletion = client.chat().completions().create(
   params, RequestOptions.builder().responseValidation(true).build()
