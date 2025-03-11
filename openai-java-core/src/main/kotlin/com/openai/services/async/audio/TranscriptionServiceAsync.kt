@@ -1,14 +1,12 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.openai.services.async.audio
 
 import com.google.errorprone.annotations.MustBeClosed
 import com.openai.core.RequestOptions
 import com.openai.core.http.HttpResponseFor
-import com.openai.models.AudioTranscriptionCreateParams
-import com.openai.models.AudioTranscriptionCreateResponse
+import com.openai.models.audio.transcriptions.TranscriptionCreateParams
+import com.openai.models.audio.transcriptions.TranscriptionCreateResponse
 import java.util.concurrent.CompletableFuture
 
 interface TranscriptionServiceAsync {
@@ -19,11 +17,14 @@ interface TranscriptionServiceAsync {
     fun withRawResponse(): WithRawResponse
 
     /** Transcribes audio into the input language. */
-    @JvmOverloads
+    fun create(params: TranscriptionCreateParams): CompletableFuture<TranscriptionCreateResponse> =
+        create(params, RequestOptions.none())
+
+    /** @see [create] */
     fun create(
-        params: AudioTranscriptionCreateParams,
+        params: TranscriptionCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<AudioTranscriptionCreateResponse>
+    ): CompletableFuture<TranscriptionCreateResponse>
 
     /**
      * A view of [TranscriptionServiceAsync] that provides access to raw HTTP responses for each
@@ -35,11 +36,17 @@ interface TranscriptionServiceAsync {
          * Returns a raw HTTP response for `post /audio/transcriptions`, but is otherwise the same
          * as [TranscriptionServiceAsync.create].
          */
-        @JvmOverloads
         @MustBeClosed
         fun create(
-            params: AudioTranscriptionCreateParams,
+            params: TranscriptionCreateParams
+        ): CompletableFuture<HttpResponseFor<TranscriptionCreateResponse>> =
+            create(params, RequestOptions.none())
+
+        /** @see [create] */
+        @MustBeClosed
+        fun create(
+            params: TranscriptionCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<AudioTranscriptionCreateResponse>>
+        ): CompletableFuture<HttpResponseFor<TranscriptionCreateResponse>>
     }
 }

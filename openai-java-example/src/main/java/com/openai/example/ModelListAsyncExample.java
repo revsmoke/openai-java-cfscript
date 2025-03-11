@@ -2,7 +2,7 @@ package com.openai.example;
 
 import com.openai.client.OpenAIClientAsync;
 import com.openai.client.okhttp.OpenAIOkHttpClientAsync;
-import com.openai.models.ModelListPageAsync;
+import com.openai.models.models.ModelListPageAsync;
 import java.util.concurrent.CompletableFuture;
 
 public final class ModelListAsyncExample {

@@ -1,20 +1,18 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.openai.services.async.beta
 
 import com.google.errorprone.annotations.MustBeClosed
 import com.openai.core.RequestOptions
 import com.openai.core.http.HttpResponseFor
-import com.openai.models.Assistant
-import com.openai.models.AssistantDeleted
-import com.openai.models.BetaAssistantCreateParams
-import com.openai.models.BetaAssistantDeleteParams
-import com.openai.models.BetaAssistantListPageAsync
-import com.openai.models.BetaAssistantListParams
-import com.openai.models.BetaAssistantRetrieveParams
-import com.openai.models.BetaAssistantUpdateParams
+import com.openai.models.beta.assistants.Assistant
+import com.openai.models.beta.assistants.AssistantCreateParams
+import com.openai.models.beta.assistants.AssistantDeleteParams
+import com.openai.models.beta.assistants.AssistantDeleted
+import com.openai.models.beta.assistants.AssistantListPageAsync
+import com.openai.models.beta.assistants.AssistantListParams
+import com.openai.models.beta.assistants.AssistantRetrieveParams
+import com.openai.models.beta.assistants.AssistantUpdateParams
 import java.util.concurrent.CompletableFuture
 
 interface AssistantServiceAsync {
@@ -25,41 +23,60 @@ interface AssistantServiceAsync {
     fun withRawResponse(): WithRawResponse
 
     /** Create an assistant with a model and instructions. */
-    @JvmOverloads
+    fun create(params: AssistantCreateParams): CompletableFuture<Assistant> =
+        create(params, RequestOptions.none())
+
+    /** @see [create] */
     fun create(
-        params: BetaAssistantCreateParams,
+        params: AssistantCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Assistant>
 
     /** Retrieves an assistant. */
-    @JvmOverloads
+    fun retrieve(params: AssistantRetrieveParams): CompletableFuture<Assistant> =
+        retrieve(params, RequestOptions.none())
+
+    /** @see [retrieve] */
     fun retrieve(
-        params: BetaAssistantRetrieveParams,
+        params: AssistantRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Assistant>
 
     /** Modifies an assistant. */
-    @JvmOverloads
+    fun update(params: AssistantUpdateParams): CompletableFuture<Assistant> =
+        update(params, RequestOptions.none())
+
+    /** @see [update] */
     fun update(
-        params: BetaAssistantUpdateParams,
+        params: AssistantUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Assistant>
 
     /** Returns a list of assistants. */
-    @JvmOverloads
-    fun list(
-        params: BetaAssistantListParams = BetaAssistantListParams.none(),
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<BetaAssistantListPageAsync>
+    fun list(): CompletableFuture<AssistantListPageAsync> = list(AssistantListParams.none())
 
-    /** Returns a list of assistants. */
-    fun list(requestOptions: RequestOptions): CompletableFuture<BetaAssistantListPageAsync> =
-        list(BetaAssistantListParams.none(), requestOptions)
+    /** @see [list] */
+    fun list(
+        params: AssistantListParams = AssistantListParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<AssistantListPageAsync>
+
+    /** @see [list] */
+    fun list(
+        params: AssistantListParams = AssistantListParams.none()
+    ): CompletableFuture<AssistantListPageAsync> = list(params, RequestOptions.none())
+
+    /** @see [list] */
+    fun list(requestOptions: RequestOptions): CompletableFuture<AssistantListPageAsync> =
+        list(AssistantListParams.none(), requestOptions)
 
     /** Delete an assistant. */
-    @JvmOverloads
+    fun delete(params: AssistantDeleteParams): CompletableFuture<AssistantDeleted> =
+        delete(params, RequestOptions.none())
+
+    /** @see [delete] */
     fun delete(
-        params: BetaAssistantDeleteParams,
+        params: AssistantDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<AssistantDeleted>
 
@@ -72,10 +89,14 @@ interface AssistantServiceAsync {
          * Returns a raw HTTP response for `post /assistants`, but is otherwise the same as
          * [AssistantServiceAsync.create].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun create(params: AssistantCreateParams): CompletableFuture<HttpResponseFor<Assistant>> =
+            create(params, RequestOptions.none())
+
+        /** @see [create] */
         @MustBeClosed
         fun create(
-            params: BetaAssistantCreateParams,
+            params: AssistantCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Assistant>>
 
@@ -83,10 +104,15 @@ interface AssistantServiceAsync {
          * Returns a raw HTTP response for `get /assistants/{assistant_id}`, but is otherwise the
          * same as [AssistantServiceAsync.retrieve].
          */
-        @JvmOverloads
         @MustBeClosed
         fun retrieve(
-            params: BetaAssistantRetrieveParams,
+            params: AssistantRetrieveParams
+        ): CompletableFuture<HttpResponseFor<Assistant>> = retrieve(params, RequestOptions.none())
+
+        /** @see [retrieve] */
+        @MustBeClosed
+        fun retrieve(
+            params: AssistantRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Assistant>>
 
@@ -94,10 +120,14 @@ interface AssistantServiceAsync {
          * Returns a raw HTTP response for `post /assistants/{assistant_id}`, but is otherwise the
          * same as [AssistantServiceAsync.update].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun update(params: AssistantUpdateParams): CompletableFuture<HttpResponseFor<Assistant>> =
+            update(params, RequestOptions.none())
+
+        /** @see [update] */
         @MustBeClosed
         fun update(
-            params: BetaAssistantUpdateParams,
+            params: AssistantUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Assistant>>
 
@@ -105,31 +135,45 @@ interface AssistantServiceAsync {
          * Returns a raw HTTP response for `get /assistants`, but is otherwise the same as
          * [AssistantServiceAsync.list].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun list(): CompletableFuture<HttpResponseFor<AssistantListPageAsync>> =
+            list(AssistantListParams.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
-            params: BetaAssistantListParams = BetaAssistantListParams.none(),
+            params: AssistantListParams = AssistantListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<BetaAssistantListPageAsync>>
+        ): CompletableFuture<HttpResponseFor<AssistantListPageAsync>>
 
-        /**
-         * Returns a raw HTTP response for `get /assistants`, but is otherwise the same as
-         * [AssistantServiceAsync.list].
-         */
+        /** @see [list] */
+        @MustBeClosed
+        fun list(
+            params: AssistantListParams = AssistantListParams.none()
+        ): CompletableFuture<HttpResponseFor<AssistantListPageAsync>> =
+            list(params, RequestOptions.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             requestOptions: RequestOptions
-        ): CompletableFuture<HttpResponseFor<BetaAssistantListPageAsync>> =
-            list(BetaAssistantListParams.none(), requestOptions)
+        ): CompletableFuture<HttpResponseFor<AssistantListPageAsync>> =
+            list(AssistantListParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `delete /assistants/{assistant_id}`, but is otherwise the
          * same as [AssistantServiceAsync.delete].
          */
-        @JvmOverloads
         @MustBeClosed
         fun delete(
-            params: BetaAssistantDeleteParams,
+            params: AssistantDeleteParams
+        ): CompletableFuture<HttpResponseFor<AssistantDeleted>> =
+            delete(params, RequestOptions.none())
+
+        /** @see [delete] */
+        @MustBeClosed
+        fun delete(
+            params: AssistantDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<AssistantDeleted>>
     }

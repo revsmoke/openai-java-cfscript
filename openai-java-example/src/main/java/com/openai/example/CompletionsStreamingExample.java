@@ -3,7 +3,9 @@ package com.openai.example;
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
 import com.openai.core.http.StreamResponse;
-import com.openai.models.*;
+import com.openai.models.ChatModel;
+import com.openai.models.chat.completions.ChatCompletionChunk;
+import com.openai.models.chat.completions.ChatCompletionCreateParams;
 
 public final class CompletionsStreamingExample {
     private CompletionsStreamingExample() {}

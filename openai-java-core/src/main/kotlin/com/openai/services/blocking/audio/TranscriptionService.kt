@@ -1,14 +1,12 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.openai.services.blocking.audio
 
 import com.google.errorprone.annotations.MustBeClosed
 import com.openai.core.RequestOptions
 import com.openai.core.http.HttpResponseFor
-import com.openai.models.AudioTranscriptionCreateParams
-import com.openai.models.AudioTranscriptionCreateResponse
+import com.openai.models.audio.transcriptions.TranscriptionCreateParams
+import com.openai.models.audio.transcriptions.TranscriptionCreateResponse
 
 interface TranscriptionService {
 
@@ -18,11 +16,14 @@ interface TranscriptionService {
     fun withRawResponse(): WithRawResponse
 
     /** Transcribes audio into the input language. */
-    @JvmOverloads
+    fun create(params: TranscriptionCreateParams): TranscriptionCreateResponse =
+        create(params, RequestOptions.none())
+
+    /** @see [create] */
     fun create(
-        params: AudioTranscriptionCreateParams,
+        params: TranscriptionCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): AudioTranscriptionCreateResponse
+    ): TranscriptionCreateResponse
 
     /**
      * A view of [TranscriptionService] that provides access to raw HTTP responses for each method.
@@ -33,11 +34,16 @@ interface TranscriptionService {
          * Returns a raw HTTP response for `post /audio/transcriptions`, but is otherwise the same
          * as [TranscriptionService.create].
          */
-        @JvmOverloads
         @MustBeClosed
         fun create(
-            params: AudioTranscriptionCreateParams,
+            params: TranscriptionCreateParams
+        ): HttpResponseFor<TranscriptionCreateResponse> = create(params, RequestOptions.none())
+
+        /** @see [create] */
+        @MustBeClosed
+        fun create(
+            params: TranscriptionCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<AudioTranscriptionCreateResponse>
+        ): HttpResponseFor<TranscriptionCreateResponse>
     }
 }

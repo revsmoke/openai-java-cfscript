@@ -1,14 +1,12 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.openai.services.async.uploads
 
 import com.google.errorprone.annotations.MustBeClosed
 import com.openai.core.RequestOptions
 import com.openai.core.http.HttpResponseFor
-import com.openai.models.UploadPart
-import com.openai.models.UploadPartCreateParams
+import com.openai.models.uploads.parts.PartCreateParams
+import com.openai.models.uploads.parts.UploadPart
 import java.util.concurrent.CompletableFuture
 
 interface PartServiceAsync {
@@ -30,9 +28,12 @@ interface PartServiceAsync {
      * Parts when you
      * [complete the Upload](https://platform.openai.com/docs/api-reference/uploads/complete).
      */
-    @JvmOverloads
+    fun create(params: PartCreateParams): CompletableFuture<UploadPart> =
+        create(params, RequestOptions.none())
+
+    /** @see [create] */
     fun create(
-        params: UploadPartCreateParams,
+        params: PartCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<UploadPart>
 
@@ -43,10 +44,14 @@ interface PartServiceAsync {
          * Returns a raw HTTP response for `post /uploads/{upload_id}/parts`, but is otherwise the
          * same as [PartServiceAsync.create].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun create(params: PartCreateParams): CompletableFuture<HttpResponseFor<UploadPart>> =
+            create(params, RequestOptions.none())
+
+        /** @see [create] */
         @MustBeClosed
         fun create(
-            params: UploadPartCreateParams,
+            params: PartCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<UploadPart>>
     }

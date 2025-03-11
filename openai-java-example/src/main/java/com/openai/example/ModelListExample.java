@@ -2,7 +2,6 @@ package com.openai.example;
 
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
-import com.openai.models.*;
 
 public final class ModelListExample {
     private ModelListExample() {}

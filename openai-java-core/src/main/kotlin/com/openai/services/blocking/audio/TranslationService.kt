@@ -1,14 +1,12 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.openai.services.blocking.audio
 
 import com.google.errorprone.annotations.MustBeClosed
 import com.openai.core.RequestOptions
 import com.openai.core.http.HttpResponseFor
-import com.openai.models.AudioTranslationCreateParams
-import com.openai.models.AudioTranslationCreateResponse
+import com.openai.models.audio.translations.TranslationCreateParams
+import com.openai.models.audio.translations.TranslationCreateResponse
 
 interface TranslationService {
 
@@ -18,11 +16,14 @@ interface TranslationService {
     fun withRawResponse(): WithRawResponse
 
     /** Translates audio into English. */
-    @JvmOverloads
+    fun create(params: TranslationCreateParams): TranslationCreateResponse =
+        create(params, RequestOptions.none())
+
+    /** @see [create] */
     fun create(
-        params: AudioTranslationCreateParams,
+        params: TranslationCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): AudioTranslationCreateResponse
+    ): TranslationCreateResponse
 
     /**
      * A view of [TranslationService] that provides access to raw HTTP responses for each method.
@@ -33,11 +34,15 @@ interface TranslationService {
          * Returns a raw HTTP response for `post /audio/translations`, but is otherwise the same as
          * [TranslationService.create].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun create(params: TranslationCreateParams): HttpResponseFor<TranslationCreateResponse> =
+            create(params, RequestOptions.none())
+
+        /** @see [create] */
         @MustBeClosed
         fun create(
-            params: AudioTranslationCreateParams,
+            params: TranslationCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<AudioTranslationCreateResponse>
+        ): HttpResponseFor<TranslationCreateResponse>
     }
 }

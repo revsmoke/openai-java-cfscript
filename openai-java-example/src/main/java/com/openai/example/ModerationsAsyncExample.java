@@ -2,8 +2,8 @@ package com.openai.example;
 
 import com.openai.client.OpenAIClientAsync;
 import com.openai.client.okhttp.OpenAIOkHttpClientAsync;
-import com.openai.models.ModerationCreateParams;
-import com.openai.models.ModerationModel;
+import com.openai.models.moderations.ModerationCreateParams;
+import com.openai.models.moderations.ModerationModel;
 
 public final class ModerationsAsyncExample {
     private ModerationsAsyncExample() {}

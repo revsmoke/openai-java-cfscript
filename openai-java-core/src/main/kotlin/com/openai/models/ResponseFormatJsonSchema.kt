@@ -17,7 +17,12 @@ import com.openai.core.toImmutable
 import com.openai.errors.OpenAIInvalidDataException
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
+/**
+ * JSON Schema response format. Used to generate structured JSON responses. Learn more about
+ * [Structured Outputs](https://platform.openai.com/docs/guides/structured-outputs).
+ */
 @NoAutoDetect
 class ResponseFormatJsonSchema
 @JsonCreator
@@ -29,11 +34,13 @@ private constructor(
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
+    /** Structured Outputs configuration options, including a JSON Schema. */
     fun jsonSchema(): JsonSchema = jsonSchema.getRequired("json_schema")
 
-    /** The type of response format being defined: `json_schema` */
+    /** The type of response format being defined. Always `json_schema`. */
     @JsonProperty("type") @ExcludeMissing fun _type(): JsonValue = type
 
+    /** Structured Outputs configuration options, including a JSON Schema. */
     @JsonProperty("json_schema")
     @ExcludeMissing
     fun _jsonSchema(): JsonField<JsonSchema> = jsonSchema
@@ -87,11 +94,13 @@ private constructor(
             additionalProperties = responseFormatJsonSchema.additionalProperties.toMutableMap()
         }
 
+        /** Structured Outputs configuration options, including a JSON Schema. */
         fun jsonSchema(jsonSchema: JsonSchema) = jsonSchema(JsonField.of(jsonSchema))
 
+        /** Structured Outputs configuration options, including a JSON Schema. */
         fun jsonSchema(jsonSchema: JsonField<JsonSchema>) = apply { this.jsonSchema = jsonSchema }
 
-        /** The type of response format being defined: `json_schema` */
+        /** The type of response format being defined. Always `json_schema`. */
         fun type(type: JsonValue) = apply { this.type = type }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -121,6 +130,7 @@ private constructor(
             )
     }
 
+    /** Structured Outputs configuration options, including a JSON Schema. */
     @NoAutoDetect
     class JsonSchema
     @JsonCreator
@@ -154,7 +164,10 @@ private constructor(
         fun description(): Optional<String> =
             Optional.ofNullable(description.getNullable("description"))
 
-        /** The schema for the response format, described as a JSON Schema object. */
+        /**
+         * The schema for the response format, described as a JSON Schema object. Learn how to build
+         * JSON schemas [here](https://json-schema.org/).
+         */
         fun schema(): Optional<Schema> = Optional.ofNullable(schema.getNullable("schema"))
 
         /**
@@ -179,7 +192,10 @@ private constructor(
         @ExcludeMissing
         fun _description(): JsonField<String> = description
 
-        /** The schema for the response format, described as a JSON Schema object. */
+        /**
+         * The schema for the response format, described as a JSON Schema object. Learn how to build
+         * JSON schemas [here](https://json-schema.org/).
+         */
         @JsonProperty("schema") @ExcludeMissing fun _schema(): JsonField<Schema> = schema
 
         /**
@@ -267,10 +283,16 @@ private constructor(
                 this.description = description
             }
 
-            /** The schema for the response format, described as a JSON Schema object. */
+            /**
+             * The schema for the response format, described as a JSON Schema object. Learn how to
+             * build JSON schemas [here](https://json-schema.org/).
+             */
             fun schema(schema: Schema) = schema(JsonField.of(schema))
 
-            /** The schema for the response format, described as a JSON Schema object. */
+            /**
+             * The schema for the response format, described as a JSON Schema object. Learn how to
+             * build JSON schemas [here](https://json-schema.org/).
+             */
             fun schema(schema: JsonField<Schema>) = apply { this.schema = schema }
 
             /**
@@ -295,8 +317,7 @@ private constructor(
              * subset of JSON Schema is supported when `strict` is `true`. To learn more, read the
              * [Structured Outputs guide](https://platform.openai.com/docs/guides/structured-outputs).
              */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun strict(strict: Optional<Boolean>) = strict(strict.orElse(null) as Boolean?)
+            fun strict(strict: Optional<Boolean>) = strict(strict.getOrNull())
 
             /**
              * Whether to enable strict schema adherence when generating the output. If set to true,
@@ -335,7 +356,10 @@ private constructor(
                 )
         }
 
-        /** The schema for the response format, described as a JSON Schema object. */
+        /**
+         * The schema for the response format, described as a JSON Schema object. Learn how to build
+         * JSON schemas [here](https://json-schema.org/).
+         */
         @NoAutoDetect
         class Schema
         @JsonCreator

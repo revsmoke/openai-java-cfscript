@@ -1,14 +1,12 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.openai.services.blocking.chat.completions
 
 import com.google.errorprone.annotations.MustBeClosed
 import com.openai.core.RequestOptions
 import com.openai.core.http.HttpResponseFor
-import com.openai.models.ChatCompletionMessageListPage
-import com.openai.models.ChatCompletionMessageListParams
+import com.openai.models.chat.completions.messages.MessageListPage
+import com.openai.models.chat.completions.messages.MessageListParams
 
 interface MessageService {
 
@@ -18,14 +16,16 @@ interface MessageService {
     fun withRawResponse(): WithRawResponse
 
     /**
-     * Get the messages in a stored chat completion. Only chat completions that have been created
+     * Get the messages in a stored chat completion. Only Chat Completions that have been created
      * with the `store` parameter set to `true` will be returned.
      */
-    @JvmOverloads
+    fun list(params: MessageListParams): MessageListPage = list(params, RequestOptions.none())
+
+    /** @see [list] */
     fun list(
-        params: ChatCompletionMessageListParams,
+        params: MessageListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): ChatCompletionMessageListPage
+    ): MessageListPage
 
     /** A view of [MessageService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -34,11 +34,15 @@ interface MessageService {
          * Returns a raw HTTP response for `get /chat/completions/{completion_id}/messages`, but is
          * otherwise the same as [MessageService.list].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun list(params: MessageListParams): HttpResponseFor<MessageListPage> =
+            list(params, RequestOptions.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
-            params: ChatCompletionMessageListParams,
+            params: MessageListParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<ChatCompletionMessageListPage>
+        ): HttpResponseFor<MessageListPage>
     }
 }

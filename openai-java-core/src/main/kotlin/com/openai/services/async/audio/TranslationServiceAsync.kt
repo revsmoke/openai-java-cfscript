@@ -1,14 +1,12 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.openai.services.async.audio
 
 import com.google.errorprone.annotations.MustBeClosed
 import com.openai.core.RequestOptions
 import com.openai.core.http.HttpResponseFor
-import com.openai.models.AudioTranslationCreateParams
-import com.openai.models.AudioTranslationCreateResponse
+import com.openai.models.audio.translations.TranslationCreateParams
+import com.openai.models.audio.translations.TranslationCreateResponse
 import java.util.concurrent.CompletableFuture
 
 interface TranslationServiceAsync {
@@ -19,11 +17,14 @@ interface TranslationServiceAsync {
     fun withRawResponse(): WithRawResponse
 
     /** Translates audio into English. */
-    @JvmOverloads
+    fun create(params: TranslationCreateParams): CompletableFuture<TranslationCreateResponse> =
+        create(params, RequestOptions.none())
+
+    /** @see [create] */
     fun create(
-        params: AudioTranslationCreateParams,
+        params: TranslationCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<AudioTranslationCreateResponse>
+    ): CompletableFuture<TranslationCreateResponse>
 
     /**
      * A view of [TranslationServiceAsync] that provides access to raw HTTP responses for each
@@ -35,11 +36,17 @@ interface TranslationServiceAsync {
          * Returns a raw HTTP response for `post /audio/translations`, but is otherwise the same as
          * [TranslationServiceAsync.create].
          */
-        @JvmOverloads
         @MustBeClosed
         fun create(
-            params: AudioTranslationCreateParams,
+            params: TranslationCreateParams
+        ): CompletableFuture<HttpResponseFor<TranslationCreateResponse>> =
+            create(params, RequestOptions.none())
+
+        /** @see [create] */
+        @MustBeClosed
+        fun create(
+            params: TranslationCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<AudioTranslationCreateResponse>>
+        ): CompletableFuture<HttpResponseFor<TranslationCreateResponse>>
     }
 }

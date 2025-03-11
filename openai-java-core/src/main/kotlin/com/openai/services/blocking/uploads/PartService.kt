@@ -1,14 +1,12 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.openai.services.blocking.uploads
 
 import com.google.errorprone.annotations.MustBeClosed
 import com.openai.core.RequestOptions
 import com.openai.core.http.HttpResponseFor
-import com.openai.models.UploadPart
-import com.openai.models.UploadPartCreateParams
+import com.openai.models.uploads.parts.PartCreateParams
+import com.openai.models.uploads.parts.UploadPart
 
 interface PartService {
 
@@ -29,9 +27,11 @@ interface PartService {
      * Parts when you
      * [complete the Upload](https://platform.openai.com/docs/api-reference/uploads/complete).
      */
-    @JvmOverloads
+    fun create(params: PartCreateParams): UploadPart = create(params, RequestOptions.none())
+
+    /** @see [create] */
     fun create(
-        params: UploadPartCreateParams,
+        params: PartCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): UploadPart
 
@@ -42,10 +42,14 @@ interface PartService {
          * Returns a raw HTTP response for `post /uploads/{upload_id}/parts`, but is otherwise the
          * same as [PartService.create].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun create(params: PartCreateParams): HttpResponseFor<UploadPart> =
+            create(params, RequestOptions.none())
+
+        /** @see [create] */
         @MustBeClosed
         fun create(
-            params: UploadPartCreateParams,
+            params: PartCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<UploadPart>
     }

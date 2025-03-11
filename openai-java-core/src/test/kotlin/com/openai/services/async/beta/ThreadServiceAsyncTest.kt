@@ -5,16 +5,15 @@ package com.openai.services.async.beta
 import com.openai.TestServerExtension
 import com.openai.client.okhttp.OpenAIOkHttpClientAsync
 import com.openai.core.JsonValue
-import com.openai.models.AssistantToolChoiceOption
-import com.openai.models.AutoFileChunkingStrategyParam
-import com.openai.models.BetaThreadCreateAndRunParams
-import com.openai.models.BetaThreadCreateParams
-import com.openai.models.BetaThreadDeleteParams
-import com.openai.models.BetaThreadRetrieveParams
-import com.openai.models.BetaThreadUpdateParams
 import com.openai.models.ChatModel
-import com.openai.models.CodeInterpreterTool
 import com.openai.models.Metadata
+import com.openai.models.beta.assistants.CodeInterpreterTool
+import com.openai.models.beta.threads.AssistantToolChoiceOption
+import com.openai.models.beta.threads.ThreadCreateAndRunParams
+import com.openai.models.beta.threads.ThreadCreateParams
+import com.openai.models.beta.threads.ThreadDeleteParams
+import com.openai.models.beta.threads.ThreadRetrieveParams
+import com.openai.models.beta.threads.ThreadUpdateParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
@@ -32,13 +31,13 @@ class ThreadServiceAsyncTest {
 
         val threadFuture =
             threadServiceAsync.create(
-                BetaThreadCreateParams.builder()
+                ThreadCreateParams.builder()
                     .addMessage(
-                        BetaThreadCreateParams.Message.builder()
+                        ThreadCreateParams.Message.builder()
                             .content("string")
-                            .role(BetaThreadCreateParams.Message.Role.USER)
+                            .role(ThreadCreateParams.Message.Role.USER)
                             .addAttachment(
-                                BetaThreadCreateParams.Message.Attachment.builder()
+                                ThreadCreateParams.Message.Attachment.builder()
                                     .fileId("file_id")
                                     .addTool(CodeInterpreterTool.builder().build())
                                     .build()
@@ -56,21 +55,19 @@ class ThreadServiceAsyncTest {
                             .build()
                     )
                     .toolResources(
-                        BetaThreadCreateParams.ToolResources.builder()
+                        ThreadCreateParams.ToolResources.builder()
                             .codeInterpreter(
-                                BetaThreadCreateParams.ToolResources.CodeInterpreter.builder()
+                                ThreadCreateParams.ToolResources.CodeInterpreter.builder()
                                     .addFileId("string")
                                     .build()
                             )
                             .fileSearch(
-                                BetaThreadCreateParams.ToolResources.FileSearch.builder()
+                                ThreadCreateParams.ToolResources.FileSearch.builder()
                                     .addVectorStoreId("string")
                                     .addVectorStore(
-                                        BetaThreadCreateParams.ToolResources.FileSearch.VectorStore
+                                        ThreadCreateParams.ToolResources.FileSearch.VectorStore
                                             .builder()
-                                            .chunkingStrategy(
-                                                AutoFileChunkingStrategyParam.builder().build()
-                                            )
+                                            .chunkingStrategyAuto()
                                             .addFileId("string")
                                             .metadata(
                                                 Metadata.builder()
@@ -104,7 +101,7 @@ class ThreadServiceAsyncTest {
 
         val threadFuture =
             threadServiceAsync.retrieve(
-                BetaThreadRetrieveParams.builder().threadId("thread_id").build()
+                ThreadRetrieveParams.builder().threadId("thread_id").build()
             )
 
         val thread = threadFuture.get()
@@ -122,7 +119,7 @@ class ThreadServiceAsyncTest {
 
         val threadFuture =
             threadServiceAsync.update(
-                BetaThreadUpdateParams.builder()
+                ThreadUpdateParams.builder()
                     .threadId("thread_id")
                     .metadata(
                         Metadata.builder()
@@ -130,14 +127,14 @@ class ThreadServiceAsyncTest {
                             .build()
                     )
                     .toolResources(
-                        BetaThreadUpdateParams.ToolResources.builder()
+                        ThreadUpdateParams.ToolResources.builder()
                             .codeInterpreter(
-                                BetaThreadUpdateParams.ToolResources.CodeInterpreter.builder()
+                                ThreadUpdateParams.ToolResources.CodeInterpreter.builder()
                                     .addFileId("string")
                                     .build()
                             )
                             .fileSearch(
-                                BetaThreadUpdateParams.ToolResources.FileSearch.builder()
+                                ThreadUpdateParams.ToolResources.FileSearch.builder()
                                     .addVectorStoreId("string")
                                     .build()
                             )
@@ -160,9 +157,7 @@ class ThreadServiceAsyncTest {
         val threadServiceAsync = client.beta().threads()
 
         val threadDeletedFuture =
-            threadServiceAsync.delete(
-                BetaThreadDeleteParams.builder().threadId("thread_id").build()
-            )
+            threadServiceAsync.delete(ThreadDeleteParams.builder().threadId("thread_id").build())
 
         val threadDeleted = threadDeletedFuture.get()
         threadDeleted.validate()
@@ -179,7 +174,7 @@ class ThreadServiceAsyncTest {
 
         val runFuture =
             threadServiceAsync.createAndRun(
-                BetaThreadCreateAndRunParams.builder()
+                ThreadCreateAndRunParams.builder()
                     .assistantId("assistant_id")
                     .instructions("instructions")
                     .maxCompletionTokens(256L)
@@ -191,17 +186,16 @@ class ThreadServiceAsyncTest {
                     )
                     .model(ChatModel.O3_MINI)
                     .parallelToolCalls(true)
-                    .responseFormatAuto()
+                    .responseFormatJsonValue()
                     .temperature(1.0)
                     .thread(
-                        BetaThreadCreateAndRunParams.Thread.builder()
+                        ThreadCreateAndRunParams.Thread.builder()
                             .addMessage(
-                                BetaThreadCreateAndRunParams.Thread.Message.builder()
+                                ThreadCreateAndRunParams.Thread.Message.builder()
                                     .content("string")
-                                    .role(BetaThreadCreateAndRunParams.Thread.Message.Role.USER)
+                                    .role(ThreadCreateAndRunParams.Thread.Message.Role.USER)
                                     .addAttachment(
-                                        BetaThreadCreateAndRunParams.Thread.Message.Attachment
-                                            .builder()
+                                        ThreadCreateAndRunParams.Thread.Message.Attachment.builder()
                                             .fileId("file_id")
                                             .addTool(CodeInterpreterTool.builder().build())
                                             .build()
@@ -219,27 +213,24 @@ class ThreadServiceAsyncTest {
                                     .build()
                             )
                             .toolResources(
-                                BetaThreadCreateAndRunParams.Thread.ToolResources.builder()
+                                ThreadCreateAndRunParams.Thread.ToolResources.builder()
                                     .codeInterpreter(
-                                        BetaThreadCreateAndRunParams.Thread.ToolResources
+                                        ThreadCreateAndRunParams.Thread.ToolResources
                                             .CodeInterpreter
                                             .builder()
                                             .addFileId("string")
                                             .build()
                                     )
                                     .fileSearch(
-                                        BetaThreadCreateAndRunParams.Thread.ToolResources.FileSearch
+                                        ThreadCreateAndRunParams.Thread.ToolResources.FileSearch
                                             .builder()
                                             .addVectorStoreId("string")
                                             .addVectorStore(
-                                                BetaThreadCreateAndRunParams.Thread.ToolResources
+                                                ThreadCreateAndRunParams.Thread.ToolResources
                                                     .FileSearch
                                                     .VectorStore
                                                     .builder()
-                                                    .chunkingStrategy(
-                                                        AutoFileChunkingStrategyParam.builder()
-                                                            .build()
-                                                    )
+                                                    .chunkingStrategyAuto()
                                                     .addFileId("string")
                                                     .metadata(
                                                         Metadata.builder()
@@ -259,14 +250,14 @@ class ThreadServiceAsyncTest {
                     )
                     .toolChoice(AssistantToolChoiceOption.Auto.NONE)
                     .toolResources(
-                        BetaThreadCreateAndRunParams.ToolResources.builder()
+                        ThreadCreateAndRunParams.ToolResources.builder()
                             .codeInterpreter(
-                                BetaThreadCreateAndRunParams.ToolResources.CodeInterpreter.builder()
+                                ThreadCreateAndRunParams.ToolResources.CodeInterpreter.builder()
                                     .addFileId("string")
                                     .build()
                             )
                             .fileSearch(
-                                BetaThreadCreateAndRunParams.ToolResources.FileSearch.builder()
+                                ThreadCreateAndRunParams.ToolResources.FileSearch.builder()
                                     .addVectorStoreId("string")
                                     .build()
                             )
@@ -275,8 +266,8 @@ class ThreadServiceAsyncTest {
                     .addTool(CodeInterpreterTool.builder().build())
                     .topP(1.0)
                     .truncationStrategy(
-                        BetaThreadCreateAndRunParams.TruncationStrategy.builder()
-                            .type(BetaThreadCreateAndRunParams.TruncationStrategy.Type.AUTO)
+                        ThreadCreateAndRunParams.TruncationStrategy.builder()
+                            .type(ThreadCreateAndRunParams.TruncationStrategy.Type.AUTO)
                             .lastMessages(1L)
                             .build()
                     )
@@ -298,7 +289,7 @@ class ThreadServiceAsyncTest {
 
         val runStreamResponse =
             threadServiceAsync.createAndRunStreaming(
-                BetaThreadCreateAndRunParams.builder()
+                ThreadCreateAndRunParams.builder()
                     .assistantId("assistant_id")
                     .instructions("instructions")
                     .maxCompletionTokens(256L)
@@ -310,17 +301,16 @@ class ThreadServiceAsyncTest {
                     )
                     .model(ChatModel.O3_MINI)
                     .parallelToolCalls(true)
-                    .responseFormatAuto()
+                    .responseFormatJsonValue()
                     .temperature(1.0)
                     .thread(
-                        BetaThreadCreateAndRunParams.Thread.builder()
+                        ThreadCreateAndRunParams.Thread.builder()
                             .addMessage(
-                                BetaThreadCreateAndRunParams.Thread.Message.builder()
+                                ThreadCreateAndRunParams.Thread.Message.builder()
                                     .content("string")
-                                    .role(BetaThreadCreateAndRunParams.Thread.Message.Role.USER)
+                                    .role(ThreadCreateAndRunParams.Thread.Message.Role.USER)
                                     .addAttachment(
-                                        BetaThreadCreateAndRunParams.Thread.Message.Attachment
-                                            .builder()
+                                        ThreadCreateAndRunParams.Thread.Message.Attachment.builder()
                                             .fileId("file_id")
                                             .addTool(CodeInterpreterTool.builder().build())
                                             .build()
@@ -338,27 +328,24 @@ class ThreadServiceAsyncTest {
                                     .build()
                             )
                             .toolResources(
-                                BetaThreadCreateAndRunParams.Thread.ToolResources.builder()
+                                ThreadCreateAndRunParams.Thread.ToolResources.builder()
                                     .codeInterpreter(
-                                        BetaThreadCreateAndRunParams.Thread.ToolResources
+                                        ThreadCreateAndRunParams.Thread.ToolResources
                                             .CodeInterpreter
                                             .builder()
                                             .addFileId("string")
                                             .build()
                                     )
                                     .fileSearch(
-                                        BetaThreadCreateAndRunParams.Thread.ToolResources.FileSearch
+                                        ThreadCreateAndRunParams.Thread.ToolResources.FileSearch
                                             .builder()
                                             .addVectorStoreId("string")
                                             .addVectorStore(
-                                                BetaThreadCreateAndRunParams.Thread.ToolResources
+                                                ThreadCreateAndRunParams.Thread.ToolResources
                                                     .FileSearch
                                                     .VectorStore
                                                     .builder()
-                                                    .chunkingStrategy(
-                                                        AutoFileChunkingStrategyParam.builder()
-                                                            .build()
-                                                    )
+                                                    .chunkingStrategyAuto()
                                                     .addFileId("string")
                                                     .metadata(
                                                         Metadata.builder()
@@ -378,14 +365,14 @@ class ThreadServiceAsyncTest {
                     )
                     .toolChoice(AssistantToolChoiceOption.Auto.NONE)
                     .toolResources(
-                        BetaThreadCreateAndRunParams.ToolResources.builder()
+                        ThreadCreateAndRunParams.ToolResources.builder()
                             .codeInterpreter(
-                                BetaThreadCreateAndRunParams.ToolResources.CodeInterpreter.builder()
+                                ThreadCreateAndRunParams.ToolResources.CodeInterpreter.builder()
                                     .addFileId("string")
                                     .build()
                             )
                             .fileSearch(
-                                BetaThreadCreateAndRunParams.ToolResources.FileSearch.builder()
+                                ThreadCreateAndRunParams.ToolResources.FileSearch.builder()
                                     .addVectorStoreId("string")
                                     .build()
                             )
@@ -394,8 +381,8 @@ class ThreadServiceAsyncTest {
                     .addTool(CodeInterpreterTool.builder().build())
                     .topP(1.0)
                     .truncationStrategy(
-                        BetaThreadCreateAndRunParams.TruncationStrategy.builder()
-                            .type(BetaThreadCreateAndRunParams.TruncationStrategy.Type.AUTO)
+                        ThreadCreateAndRunParams.TruncationStrategy.builder()
+                            .type(ThreadCreateAndRunParams.TruncationStrategy.Type.AUTO)
                             .lastMessages(1L)
                             .build()
                     )

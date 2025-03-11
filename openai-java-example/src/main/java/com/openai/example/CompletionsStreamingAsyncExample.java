@@ -2,7 +2,8 @@ package com.openai.example;
 
 import com.openai.client.OpenAIClientAsync;
 import com.openai.client.okhttp.OpenAIOkHttpClientAsync;
-import com.openai.models.*;
+import com.openai.models.ChatModel;
+import com.openai.models.chat.completions.ChatCompletionCreateParams;
 
 public final class CompletionsStreamingAsyncExample {
     private CompletionsStreamingAsyncExample() {}
