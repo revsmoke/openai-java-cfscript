@@ -48,6 +48,27 @@ This library requires Java 8 or later.
 
 See the [`openai-java-example`](openai-java-example/src/main/java/com/openai/example) directory for complete and runnable examples.
 
+The primary API for interacting with OpenAI models is the [Responses API](https://platform.openai.com/docs/api-reference/responses). You can generate text from the model with the code below.
+
+```java
+import com.openai.client.OpenAIClient;
+import com.openai.client.okhttp.OpenAIOkHttpClient;
+import com.openai.models.ChatModel;
+import com.openai.models.responses.Response;
+import com.openai.models.responses.ResponseCreateParams;
+
+// Configures using the `OPENAI_API_KEY`, `OPENAI_ORG_ID` and `OPENAI_PROJECT_ID` environment variables
+OpenAIClient client = OpenAIOkHttpClient.fromEnv();
+
+ResponseCreateParams params = ResponseCreateParams.builder()
+        .input("Say this is a test")
+        .model(ChatModel.GPT_4O)
+        .build();
+Response response = client.responses().create(params);
+```
+
+The previous standard (supported indefinitely) for generating text is the [Chat Completions API](https://platform.openai.com/docs/api-reference/chat). You can use that API to generate text from the model with the code below.
+
 ```java
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
