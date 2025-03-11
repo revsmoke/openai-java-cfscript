@@ -90,7 +90,7 @@ class ResponseServiceImpl internal constructor(private val clientOptions: Client
                     .addPathSegments("responses")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
-                    .prepare(clientOptions, params)
+                    .prepare(clientOptions, params, deploymentModel = params.model().toString())
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
             return response.parseable {
@@ -128,7 +128,7 @@ class ResponseServiceImpl internal constructor(private val clientOptions: Client
                         )
                     )
                     .build()
-                    .prepare(clientOptions, params)
+                    .prepare(clientOptions, params, deploymentModel = params.model().toString())
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
             return response.parseable {
@@ -156,7 +156,7 @@ class ResponseServiceImpl internal constructor(private val clientOptions: Client
                     .method(HttpMethod.GET)
                     .addPathSegments("responses", params.getPathParam(0))
                     .build()
-                    .prepare(clientOptions, params)
+                    .prepare(clientOptions, params, deploymentModel = null)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
             return response.parseable {
@@ -182,7 +182,7 @@ class ResponseServiceImpl internal constructor(private val clientOptions: Client
                     .addPathSegments("responses", params.getPathParam(0))
                     .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
-                    .prepare(clientOptions, params)
+                    .prepare(clientOptions, params, deploymentModel = null)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
             return response.parseable { response.use { deleteHandler.handle(it) } }

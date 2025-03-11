@@ -103,7 +103,11 @@ class ResponseServiceAsyncImpl internal constructor(private val clientOptions: C
                     .addPathSegments("responses")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
-                    .prepareAsync(clientOptions, params)
+                    .prepareAsync(
+                        clientOptions,
+                        params,
+                        deploymentModel = params.model().toString(),
+                    )
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
@@ -144,7 +148,11 @@ class ResponseServiceAsyncImpl internal constructor(private val clientOptions: C
                         )
                     )
                     .build()
-                    .prepareAsync(clientOptions, params)
+                    .prepareAsync(
+                        clientOptions,
+                        params,
+                        deploymentModel = params.model().toString(),
+                    )
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
@@ -175,7 +183,7 @@ class ResponseServiceAsyncImpl internal constructor(private val clientOptions: C
                     .method(HttpMethod.GET)
                     .addPathSegments("responses", params.getPathParam(0))
                     .build()
-                    .prepareAsync(clientOptions, params)
+                    .prepareAsync(clientOptions, params, deploymentModel = null)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
@@ -204,7 +212,7 @@ class ResponseServiceAsyncImpl internal constructor(private val clientOptions: C
                     .addPathSegments("responses", params.getPathParam(0))
                     .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
-                    .prepareAsync(clientOptions, params)
+                    .prepareAsync(clientOptions, params, deploymentModel = null)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }

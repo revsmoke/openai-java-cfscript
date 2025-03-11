@@ -174,7 +174,7 @@ class FileServiceAsyncImpl internal constructor(private val clientOptions: Clien
                     .putAllHeaders(DEFAULT_HEADERS)
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
-                    .prepareAsync(clientOptions, params)
+                    .prepareAsync(clientOptions, params, deploymentModel = null)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
@@ -286,7 +286,7 @@ class FileServiceAsyncImpl internal constructor(private val clientOptions: Clien
                     )
                     .putAllHeaders(DEFAULT_HEADERS)
                     .build()
-                    .prepareAsync(clientOptions, params)
+                    .prepareAsync(clientOptions, params, deploymentModel = null)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
