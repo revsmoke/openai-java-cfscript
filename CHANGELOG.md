@@ -1,5 +1,36 @@
 # Changelog
 
+## 0.34.0 (2025-03-11)
+
+Full Changelog: [v0.33.0...v0.34.0](https://github.com/openai/openai-java/compare/v0.33.0...v0.34.0)
+
+### ⚠ BREAKING CHANGES
+
+* **client:** move classes into subpackages and shorten names ([#294](https://github.com/openai/openai-java/issues/294))
+
+### Features
+
+* **api:** add /v1/responses and built-in tools ([#296](https://github.com/openai/openai-java/issues/296)) ([3216ffa](https://github.com/openai/openai-java/commit/3216ffa635b2d5ee337a9e62abef88f3faf3735e))
+
+
+### Chores
+
+* add `deploymentModel` to new endpoints ([2d98165](https://github.com/openai/openai-java/commit/2d981657dca3782cd03f2b19118ec01835dd6490))
+* **client:** move classes into subpackages and shorten names ([#294](https://github.com/openai/openai-java/issues/294)) ([1a65445](https://github.com/openai/openai-java/commit/1a65445fbed70d1f1cde1d5e6e9db299fff3dbb3))
+* **internal:** add `.kotlin` to `.gitignore` ([#285](https://github.com/openai/openai-java/issues/285)) ([46c9b3a](https://github.com/openai/openai-java/commit/46c9b3af9d2593b679fa359df4123516a36f5c25))
+* **internal:** don't use `JvmOverloads` in interfaces ([9b04bb9](https://github.com/openai/openai-java/commit/9b04bb90bdacc38e926560e72244a677ced99991))
+* **internal:** reenable warnings as errors ([#288](https://github.com/openai/openai-java/issues/288)) ([9b04bb9](https://github.com/openai/openai-java/commit/9b04bb90bdacc38e926560e72244a677ced99991))
+* **internal:** use `getOrNull` instead of `orElse(null)` ([#287](https://github.com/openai/openai-java/issues/287)) ([8eeec84](https://github.com/openai/openai-java/commit/8eeec8405630759ffd7c02b30d4dd78b0d7df4d7))
+
+
+### Documentation
+
+* document `JsonValue` construction in readme ([#292](https://github.com/openai/openai-java/issues/292)) ([4453173](https://github.com/openai/openai-java/commit/4453173cf4916bd880be12b20bfbba23cd2370d2))
+* fix examples ([0dfd4b1](https://github.com/openai/openai-java/commit/0dfd4b17e36ab12c9b37cc0a2f45170a89cea8ea))
+* make URL purpose clearer in readme ([#289](https://github.com/openai/openai-java/issues/289)) ([88df036](https://github.com/openai/openai-java/commit/88df03664adae72f9d1fb9318a11ce73aa2c7b1e))
+* responses examples ([589ea32](https://github.com/openai/openai-java/commit/589ea32fcdd3b1effcf3860d005987415eaab48e))
+* revise readme docs about nested params ([#291](https://github.com/openai/openai-java/issues/291)) ([d3df21f](https://github.com/openai/openai-java/commit/d3df21f3f9dac58e896817c9619ab0c6e83419b7))
+
 ## 0.33.0 (2025-03-06)
 
 Full Changelog: [v0.32.0...v0.33.0](https://github.com/openai/openai-java/compare/v0.32.0...v0.33.0)
