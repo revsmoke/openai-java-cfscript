@@ -5,12 +5,12 @@ package com.openai.models.responses
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-internal class ResponseFunctionToolCallTest {
+internal class ResponseFunctionToolCallItemTest {
 
     @Test
     fun create() {
-        val responseFunctionToolCall =
-            ResponseFunctionToolCall.builder()
+        val responseFunctionToolCallItem =
+            ResponseFunctionToolCallItem.builder()
                 .arguments("arguments")
                 .callId("call_id")
                 .name("name")
@@ -18,11 +18,11 @@ internal class ResponseFunctionToolCallTest {
                 .status(ResponseFunctionToolCall.Status.IN_PROGRESS)
                 .build()
 
-        assertThat(responseFunctionToolCall.arguments()).isEqualTo("arguments")
-        assertThat(responseFunctionToolCall.callId()).isEqualTo("call_id")
-        assertThat(responseFunctionToolCall.name()).isEqualTo("name")
-        assertThat(responseFunctionToolCall.id()).contains("id")
-        assertThat(responseFunctionToolCall.status())
+        assertThat(responseFunctionToolCallItem.arguments()).isEqualTo("arguments")
+        assertThat(responseFunctionToolCallItem.callId()).isEqualTo("call_id")
+        assertThat(responseFunctionToolCallItem.name()).isEqualTo("name")
+        assertThat(responseFunctionToolCallItem.id()).contains("id")
+        assertThat(responseFunctionToolCallItem.status())
             .contains(ResponseFunctionToolCall.Status.IN_PROGRESS)
     }
 }
