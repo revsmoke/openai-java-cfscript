@@ -2,14 +2,12 @@
 
 package com.openai.models.vectorstores
 
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class AutoFileChunkingStrategyParamTest {
+internal class AutoFileChunkingStrategyParamTest {
 
     @Test
-    fun createAutoFileChunkingStrategyParam() {
+    fun create() {
         val autoFileChunkingStrategyParam = AutoFileChunkingStrategyParam.builder().build()
-        assertThat(autoFileChunkingStrategyParam).isNotNull
     }
 }

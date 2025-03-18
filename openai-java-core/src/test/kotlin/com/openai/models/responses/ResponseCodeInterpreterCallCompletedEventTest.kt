@@ -5,10 +5,10 @@ package com.openai.models.responses
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ResponseCodeInterpreterCallCompletedEventTest {
+internal class ResponseCodeInterpreterCallCompletedEventTest {
 
     @Test
-    fun createResponseCodeInterpreterCallCompletedEvent() {
+    fun create() {
         val responseCodeInterpreterCallCompletedEvent =
             ResponseCodeInterpreterCallCompletedEvent.builder()
                 .codeInterpreterCall(
@@ -21,7 +21,7 @@ class ResponseCodeInterpreterCallCompletedEventTest {
                 )
                 .outputIndex(0L)
                 .build()
-        assertThat(responseCodeInterpreterCallCompletedEvent).isNotNull
+
         assertThat(responseCodeInterpreterCallCompletedEvent.codeInterpreterCall())
             .isEqualTo(
                 ResponseCodeInterpreterToolCall.builder()

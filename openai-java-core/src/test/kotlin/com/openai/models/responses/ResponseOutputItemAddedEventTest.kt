@@ -5,10 +5,10 @@ package com.openai.models.responses
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ResponseOutputItemAddedEventTest {
+internal class ResponseOutputItemAddedEventTest {
 
     @Test
-    fun createResponseOutputItemAddedEvent() {
+    fun create() {
         val responseOutputItemAddedEvent =
             ResponseOutputItemAddedEvent.builder()
                 .item(
@@ -30,7 +30,7 @@ class ResponseOutputItemAddedEventTest {
                 )
                 .outputIndex(0L)
                 .build()
-        assertThat(responseOutputItemAddedEvent).isNotNull
+
         assertThat(responseOutputItemAddedEvent.item())
             .isEqualTo(
                 ResponseOutputItem.ofMessage(

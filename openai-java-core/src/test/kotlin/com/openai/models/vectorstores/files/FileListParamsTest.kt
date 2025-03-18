@@ -6,7 +6,7 @@ import com.openai.core.http.QueryParams
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class FileListParamsTest {
+internal class FileListParamsTest {
 
     @Test
     fun create() {
@@ -21,6 +21,15 @@ class FileListParamsTest {
     }
 
     @Test
+    fun pathParams() {
+        val params = FileListParams.builder().vectorStoreId("vector_store_id").build()
+
+        assertThat(params._pathParam(0)).isEqualTo("vector_store_id")
+        // out-of-bound path param
+        assertThat(params._pathParam(1)).isEqualTo("")
+    }
+
+    @Test
     fun queryParams() {
         val params =
             FileListParams.builder()
@@ -31,29 +40,27 @@ class FileListParamsTest {
                 .limit(0L)
                 .order(FileListParams.Order.ASC)
                 .build()
-        val expected = QueryParams.builder()
-        expected.put("after", "after")
-        expected.put("before", "before")
-        expected.put("filter", FileListParams.Filter.IN_PROGRESS.toString())
-        expected.put("limit", "0")
-        expected.put("order", FileListParams.Order.ASC.toString())
-        assertThat(params._queryParams()).isEqualTo(expected.build())
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams)
+            .isEqualTo(
+                QueryParams.builder()
+                    .put("after", "after")
+                    .put("before", "before")
+                    .put("filter", "in_progress")
+                    .put("limit", "0")
+                    .put("order", "asc")
+                    .build()
+            )
     }
 
     @Test
     fun queryParamsWithoutOptionalFields() {
         val params = FileListParams.builder().vectorStoreId("vector_store_id").build()
-        val expected = QueryParams.builder()
-        assertThat(params._queryParams()).isEqualTo(expected.build())
-    }
 
-    @Test
-    fun getPathParam() {
-        val params = FileListParams.builder().vectorStoreId("vector_store_id").build()
-        assertThat(params).isNotNull
-        // path param "vectorStoreId"
-        assertThat(params.getPathParam(0)).isEqualTo("vector_store_id")
-        // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams).isEqualTo(QueryParams.builder().build())
     }
 }

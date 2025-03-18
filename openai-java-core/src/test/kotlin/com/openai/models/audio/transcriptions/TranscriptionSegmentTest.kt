@@ -5,10 +5,10 @@ package com.openai.models.audio.transcriptions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class TranscriptionSegmentTest {
+internal class TranscriptionSegmentTest {
 
     @Test
-    fun createTranscriptionSegment() {
+    fun create() {
         val transcriptionSegment =
             TranscriptionSegment.builder()
                 .id(0L)
@@ -22,7 +22,7 @@ class TranscriptionSegmentTest {
                 .text("text")
                 .addToken(0L)
                 .build()
-        assertThat(transcriptionSegment).isNotNull
+
         assertThat(transcriptionSegment.id()).isEqualTo(0L)
         assertThat(transcriptionSegment.avgLogprob()).isEqualTo(0.0)
         assertThat(transcriptionSegment.compressionRatio()).isEqualTo(0.0)

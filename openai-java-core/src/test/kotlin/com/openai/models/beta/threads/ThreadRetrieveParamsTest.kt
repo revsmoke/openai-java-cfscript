@@ -5,7 +5,7 @@ package com.openai.models.beta.threads
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ThreadRetrieveParamsTest {
+internal class ThreadRetrieveParamsTest {
 
     @Test
     fun create() {
@@ -13,12 +13,11 @@ class ThreadRetrieveParamsTest {
     }
 
     @Test
-    fun getPathParam() {
+    fun pathParams() {
         val params = ThreadRetrieveParams.builder().threadId("thread_id").build()
-        assertThat(params).isNotNull
-        // path param "threadId"
-        assertThat(params.getPathParam(0)).isEqualTo("thread_id")
+
+        assertThat(params._pathParam(0)).isEqualTo("thread_id")
         // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
+        assertThat(params._pathParam(1)).isEqualTo("")
     }
 }

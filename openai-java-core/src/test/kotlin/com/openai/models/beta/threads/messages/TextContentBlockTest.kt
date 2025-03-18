@@ -5,10 +5,10 @@ package com.openai.models.beta.threads.messages
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class TextContentBlockTest {
+internal class TextContentBlockTest {
 
     @Test
-    fun createTextContentBlock() {
+    fun create() {
         val textContentBlock =
             TextContentBlock.builder()
                 .text(
@@ -29,7 +29,7 @@ class TextContentBlockTest {
                         .build()
                 )
                 .build()
-        assertThat(textContentBlock).isNotNull
+
         assertThat(textContentBlock.text())
             .isEqualTo(
                 Text.builder()

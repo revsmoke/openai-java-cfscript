@@ -6,10 +6,10 @@ import com.openai.core.JsonValue
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class CompletionChoiceTest {
+internal class CompletionChoiceTest {
 
     @Test
-    fun createCompletionChoice() {
+    fun create() {
         val completionChoice =
             CompletionChoice.builder()
                 .finishReason(CompletionChoice.FinishReason.STOP)
@@ -28,7 +28,7 @@ class CompletionChoiceTest {
                 )
                 .text("text")
                 .build()
-        assertThat(completionChoice).isNotNull
+
         assertThat(completionChoice.finishReason()).isEqualTo(CompletionChoice.FinishReason.STOP)
         assertThat(completionChoice.index()).isEqualTo(0L)
         assertThat(completionChoice.logprobs())

@@ -6,10 +6,10 @@ import com.openai.core.JsonValue
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class FunctionDefinitionTest {
+internal class FunctionDefinitionTest {
 
     @Test
-    fun createFunctionDefinition() {
+    fun create() {
         val functionDefinition =
             FunctionDefinition.builder()
                 .name("name")
@@ -21,7 +21,7 @@ class FunctionDefinitionTest {
                 )
                 .strict(true)
                 .build()
-        assertThat(functionDefinition).isNotNull
+
         assertThat(functionDefinition.name()).isEqualTo("name")
         assertThat(functionDefinition.description()).contains("description")
         assertThat(functionDefinition.parameters())

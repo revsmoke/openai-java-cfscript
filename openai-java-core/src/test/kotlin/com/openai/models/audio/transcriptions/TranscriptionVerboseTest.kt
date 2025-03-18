@@ -2,13 +2,14 @@
 
 package com.openai.models.audio.transcriptions
 
+import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class TranscriptionVerboseTest {
+internal class TranscriptionVerboseTest {
 
     @Test
-    fun createTranscriptionVerbose() {
+    fun create() {
         val transcriptionVerbose =
             TranscriptionVerbose.builder()
                 .duration(0.0)
@@ -30,11 +31,11 @@ class TranscriptionVerboseTest {
                 )
                 .addWord(TranscriptionWord.builder().end(0.0).start(0.0).word("word").build())
                 .build()
-        assertThat(transcriptionVerbose).isNotNull
+
         assertThat(transcriptionVerbose.duration()).isEqualTo(0.0)
         assertThat(transcriptionVerbose.language()).isEqualTo("language")
         assertThat(transcriptionVerbose.text()).isEqualTo("text")
-        assertThat(transcriptionVerbose.segments().get())
+        assertThat(transcriptionVerbose.segments().getOrNull())
             .containsExactly(
                 TranscriptionSegment.builder()
                     .id(0L)
@@ -49,7 +50,7 @@ class TranscriptionVerboseTest {
                     .addToken(0L)
                     .build()
             )
-        assertThat(transcriptionVerbose.words().get())
+        assertThat(transcriptionVerbose.words().getOrNull())
             .containsExactly(TranscriptionWord.builder().end(0.0).start(0.0).word("word").build())
     }
 }

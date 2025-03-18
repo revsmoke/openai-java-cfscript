@@ -5,10 +5,10 @@ package com.openai.models.chat.completions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ChatCompletionAudioTest {
+internal class ChatCompletionAudioTest {
 
     @Test
-    fun createChatCompletionAudio() {
+    fun create() {
         val chatCompletionAudio =
             ChatCompletionAudio.builder()
                 .id("id")
@@ -16,7 +16,7 @@ class ChatCompletionAudioTest {
                 .expiresAt(0L)
                 .transcript("transcript")
                 .build()
-        assertThat(chatCompletionAudio).isNotNull
+
         assertThat(chatCompletionAudio.id()).isEqualTo("id")
         assertThat(chatCompletionAudio.data()).isEqualTo("data")
         assertThat(chatCompletionAudio.expiresAt()).isEqualTo(0L)

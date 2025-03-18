@@ -2,14 +2,12 @@
 
 package com.openai.models.beta.assistants
 
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class CodeInterpreterToolTest {
+internal class CodeInterpreterToolTest {
 
     @Test
-    fun createCodeInterpreterTool() {
+    fun create() {
         val codeInterpreterTool = CodeInterpreterTool.builder().build()
-        assertThat(codeInterpreterTool).isNotNull
     }
 }

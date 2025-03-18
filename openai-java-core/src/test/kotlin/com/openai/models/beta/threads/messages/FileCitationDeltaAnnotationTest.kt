@@ -5,10 +5,10 @@ package com.openai.models.beta.threads.messages
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class FileCitationDeltaAnnotationTest {
+internal class FileCitationDeltaAnnotationTest {
 
     @Test
-    fun createFileCitationDeltaAnnotation() {
+    fun create() {
         val fileCitationDeltaAnnotation =
             FileCitationDeltaAnnotation.builder()
                 .index(0L)
@@ -22,7 +22,7 @@ class FileCitationDeltaAnnotationTest {
                 .startIndex(0L)
                 .text("text")
                 .build()
-        assertThat(fileCitationDeltaAnnotation).isNotNull
+
         assertThat(fileCitationDeltaAnnotation.index()).isEqualTo(0L)
         assertThat(fileCitationDeltaAnnotation.endIndex()).contains(0L)
         assertThat(fileCitationDeltaAnnotation.fileCitation())

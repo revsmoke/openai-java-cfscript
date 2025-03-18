@@ -5,10 +5,10 @@ package com.openai.models.beta.threads.messages
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class FilePathAnnotationTest {
+internal class FilePathAnnotationTest {
 
     @Test
-    fun createFilePathAnnotation() {
+    fun create() {
         val filePathAnnotation =
             FilePathAnnotation.builder()
                 .endIndex(0L)
@@ -16,7 +16,7 @@ class FilePathAnnotationTest {
                 .startIndex(0L)
                 .text("text")
                 .build()
-        assertThat(filePathAnnotation).isNotNull
+
         assertThat(filePathAnnotation.endIndex()).isEqualTo(0L)
         assertThat(filePathAnnotation.filePath())
             .isEqualTo(FilePathAnnotation.FilePath.builder().fileId("file_id").build())

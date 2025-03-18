@@ -5,10 +5,10 @@ package com.openai.models.embeddings
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class CreateEmbeddingResponseTest {
+internal class CreateEmbeddingResponseTest {
 
     @Test
-    fun createCreateEmbeddingResponse() {
+    fun create() {
         val createEmbeddingResponse =
             CreateEmbeddingResponse.builder()
                 .addData(Embedding.builder().addEmbedding(0.0).index(0L).build())
@@ -17,7 +17,7 @@ class CreateEmbeddingResponseTest {
                     CreateEmbeddingResponse.Usage.builder().promptTokens(0L).totalTokens(0L).build()
                 )
                 .build()
-        assertThat(createEmbeddingResponse).isNotNull
+
         assertThat(createEmbeddingResponse.data())
             .containsExactly(Embedding.builder().addEmbedding(0.0).index(0L).build())
         assertThat(createEmbeddingResponse.model()).isEqualTo("model")

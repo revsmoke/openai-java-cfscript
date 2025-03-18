@@ -5,12 +5,12 @@ package com.openai.models.audio.transcriptions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class TranscriptionWordTest {
+internal class TranscriptionWordTest {
 
     @Test
-    fun createTranscriptionWord() {
+    fun create() {
         val transcriptionWord = TranscriptionWord.builder().end(0.0).start(0.0).word("word").build()
-        assertThat(transcriptionWord).isNotNull
+
         assertThat(transcriptionWord.end()).isEqualTo(0.0)
         assertThat(transcriptionWord.start()).isEqualTo(0.0)
         assertThat(transcriptionWord.word()).isEqualTo("word")

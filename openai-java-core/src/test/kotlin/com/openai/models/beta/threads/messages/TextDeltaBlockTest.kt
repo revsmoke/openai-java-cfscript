@@ -5,10 +5,10 @@ package com.openai.models.beta.threads.messages
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class TextDeltaBlockTest {
+internal class TextDeltaBlockTest {
 
     @Test
-    fun createTextDeltaBlock() {
+    fun create() {
         val textDeltaBlock =
             TextDeltaBlock.builder()
                 .index(0L)
@@ -32,7 +32,7 @@ class TextDeltaBlockTest {
                         .build()
                 )
                 .build()
-        assertThat(textDeltaBlock).isNotNull
+
         assertThat(textDeltaBlock.index()).isEqualTo(0L)
         assertThat(textDeltaBlock.text())
             .contains(

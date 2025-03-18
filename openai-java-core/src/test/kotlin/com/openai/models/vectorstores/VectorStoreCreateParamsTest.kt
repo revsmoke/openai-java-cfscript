@@ -4,11 +4,12 @@ package com.openai.models.vectorstores
 
 import com.openai.core.JsonValue
 import com.openai.models.Metadata
+import kotlin.jvm.optionals.getOrNull
 import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class VectorStoreCreateParamsTest {
+internal class VectorStoreCreateParamsTest {
 
     @Test
     fun create() {
@@ -47,7 +48,7 @@ class VectorStoreCreateParamsTest {
             )
         assertThat(body.expiresAfter())
             .contains(VectorStoreCreateParams.ExpiresAfter.builder().days(1L).build())
-        assertThat(body.fileIds()).contains(listOf("string"))
+        assertThat(body.fileIds().getOrNull()).containsExactly("string")
         assertThat(body.metadata())
             .contains(
                 Metadata.builder().putAdditionalProperty("foo", JsonValue.from("string")).build()

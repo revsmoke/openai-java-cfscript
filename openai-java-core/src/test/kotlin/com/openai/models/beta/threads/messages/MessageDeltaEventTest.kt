@@ -5,10 +5,10 @@ package com.openai.models.beta.threads.messages
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class MessageDeltaEventTest {
+internal class MessageDeltaEventTest {
 
     @Test
-    fun createMessageDeltaEvent() {
+    fun create() {
         val messageDeltaEvent =
             MessageDeltaEvent.builder()
                 .id("id")
@@ -29,7 +29,7 @@ class MessageDeltaEventTest {
                         .build()
                 )
                 .build()
-        assertThat(messageDeltaEvent).isNotNull
+
         assertThat(messageDeltaEvent.id()).isEqualTo("id")
         assertThat(messageDeltaEvent.delta())
             .isEqualTo(

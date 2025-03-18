@@ -5,10 +5,10 @@ package com.openai.models.finetuning.jobs
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class FineTuningJobWandbIntegrationObjectTest {
+internal class FineTuningJobWandbIntegrationObjectTest {
 
     @Test
-    fun createFineTuningJobWandbIntegrationObject() {
+    fun create() {
         val fineTuningJobWandbIntegrationObject =
             FineTuningJobWandbIntegrationObject.builder()
                 .wandb(
@@ -20,7 +20,7 @@ class FineTuningJobWandbIntegrationObjectTest {
                         .build()
                 )
                 .build()
-        assertThat(fineTuningJobWandbIntegrationObject).isNotNull
+
         assertThat(fineTuningJobWandbIntegrationObject.wandb())
             .isEqualTo(
                 FineTuningJobWandbIntegration.builder()

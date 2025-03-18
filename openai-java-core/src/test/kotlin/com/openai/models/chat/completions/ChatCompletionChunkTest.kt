@@ -6,10 +6,10 @@ import com.openai.models.completions.CompletionUsage
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ChatCompletionChunkTest {
+internal class ChatCompletionChunkTest {
 
     @Test
-    fun createChatCompletionChunk() {
+    fun create() {
         val chatCompletionChunk =
             ChatCompletionChunk.builder()
                 .id("id")
@@ -106,7 +106,7 @@ class ChatCompletionChunkTest {
                         .build()
                 )
                 .build()
-        assertThat(chatCompletionChunk).isNotNull
+
         assertThat(chatCompletionChunk.id()).isEqualTo("id")
         assertThat(chatCompletionChunk.choices())
             .containsExactly(

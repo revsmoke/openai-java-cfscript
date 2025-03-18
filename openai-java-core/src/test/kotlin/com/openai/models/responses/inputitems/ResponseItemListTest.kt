@@ -5,10 +5,10 @@ package com.openai.models.responses.inputitems
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ResponseItemListTest {
+internal class ResponseItemListTest {
 
     @Test
-    fun createResponseItemList() {
+    fun create() {
         val responseItemList =
             ResponseItemList.builder()
                 .addData(
@@ -24,7 +24,7 @@ class ResponseItemListTest {
                 .hasMore(true)
                 .lastId("last_id")
                 .build()
-        assertThat(responseItemList).isNotNull
+
         assertThat(responseItemList.data())
             .containsExactly(
                 ResponseItemList.Data.ofMessage(

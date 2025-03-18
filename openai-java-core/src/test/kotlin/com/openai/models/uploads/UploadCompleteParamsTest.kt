@@ -6,7 +6,7 @@ import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class UploadCompleteParamsTest {
+internal class UploadCompleteParamsTest {
 
     @Test
     fun create() {
@@ -15,6 +15,16 @@ class UploadCompleteParamsTest {
             .addPartId("string")
             .md5("md5")
             .build()
+    }
+
+    @Test
+    fun pathParams() {
+        val params =
+            UploadCompleteParams.builder().uploadId("upload_abc123").addPartId("string").build()
+
+        assertThat(params._pathParam(0)).isEqualTo("upload_abc123")
+        // out-of-bound path param
+        assertThat(params._pathParam(1)).isEqualTo("")
     }
 
     @Test
@@ -29,7 +39,7 @@ class UploadCompleteParamsTest {
         val body = params._body()
 
         assertNotNull(body)
-        assertThat(body.partIds()).isEqualTo(listOf("string"))
+        assertThat(body.partIds()).containsExactly("string")
         assertThat(body.md5()).contains("md5")
     }
 
@@ -41,17 +51,6 @@ class UploadCompleteParamsTest {
         val body = params._body()
 
         assertNotNull(body)
-        assertThat(body.partIds()).isEqualTo(listOf("string"))
-    }
-
-    @Test
-    fun getPathParam() {
-        val params =
-            UploadCompleteParams.builder().uploadId("upload_abc123").addPartId("string").build()
-        assertThat(params).isNotNull
-        // path param "uploadId"
-        assertThat(params.getPathParam(0)).isEqualTo("upload_abc123")
-        // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
+        assertThat(body.partIds()).containsExactly("string")
     }
 }

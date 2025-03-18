@@ -5,12 +5,12 @@ package com.openai.models.beta.threads.messages
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ImageFileTest {
+internal class ImageFileTest {
 
     @Test
-    fun createImageFile() {
+    fun create() {
         val imageFile = ImageFile.builder().fileId("file_id").detail(ImageFile.Detail.AUTO).build()
-        assertThat(imageFile).isNotNull
+
         assertThat(imageFile.fileId()).isEqualTo("file_id")
         assertThat(imageFile.detail()).contains(ImageFile.Detail.AUTO)
     }

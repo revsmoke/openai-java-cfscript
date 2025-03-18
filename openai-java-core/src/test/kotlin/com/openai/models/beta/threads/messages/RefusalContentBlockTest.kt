@@ -5,12 +5,12 @@ package com.openai.models.beta.threads.messages
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class RefusalContentBlockTest {
+internal class RefusalContentBlockTest {
 
     @Test
-    fun createRefusalContentBlock() {
+    fun create() {
         val refusalContentBlock = RefusalContentBlock.builder().refusal("refusal").build()
-        assertThat(refusalContentBlock).isNotNull
+
         assertThat(refusalContentBlock.refusal()).isEqualTo("refusal")
     }
 }

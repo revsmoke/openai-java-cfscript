@@ -5,13 +5,13 @@ package com.openai.models.chat.completions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ChatCompletionStreamOptionsTest {
+internal class ChatCompletionStreamOptionsTest {
 
     @Test
-    fun createChatCompletionStreamOptions() {
+    fun create() {
         val chatCompletionStreamOptions =
             ChatCompletionStreamOptions.builder().includeUsage(true).build()
-        assertThat(chatCompletionStreamOptions).isNotNull
+
         assertThat(chatCompletionStreamOptions.includeUsage()).contains(true)
     }
 }

@@ -6,7 +6,7 @@ import com.openai.core.http.QueryParams
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class FileBatchListFilesParamsTest {
+internal class FileBatchListFilesParamsTest {
 
     @Test
     fun create() {
@@ -22,6 +22,20 @@ class FileBatchListFilesParamsTest {
     }
 
     @Test
+    fun pathParams() {
+        val params =
+            FileBatchListFilesParams.builder()
+                .vectorStoreId("vector_store_id")
+                .batchId("batch_id")
+                .build()
+
+        assertThat(params._pathParam(0)).isEqualTo("vector_store_id")
+        assertThat(params._pathParam(1)).isEqualTo("batch_id")
+        // out-of-bound path param
+        assertThat(params._pathParam(2)).isEqualTo("")
+    }
+
+    @Test
     fun queryParams() {
         val params =
             FileBatchListFilesParams.builder()
@@ -33,13 +47,19 @@ class FileBatchListFilesParamsTest {
                 .limit(0L)
                 .order(FileBatchListFilesParams.Order.ASC)
                 .build()
-        val expected = QueryParams.builder()
-        expected.put("after", "after")
-        expected.put("before", "before")
-        expected.put("filter", FileBatchListFilesParams.Filter.IN_PROGRESS.toString())
-        expected.put("limit", "0")
-        expected.put("order", FileBatchListFilesParams.Order.ASC.toString())
-        assertThat(params._queryParams()).isEqualTo(expected.build())
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams)
+            .isEqualTo(
+                QueryParams.builder()
+                    .put("after", "after")
+                    .put("before", "before")
+                    .put("filter", "in_progress")
+                    .put("limit", "0")
+                    .put("order", "asc")
+                    .build()
+            )
     }
 
     @Test
@@ -49,23 +69,9 @@ class FileBatchListFilesParamsTest {
                 .vectorStoreId("vector_store_id")
                 .batchId("batch_id")
                 .build()
-        val expected = QueryParams.builder()
-        assertThat(params._queryParams()).isEqualTo(expected.build())
-    }
 
-    @Test
-    fun getPathParam() {
-        val params =
-            FileBatchListFilesParams.builder()
-                .vectorStoreId("vector_store_id")
-                .batchId("batch_id")
-                .build()
-        assertThat(params).isNotNull
-        // path param "vectorStoreId"
-        assertThat(params.getPathParam(0)).isEqualTo("vector_store_id")
-        // path param "batchId"
-        assertThat(params.getPathParam(1)).isEqualTo("batch_id")
-        // out-of-bound path param
-        assertThat(params.getPathParam(2)).isEqualTo("")
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams).isEqualTo(QueryParams.builder().build())
     }
 }

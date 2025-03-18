@@ -5,10 +5,10 @@ package com.openai.models.beta.threads.runs.steps
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class RunStepDeltaTest {
+internal class RunStepDeltaTest {
 
     @Test
-    fun createRunStepDelta() {
+    fun create() {
         val runStepDelta =
             RunStepDelta.builder()
                 .stepDetails(
@@ -21,7 +21,7 @@ class RunStepDeltaTest {
                         .build()
                 )
                 .build()
-        assertThat(runStepDelta).isNotNull
+
         assertThat(runStepDelta.stepDetails())
             .contains(
                 RunStepDelta.StepDetails.ofMessageCreation(

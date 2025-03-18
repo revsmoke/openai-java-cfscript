@@ -5,13 +5,13 @@ package com.openai.models.chat.completions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ChatCompletionPredictionContentTest {
+internal class ChatCompletionPredictionContentTest {
 
     @Test
-    fun createChatCompletionPredictionContent() {
+    fun create() {
         val chatCompletionPredictionContent =
             ChatCompletionPredictionContent.builder().content("string").build()
-        assertThat(chatCompletionPredictionContent).isNotNull
+
         assertThat(chatCompletionPredictionContent.content())
             .isEqualTo(ChatCompletionPredictionContent.Content.ofText("string"))
     }

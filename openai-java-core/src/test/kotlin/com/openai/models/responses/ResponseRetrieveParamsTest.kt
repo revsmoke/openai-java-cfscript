@@ -6,7 +6,7 @@ import com.openai.core.http.QueryParams
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ResponseRetrieveParamsTest {
+internal class ResponseRetrieveParamsTest {
 
     @Test
     fun create() {
@@ -17,15 +17,29 @@ class ResponseRetrieveParamsTest {
     }
 
     @Test
+    fun pathParams() {
+        val params =
+            ResponseRetrieveParams.builder()
+                .responseId("resp_677efb5139a88190b512bc3fef8e535d")
+                .build()
+
+        assertThat(params._pathParam(0)).isEqualTo("resp_677efb5139a88190b512bc3fef8e535d")
+        // out-of-bound path param
+        assertThat(params._pathParam(1)).isEqualTo("")
+    }
+
+    @Test
     fun queryParams() {
         val params =
             ResponseRetrieveParams.builder()
                 .responseId("resp_677efb5139a88190b512bc3fef8e535d")
                 .addInclude(ResponseIncludable.FILE_SEARCH_CALL_RESULTS)
                 .build()
-        val expected = QueryParams.builder()
-        expected.put("include[]", ResponseIncludable.FILE_SEARCH_CALL_RESULTS.toString())
-        assertThat(params._queryParams()).isEqualTo(expected.build())
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams)
+            .isEqualTo(QueryParams.builder().put("include[]", "file_search_call.results").build())
     }
 
     @Test
@@ -34,20 +48,9 @@ class ResponseRetrieveParamsTest {
             ResponseRetrieveParams.builder()
                 .responseId("resp_677efb5139a88190b512bc3fef8e535d")
                 .build()
-        val expected = QueryParams.builder()
-        assertThat(params._queryParams()).isEqualTo(expected.build())
-    }
 
-    @Test
-    fun getPathParam() {
-        val params =
-            ResponseRetrieveParams.builder()
-                .responseId("resp_677efb5139a88190b512bc3fef8e535d")
-                .build()
-        assertThat(params).isNotNull
-        // path param "responseId"
-        assertThat(params.getPathParam(0)).isEqualTo("resp_677efb5139a88190b512bc3fef8e535d")
-        // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams).isEqualTo(QueryParams.builder().build())
     }
 }

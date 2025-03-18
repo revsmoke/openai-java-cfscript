@@ -6,10 +6,10 @@ import com.openai.models.ComparisonFilter
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class FileSearchToolTest {
+internal class FileSearchToolTest {
 
     @Test
-    fun createFileSearchTool() {
+    fun create() {
         val fileSearchTool =
             FileSearchTool.builder()
                 .addVectorStoreId("string")
@@ -28,7 +28,7 @@ class FileSearchToolTest {
                         .build()
                 )
                 .build()
-        assertThat(fileSearchTool).isNotNull
+
         assertThat(fileSearchTool.vectorStoreIds()).containsExactly("string")
         assertThat(fileSearchTool.filters())
             .contains(

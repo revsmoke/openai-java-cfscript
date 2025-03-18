@@ -5,7 +5,7 @@ package com.openai.models.chat.completions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ChatCompletionRetrieveParamsTest {
+internal class ChatCompletionRetrieveParamsTest {
 
     @Test
     fun create() {
@@ -13,12 +13,11 @@ class ChatCompletionRetrieveParamsTest {
     }
 
     @Test
-    fun getPathParam() {
+    fun pathParams() {
         val params = ChatCompletionRetrieveParams.builder().completionId("completion_id").build()
-        assertThat(params).isNotNull
-        // path param "completionId"
-        assertThat(params.getPathParam(0)).isEqualTo("completion_id")
+
+        assertThat(params._pathParam(0)).isEqualTo("completion_id")
         // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
+        assertThat(params._pathParam(1)).isEqualTo("")
     }
 }

@@ -12,10 +12,10 @@ import com.openai.models.ResponseFormatText
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ResponseTest {
+internal class ResponseTest {
 
     @Test
-    fun createResponse() {
+    fun create() {
         val response =
             Response.builder()
                 .id("id")
@@ -105,7 +105,7 @@ class ResponseTest {
                 )
                 .user("user-1234")
                 .build()
-        assertThat(response).isNotNull
+
         assertThat(response.id()).isEqualTo("id")
         assertThat(response.createdAt()).isEqualTo(0.0)
         assertThat(response.error())

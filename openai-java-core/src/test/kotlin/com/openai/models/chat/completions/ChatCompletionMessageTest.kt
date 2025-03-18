@@ -2,13 +2,14 @@
 
 package com.openai.models.chat.completions
 
+import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ChatCompletionMessageTest {
+internal class ChatCompletionMessageTest {
 
     @Test
-    fun createChatCompletionMessage() {
+    fun create() {
         val chatCompletionMessage =
             ChatCompletionMessage.builder()
                 .content("content")
@@ -51,10 +52,10 @@ class ChatCompletionMessageTest {
                         .build()
                 )
                 .build()
-        assertThat(chatCompletionMessage).isNotNull
+
         assertThat(chatCompletionMessage.content()).contains("content")
         assertThat(chatCompletionMessage.refusal()).contains("refusal")
-        assertThat(chatCompletionMessage.annotations().get())
+        assertThat(chatCompletionMessage.annotations().getOrNull())
             .containsExactly(
                 ChatCompletionMessage.Annotation.builder()
                     .urlCitation(
@@ -83,7 +84,7 @@ class ChatCompletionMessageTest {
                     .name("name")
                     .build()
             )
-        assertThat(chatCompletionMessage.toolCalls().get())
+        assertThat(chatCompletionMessage.toolCalls().getOrNull())
             .containsExactly(
                 ChatCompletionMessageToolCall.builder()
                     .id("id")

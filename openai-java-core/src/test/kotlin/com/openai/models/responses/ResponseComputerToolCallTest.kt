@@ -5,10 +5,10 @@ package com.openai.models.responses
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ResponseComputerToolCallTest {
+internal class ResponseComputerToolCallTest {
 
     @Test
-    fun createResponseComputerToolCall() {
+    fun create() {
         val responseComputerToolCall =
             ResponseComputerToolCall.builder()
                 .id("id")
@@ -30,7 +30,7 @@ class ResponseComputerToolCallTest {
                 .status(ResponseComputerToolCall.Status.IN_PROGRESS)
                 .type(ResponseComputerToolCall.Type.COMPUTER_CALL)
                 .build()
-        assertThat(responseComputerToolCall).isNotNull
+
         assertThat(responseComputerToolCall.id()).isEqualTo("id")
         assertThat(responseComputerToolCall.action())
             .isEqualTo(

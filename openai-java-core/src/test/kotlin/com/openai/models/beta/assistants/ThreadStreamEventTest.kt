@@ -8,10 +8,10 @@ import com.openai.models.beta.threads.Thread
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ThreadStreamEventTest {
+internal class ThreadStreamEventTest {
 
     @Test
-    fun createThreadStreamEvent() {
+    fun create() {
         val threadStreamEvent =
             ThreadStreamEvent.builder()
                 .data(
@@ -41,7 +41,7 @@ class ThreadStreamEventTest {
                 )
                 .enabled(true)
                 .build()
-        assertThat(threadStreamEvent).isNotNull
+
         assertThat(threadStreamEvent.data())
             .isEqualTo(
                 Thread.builder()

@@ -5,10 +5,10 @@ package com.openai.models.responses
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ResponseContentPartDoneEventTest {
+internal class ResponseContentPartDoneEventTest {
 
     @Test
-    fun createResponseContentPartDoneEvent() {
+    fun create() {
         val responseContentPartDoneEvent =
             ResponseContentPartDoneEvent.builder()
                 .contentIndex(0L)
@@ -26,7 +26,7 @@ class ResponseContentPartDoneEventTest {
                         .build()
                 )
                 .build()
-        assertThat(responseContentPartDoneEvent).isNotNull
+
         assertThat(responseContentPartDoneEvent.contentIndex()).isEqualTo(0L)
         assertThat(responseContentPartDoneEvent.itemId()).isEqualTo("item_id")
         assertThat(responseContentPartDoneEvent.outputIndex()).isEqualTo(0L)

@@ -8,10 +8,10 @@ import com.openai.models.FunctionParameters
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ChatCompletionToolTest {
+internal class ChatCompletionToolTest {
 
     @Test
-    fun createChatCompletionTool() {
+    fun create() {
         val chatCompletionTool =
             ChatCompletionTool.builder()
                 .function(
@@ -27,7 +27,7 @@ class ChatCompletionToolTest {
                         .build()
                 )
                 .build()
-        assertThat(chatCompletionTool).isNotNull
+
         assertThat(chatCompletionTool.function())
             .isEqualTo(
                 FunctionDefinition.builder()

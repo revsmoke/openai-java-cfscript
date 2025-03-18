@@ -5,10 +5,10 @@ package com.openai.models.beta.threads.runs.steps
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class FunctionToolCallDeltaTest {
+internal class FunctionToolCallDeltaTest {
 
     @Test
-    fun createFunctionToolCallDelta() {
+    fun create() {
         val functionToolCallDelta =
             FunctionToolCallDelta.builder()
                 .index(0L)
@@ -21,7 +21,7 @@ class FunctionToolCallDeltaTest {
                         .build()
                 )
                 .build()
-        assertThat(functionToolCallDelta).isNotNull
+
         assertThat(functionToolCallDelta.index()).isEqualTo(0L)
         assertThat(functionToolCallDelta.id()).contains("id")
         assertThat(functionToolCallDelta.function())

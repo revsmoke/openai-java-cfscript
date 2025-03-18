@@ -5,10 +5,10 @@ package com.openai.models.moderations
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ModerationCreateResponseTest {
+internal class ModerationCreateResponseTest {
 
     @Test
-    fun createModerationCreateResponse() {
+    fun create() {
         val moderationCreateResponse =
             ModerationCreateResponse.builder()
                 .id("id")
@@ -84,7 +84,7 @@ class ModerationCreateResponseTest {
                         .build()
                 )
                 .build()
-        assertThat(moderationCreateResponse).isNotNull
+
         assertThat(moderationCreateResponse.id()).isEqualTo("id")
         assertThat(moderationCreateResponse.model()).isEqualTo("model")
         assertThat(moderationCreateResponse.results())

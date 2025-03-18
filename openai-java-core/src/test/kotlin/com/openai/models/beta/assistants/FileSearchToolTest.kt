@@ -5,10 +5,10 @@ package com.openai.models.beta.assistants
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class FileSearchToolTest {
+internal class FileSearchToolTest {
 
     @Test
-    fun createFileSearchTool() {
+    fun create() {
         val fileSearchTool =
             FileSearchTool.builder()
                 .fileSearch(
@@ -23,7 +23,7 @@ class FileSearchToolTest {
                         .build()
                 )
                 .build()
-        assertThat(fileSearchTool).isNotNull
+
         assertThat(fileSearchTool.fileSearch())
             .contains(
                 FileSearchTool.FileSearch.builder()

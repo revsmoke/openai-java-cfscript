@@ -5,10 +5,10 @@ package com.openai.models.responses
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ResponseTextAnnotationDeltaEventTest {
+internal class ResponseTextAnnotationDeltaEventTest {
 
     @Test
-    fun createResponseTextAnnotationDeltaEvent() {
+    fun create() {
         val responseTextAnnotationDeltaEvent =
             ResponseTextAnnotationDeltaEvent.builder()
                 .annotation(
@@ -22,7 +22,7 @@ class ResponseTextAnnotationDeltaEventTest {
                 .itemId("item_id")
                 .outputIndex(0L)
                 .build()
-        assertThat(responseTextAnnotationDeltaEvent).isNotNull
+
         assertThat(responseTextAnnotationDeltaEvent.annotation())
             .isEqualTo(
                 ResponseTextAnnotationDeltaEvent.Annotation.ofFileCitation(

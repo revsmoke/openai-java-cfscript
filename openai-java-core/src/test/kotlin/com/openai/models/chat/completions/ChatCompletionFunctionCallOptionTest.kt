@@ -5,13 +5,13 @@ package com.openai.models.chat.completions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ChatCompletionFunctionCallOptionTest {
+internal class ChatCompletionFunctionCallOptionTest {
 
     @Test
-    fun createChatCompletionFunctionCallOption() {
+    fun create() {
         val chatCompletionFunctionCallOption =
             ChatCompletionFunctionCallOption.builder().name("name").build()
-        assertThat(chatCompletionFunctionCallOption).isNotNull
+
         assertThat(chatCompletionFunctionCallOption.name()).isEqualTo("name")
     }
 }

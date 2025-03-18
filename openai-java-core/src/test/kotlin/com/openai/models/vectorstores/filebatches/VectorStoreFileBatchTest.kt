@@ -5,10 +5,10 @@ package com.openai.models.vectorstores.filebatches
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class VectorStoreFileBatchTest {
+internal class VectorStoreFileBatchTest {
 
     @Test
-    fun createVectorStoreFileBatch() {
+    fun create() {
         val vectorStoreFileBatch =
             VectorStoreFileBatch.builder()
                 .id("id")
@@ -25,7 +25,7 @@ class VectorStoreFileBatchTest {
                 .status(VectorStoreFileBatch.Status.IN_PROGRESS)
                 .vectorStoreId("vector_store_id")
                 .build()
-        assertThat(vectorStoreFileBatch).isNotNull
+
         assertThat(vectorStoreFileBatch.id()).isEqualTo("id")
         assertThat(vectorStoreFileBatch.createdAt()).isEqualTo(0L)
         assertThat(vectorStoreFileBatch.fileCounts())

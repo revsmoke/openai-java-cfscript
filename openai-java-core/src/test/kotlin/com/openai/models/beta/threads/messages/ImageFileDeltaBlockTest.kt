@@ -5,10 +5,10 @@ package com.openai.models.beta.threads.messages
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ImageFileDeltaBlockTest {
+internal class ImageFileDeltaBlockTest {
 
     @Test
-    fun createImageFileDeltaBlock() {
+    fun create() {
         val imageFileDeltaBlock =
             ImageFileDeltaBlock.builder()
                 .index(0L)
@@ -19,7 +19,7 @@ class ImageFileDeltaBlockTest {
                         .build()
                 )
                 .build()
-        assertThat(imageFileDeltaBlock).isNotNull
+
         assertThat(imageFileDeltaBlock.index()).isEqualTo(0L)
         assertThat(imageFileDeltaBlock.imageFile())
             .contains(

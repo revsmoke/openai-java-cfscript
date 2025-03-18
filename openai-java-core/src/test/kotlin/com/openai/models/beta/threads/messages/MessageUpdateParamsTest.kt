@@ -8,7 +8,7 @@ import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class MessageUpdateParamsTest {
+internal class MessageUpdateParamsTest {
 
     @Test
     fun create() {
@@ -19,6 +19,17 @@ class MessageUpdateParamsTest {
                 Metadata.builder().putAdditionalProperty("foo", JsonValue.from("string")).build()
             )
             .build()
+    }
+
+    @Test
+    fun pathParams() {
+        val params =
+            MessageUpdateParams.builder().threadId("thread_id").messageId("message_id").build()
+
+        assertThat(params._pathParam(0)).isEqualTo("thread_id")
+        assertThat(params._pathParam(1)).isEqualTo("message_id")
+        // out-of-bound path param
+        assertThat(params._pathParam(2)).isEqualTo("")
     }
 
     @Test
@@ -51,18 +62,5 @@ class MessageUpdateParamsTest {
         val body = params._body()
 
         assertNotNull(body)
-    }
-
-    @Test
-    fun getPathParam() {
-        val params =
-            MessageUpdateParams.builder().threadId("thread_id").messageId("message_id").build()
-        assertThat(params).isNotNull
-        // path param "threadId"
-        assertThat(params.getPathParam(0)).isEqualTo("thread_id")
-        // path param "messageId"
-        assertThat(params.getPathParam(1)).isEqualTo("message_id")
-        // out-of-bound path param
-        assertThat(params.getPathParam(2)).isEqualTo("")
     }
 }

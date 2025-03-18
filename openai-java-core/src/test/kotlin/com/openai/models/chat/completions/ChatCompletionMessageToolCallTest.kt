@@ -5,10 +5,10 @@ package com.openai.models.chat.completions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ChatCompletionMessageToolCallTest {
+internal class ChatCompletionMessageToolCallTest {
 
     @Test
-    fun createChatCompletionMessageToolCall() {
+    fun create() {
         val chatCompletionMessageToolCall =
             ChatCompletionMessageToolCall.builder()
                 .id("id")
@@ -19,7 +19,7 @@ class ChatCompletionMessageToolCallTest {
                         .build()
                 )
                 .build()
-        assertThat(chatCompletionMessageToolCall).isNotNull
+
         assertThat(chatCompletionMessageToolCall.id()).isEqualTo("id")
         assertThat(chatCompletionMessageToolCall.function())
             .isEqualTo(

@@ -5,10 +5,10 @@ package com.openai.models.images
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ImagesResponseTest {
+internal class ImagesResponseTest {
 
     @Test
-    fun createImagesResponse() {
+    fun create() {
         val imagesResponse =
             ImagesResponse.builder()
                 .created(0L)
@@ -20,7 +20,7 @@ class ImagesResponseTest {
                         .build()
                 )
                 .build()
-        assertThat(imagesResponse).isNotNull
+
         assertThat(imagesResponse.created()).isEqualTo(0L)
         assertThat(imagesResponse.data())
             .containsExactly(

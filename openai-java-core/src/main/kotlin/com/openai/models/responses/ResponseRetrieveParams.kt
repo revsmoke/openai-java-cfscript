@@ -33,21 +33,21 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    override fun _headers(): Headers = additionalHeaders
-
-    override fun _queryParams(): QueryParams {
-        val queryParams = QueryParams.builder()
-        this.include?.let { queryParams.put("include[]", it.map(Any::toString)) }
-        queryParams.putAll(additionalQueryParams)
-        return queryParams.build()
-    }
-
-    fun getPathParam(index: Int): String {
-        return when (index) {
+    fun _pathParam(index: Int): String =
+        when (index) {
             0 -> responseId
             else -> ""
         }
-    }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                include?.forEach { put("include[]", it.asString()) }
+                putAll(additionalQueryParams)
+            }
+            .build()
 
     fun toBuilder() = Builder().from(this)
 
@@ -91,15 +91,13 @@ private constructor(
             this.include = include?.toMutableList()
         }
 
-        /**
-         * Additional fields to include in the response. See the `include` parameter for Response
-         * creation above for more information.
-         */
+        /** Alias for calling [Builder.include] with `include.orElse(null)`. */
         fun include(include: Optional<List<ResponseIncludable>>) = include(include.getOrNull())
 
         /**
-         * Additional fields to include in the response. See the `include` parameter for Response
-         * creation above for more information.
+         * Adds a single [ResponseIncludable] to [Builder.include].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
          */
         fun addInclude(include: ResponseIncludable) = apply {
             this.include = (this.include ?: mutableListOf()).apply { add(include) }
@@ -203,6 +201,18 @@ private constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [ResponseRetrieveParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .responseId()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): ResponseRetrieveParams =
             ResponseRetrieveParams(
                 checkRequired("responseId", responseId),

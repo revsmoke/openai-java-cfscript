@@ -5,10 +5,10 @@ package com.openai.models.beta.threads.runs
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class RequiredActionFunctionToolCallTest {
+internal class RequiredActionFunctionToolCallTest {
 
     @Test
-    fun createRequiredActionFunctionToolCall() {
+    fun create() {
         val requiredActionFunctionToolCall =
             RequiredActionFunctionToolCall.builder()
                 .id("id")
@@ -19,7 +19,7 @@ class RequiredActionFunctionToolCallTest {
                         .build()
                 )
                 .build()
-        assertThat(requiredActionFunctionToolCall).isNotNull
+
         assertThat(requiredActionFunctionToolCall.id()).isEqualTo("id")
         assertThat(requiredActionFunctionToolCall.function())
             .isEqualTo(

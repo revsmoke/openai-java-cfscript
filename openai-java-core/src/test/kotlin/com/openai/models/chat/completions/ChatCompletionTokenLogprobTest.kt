@@ -2,13 +2,14 @@
 
 package com.openai.models.chat.completions
 
+import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ChatCompletionTokenLogprobTest {
+internal class ChatCompletionTokenLogprobTest {
 
     @Test
-    fun createChatCompletionTokenLogprob() {
+    fun create() {
         val chatCompletionTokenLogprob =
             ChatCompletionTokenLogprob.builder()
                 .token("token")
@@ -22,9 +23,9 @@ class ChatCompletionTokenLogprobTest {
                         .build()
                 )
                 .build()
-        assertThat(chatCompletionTokenLogprob).isNotNull
+
         assertThat(chatCompletionTokenLogprob.token()).isEqualTo("token")
-        assertThat(chatCompletionTokenLogprob.bytes().get()).containsExactly(0L)
+        assertThat(chatCompletionTokenLogprob.bytes().getOrNull()).containsExactly(0L)
         assertThat(chatCompletionTokenLogprob.logprob()).isEqualTo(0.0)
         assertThat(chatCompletionTokenLogprob.topLogprobs())
             .containsExactly(

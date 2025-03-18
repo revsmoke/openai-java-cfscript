@@ -8,7 +8,7 @@ import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class VectorStoreUpdateParamsTest {
+internal class VectorStoreUpdateParamsTest {
 
     @Test
     fun create() {
@@ -20,6 +20,15 @@ class VectorStoreUpdateParamsTest {
             )
             .name("name")
             .build()
+    }
+
+    @Test
+    fun pathParams() {
+        val params = VectorStoreUpdateParams.builder().vectorStoreId("vector_store_id").build()
+
+        assertThat(params._pathParam(0)).isEqualTo("vector_store_id")
+        // out-of-bound path param
+        assertThat(params._pathParam(1)).isEqualTo("")
     }
 
     @Test
@@ -55,15 +64,5 @@ class VectorStoreUpdateParamsTest {
         val body = params._body()
 
         assertNotNull(body)
-    }
-
-    @Test
-    fun getPathParam() {
-        val params = VectorStoreUpdateParams.builder().vectorStoreId("vector_store_id").build()
-        assertThat(params).isNotNull
-        // path param "vectorStoreId"
-        assertThat(params.getPathParam(0)).isEqualTo("vector_store_id")
-        // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
     }
 }

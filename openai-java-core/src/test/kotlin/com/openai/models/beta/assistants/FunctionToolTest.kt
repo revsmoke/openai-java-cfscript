@@ -8,10 +8,10 @@ import com.openai.models.FunctionParameters
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class FunctionToolTest {
+internal class FunctionToolTest {
 
     @Test
-    fun createFunctionTool() {
+    fun create() {
         val functionTool =
             FunctionTool.builder()
                 .function(
@@ -27,7 +27,7 @@ class FunctionToolTest {
                         .build()
                 )
                 .build()
-        assertThat(functionTool).isNotNull
+
         assertThat(functionTool.function())
             .isEqualTo(
                 FunctionDefinition.builder()

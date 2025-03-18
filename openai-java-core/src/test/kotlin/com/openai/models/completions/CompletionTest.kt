@@ -6,10 +6,10 @@ import com.openai.core.JsonValue
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class CompletionTest {
+internal class CompletionTest {
 
     @Test
-    fun createCompletion() {
+    fun create() {
         val completion =
             Completion.builder()
                 .id("id")
@@ -57,7 +57,7 @@ class CompletionTest {
                         .build()
                 )
                 .build()
-        assertThat(completion).isNotNull
+
         assertThat(completion.id()).isEqualTo("id")
         assertThat(completion.choices())
             .containsExactly(

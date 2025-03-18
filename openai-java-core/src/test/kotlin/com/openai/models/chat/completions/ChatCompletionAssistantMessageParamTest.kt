@@ -2,13 +2,14 @@
 
 package com.openai.models.chat.completions
 
+import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ChatCompletionAssistantMessageParamTest {
+internal class ChatCompletionAssistantMessageParamTest {
 
     @Test
-    fun createChatCompletionAssistantMessageParam() {
+    fun create() {
         val chatCompletionAssistantMessageParam =
             ChatCompletionAssistantMessageParam.builder()
                 .audio(ChatCompletionAssistantMessageParam.Audio.builder().id("id").build())
@@ -33,7 +34,7 @@ class ChatCompletionAssistantMessageParamTest {
                         .build()
                 )
                 .build()
-        assertThat(chatCompletionAssistantMessageParam).isNotNull
+
         assertThat(chatCompletionAssistantMessageParam.audio())
             .contains(ChatCompletionAssistantMessageParam.Audio.builder().id("id").build())
         assertThat(chatCompletionAssistantMessageParam.content())
@@ -47,7 +48,7 @@ class ChatCompletionAssistantMessageParamTest {
             )
         assertThat(chatCompletionAssistantMessageParam.name()).contains("name")
         assertThat(chatCompletionAssistantMessageParam.refusal()).contains("refusal")
-        assertThat(chatCompletionAssistantMessageParam.toolCalls().get())
+        assertThat(chatCompletionAssistantMessageParam.toolCalls().getOrNull())
             .containsExactly(
                 ChatCompletionMessageToolCall.builder()
                     .id("id")

@@ -6,10 +6,10 @@ import com.openai.core.JsonValue
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class VectorStoreSearchResponseTest {
+internal class VectorStoreSearchResponseTest {
 
     @Test
-    fun createVectorStoreSearchResponse() {
+    fun create() {
         val vectorStoreSearchResponse =
             VectorStoreSearchResponse.builder()
                 .attributes(
@@ -27,7 +27,7 @@ class VectorStoreSearchResponseTest {
                 .filename("filename")
                 .score(0.0)
                 .build()
-        assertThat(vectorStoreSearchResponse).isNotNull
+
         assertThat(vectorStoreSearchResponse.attributes())
             .contains(
                 VectorStoreSearchResponse.Attributes.builder()

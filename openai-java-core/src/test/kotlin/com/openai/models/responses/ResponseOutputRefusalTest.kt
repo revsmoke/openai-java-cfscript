@@ -5,12 +5,12 @@ package com.openai.models.responses
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ResponseOutputRefusalTest {
+internal class ResponseOutputRefusalTest {
 
     @Test
-    fun createResponseOutputRefusal() {
+    fun create() {
         val responseOutputRefusal = ResponseOutputRefusal.builder().refusal("refusal").build()
-        assertThat(responseOutputRefusal).isNotNull
+
         assertThat(responseOutputRefusal.refusal()).isEqualTo("refusal")
     }
 }

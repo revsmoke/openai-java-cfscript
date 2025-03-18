@@ -5,10 +5,10 @@ package com.openai.models.beta.threads.runs.steps
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ToolCallsStepDetailsTest {
+internal class ToolCallsStepDetailsTest {
 
     @Test
-    fun createToolCallsStepDetails() {
+    fun create() {
         val toolCallsStepDetails =
             ToolCallsStepDetails.builder()
                 .addToolCall(
@@ -23,7 +23,7 @@ class ToolCallsStepDetailsTest {
                         .build()
                 )
                 .build()
-        assertThat(toolCallsStepDetails).isNotNull
+
         assertThat(toolCallsStepDetails.toolCalls())
             .containsExactly(
                 ToolCall.ofCodeInterpreter(

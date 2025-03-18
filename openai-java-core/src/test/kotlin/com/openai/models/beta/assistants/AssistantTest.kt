@@ -8,10 +8,10 @@ import com.openai.models.beta.threads.AssistantResponseFormatOption
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class AssistantTest {
+internal class AssistantTest {
 
     @Test
-    fun createAssistant() {
+    fun create() {
         val assistant =
             Assistant.builder()
                 .id("id")
@@ -44,7 +44,7 @@ class AssistantTest {
                 )
                 .topP(1.0)
                 .build()
-        assertThat(assistant).isNotNull
+
         assertThat(assistant.id()).isEqualTo("id")
         assertThat(assistant.createdAt()).isEqualTo(0L)
         assertThat(assistant.description()).contains("description")

@@ -12,10 +12,10 @@ import com.openai.models.ResponseFormatText
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ResponseCreatedEventTest {
+internal class ResponseCreatedEventTest {
 
     @Test
-    fun createResponseCreatedEvent() {
+    fun create() {
         val responseCreatedEvent =
             ResponseCreatedEvent.builder()
                 .response(
@@ -111,7 +111,7 @@ class ResponseCreatedEventTest {
                         .build()
                 )
                 .build()
-        assertThat(responseCreatedEvent).isNotNull
+
         assertThat(responseCreatedEvent.response())
             .isEqualTo(
                 Response.builder()

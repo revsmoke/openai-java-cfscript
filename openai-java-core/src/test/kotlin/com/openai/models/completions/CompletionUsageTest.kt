@@ -5,10 +5,10 @@ package com.openai.models.completions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class CompletionUsageTest {
+internal class CompletionUsageTest {
 
     @Test
-    fun createCompletionUsage() {
+    fun create() {
         val completionUsage =
             CompletionUsage.builder()
                 .completionTokens(0L)
@@ -29,7 +29,7 @@ class CompletionUsageTest {
                         .build()
                 )
                 .build()
-        assertThat(completionUsage).isNotNull
+
         assertThat(completionUsage.completionTokens()).isEqualTo(0L)
         assertThat(completionUsage.promptTokens()).isEqualTo(0L)
         assertThat(completionUsage.totalTokens()).isEqualTo(0L)

@@ -5,13 +5,13 @@ package com.openai.models.responses
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ToolChoiceTypesTest {
+internal class ToolChoiceTypesTest {
 
     @Test
-    fun createToolChoiceTypes() {
+    fun create() {
         val toolChoiceTypes =
             ToolChoiceTypes.builder().type(ToolChoiceTypes.Type.FILE_SEARCH).build()
-        assertThat(toolChoiceTypes).isNotNull
+
         assertThat(toolChoiceTypes.type()).isEqualTo(ToolChoiceTypes.Type.FILE_SEARCH)
     }
 }

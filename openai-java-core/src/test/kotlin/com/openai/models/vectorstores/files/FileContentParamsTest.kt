@@ -5,7 +5,7 @@ package com.openai.models.vectorstores.files
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class FileContentParamsTest {
+internal class FileContentParamsTest {
 
     @Test
     fun create() {
@@ -13,15 +13,13 @@ class FileContentParamsTest {
     }
 
     @Test
-    fun getPathParam() {
+    fun pathParams() {
         val params =
             FileContentParams.builder().vectorStoreId("vs_abc123").fileId("file-abc123").build()
-        assertThat(params).isNotNull
-        // path param "vectorStoreId"
-        assertThat(params.getPathParam(0)).isEqualTo("vs_abc123")
-        // path param "fileId"
-        assertThat(params.getPathParam(1)).isEqualTo("file-abc123")
+
+        assertThat(params._pathParam(0)).isEqualTo("vs_abc123")
+        assertThat(params._pathParam(1)).isEqualTo("file-abc123")
         // out-of-bound path param
-        assertThat(params.getPathParam(2)).isEqualTo("")
+        assertThat(params._pathParam(2)).isEqualTo("")
     }
 }

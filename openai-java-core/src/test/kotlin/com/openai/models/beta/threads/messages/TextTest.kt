@@ -5,10 +5,10 @@ package com.openai.models.beta.threads.messages
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class TextTest {
+internal class TextTest {
 
     @Test
-    fun createText() {
+    fun create() {
         val text =
             Text.builder()
                 .addAnnotation(
@@ -23,7 +23,7 @@ class TextTest {
                 )
                 .value("value")
                 .build()
-        assertThat(text).isNotNull
+
         assertThat(text.annotations())
             .containsExactly(
                 Annotation.ofFileCitation(

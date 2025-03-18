@@ -2,13 +2,14 @@
 
 package com.openai.models.beta.threads.messages
 
+import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class MessageDeltaTest {
+internal class MessageDeltaTest {
 
     @Test
-    fun createMessageDelta() {
+    fun create() {
         val messageDelta =
             MessageDelta.builder()
                 .addContent(
@@ -24,8 +25,8 @@ class MessageDeltaTest {
                 )
                 .role(MessageDelta.Role.USER)
                 .build()
-        assertThat(messageDelta).isNotNull
-        assertThat(messageDelta.content().get())
+
+        assertThat(messageDelta.content().getOrNull())
             .containsExactly(
                 MessageContentDelta.ofImageFile(
                     ImageFileDeltaBlock.builder()

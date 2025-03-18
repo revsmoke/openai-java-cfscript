@@ -5,10 +5,10 @@ package com.openai.models.beta.threads.runs.steps
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class MessageCreationStepDetailsTest {
+internal class MessageCreationStepDetailsTest {
 
     @Test
-    fun createMessageCreationStepDetails() {
+    fun create() {
         val messageCreationStepDetails =
             MessageCreationStepDetails.builder()
                 .messageCreation(
@@ -17,7 +17,7 @@ class MessageCreationStepDetailsTest {
                         .build()
                 )
                 .build()
-        assertThat(messageCreationStepDetails).isNotNull
+
         assertThat(messageCreationStepDetails.messageCreation())
             .isEqualTo(
                 MessageCreationStepDetails.MessageCreation.builder().messageId("message_id").build()

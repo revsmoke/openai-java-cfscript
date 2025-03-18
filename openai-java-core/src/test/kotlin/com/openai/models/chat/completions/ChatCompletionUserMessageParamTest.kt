@@ -5,13 +5,13 @@ package com.openai.models.chat.completions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ChatCompletionUserMessageParamTest {
+internal class ChatCompletionUserMessageParamTest {
 
     @Test
-    fun createChatCompletionUserMessageParam() {
+    fun create() {
         val chatCompletionUserMessageParam =
             ChatCompletionUserMessageParam.builder().content("string").name("name").build()
-        assertThat(chatCompletionUserMessageParam).isNotNull
+
         assertThat(chatCompletionUserMessageParam.content())
             .isEqualTo(ChatCompletionUserMessageParam.Content.ofText("string"))
         assertThat(chatCompletionUserMessageParam.name()).contains("name")

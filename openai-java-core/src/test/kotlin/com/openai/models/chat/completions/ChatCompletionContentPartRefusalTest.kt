@@ -5,13 +5,13 @@ package com.openai.models.chat.completions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ChatCompletionContentPartRefusalTest {
+internal class ChatCompletionContentPartRefusalTest {
 
     @Test
-    fun createChatCompletionContentPartRefusal() {
+    fun create() {
         val chatCompletionContentPartRefusal =
             ChatCompletionContentPartRefusal.builder().refusal("refusal").build()
-        assertThat(chatCompletionContentPartRefusal).isNotNull
+
         assertThat(chatCompletionContentPartRefusal.refusal()).isEqualTo("refusal")
     }
 }

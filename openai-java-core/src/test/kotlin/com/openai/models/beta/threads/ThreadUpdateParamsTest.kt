@@ -8,7 +8,7 @@ import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ThreadUpdateParamsTest {
+internal class ThreadUpdateParamsTest {
 
     @Test
     fun create() {
@@ -32,6 +32,15 @@ class ThreadUpdateParamsTest {
                     .build()
             )
             .build()
+    }
+
+    @Test
+    fun pathParams() {
+        val params = ThreadUpdateParams.builder().threadId("thread_id").build()
+
+        assertThat(params._pathParam(0)).isEqualTo("thread_id")
+        // out-of-bound path param
+        assertThat(params._pathParam(1)).isEqualTo("")
     }
 
     @Test
@@ -91,15 +100,5 @@ class ThreadUpdateParamsTest {
         val body = params._body()
 
         assertNotNull(body)
-    }
-
-    @Test
-    fun getPathParam() {
-        val params = ThreadUpdateParams.builder().threadId("thread_id").build()
-        assertThat(params).isNotNull
-        // path param "threadId"
-        assertThat(params.getPathParam(0)).isEqualTo("thread_id")
-        // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
     }
 }

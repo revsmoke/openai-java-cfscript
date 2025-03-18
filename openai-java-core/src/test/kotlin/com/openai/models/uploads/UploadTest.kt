@@ -6,10 +6,10 @@ import com.openai.models.files.FileObject
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class UploadTest {
+internal class UploadTest {
 
     @Test
-    fun createUpload() {
+    fun create() {
         val upload =
             Upload.builder()
                 .id("id")
@@ -32,7 +32,7 @@ class UploadTest {
                         .build()
                 )
                 .build()
-        assertThat(upload).isNotNull
+
         assertThat(upload.id()).isEqualTo("id")
         assertThat(upload.bytes()).isEqualTo(0L)
         assertThat(upload.createdAt()).isEqualTo(0L)

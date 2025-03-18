@@ -5,16 +5,16 @@ package com.openai.models.vectorstores
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class StaticFileChunkingStrategyTest {
+internal class StaticFileChunkingStrategyTest {
 
     @Test
-    fun createStaticFileChunkingStrategy() {
+    fun create() {
         val staticFileChunkingStrategy =
             StaticFileChunkingStrategy.builder()
                 .chunkOverlapTokens(0L)
                 .maxChunkSizeTokens(100L)
                 .build()
-        assertThat(staticFileChunkingStrategy).isNotNull
+
         assertThat(staticFileChunkingStrategy.chunkOverlapTokens()).isEqualTo(0L)
         assertThat(staticFileChunkingStrategy.maxChunkSizeTokens()).isEqualTo(100L)
     }

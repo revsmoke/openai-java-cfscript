@@ -5,10 +5,10 @@ package com.openai.models.beta.threads.runs.steps
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class CodeInterpreterToolCallTest {
+internal class CodeInterpreterToolCallTest {
 
     @Test
-    fun createCodeInterpreterToolCall() {
+    fun create() {
         val codeInterpreterToolCall =
             CodeInterpreterToolCall.builder()
                 .id("id")
@@ -19,7 +19,7 @@ class CodeInterpreterToolCallTest {
                         .build()
                 )
                 .build()
-        assertThat(codeInterpreterToolCall).isNotNull
+
         assertThat(codeInterpreterToolCall.id()).isEqualTo("id")
         assertThat(codeInterpreterToolCall.codeInterpreter())
             .isEqualTo(

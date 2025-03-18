@@ -5,7 +5,7 @@ package com.openai.models.beta.assistants
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class AssistantRetrieveParamsTest {
+internal class AssistantRetrieveParamsTest {
 
     @Test
     fun create() {
@@ -13,12 +13,11 @@ class AssistantRetrieveParamsTest {
     }
 
     @Test
-    fun getPathParam() {
+    fun pathParams() {
         val params = AssistantRetrieveParams.builder().assistantId("assistant_id").build()
-        assertThat(params).isNotNull
-        // path param "assistantId"
-        assertThat(params.getPathParam(0)).isEqualTo("assistant_id")
+
+        assertThat(params._pathParam(0)).isEqualTo("assistant_id")
         // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
+        assertThat(params._pathParam(1)).isEqualTo("")
     }
 }

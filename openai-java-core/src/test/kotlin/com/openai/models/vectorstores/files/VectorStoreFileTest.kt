@@ -9,10 +9,10 @@ import com.openai.models.vectorstores.StaticFileChunkingStrategyObject
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class VectorStoreFileTest {
+internal class VectorStoreFileTest {
 
     @Test
-    fun createVectorStoreFile() {
+    fun create() {
         val vectorStoreFile =
             VectorStoreFile.builder()
                 .id("id")
@@ -38,7 +38,7 @@ class VectorStoreFileTest {
                         .build()
                 )
                 .build()
-        assertThat(vectorStoreFile).isNotNull
+
         assertThat(vectorStoreFile.id()).isEqualTo("id")
         assertThat(vectorStoreFile.createdAt()).isEqualTo(0L)
         assertThat(vectorStoreFile.lastError())

@@ -11,10 +11,10 @@ import com.openai.models.beta.threads.AssistantToolChoiceOption
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class RunTest {
+internal class RunTest {
 
     @Test
-    fun createRun() {
+    fun create() {
         val run =
             Run.builder()
                 .id("id")
@@ -86,7 +86,7 @@ class RunTest {
                 .temperature(0.0)
                 .topP(0.0)
                 .build()
-        assertThat(run).isNotNull
+
         assertThat(run.id()).isEqualTo("id")
         assertThat(run.assistantId()).isEqualTo("assistant_id")
         assertThat(run.cancelledAt()).contains(0L)

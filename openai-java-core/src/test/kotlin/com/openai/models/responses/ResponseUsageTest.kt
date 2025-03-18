@@ -5,10 +5,10 @@ package com.openai.models.responses
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ResponseUsageTest {
+internal class ResponseUsageTest {
 
     @Test
-    fun createResponseUsage() {
+    fun create() {
         val responseUsage =
             ResponseUsage.builder()
                 .inputTokens(0L)
@@ -18,7 +18,7 @@ class ResponseUsageTest {
                 )
                 .totalTokens(0L)
                 .build()
-        assertThat(responseUsage).isNotNull
+
         assertThat(responseUsage.inputTokens()).isEqualTo(0L)
         assertThat(responseUsage.outputTokens()).isEqualTo(0L)
         assertThat(responseUsage.outputTokensDetails())

@@ -5,10 +5,10 @@ package com.openai.models.vectorstores
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class StaticFileChunkingStrategyObjectTest {
+internal class StaticFileChunkingStrategyObjectTest {
 
     @Test
-    fun createStaticFileChunkingStrategyObject() {
+    fun create() {
         val staticFileChunkingStrategyObject =
             StaticFileChunkingStrategyObject.builder()
                 .static_(
@@ -18,7 +18,7 @@ class StaticFileChunkingStrategyObjectTest {
                         .build()
                 )
                 .build()
-        assertThat(staticFileChunkingStrategyObject).isNotNull
+
         assertThat(staticFileChunkingStrategyObject.static_())
             .isEqualTo(
                 StaticFileChunkingStrategy.builder()

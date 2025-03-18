@@ -53,15 +53,16 @@ private constructor(
 
     override fun _headers(): Headers = additionalHeaders
 
-    override fun _queryParams(): QueryParams {
-        val queryParams = QueryParams.builder()
-        this.after?.let { queryParams.put("after", listOf(it.toString())) }
-        this.limit?.let { queryParams.put("limit", listOf(it.toString())) }
-        this.order?.let { queryParams.put("order", listOf(it.toString())) }
-        this.purpose?.let { queryParams.put("purpose", listOf(it.toString())) }
-        queryParams.putAll(additionalQueryParams)
-        return queryParams.build()
-    }
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                after?.let { put("after", it) }
+                limit?.let { put("limit", it.toString()) }
+                order?.let { put("order", it.asString()) }
+                purpose?.let { put("purpose", it) }
+                putAll(additionalQueryParams)
+            }
+            .build()
 
     fun toBuilder() = Builder().from(this)
 
@@ -102,12 +103,7 @@ private constructor(
          */
         fun after(after: String?) = apply { this.after = after }
 
-        /**
-         * A cursor for use in pagination. `after` is an object ID that defines your place in the
-         * list. For instance, if you make a list request and receive 100 objects, ending with
-         * obj_foo, your subsequent call can include after=obj_foo in order to fetch the next page
-         * of the list.
-         */
+        /** Alias for calling [Builder.after] with `after.orElse(null)`. */
         fun after(after: Optional<String>) = after(after.getOrNull())
 
         /**
@@ -117,15 +113,13 @@ private constructor(
         fun limit(limit: Long?) = apply { this.limit = limit }
 
         /**
-         * A limit on the number of objects to be returned. Limit can range between 1 and 10,000,
-         * and the default is 10,000.
+         * Alias for [Builder.limit].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
          */
         fun limit(limit: Long) = limit(limit as Long?)
 
-        /**
-         * A limit on the number of objects to be returned. Limit can range between 1 and 10,000,
-         * and the default is 10,000.
-         */
+        /** Alias for calling [Builder.limit] with `limit.orElse(null)`. */
         fun limit(limit: Optional<Long>) = limit(limit.getOrNull())
 
         /**
@@ -134,16 +128,13 @@ private constructor(
          */
         fun order(order: Order?) = apply { this.order = order }
 
-        /**
-         * Sort order by the `created_at` timestamp of the objects. `asc` for ascending order and
-         * `desc` for descending order.
-         */
+        /** Alias for calling [Builder.order] with `order.orElse(null)`. */
         fun order(order: Optional<Order>) = order(order.getOrNull())
 
         /** Only return files with the given purpose. */
         fun purpose(purpose: String?) = apply { this.purpose = purpose }
 
-        /** Only return files with the given purpose. */
+        /** Alias for calling [Builder.purpose] with `purpose.orElse(null)`. */
         fun purpose(purpose: Optional<String>) = purpose(purpose.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
@@ -244,6 +235,11 @@ private constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [FileListParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): FileListParams =
             FileListParams(
                 after,

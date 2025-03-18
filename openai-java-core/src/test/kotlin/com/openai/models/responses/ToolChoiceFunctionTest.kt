@@ -5,12 +5,12 @@ package com.openai.models.responses
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ToolChoiceFunctionTest {
+internal class ToolChoiceFunctionTest {
 
     @Test
-    fun createToolChoiceFunction() {
+    fun create() {
         val toolChoiceFunction = ToolChoiceFunction.builder().name("name").build()
-        assertThat(toolChoiceFunction).isNotNull
+
         assertThat(toolChoiceFunction.name()).isEqualTo("name")
     }
 }

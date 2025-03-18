@@ -5,10 +5,10 @@ package com.openai.models.finetuning.jobs.checkpoints
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class FineTuningJobCheckpointTest {
+internal class FineTuningJobCheckpointTest {
 
     @Test
-    fun createFineTuningJobCheckpoint() {
+    fun create() {
         val fineTuningJobCheckpoint =
             FineTuningJobCheckpoint.builder()
                 .id("id")
@@ -28,7 +28,7 @@ class FineTuningJobCheckpointTest {
                 )
                 .stepNumber(0L)
                 .build()
-        assertThat(fineTuningJobCheckpoint).isNotNull
+
         assertThat(fineTuningJobCheckpoint.id()).isEqualTo("id")
         assertThat(fineTuningJobCheckpoint.createdAt()).isEqualTo(0L)
         assertThat(fineTuningJobCheckpoint.fineTunedModelCheckpoint())

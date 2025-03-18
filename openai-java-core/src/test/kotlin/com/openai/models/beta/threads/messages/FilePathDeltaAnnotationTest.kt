@@ -5,10 +5,10 @@ package com.openai.models.beta.threads.messages
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class FilePathDeltaAnnotationTest {
+internal class FilePathDeltaAnnotationTest {
 
     @Test
-    fun createFilePathDeltaAnnotation() {
+    fun create() {
         val filePathDeltaAnnotation =
             FilePathDeltaAnnotation.builder()
                 .index(0L)
@@ -17,7 +17,7 @@ class FilePathDeltaAnnotationTest {
                 .startIndex(0L)
                 .text("text")
                 .build()
-        assertThat(filePathDeltaAnnotation).isNotNull
+
         assertThat(filePathDeltaAnnotation.index()).isEqualTo(0L)
         assertThat(filePathDeltaAnnotation.endIndex()).contains(0L)
         assertThat(filePathDeltaAnnotation.filePath())

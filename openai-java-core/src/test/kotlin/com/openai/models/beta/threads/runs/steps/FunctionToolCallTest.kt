@@ -5,10 +5,10 @@ package com.openai.models.beta.threads.runs.steps
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class FunctionToolCallTest {
+internal class FunctionToolCallTest {
 
     @Test
-    fun createFunctionToolCall() {
+    fun create() {
         val functionToolCall =
             FunctionToolCall.builder()
                 .id("id")
@@ -20,7 +20,7 @@ class FunctionToolCallTest {
                         .build()
                 )
                 .build()
-        assertThat(functionToolCall).isNotNull
+
         assertThat(functionToolCall.id()).isEqualTo("id")
         assertThat(functionToolCall.function())
             .isEqualTo(

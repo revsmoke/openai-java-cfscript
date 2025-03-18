@@ -3,13 +3,14 @@
 package com.openai.models.responses
 
 import com.openai.core.JsonValue
+import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ResponseFileSearchToolCallTest {
+internal class ResponseFileSearchToolCallTest {
 
     @Test
-    fun createResponseFileSearchToolCall() {
+    fun create() {
         val responseFileSearchToolCall =
             ResponseFileSearchToolCall.builder()
                 .id("id")
@@ -29,12 +30,12 @@ class ResponseFileSearchToolCallTest {
                         .build()
                 )
                 .build()
-        assertThat(responseFileSearchToolCall).isNotNull
+
         assertThat(responseFileSearchToolCall.id()).isEqualTo("id")
         assertThat(responseFileSearchToolCall.queries()).containsExactly("string")
         assertThat(responseFileSearchToolCall.status())
             .isEqualTo(ResponseFileSearchToolCall.Status.IN_PROGRESS)
-        assertThat(responseFileSearchToolCall.results().get())
+        assertThat(responseFileSearchToolCall.results().getOrNull())
             .containsExactly(
                 ResponseFileSearchToolCall.Result.builder()
                     .attributes(

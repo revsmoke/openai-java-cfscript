@@ -5,12 +5,12 @@ package com.openai.models.responses
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ResponseAudioDeltaEventTest {
+internal class ResponseAudioDeltaEventTest {
 
     @Test
-    fun createResponseAudioDeltaEvent() {
+    fun create() {
         val responseAudioDeltaEvent = ResponseAudioDeltaEvent.builder().delta("delta").build()
-        assertThat(responseAudioDeltaEvent).isNotNull
+
         assertThat(responseAudioDeltaEvent.delta()).isEqualTo("delta")
     }
 }

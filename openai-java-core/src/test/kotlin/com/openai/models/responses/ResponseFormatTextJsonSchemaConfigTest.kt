@@ -6,10 +6,10 @@ import com.openai.core.JsonValue
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ResponseFormatTextJsonSchemaConfigTest {
+internal class ResponseFormatTextJsonSchemaConfigTest {
 
     @Test
-    fun createResponseFormatTextJsonSchemaConfig() {
+    fun create() {
         val responseFormatTextJsonSchemaConfig =
             ResponseFormatTextJsonSchemaConfig.builder()
                 .schema(
@@ -21,7 +21,7 @@ class ResponseFormatTextJsonSchemaConfigTest {
                 .name("name")
                 .strict(true)
                 .build()
-        assertThat(responseFormatTextJsonSchemaConfig).isNotNull
+
         assertThat(responseFormatTextJsonSchemaConfig.schema())
             .isEqualTo(
                 ResponseFormatTextJsonSchemaConfig.Schema.builder()

@@ -5,10 +5,10 @@ package com.openai.models.beta.threads.runs.steps
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class CodeInterpreterToolCallDeltaTest {
+internal class CodeInterpreterToolCallDeltaTest {
 
     @Test
-    fun createCodeInterpreterToolCallDelta() {
+    fun create() {
         val codeInterpreterToolCallDelta =
             CodeInterpreterToolCallDelta.builder()
                 .index(0L)
@@ -20,7 +20,7 @@ class CodeInterpreterToolCallDeltaTest {
                         .build()
                 )
                 .build()
-        assertThat(codeInterpreterToolCallDelta).isNotNull
+
         assertThat(codeInterpreterToolCallDelta.index()).isEqualTo(0L)
         assertThat(codeInterpreterToolCallDelta.id()).contains("id")
         assertThat(codeInterpreterToolCallDelta.codeInterpreter())

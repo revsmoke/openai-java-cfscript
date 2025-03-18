@@ -6,7 +6,7 @@ import com.openai.core.http.QueryParams
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class StepListParamsTest {
+internal class StepListParamsTest {
 
     @Test
     fun create() {
@@ -22,6 +22,16 @@ class StepListParamsTest {
     }
 
     @Test
+    fun pathParams() {
+        val params = StepListParams.builder().threadId("thread_id").runId("run_id").build()
+
+        assertThat(params._pathParam(0)).isEqualTo("thread_id")
+        assertThat(params._pathParam(1)).isEqualTo("run_id")
+        // out-of-bound path param
+        assertThat(params._pathParam(2)).isEqualTo("")
+    }
+
+    @Test
     fun queryParams() {
         val params =
             StepListParams.builder()
@@ -33,34 +43,27 @@ class StepListParamsTest {
                 .limit(0L)
                 .order(StepListParams.Order.ASC)
                 .build()
-        val expected = QueryParams.builder()
-        expected.put("after", "after")
-        expected.put("before", "before")
-        expected.put(
-            "include[]",
-            RunStepInclude.STEP_DETAILS_TOOL_CALLS_FILE_SEARCH_RESULTS_CONTENT.toString(),
-        )
-        expected.put("limit", "0")
-        expected.put("order", StepListParams.Order.ASC.toString())
-        assertThat(params._queryParams()).isEqualTo(expected.build())
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams)
+            .isEqualTo(
+                QueryParams.builder()
+                    .put("after", "after")
+                    .put("before", "before")
+                    .put("include[]", "step_details.tool_calls[*].file_search.results[*].content")
+                    .put("limit", "0")
+                    .put("order", "asc")
+                    .build()
+            )
     }
 
     @Test
     fun queryParamsWithoutOptionalFields() {
         val params = StepListParams.builder().threadId("thread_id").runId("run_id").build()
-        val expected = QueryParams.builder()
-        assertThat(params._queryParams()).isEqualTo(expected.build())
-    }
 
-    @Test
-    fun getPathParam() {
-        val params = StepListParams.builder().threadId("thread_id").runId("run_id").build()
-        assertThat(params).isNotNull
-        // path param "threadId"
-        assertThat(params.getPathParam(0)).isEqualTo("thread_id")
-        // path param "runId"
-        assertThat(params.getPathParam(1)).isEqualTo("run_id")
-        // out-of-bound path param
-        assertThat(params.getPathParam(2)).isEqualTo("")
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams).isEqualTo(QueryParams.builder().build())
     }
 }

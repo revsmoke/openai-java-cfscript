@@ -5,10 +5,10 @@ package com.openai.models
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class CompoundFilterTest {
+internal class CompoundFilterTest {
 
     @Test
-    fun createCompoundFilter() {
+    fun create() {
         val compoundFilter =
             CompoundFilter.builder()
                 .addFilter(
@@ -20,7 +20,7 @@ class CompoundFilterTest {
                 )
                 .type(CompoundFilter.Type.AND)
                 .build()
-        assertThat(compoundFilter).isNotNull
+
         assertThat(compoundFilter.filters())
             .containsExactly(
                 CompoundFilter.Filter.ofComparison(

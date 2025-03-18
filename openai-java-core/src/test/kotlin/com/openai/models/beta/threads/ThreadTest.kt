@@ -7,10 +7,10 @@ import com.openai.models.Metadata
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ThreadTest {
+internal class ThreadTest {
 
     @Test
-    fun createThread() {
+    fun create() {
         val thread =
             Thread.builder()
                 .id("id")
@@ -35,7 +35,7 @@ class ThreadTest {
                         .build()
                 )
                 .build()
-        assertThat(thread).isNotNull
+
         assertThat(thread.id()).isEqualTo("id")
         assertThat(thread.createdAt()).isEqualTo(0L)
         assertThat(thread.metadata())

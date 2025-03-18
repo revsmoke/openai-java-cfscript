@@ -5,13 +5,13 @@ package com.openai.models.beta.threads.messages
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ImageUrlTest {
+internal class ImageUrlTest {
 
     @Test
-    fun createImageUrl() {
+    fun create() {
         val imageUrl =
             ImageUrl.builder().url("https://example.com").detail(ImageUrl.Detail.AUTO).build()
-        assertThat(imageUrl).isNotNull
+
         assertThat(imageUrl.url()).isEqualTo("https://example.com")
         assertThat(imageUrl.detail()).contains(ImageUrl.Detail.AUTO)
     }
