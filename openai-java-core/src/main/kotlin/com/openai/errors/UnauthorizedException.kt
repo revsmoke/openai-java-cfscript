@@ -18,8 +18,6 @@ private constructor(
     cause: Throwable?,
 ) : OpenAIServiceException("401: ${error?.message()}", cause) {
 
-    override fun headers(): Headers = headers
-
     override fun statusCode(): Int = 401
 
     override fun body(): JsonValue =
@@ -31,6 +29,8 @@ private constructor(
 
     override fun type(): Optional<String> = Optional.ofNullable(error?.type())
 
+    override fun headers(): Headers = headers
+
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -41,7 +41,6 @@ private constructor(
          * The following fields are required:
          * ```java
          * .headers()
-         * .error()
          * ```
          */
         @JvmStatic fun builder() = Builder()
@@ -65,6 +64,9 @@ private constructor(
 
         fun error(error: ErrorObject?) = apply { this.error = error }
 
+        /** Alias for calling [Builder.error] with `error.orElse(null)`. */
+        fun error(error: Optional<ErrorObject>) = error(error.getOrNull())
+
         fun cause(cause: Throwable?) = apply { this.cause = cause }
 
         /** Alias for calling [Builder.cause] with `cause.orElse(null)`. */
@@ -78,16 +80,11 @@ private constructor(
          * The following fields are required:
          * ```java
          * .headers()
-         * .error()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
          */
         fun build(): UnauthorizedException =
-            UnauthorizedException(
-                checkRequired("headers", headers),
-                checkRequired("error", error),
-                cause,
-            )
+            UnauthorizedException(checkRequired("headers", headers), error, cause)
     }
 }

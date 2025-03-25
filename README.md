@@ -9,16 +9,16 @@
 
 <!-- x-release-please-start-version -->
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.openai/openai-java)](https://central.sonatype.com/artifact/com.openai/openai-java/0.36.0)
-[![javadoc](https://javadoc.io/badge2/com.openai/openai-java/0.36.0/javadoc.svg)](https://javadoc.io/doc/com.openai/openai-java/0.36.0)
+[![Maven Central](https://img.shields.io/maven-central/v/com.openai/openai-java)](https://central.sonatype.com/artifact/com.openai/openai-java/0.37.0)
+[![javadoc](https://javadoc.io/badge2/com.openai/openai-java/0.37.0/javadoc.svg)](https://javadoc.io/doc/com.openai/openai-java/0.37.0)
 
 <!-- x-release-please-end -->
 
-The OpenAI Java SDK provides convenient access to the OpenAI REST API from applications written in Java.
+The OpenAI Java SDK provides convenient access to the [OpenAI REST API](https://platform.openai.com/docs) from applications written in Java.
 
 <!-- x-release-please-start-version -->
 
-The REST API documentation can be found on [platform.openai.com](https://platform.openai.com/docs). Javadocs are also available on [javadoc.io](https://javadoc.io/doc/com.openai/openai-java/0.36.0).
+The REST API documentation can be found on [platform.openai.com](https://platform.openai.com/docs). Javadocs are also available on [javadoc.io](https://javadoc.io/doc/com.openai/openai-java/0.37.0).
 
 <!-- x-release-please-end -->
 
@@ -29,16 +29,16 @@ The REST API documentation can be found on [platform.openai.com](https://platfor
 ### Gradle
 
 ```kotlin
-implementation("com.openai:openai-java:0.36.0")
+implementation("com.openai:openai-java:0.37.0")
 ```
 
 ### Maven
 
 ```xml
 <dependency>
-    <groupId>com.openai</groupId>
-    <artifactId>openai-java</artifactId>
-    <version>0.36.0</version>
+  <groupId>com.openai</groupId>
+  <artifactId>openai-java</artifactId>
+  <version>0.37.0</version>
 </dependency>
 ```
 
@@ -444,16 +444,18 @@ The SDK throws custom unchecked exception types:
 
 - [`OpenAIServiceException`](openai-java-core/src/main/kotlin/com/openai/errors/OpenAIServiceException.kt): Base class for HTTP errors. See this table for which exception subclass is thrown for each HTTP status code:
 
-  | Status | Exception                       |
-  | ------ | ------------------------------- |
-  | 400    | `BadRequestException`           |
-  | 401    | `AuthenticationException`       |
-  | 403    | `PermissionDeniedException`     |
-  | 404    | `NotFoundException`             |
-  | 422    | `UnprocessableEntityException`  |
-  | 429    | `RateLimitException`            |
-  | 5xx    | `InternalServerException`       |
-  | others | `UnexpectedStatusCodeException` |
+  | Status | Exception                                                                                                              |
+  | ------ | ---------------------------------------------------------------------------------------------------------------------- |
+  | 400    | [`BadRequestException`](openai-java-core/src/main/kotlin/com/openai/errors/BadRequestException.kt)                     |
+  | 401    | [`UnauthorizedException`](openai-java-core/src/main/kotlin/com/openai/errors/UnauthorizedException.kt)                 |
+  | 403    | [`PermissionDeniedException`](openai-java-core/src/main/kotlin/com/openai/errors/PermissionDeniedException.kt)         |
+  | 404    | [`NotFoundException`](openai-java-core/src/main/kotlin/com/openai/errors/NotFoundException.kt)                         |
+  | 422    | [`UnprocessableEntityException`](openai-java-core/src/main/kotlin/com/openai/errors/UnprocessableEntityException.kt)   |
+  | 429    | [`RateLimitException`](openai-java-core/src/main/kotlin/com/openai/errors/RateLimitException.kt)                       |
+  | 5xx    | [`InternalServerException`](openai-java-core/src/main/kotlin/com/openai/errors/InternalServerException.kt)             |
+  | others | [`UnexpectedStatusCodeException`](openai-java-core/src/main/kotlin/com/openai/errors/UnexpectedStatusCodeException.kt) |
+
+  [`SseException`](openai-java-core/src/main/kotlin/com/openai/errors/SseException.kt) is thrown for errors encountered during [SSE streaming](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events) after a successful initial HTTP response.
 
 - [`OpenAIIoException`](openai-java-core/src/main/kotlin/com/openai/errors/OpenAIIoException.kt): I/O networking errors.
 
