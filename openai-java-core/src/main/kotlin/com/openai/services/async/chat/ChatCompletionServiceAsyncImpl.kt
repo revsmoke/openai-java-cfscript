@@ -27,11 +27,14 @@ import com.openai.models.chat.completions.ChatCompletionChunk
 import com.openai.models.chat.completions.ChatCompletionCreateParams
 import com.openai.models.chat.completions.ChatCompletionDeleteParams
 import com.openai.models.chat.completions.ChatCompletionDeleted
+import com.openai.models.chat.completions.ChatCompletionListPageAsync
+import com.openai.models.chat.completions.ChatCompletionListParams
 import com.openai.models.chat.completions.ChatCompletionRetrieveParams
 import com.openai.models.chat.completions.ChatCompletionUpdateParams
 import com.openai.services.async.chat.completions.MessageServiceAsync
 import com.openai.services.async.chat.completions.MessageServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
+import kotlin.jvm.optionals.getOrNull
 
 class ChatCompletionServiceAsyncImpl
 internal constructor(private val clientOptions: ClientOptions) : ChatCompletionServiceAsync {
@@ -76,6 +79,13 @@ internal constructor(private val clientOptions: ClientOptions) : ChatCompletionS
     ): CompletableFuture<ChatCompletion> =
         // post /chat/completions/{completion_id}
         withRawResponse().update(params, requestOptions).thenApply { it.parse() }
+
+    override fun list(
+        params: ChatCompletionListParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<ChatCompletionListPageAsync> =
+        // get /chat/completions
+        withRawResponse().list(params, requestOptions).thenApply { it.parse() }
 
     override fun delete(
         params: ChatCompletionDeleteParams,
@@ -222,6 +232,47 @@ internal constructor(private val clientOptions: ClientOptions) : ChatCompletionS
                                 if (requestOptions.responseValidation!!) {
                                     it.validate()
                                 }
+                            }
+                    }
+                }
+        }
+
+        private val listHandler: Handler<ChatCompletionListPageAsync.Response> =
+            jsonHandler<ChatCompletionListPageAsync.Response>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
+
+        override fun list(
+            params: ChatCompletionListParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<ChatCompletionListPageAsync>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("chat", "completions")
+                    .build()
+                    .prepareAsync(
+                        clientOptions,
+                        params,
+                        deploymentModel = params.model().map { it.toString() }.getOrNull(),
+                    )
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { listHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                            .let {
+                                ChatCompletionListPageAsync.of(
+                                    ChatCompletionServiceAsyncImpl(clientOptions),
+                                    params,
+                                    it,
+                                )
                             }
                     }
                 }
