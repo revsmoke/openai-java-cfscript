@@ -9,8 +9,8 @@
 
 <!-- x-release-please-start-version -->
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.openai/openai-java)](https://central.sonatype.com/artifact/com.openai/openai-java/0.37.0)
-[![javadoc](https://javadoc.io/badge2/com.openai/openai-java/0.37.0/javadoc.svg)](https://javadoc.io/doc/com.openai/openai-java/0.37.0)
+[![Maven Central](https://img.shields.io/maven-central/v/com.openai/openai-java)](https://central.sonatype.com/artifact/com.openai/openai-java/0.38.0)
+[![javadoc](https://javadoc.io/badge2/com.openai/openai-java/0.38.0/javadoc.svg)](https://javadoc.io/doc/com.openai/openai-java/0.38.0)
 
 <!-- x-release-please-end -->
 
@@ -18,7 +18,7 @@ The OpenAI Java SDK provides convenient access to the [OpenAI REST API](https://
 
 <!-- x-release-please-start-version -->
 
-The REST API documentation can be found on [platform.openai.com](https://platform.openai.com/docs). Javadocs are also available on [javadoc.io](https://javadoc.io/doc/com.openai/openai-java/0.37.0).
+The REST API documentation can be found on [platform.openai.com](https://platform.openai.com/docs). Javadocs are also available on [javadoc.io](https://javadoc.io/doc/com.openai/openai-java/0.38.0).
 
 <!-- x-release-please-end -->
 
@@ -29,7 +29,7 @@ The REST API documentation can be found on [platform.openai.com](https://platfor
 ### Gradle
 
 ```kotlin
-implementation("com.openai:openai-java:0.37.0")
+implementation("com.openai:openai-java:0.38.0")
 ```
 
 ### Maven
@@ -38,7 +38,7 @@ implementation("com.openai:openai-java:0.37.0")
 <dependency>
   <groupId>com.openai</groupId>
   <artifactId>openai-java</artifactId>
-  <version>0.37.0</version>
+  <version>0.38.0</version>
 </dependency>
 ```
 
@@ -286,6 +286,58 @@ OpenAIClient client = OpenAIOkHttpClient.builder()
     .fromEnv()
     .streamHandlerExecutor(Executors.newFixedThreadPool(4))
     .build();
+```
+
+### Streaming helpers
+
+The SDK provides conveniences for streamed chat completions. A
+[`ChatCompletionAccumulator`](openai-java-core/src/main/kotlin/com/openai/helpers/ChatCompletionAccumulator.kt)
+can record the stream of chat completion chunks in the response as they are processed and accumulate 
+a [`ChatCompletion`](openai-java-core/src/main/kotlin/com/openai/models/chat/completions/ChatCompletion.kt)
+object similar to that which would have been returned by the non-streaming API.
+
+For a synchronous response add a
+[`Stream.peek()`](https://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html#peek-java.util.function.Consumer-)
+call to the stream pipeline to accumulate each chunk:
+
+```java
+import com.openai.core.http.StreamResponse;
+import com.openai.helpers.ChatCompletionAccumulator;
+import com.openai.models.chat.completions.ChatCompletion;
+import com.openai.models.chat.completions.ChatCompletionChunk;
+
+ChatCompletionAccumulator chatCompletionAccumulator = ChatCompletionAccumulator.create();
+
+try (StreamResponse<ChatCompletionChunk> streamResponse =
+        client.chat().completions().createStreaming(createParams)) {
+    streamResponse.stream()
+            .peek(chatCompletionAccumulator::accumulate)
+            .flatMap(completion -> completion.choices().stream())
+            .flatMap(choice -> choice.delta().content().stream())
+            .forEach(System.out::print);
+}
+
+ChatCompletion chatCompletion = chatCompletionAccumulator.chatCompletion();
+```
+
+For an asynchronous response, add the `ChatCompletionAccumulator` to the `subscribe()` call:
+
+```java
+import com.openai.helpers.ChatCompletionAccumulator;
+import com.openai.models.chat.completions.ChatCompletion;
+
+ChatCompletionAccumulator chatCompletionAccumulator = ChatCompletionAccumulator.create();
+
+client.chat()
+        .completions()
+        .createStreaming(createParams)
+        .subscribe(chunk -> chatCompletionAccumulator.accumulate(chunk).choices().stream()
+                .flatMap(choice -> choice.delta().content().stream())
+                .forEach(System.out::print))
+        .onCompleteFuture()
+        .join();
+
+ChatCompletion chatCompletion = chatCompletionAccumulator.chatCompletion();
 ```
 
 ## File uploads
