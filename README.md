@@ -9,8 +9,8 @@
 
 <!-- x-release-please-start-version -->
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.openai/openai-java)](https://central.sonatype.com/artifact/com.openai/openai-java/0.40.0)
-[![javadoc](https://javadoc.io/badge2/com.openai/openai-java/0.40.0/javadoc.svg)](https://javadoc.io/doc/com.openai/openai-java/0.40.0)
+[![Maven Central](https://img.shields.io/maven-central/v/com.openai/openai-java)](https://central.sonatype.com/artifact/com.openai/openai-java/0.40.1)
+[![javadoc](https://javadoc.io/badge2/com.openai/openai-java/0.40.1/javadoc.svg)](https://javadoc.io/doc/com.openai/openai-java/0.40.1)
 
 <!-- x-release-please-end -->
 
@@ -18,7 +18,7 @@ The OpenAI Java SDK provides convenient access to the [OpenAI REST API](https://
 
 <!-- x-release-please-start-version -->
 
-The REST API documentation can be found on [platform.openai.com](https://platform.openai.com/docs). Javadocs are also available on [javadoc.io](https://javadoc.io/doc/com.openai/openai-java/0.40.0).
+The REST API documentation can be found on [platform.openai.com](https://platform.openai.com/docs). Javadocs are also available on [javadoc.io](https://javadoc.io/doc/com.openai/openai-java/0.40.1).
 
 <!-- x-release-please-end -->
 
@@ -29,7 +29,7 @@ The REST API documentation can be found on [platform.openai.com](https://platfor
 ### Gradle
 
 ```kotlin
-implementation("com.openai:openai-java:0.40.0")
+implementation("com.openai:openai-java:0.40.1")
 ```
 
 ### Maven
@@ -38,7 +38,7 @@ implementation("com.openai:openai-java:0.40.0")
 <dependency>
   <groupId>com.openai</groupId>
   <artifactId>openai-java</artifactId>
-  <version>0.40.0</version>
+  <version>0.40.1</version>
 </dependency>
 ```
 
@@ -489,6 +489,23 @@ import com.openai.models.chat.completions.ChatCompletion;
 
 ChatCompletion parsedChatCompletion = chatCompletion.parse();
 ```
+
+### Request IDs
+
+> For more information on debugging requests, see [the API docs](https://platform.openai.com/docs/api-reference/debugging-requests).
+
+When using raw responses, you can access the `x-request-id` response header using the `requestId()` method:
+
+```java
+import com.openai.core.http.HttpResponseFor;
+import com.openai.models.chat.completions.ChatCompletion;
+import java.util.Optional;
+
+HttpResponseFor<ChatCompletion> chatCompletion = client.chat().completions().withRawResponse().create(params);
+Optional<String> requestId = chatCompletion.requestId();
+```
+
+This can be used to quickly log failing requests and report them back to OpenAI.
 
 ## Error handling
 
