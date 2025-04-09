@@ -2,17 +2,8 @@
 
 package com.openai.models.evals
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonAnySetter
-import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.openai.core.ExcludeMissing
-import com.openai.core.JsonField
-import com.openai.core.JsonMissing
-import com.openai.core.JsonValue
-import com.openai.errors.OpenAIInvalidDataException
+import com.openai.core.checkRequired
 import com.openai.services.async.EvalServiceAsync
-import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import java.util.concurrent.CompletableFuture
@@ -20,165 +11,111 @@ import java.util.concurrent.Executor
 import java.util.function.Predicate
 import kotlin.jvm.optionals.getOrNull
 
-/** List evaluations for a project. */
+/** @see [EvalServiceAsync.list] */
 class EvalListPageAsync
 private constructor(
-    private val evalsService: EvalServiceAsync,
+    private val service: EvalServiceAsync,
     private val params: EvalListParams,
-    private val response: Response,
+    private val response: EvalListPageResponse,
 ) {
 
-    fun response(): Response = response
+    /**
+     * Delegates to [EvalListPageResponse], but gracefully handles missing data.
+     *
+     * @see [EvalListPageResponse.data]
+     */
+    fun data(): List<EvalListResponse> =
+        response._data().getOptional("data").getOrNull() ?: emptyList()
 
-    fun data(): List<EvalListResponse> = response().data()
+    /**
+     * Delegates to [EvalListPageResponse], but gracefully handles missing data.
+     *
+     * @see [EvalListPageResponse.hasMore]
+     */
+    fun hasMore(): Optional<Boolean> = response._hasMore().getOptional("has_more")
 
-    fun hasMore(): Optional<Boolean> = response().hasMore()
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is EvalListPageAsync && evalsService == other.evalsService && params == other.params && response == other.response /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(evalsService, params, response) /* spotless:on */
-
-    override fun toString() =
-        "EvalListPageAsync{evalsService=$evalsService, params=$params, response=$response}"
-
-    fun hasNextPage(): Boolean {
-        return !data().isEmpty()
-    }
+    fun hasNextPage(): Boolean = data().isNotEmpty()
 
     fun getNextPageParams(): Optional<EvalListParams> {
         if (!hasNextPage()) {
             return Optional.empty()
         }
 
-        return Optional.of(params.toBuilder().after(data().last().id()).build())
+        return Optional.of(params.toBuilder().after(data().last()._id().getOptional("id")).build())
     }
 
-    fun getNextPage(): CompletableFuture<Optional<EvalListPageAsync>> {
-        return getNextPageParams()
-            .map { evalsService.list(it).thenApply { Optional.of(it) } }
+    fun getNextPage(): CompletableFuture<Optional<EvalListPageAsync>> =
+        getNextPageParams()
+            .map { service.list(it).thenApply { Optional.of(it) } }
             .orElseGet { CompletableFuture.completedFuture(Optional.empty()) }
-    }
 
     fun autoPager(): AutoPager = AutoPager(this)
 
+    /** The parameters that were used to request this page. */
+    fun params(): EvalListParams = params
+
+    /** The response that this page was parsed from. */
+    fun response(): EvalListPageResponse = response
+
+    fun toBuilder() = Builder().from(this)
+
     companion object {
 
-        @JvmStatic
-        fun of(evalsService: EvalServiceAsync, params: EvalListParams, response: Response) =
-            EvalListPageAsync(evalsService, params, response)
+        /**
+         * Returns a mutable builder for constructing an instance of [EvalListPageAsync].
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         */
+        @JvmStatic fun builder() = Builder()
     }
 
-    class Response(
-        private val data: JsonField<List<EvalListResponse>>,
-        private val hasMore: JsonField<Boolean>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
+    /** A builder for [EvalListPageAsync]. */
+    class Builder internal constructor() {
 
-        @JsonCreator
-        private constructor(
-            @JsonProperty("data") data: JsonField<List<EvalListResponse>> = JsonMissing.of(),
-            @JsonProperty("has_more") hasMore: JsonField<Boolean> = JsonMissing.of(),
-        ) : this(data, hasMore, mutableMapOf())
+        private var service: EvalServiceAsync? = null
+        private var params: EvalListParams? = null
+        private var response: EvalListPageResponse? = null
 
-        fun data(): List<EvalListResponse> = data.getOptional("data").getOrNull() ?: listOf()
-
-        fun hasMore(): Optional<Boolean> = hasMore.getOptional("has_more")
-
-        @JsonProperty("data")
-        fun _data(): Optional<JsonField<List<EvalListResponse>>> = Optional.ofNullable(data)
-
-        @JsonProperty("has_more")
-        fun _hasMore(): Optional<JsonField<Boolean>> = Optional.ofNullable(hasMore)
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
+        @JvmSynthetic
+        internal fun from(evalListPageAsync: EvalListPageAsync) = apply {
+            service = evalListPageAsync.service
+            params = evalListPageAsync.params
+            response = evalListPageAsync.response
         }
 
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
+        fun service(service: EvalServiceAsync) = apply { this.service = service }
 
-        private var validated: Boolean = false
+        /** The parameters that were used to request this page. */
+        fun params(params: EvalListParams) = apply { this.params = params }
 
-        fun validate(): Response = apply {
-            if (validated) {
-                return@apply
-            }
+        /** The response that this page was parsed from. */
+        fun response(response: EvalListPageResponse) = apply { this.response = response }
 
-            data().map { it.validate() }
-            hasMore()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: OpenAIInvalidDataException) {
-                false
-            }
-
-        fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Response && data == other.data && hasMore == other.hasMore && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(data, hasMore, additionalProperties) /* spotless:on */
-
-        override fun toString() =
-            "Response{data=$data, hasMore=$hasMore, additionalProperties=$additionalProperties}"
-
-        companion object {
-
-            /** Returns a mutable builder for constructing an instance of [EvalListPageAsync]. */
-            @JvmStatic fun builder() = Builder()
-        }
-
-        class Builder {
-
-            private var data: JsonField<List<EvalListResponse>> = JsonMissing.of()
-            private var hasMore: JsonField<Boolean> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(page: Response) = apply {
-                this.data = page.data
-                this.hasMore = page.hasMore
-                this.additionalProperties.putAll(page.additionalProperties)
-            }
-
-            fun data(data: List<EvalListResponse>) = data(JsonField.of(data))
-
-            fun data(data: JsonField<List<EvalListResponse>>) = apply { this.data = data }
-
-            fun hasMore(hasMore: Boolean) = hasMore(JsonField.of(hasMore))
-
-            fun hasMore(hasMore: JsonField<Boolean>) = apply { this.hasMore = hasMore }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
-            }
-
-            /**
-             * Returns an immutable instance of [Response].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             */
-            fun build(): Response = Response(data, hasMore, additionalProperties.toMutableMap())
-        }
+        /**
+         * Returns an immutable instance of [EvalListPageAsync].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): EvalListPageAsync =
+            EvalListPageAsync(
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
+            )
     }
 
     class AutoPager(private val firstPage: EvalListPageAsync) {
@@ -209,4 +146,17 @@ private constructor(
             return forEach(values::add, executor).thenApply { values }
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is EvalListPageAsync && service == other.service && params == other.params && response == other.response /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
+
+    override fun toString() =
+        "EvalListPageAsync{service=$service, params=$params, response=$response}"
 }

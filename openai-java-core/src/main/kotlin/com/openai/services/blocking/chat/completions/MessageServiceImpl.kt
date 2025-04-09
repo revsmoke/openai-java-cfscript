@@ -15,6 +15,7 @@ import com.openai.core.http.parseable
 import com.openai.core.prepare
 import com.openai.models.ErrorObject
 import com.openai.models.chat.completions.messages.MessageListPage
+import com.openai.models.chat.completions.messages.MessageListPageResponse
 import com.openai.models.chat.completions.messages.MessageListParams
 
 class MessageServiceImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -35,8 +36,8 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
 
         private val errorHandler: Handler<ErrorObject?> = errorHandler(clientOptions.jsonMapper)
 
-        private val listHandler: Handler<MessageListPage.Response> =
-            jsonHandler<MessageListPage.Response>(clientOptions.jsonMapper)
+        private val listHandler: Handler<MessageListPageResponse> =
+            jsonHandler<MessageListPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun list(
@@ -59,7 +60,13 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
                             it.validate()
                         }
                     }
-                    .let { MessageListPage.of(MessageServiceImpl(clientOptions), params, it) }
+                    .let {
+                        MessageListPage.builder()
+                            .service(MessageServiceImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
+                    }
             }
         }
     }

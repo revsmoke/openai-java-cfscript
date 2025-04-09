@@ -2,17 +2,9 @@
 
 package com.openai.models.vectorstores
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonAnySetter
-import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.openai.core.ExcludeMissing
-import com.openai.core.JsonField
-import com.openai.core.JsonMissing
 import com.openai.core.JsonValue
-import com.openai.errors.OpenAIInvalidDataException
+import com.openai.core.checkRequired
 import com.openai.services.async.VectorStoreServiceAsync
-import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import java.util.concurrent.CompletableFuture
@@ -20,170 +12,101 @@ import java.util.concurrent.Executor
 import java.util.function.Predicate
 import kotlin.jvm.optionals.getOrNull
 
-/** Search a vector store for relevant chunks based on a query and file attributes filter. */
+/** @see [VectorStoreServiceAsync.search] */
 class VectorStoreSearchPageAsync
 private constructor(
-    private val vectorStoresService: VectorStoreServiceAsync,
+    private val service: VectorStoreServiceAsync,
     private val params: VectorStoreSearchParams,
-    private val response: Response,
+    private val response: VectorStoreSearchPageResponse,
 ) {
 
-    fun response(): Response = response
+    /**
+     * Delegates to [VectorStoreSearchPageResponse], but gracefully handles missing data.
+     *
+     * @see [VectorStoreSearchPageResponse.data]
+     */
+    fun data(): List<VectorStoreSearchResponse> =
+        response._data().getOptional("data").getOrNull() ?: emptyList()
 
-    fun data(): List<VectorStoreSearchResponse> = response().data()
+    /** @see [VectorStoreSearchPageResponse.object_] */
+    fun object_(): JsonValue = response._object_()
 
-    fun object_(): String = response().object_()
+    fun hasNextPage(): Boolean = data().isNotEmpty()
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+    fun getNextPageParams(): Optional<VectorStoreSearchParams> = Optional.empty()
 
-        return /* spotless:off */ other is VectorStoreSearchPageAsync && vectorStoresService == other.vectorStoresService && params == other.params && response == other.response /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(vectorStoresService, params, response) /* spotless:on */
-
-    override fun toString() =
-        "VectorStoreSearchPageAsync{vectorStoresService=$vectorStoresService, params=$params, response=$response}"
-
-    fun hasNextPage(): Boolean {
-        return !data().isEmpty()
-    }
-
-    fun getNextPageParams(): Optional<VectorStoreSearchParams> {
-        return Optional.empty()
-    }
-
-    fun getNextPage(): CompletableFuture<Optional<VectorStoreSearchPageAsync>> {
-        return getNextPageParams()
-            .map { vectorStoresService.search(it).thenApply { Optional.of(it) } }
+    fun getNextPage(): CompletableFuture<Optional<VectorStoreSearchPageAsync>> =
+        getNextPageParams()
+            .map { service.search(it).thenApply { Optional.of(it) } }
             .orElseGet { CompletableFuture.completedFuture(Optional.empty()) }
-    }
 
     fun autoPager(): AutoPager = AutoPager(this)
 
+    /** The parameters that were used to request this page. */
+    fun params(): VectorStoreSearchParams = params
+
+    /** The response that this page was parsed from. */
+    fun response(): VectorStoreSearchPageResponse = response
+
+    fun toBuilder() = Builder().from(this)
+
     companion object {
 
-        @JvmStatic
-        fun of(
-            vectorStoresService: VectorStoreServiceAsync,
-            params: VectorStoreSearchParams,
-            response: Response,
-        ) = VectorStoreSearchPageAsync(vectorStoresService, params, response)
+        /**
+         * Returns a mutable builder for constructing an instance of [VectorStoreSearchPageAsync].
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         */
+        @JvmStatic fun builder() = Builder()
     }
 
-    class Response(
-        private val data: JsonField<List<VectorStoreSearchResponse>>,
-        private val object_: JsonField<String>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
+    /** A builder for [VectorStoreSearchPageAsync]. */
+    class Builder internal constructor() {
 
-        @JsonCreator
-        private constructor(
-            @JsonProperty("data")
-            data: JsonField<List<VectorStoreSearchResponse>> = JsonMissing.of(),
-            @JsonProperty("object") object_: JsonField<String> = JsonMissing.of(),
-        ) : this(data, object_, mutableMapOf())
+        private var service: VectorStoreServiceAsync? = null
+        private var params: VectorStoreSearchParams? = null
+        private var response: VectorStoreSearchPageResponse? = null
 
-        fun data(): List<VectorStoreSearchResponse> =
-            data.getOptional("data").getOrNull() ?: listOf()
-
-        fun object_(): String = object_.getRequired("object")
-
-        @JsonProperty("data")
-        fun _data(): Optional<JsonField<List<VectorStoreSearchResponse>>> =
-            Optional.ofNullable(data)
-
-        @JsonProperty("object")
-        fun _object_(): Optional<JsonField<String>> = Optional.ofNullable(object_)
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
+        @JvmSynthetic
+        internal fun from(vectorStoreSearchPageAsync: VectorStoreSearchPageAsync) = apply {
+            service = vectorStoreSearchPageAsync.service
+            params = vectorStoreSearchPageAsync.params
+            response = vectorStoreSearchPageAsync.response
         }
 
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
+        fun service(service: VectorStoreServiceAsync) = apply { this.service = service }
 
-        private var validated: Boolean = false
+        /** The parameters that were used to request this page. */
+        fun params(params: VectorStoreSearchParams) = apply { this.params = params }
 
-        fun validate(): Response = apply {
-            if (validated) {
-                return@apply
-            }
+        /** The response that this page was parsed from. */
+        fun response(response: VectorStoreSearchPageResponse) = apply { this.response = response }
 
-            data().map { it.validate() }
-            object_()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: OpenAIInvalidDataException) {
-                false
-            }
-
-        fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Response && data == other.data && object_ == other.object_ && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(data, object_, additionalProperties) /* spotless:on */
-
-        override fun toString() =
-            "Response{data=$data, object_=$object_, additionalProperties=$additionalProperties}"
-
-        companion object {
-
-            /**
-             * Returns a mutable builder for constructing an instance of
-             * [VectorStoreSearchPageAsync].
-             */
-            @JvmStatic fun builder() = Builder()
-        }
-
-        class Builder {
-
-            private var data: JsonField<List<VectorStoreSearchResponse>> = JsonMissing.of()
-            private var object_: JsonField<String> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(page: Response) = apply {
-                this.data = page.data
-                this.object_ = page.object_
-                this.additionalProperties.putAll(page.additionalProperties)
-            }
-
-            fun data(data: List<VectorStoreSearchResponse>) = data(JsonField.of(data))
-
-            fun data(data: JsonField<List<VectorStoreSearchResponse>>) = apply { this.data = data }
-
-            fun object_(object_: String) = object_(JsonField.of(object_))
-
-            fun object_(object_: JsonField<String>) = apply { this.object_ = object_ }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
-            }
-
-            /**
-             * Returns an immutable instance of [Response].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             */
-            fun build(): Response = Response(data, object_, additionalProperties.toMutableMap())
-        }
+        /**
+         * Returns an immutable instance of [VectorStoreSearchPageAsync].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): VectorStoreSearchPageAsync =
+            VectorStoreSearchPageAsync(
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
+            )
     }
 
     class AutoPager(private val firstPage: VectorStoreSearchPageAsync) {
@@ -214,4 +137,17 @@ private constructor(
             return forEach(values::add, executor).thenApply { values }
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is VectorStoreSearchPageAsync && service == other.service && params == other.params && response == other.response /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
+
+    override fun toString() =
+        "VectorStoreSearchPageAsync{service=$service, params=$params, response=$response}"
 }

@@ -2,183 +2,116 @@
 
 package com.openai.models.finetuning.jobs.checkpoints
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonAnySetter
-import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.openai.core.ExcludeMissing
-import com.openai.core.JsonField
-import com.openai.core.JsonMissing
-import com.openai.core.JsonValue
-import com.openai.errors.OpenAIInvalidDataException
+import com.openai.core.checkRequired
 import com.openai.services.blocking.finetuning.jobs.CheckpointService
-import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import java.util.stream.Stream
 import java.util.stream.StreamSupport
 import kotlin.jvm.optionals.getOrNull
 
-/** List checkpoints for a fine-tuning job. */
+/** @see [CheckpointService.list] */
 class CheckpointListPage
 private constructor(
-    private val checkpointsService: CheckpointService,
+    private val service: CheckpointService,
     private val params: CheckpointListParams,
-    private val response: Response,
+    private val response: CheckpointListPageResponse,
 ) {
 
-    fun response(): Response = response
+    /**
+     * Delegates to [CheckpointListPageResponse], but gracefully handles missing data.
+     *
+     * @see [CheckpointListPageResponse.data]
+     */
+    fun data(): List<FineTuningJobCheckpoint> =
+        response._data().getOptional("data").getOrNull() ?: emptyList()
 
-    fun data(): List<FineTuningJobCheckpoint> = response().data()
+    /**
+     * Delegates to [CheckpointListPageResponse], but gracefully handles missing data.
+     *
+     * @see [CheckpointListPageResponse.hasMore]
+     */
+    fun hasMore(): Optional<Boolean> = response._hasMore().getOptional("has_more")
 
-    fun hasMore(): Optional<Boolean> = response().hasMore()
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is CheckpointListPage && checkpointsService == other.checkpointsService && params == other.params && response == other.response /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(checkpointsService, params, response) /* spotless:on */
-
-    override fun toString() =
-        "CheckpointListPage{checkpointsService=$checkpointsService, params=$params, response=$response}"
-
-    fun hasNextPage(): Boolean {
-        return !data().isEmpty()
-    }
+    fun hasNextPage(): Boolean = data().isNotEmpty()
 
     fun getNextPageParams(): Optional<CheckpointListParams> {
         if (!hasNextPage()) {
             return Optional.empty()
         }
 
-        return Optional.of(params.toBuilder().after(data().last().id()).build())
+        return Optional.of(params.toBuilder().after(data().last()._id().getOptional("id")).build())
     }
 
-    fun getNextPage(): Optional<CheckpointListPage> {
-        return getNextPageParams().map { checkpointsService.list(it) }
-    }
+    fun getNextPage(): Optional<CheckpointListPage> = getNextPageParams().map { service.list(it) }
 
     fun autoPager(): AutoPager = AutoPager(this)
 
+    /** The parameters that were used to request this page. */
+    fun params(): CheckpointListParams = params
+
+    /** The response that this page was parsed from. */
+    fun response(): CheckpointListPageResponse = response
+
+    fun toBuilder() = Builder().from(this)
+
     companion object {
 
-        @JvmStatic
-        fun of(
-            checkpointsService: CheckpointService,
-            params: CheckpointListParams,
-            response: Response,
-        ) = CheckpointListPage(checkpointsService, params, response)
+        /**
+         * Returns a mutable builder for constructing an instance of [CheckpointListPage].
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         */
+        @JvmStatic fun builder() = Builder()
     }
 
-    class Response(
-        private val data: JsonField<List<FineTuningJobCheckpoint>>,
-        private val hasMore: JsonField<Boolean>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
+    /** A builder for [CheckpointListPage]. */
+    class Builder internal constructor() {
 
-        @JsonCreator
-        private constructor(
-            @JsonProperty("data") data: JsonField<List<FineTuningJobCheckpoint>> = JsonMissing.of(),
-            @JsonProperty("has_more") hasMore: JsonField<Boolean> = JsonMissing.of(),
-        ) : this(data, hasMore, mutableMapOf())
+        private var service: CheckpointService? = null
+        private var params: CheckpointListParams? = null
+        private var response: CheckpointListPageResponse? = null
 
-        fun data(): List<FineTuningJobCheckpoint> = data.getOptional("data").getOrNull() ?: listOf()
-
-        fun hasMore(): Optional<Boolean> = hasMore.getOptional("has_more")
-
-        @JsonProperty("data")
-        fun _data(): Optional<JsonField<List<FineTuningJobCheckpoint>>> = Optional.ofNullable(data)
-
-        @JsonProperty("has_more")
-        fun _hasMore(): Optional<JsonField<Boolean>> = Optional.ofNullable(hasMore)
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
+        @JvmSynthetic
+        internal fun from(checkpointListPage: CheckpointListPage) = apply {
+            service = checkpointListPage.service
+            params = checkpointListPage.params
+            response = checkpointListPage.response
         }
 
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
+        fun service(service: CheckpointService) = apply { this.service = service }
 
-        private var validated: Boolean = false
+        /** The parameters that were used to request this page. */
+        fun params(params: CheckpointListParams) = apply { this.params = params }
 
-        fun validate(): Response = apply {
-            if (validated) {
-                return@apply
-            }
+        /** The response that this page was parsed from. */
+        fun response(response: CheckpointListPageResponse) = apply { this.response = response }
 
-            data().map { it.validate() }
-            hasMore()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: OpenAIInvalidDataException) {
-                false
-            }
-
-        fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Response && data == other.data && hasMore == other.hasMore && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(data, hasMore, additionalProperties) /* spotless:on */
-
-        override fun toString() =
-            "Response{data=$data, hasMore=$hasMore, additionalProperties=$additionalProperties}"
-
-        companion object {
-
-            /** Returns a mutable builder for constructing an instance of [CheckpointListPage]. */
-            @JvmStatic fun builder() = Builder()
-        }
-
-        class Builder {
-
-            private var data: JsonField<List<FineTuningJobCheckpoint>> = JsonMissing.of()
-            private var hasMore: JsonField<Boolean> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(page: Response) = apply {
-                this.data = page.data
-                this.hasMore = page.hasMore
-                this.additionalProperties.putAll(page.additionalProperties)
-            }
-
-            fun data(data: List<FineTuningJobCheckpoint>) = data(JsonField.of(data))
-
-            fun data(data: JsonField<List<FineTuningJobCheckpoint>>) = apply { this.data = data }
-
-            fun hasMore(hasMore: Boolean) = hasMore(JsonField.of(hasMore))
-
-            fun hasMore(hasMore: JsonField<Boolean>) = apply { this.hasMore = hasMore }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
-            }
-
-            /**
-             * Returns an immutable instance of [Response].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             */
-            fun build(): Response = Response(data, hasMore, additionalProperties.toMutableMap())
-        }
+        /**
+         * Returns an immutable instance of [CheckpointListPage].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): CheckpointListPage =
+            CheckpointListPage(
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
+            )
     }
 
     class AutoPager(private val firstPage: CheckpointListPage) : Iterable<FineTuningJobCheckpoint> {
@@ -199,4 +132,17 @@ private constructor(
             return StreamSupport.stream(spliterator(), false)
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is CheckpointListPage && service == other.service && params == other.params && response == other.response /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
+
+    override fun toString() =
+        "CheckpointListPage{service=$service, params=$params, response=$response}"
 }

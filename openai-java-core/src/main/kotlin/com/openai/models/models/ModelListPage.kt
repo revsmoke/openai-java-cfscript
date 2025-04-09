@@ -2,179 +2,106 @@
 
 package com.openai.models.models
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonAnySetter
-import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.openai.core.ExcludeMissing
-import com.openai.core.JsonField
-import com.openai.core.JsonMissing
 import com.openai.core.JsonValue
-import com.openai.errors.OpenAIInvalidDataException
+import com.openai.core.checkRequired
 import com.openai.services.blocking.ModelService
-import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import java.util.stream.Stream
 import java.util.stream.StreamSupport
 import kotlin.jvm.optionals.getOrNull
 
-/**
- * Lists the currently available models, and provides basic information about each one such as the
- * owner and availability.
- */
+/** @see [ModelService.list] */
 class ModelListPage
 private constructor(
-    private val modelsService: ModelService,
+    private val service: ModelService,
     private val params: ModelListParams,
-    private val response: Response,
+    private val response: ModelListPageResponse,
 ) {
 
-    fun response(): Response = response
+    /**
+     * Delegates to [ModelListPageResponse], but gracefully handles missing data.
+     *
+     * @see [ModelListPageResponse.data]
+     */
+    fun data(): List<Model> = response._data().getOptional("data").getOrNull() ?: emptyList()
 
-    fun data(): List<Model> = response().data()
+    /** @see [ModelListPageResponse.object_] */
+    fun object_(): JsonValue = response._object_()
 
-    fun object_(): String = response().object_()
+    fun hasNextPage(): Boolean = data().isNotEmpty()
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+    fun getNextPageParams(): Optional<ModelListParams> = Optional.empty()
 
-        return /* spotless:off */ other is ModelListPage && modelsService == other.modelsService && params == other.params && response == other.response /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(modelsService, params, response) /* spotless:on */
-
-    override fun toString() =
-        "ModelListPage{modelsService=$modelsService, params=$params, response=$response}"
-
-    fun hasNextPage(): Boolean {
-        return !data().isEmpty()
-    }
-
-    fun getNextPageParams(): Optional<ModelListParams> {
-        return Optional.empty()
-    }
-
-    fun getNextPage(): Optional<ModelListPage> {
-        return getNextPageParams().map { modelsService.list(it) }
-    }
+    fun getNextPage(): Optional<ModelListPage> = getNextPageParams().map { service.list(it) }
 
     fun autoPager(): AutoPager = AutoPager(this)
 
+    /** The parameters that were used to request this page. */
+    fun params(): ModelListParams = params
+
+    /** The response that this page was parsed from. */
+    fun response(): ModelListPageResponse = response
+
+    fun toBuilder() = Builder().from(this)
+
     companion object {
 
-        @JvmStatic
-        fun of(modelsService: ModelService, params: ModelListParams, response: Response) =
-            ModelListPage(modelsService, params, response)
+        /**
+         * Returns a mutable builder for constructing an instance of [ModelListPage].
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         */
+        @JvmStatic fun builder() = Builder()
     }
 
-    class Response(
-        private val data: JsonField<List<Model>>,
-        private val object_: JsonField<String>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
+    /** A builder for [ModelListPage]. */
+    class Builder internal constructor() {
 
-        @JsonCreator
-        private constructor(
-            @JsonProperty("data") data: JsonField<List<Model>> = JsonMissing.of(),
-            @JsonProperty("object") object_: JsonField<String> = JsonMissing.of(),
-        ) : this(data, object_, mutableMapOf())
+        private var service: ModelService? = null
+        private var params: ModelListParams? = null
+        private var response: ModelListPageResponse? = null
 
-        fun data(): List<Model> = data.getOptional("data").getOrNull() ?: listOf()
-
-        fun object_(): String = object_.getRequired("object")
-
-        @JsonProperty("data")
-        fun _data(): Optional<JsonField<List<Model>>> = Optional.ofNullable(data)
-
-        @JsonProperty("object")
-        fun _object_(): Optional<JsonField<String>> = Optional.ofNullable(object_)
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
+        @JvmSynthetic
+        internal fun from(modelListPage: ModelListPage) = apply {
+            service = modelListPage.service
+            params = modelListPage.params
+            response = modelListPage.response
         }
 
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
+        fun service(service: ModelService) = apply { this.service = service }
 
-        private var validated: Boolean = false
+        /** The parameters that were used to request this page. */
+        fun params(params: ModelListParams) = apply { this.params = params }
 
-        fun validate(): Response = apply {
-            if (validated) {
-                return@apply
-            }
+        /** The response that this page was parsed from. */
+        fun response(response: ModelListPageResponse) = apply { this.response = response }
 
-            data().map { it.validate() }
-            object_()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: OpenAIInvalidDataException) {
-                false
-            }
-
-        fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Response && data == other.data && object_ == other.object_ && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(data, object_, additionalProperties) /* spotless:on */
-
-        override fun toString() =
-            "Response{data=$data, object_=$object_, additionalProperties=$additionalProperties}"
-
-        companion object {
-
-            /** Returns a mutable builder for constructing an instance of [ModelListPage]. */
-            @JvmStatic fun builder() = Builder()
-        }
-
-        class Builder {
-
-            private var data: JsonField<List<Model>> = JsonMissing.of()
-            private var object_: JsonField<String> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(page: Response) = apply {
-                this.data = page.data
-                this.object_ = page.object_
-                this.additionalProperties.putAll(page.additionalProperties)
-            }
-
-            fun data(data: List<Model>) = data(JsonField.of(data))
-
-            fun data(data: JsonField<List<Model>>) = apply { this.data = data }
-
-            fun object_(object_: String) = object_(JsonField.of(object_))
-
-            fun object_(object_: JsonField<String>) = apply { this.object_ = object_ }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
-            }
-
-            /**
-             * Returns an immutable instance of [Response].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             */
-            fun build(): Response = Response(data, object_, additionalProperties.toMutableMap())
-        }
+        /**
+         * Returns an immutable instance of [ModelListPage].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): ModelListPage =
+            ModelListPage(
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
+            )
     }
 
     class AutoPager(private val firstPage: ModelListPage) : Iterable<Model> {
@@ -195,4 +122,16 @@ private constructor(
             return StreamSupport.stream(spliterator(), false)
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is ModelListPage && service == other.service && params == other.params && response == other.response /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
+
+    override fun toString() = "ModelListPage{service=$service, params=$params, response=$response}"
 }

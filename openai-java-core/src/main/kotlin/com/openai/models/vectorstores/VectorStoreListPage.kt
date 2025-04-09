@@ -2,183 +2,115 @@
 
 package com.openai.models.vectorstores
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonAnySetter
-import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.openai.core.ExcludeMissing
-import com.openai.core.JsonField
-import com.openai.core.JsonMissing
-import com.openai.core.JsonValue
-import com.openai.errors.OpenAIInvalidDataException
+import com.openai.core.checkRequired
 import com.openai.services.blocking.VectorStoreService
-import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import java.util.stream.Stream
 import java.util.stream.StreamSupport
 import kotlin.jvm.optionals.getOrNull
 
-/** Returns a list of vector stores. */
+/** @see [VectorStoreService.list] */
 class VectorStoreListPage
 private constructor(
-    private val vectorStoresService: VectorStoreService,
+    private val service: VectorStoreService,
     private val params: VectorStoreListParams,
-    private val response: Response,
+    private val response: VectorStoreListPageResponse,
 ) {
 
-    fun response(): Response = response
+    /**
+     * Delegates to [VectorStoreListPageResponse], but gracefully handles missing data.
+     *
+     * @see [VectorStoreListPageResponse.data]
+     */
+    fun data(): List<VectorStore> = response._data().getOptional("data").getOrNull() ?: emptyList()
 
-    fun data(): List<VectorStore> = response().data()
+    /**
+     * Delegates to [VectorStoreListPageResponse], but gracefully handles missing data.
+     *
+     * @see [VectorStoreListPageResponse.hasMore]
+     */
+    fun hasMore(): Optional<Boolean> = response._hasMore().getOptional("has_more")
 
-    fun hasMore(): Optional<Boolean> = response().hasMore()
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is VectorStoreListPage && vectorStoresService == other.vectorStoresService && params == other.params && response == other.response /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(vectorStoresService, params, response) /* spotless:on */
-
-    override fun toString() =
-        "VectorStoreListPage{vectorStoresService=$vectorStoresService, params=$params, response=$response}"
-
-    fun hasNextPage(): Boolean {
-        return !data().isEmpty()
-    }
+    fun hasNextPage(): Boolean = data().isNotEmpty()
 
     fun getNextPageParams(): Optional<VectorStoreListParams> {
         if (!hasNextPage()) {
             return Optional.empty()
         }
 
-        return Optional.of(params.toBuilder().after(data().last().id()).build())
+        return Optional.of(params.toBuilder().after(data().last()._id().getOptional("id")).build())
     }
 
-    fun getNextPage(): Optional<VectorStoreListPage> {
-        return getNextPageParams().map { vectorStoresService.list(it) }
-    }
+    fun getNextPage(): Optional<VectorStoreListPage> = getNextPageParams().map { service.list(it) }
 
     fun autoPager(): AutoPager = AutoPager(this)
 
+    /** The parameters that were used to request this page. */
+    fun params(): VectorStoreListParams = params
+
+    /** The response that this page was parsed from. */
+    fun response(): VectorStoreListPageResponse = response
+
+    fun toBuilder() = Builder().from(this)
+
     companion object {
 
-        @JvmStatic
-        fun of(
-            vectorStoresService: VectorStoreService,
-            params: VectorStoreListParams,
-            response: Response,
-        ) = VectorStoreListPage(vectorStoresService, params, response)
+        /**
+         * Returns a mutable builder for constructing an instance of [VectorStoreListPage].
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         */
+        @JvmStatic fun builder() = Builder()
     }
 
-    class Response(
-        private val data: JsonField<List<VectorStore>>,
-        private val hasMore: JsonField<Boolean>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
+    /** A builder for [VectorStoreListPage]. */
+    class Builder internal constructor() {
 
-        @JsonCreator
-        private constructor(
-            @JsonProperty("data") data: JsonField<List<VectorStore>> = JsonMissing.of(),
-            @JsonProperty("has_more") hasMore: JsonField<Boolean> = JsonMissing.of(),
-        ) : this(data, hasMore, mutableMapOf())
+        private var service: VectorStoreService? = null
+        private var params: VectorStoreListParams? = null
+        private var response: VectorStoreListPageResponse? = null
 
-        fun data(): List<VectorStore> = data.getOptional("data").getOrNull() ?: listOf()
-
-        fun hasMore(): Optional<Boolean> = hasMore.getOptional("has_more")
-
-        @JsonProperty("data")
-        fun _data(): Optional<JsonField<List<VectorStore>>> = Optional.ofNullable(data)
-
-        @JsonProperty("has_more")
-        fun _hasMore(): Optional<JsonField<Boolean>> = Optional.ofNullable(hasMore)
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
+        @JvmSynthetic
+        internal fun from(vectorStoreListPage: VectorStoreListPage) = apply {
+            service = vectorStoreListPage.service
+            params = vectorStoreListPage.params
+            response = vectorStoreListPage.response
         }
 
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
+        fun service(service: VectorStoreService) = apply { this.service = service }
 
-        private var validated: Boolean = false
+        /** The parameters that were used to request this page. */
+        fun params(params: VectorStoreListParams) = apply { this.params = params }
 
-        fun validate(): Response = apply {
-            if (validated) {
-                return@apply
-            }
+        /** The response that this page was parsed from. */
+        fun response(response: VectorStoreListPageResponse) = apply { this.response = response }
 
-            data().map { it.validate() }
-            hasMore()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: OpenAIInvalidDataException) {
-                false
-            }
-
-        fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Response && data == other.data && hasMore == other.hasMore && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(data, hasMore, additionalProperties) /* spotless:on */
-
-        override fun toString() =
-            "Response{data=$data, hasMore=$hasMore, additionalProperties=$additionalProperties}"
-
-        companion object {
-
-            /** Returns a mutable builder for constructing an instance of [VectorStoreListPage]. */
-            @JvmStatic fun builder() = Builder()
-        }
-
-        class Builder {
-
-            private var data: JsonField<List<VectorStore>> = JsonMissing.of()
-            private var hasMore: JsonField<Boolean> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(page: Response) = apply {
-                this.data = page.data
-                this.hasMore = page.hasMore
-                this.additionalProperties.putAll(page.additionalProperties)
-            }
-
-            fun data(data: List<VectorStore>) = data(JsonField.of(data))
-
-            fun data(data: JsonField<List<VectorStore>>) = apply { this.data = data }
-
-            fun hasMore(hasMore: Boolean) = hasMore(JsonField.of(hasMore))
-
-            fun hasMore(hasMore: JsonField<Boolean>) = apply { this.hasMore = hasMore }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
-            }
-
-            /**
-             * Returns an immutable instance of [Response].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             */
-            fun build(): Response = Response(data, hasMore, additionalProperties.toMutableMap())
-        }
+        /**
+         * Returns an immutable instance of [VectorStoreListPage].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): VectorStoreListPage =
+            VectorStoreListPage(
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
+            )
     }
 
     class AutoPager(private val firstPage: VectorStoreListPage) : Iterable<VectorStore> {
@@ -199,4 +131,17 @@ private constructor(
             return StreamSupport.stream(spliterator(), false)
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is VectorStoreListPage && service == other.service && params == other.params && response == other.response /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
+
+    override fun toString() =
+        "VectorStoreListPage{service=$service, params=$params, response=$response}"
 }

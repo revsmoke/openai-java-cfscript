@@ -15,6 +15,7 @@ import com.openai.core.http.parseable
 import com.openai.core.prepareAsync
 import com.openai.models.ErrorObject
 import com.openai.models.finetuning.jobs.checkpoints.CheckpointListPageAsync
+import com.openai.models.finetuning.jobs.checkpoints.CheckpointListPageResponse
 import com.openai.models.finetuning.jobs.checkpoints.CheckpointListParams
 import java.util.concurrent.CompletableFuture
 
@@ -39,8 +40,8 @@ class CheckpointServiceAsyncImpl internal constructor(private val clientOptions:
 
         private val errorHandler: Handler<ErrorObject?> = errorHandler(clientOptions.jsonMapper)
 
-        private val listHandler: Handler<CheckpointListPageAsync.Response> =
-            jsonHandler<CheckpointListPageAsync.Response>(clientOptions.jsonMapper)
+        private val listHandler: Handler<CheckpointListPageResponse> =
+            jsonHandler<CheckpointListPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun list(
@@ -66,11 +67,11 @@ class CheckpointServiceAsyncImpl internal constructor(private val clientOptions:
                                 }
                             }
                             .let {
-                                CheckpointListPageAsync.of(
-                                    CheckpointServiceAsyncImpl(clientOptions),
-                                    params,
-                                    it,
-                                )
+                                CheckpointListPageAsync.builder()
+                                    .service(CheckpointServiceAsyncImpl(clientOptions))
+                                    .params(params)
+                                    .response(it)
+                                    .build()
                             }
                     }
                 }

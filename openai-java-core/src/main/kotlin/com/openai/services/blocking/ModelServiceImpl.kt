@@ -19,6 +19,7 @@ import com.openai.models.models.Model
 import com.openai.models.models.ModelDeleteParams
 import com.openai.models.models.ModelDeleted
 import com.openai.models.models.ModelListPage
+import com.openai.models.models.ModelListPageResponse
 import com.openai.models.models.ModelListParams
 import com.openai.models.models.ModelRetrieveParams
 
@@ -74,8 +75,8 @@ class ModelServiceImpl internal constructor(private val clientOptions: ClientOpt
             }
         }
 
-        private val listHandler: Handler<ModelListPage.Response> =
-            jsonHandler<ModelListPage.Response>(clientOptions.jsonMapper)
+        private val listHandler: Handler<ModelListPageResponse> =
+            jsonHandler<ModelListPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun list(
@@ -98,7 +99,13 @@ class ModelServiceImpl internal constructor(private val clientOptions: ClientOpt
                             it.validate()
                         }
                     }
-                    .let { ModelListPage.of(ModelServiceImpl(clientOptions), params, it) }
+                    .let {
+                        ModelListPage.builder()
+                            .service(ModelServiceImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
+                    }
             }
         }
 

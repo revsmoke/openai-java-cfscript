@@ -15,6 +15,7 @@ import com.openai.core.http.parseable
 import com.openai.core.prepareAsync
 import com.openai.models.ErrorObject
 import com.openai.models.chat.completions.messages.MessageListPageAsync
+import com.openai.models.chat.completions.messages.MessageListPageResponse
 import com.openai.models.chat.completions.messages.MessageListParams
 import java.util.concurrent.CompletableFuture
 
@@ -39,8 +40,8 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
 
         private val errorHandler: Handler<ErrorObject?> = errorHandler(clientOptions.jsonMapper)
 
-        private val listHandler: Handler<MessageListPageAsync.Response> =
-            jsonHandler<MessageListPageAsync.Response>(clientOptions.jsonMapper)
+        private val listHandler: Handler<MessageListPageResponse> =
+            jsonHandler<MessageListPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun list(
@@ -66,11 +67,11 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
                                 }
                             }
                             .let {
-                                MessageListPageAsync.of(
-                                    MessageServiceAsyncImpl(clientOptions),
-                                    params,
-                                    it,
-                                )
+                                MessageListPageAsync.builder()
+                                    .service(MessageServiceAsyncImpl(clientOptions))
+                                    .params(params)
+                                    .response(it)
+                                    .build()
                             }
                     }
                 }

@@ -21,9 +21,11 @@ import com.openai.models.vectorstores.VectorStoreCreateParams
 import com.openai.models.vectorstores.VectorStoreDeleteParams
 import com.openai.models.vectorstores.VectorStoreDeleted
 import com.openai.models.vectorstores.VectorStoreListPageAsync
+import com.openai.models.vectorstores.VectorStoreListPageResponse
 import com.openai.models.vectorstores.VectorStoreListParams
 import com.openai.models.vectorstores.VectorStoreRetrieveParams
 import com.openai.models.vectorstores.VectorStoreSearchPageAsync
+import com.openai.models.vectorstores.VectorStoreSearchPageResponse
 import com.openai.models.vectorstores.VectorStoreSearchParams
 import com.openai.models.vectorstores.VectorStoreUpdateParams
 import com.openai.services.async.vectorstores.FileBatchServiceAsync
@@ -207,8 +209,8 @@ class VectorStoreServiceAsyncImpl internal constructor(private val clientOptions
                 }
         }
 
-        private val listHandler: Handler<VectorStoreListPageAsync.Response> =
-            jsonHandler<VectorStoreListPageAsync.Response>(clientOptions.jsonMapper)
+        private val listHandler: Handler<VectorStoreListPageResponse> =
+            jsonHandler<VectorStoreListPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun list(
@@ -235,11 +237,11 @@ class VectorStoreServiceAsyncImpl internal constructor(private val clientOptions
                                 }
                             }
                             .let {
-                                VectorStoreListPageAsync.of(
-                                    VectorStoreServiceAsyncImpl(clientOptions),
-                                    params,
-                                    it,
-                                )
+                                VectorStoreListPageAsync.builder()
+                                    .service(VectorStoreServiceAsyncImpl(clientOptions))
+                                    .params(params)
+                                    .response(it)
+                                    .build()
                             }
                     }
                 }
@@ -276,8 +278,8 @@ class VectorStoreServiceAsyncImpl internal constructor(private val clientOptions
                 }
         }
 
-        private val searchHandler: Handler<VectorStoreSearchPageAsync.Response> =
-            jsonHandler<VectorStoreSearchPageAsync.Response>(clientOptions.jsonMapper)
+        private val searchHandler: Handler<VectorStoreSearchPageResponse> =
+            jsonHandler<VectorStoreSearchPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun search(
@@ -305,11 +307,11 @@ class VectorStoreServiceAsyncImpl internal constructor(private val clientOptions
                                 }
                             }
                             .let {
-                                VectorStoreSearchPageAsync.of(
-                                    VectorStoreServiceAsyncImpl(clientOptions),
-                                    params,
-                                    it,
-                                )
+                                VectorStoreSearchPageAsync.builder()
+                                    .service(VectorStoreServiceAsyncImpl(clientOptions))
+                                    .params(params)
+                                    .response(it)
+                                    .build()
                             }
                     }
                 }

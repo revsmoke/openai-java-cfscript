@@ -2,176 +2,107 @@
 
 package com.openai.models.vectorstores.files
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonAnySetter
-import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.openai.core.ExcludeMissing
-import com.openai.core.JsonField
-import com.openai.core.JsonMissing
 import com.openai.core.JsonValue
-import com.openai.errors.OpenAIInvalidDataException
+import com.openai.core.checkRequired
 import com.openai.services.blocking.vectorstores.FileService
-import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import java.util.stream.Stream
 import java.util.stream.StreamSupport
 import kotlin.jvm.optionals.getOrNull
 
-/** Retrieve the parsed contents of a vector store file. */
+/** @see [FileService.content] */
 class FileContentPage
 private constructor(
-    private val filesService: FileService,
+    private val service: FileService,
     private val params: FileContentParams,
-    private val response: Response,
+    private val response: FileContentPageResponse,
 ) {
 
-    fun response(): Response = response
+    /**
+     * Delegates to [FileContentPageResponse], but gracefully handles missing data.
+     *
+     * @see [FileContentPageResponse.data]
+     */
+    fun data(): List<FileContentResponse> =
+        response._data().getOptional("data").getOrNull() ?: emptyList()
 
-    fun data(): List<FileContentResponse> = response().data()
+    /** @see [FileContentPageResponse.object_] */
+    fun object_(): JsonValue = response._object_()
 
-    fun object_(): String = response().object_()
+    fun hasNextPage(): Boolean = data().isNotEmpty()
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+    fun getNextPageParams(): Optional<FileContentParams> = Optional.empty()
 
-        return /* spotless:off */ other is FileContentPage && filesService == other.filesService && params == other.params && response == other.response /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(filesService, params, response) /* spotless:on */
-
-    override fun toString() =
-        "FileContentPage{filesService=$filesService, params=$params, response=$response}"
-
-    fun hasNextPage(): Boolean {
-        return !data().isEmpty()
-    }
-
-    fun getNextPageParams(): Optional<FileContentParams> {
-        return Optional.empty()
-    }
-
-    fun getNextPage(): Optional<FileContentPage> {
-        return getNextPageParams().map { filesService.content(it) }
-    }
+    fun getNextPage(): Optional<FileContentPage> = getNextPageParams().map { service.content(it) }
 
     fun autoPager(): AutoPager = AutoPager(this)
 
+    /** The parameters that were used to request this page. */
+    fun params(): FileContentParams = params
+
+    /** The response that this page was parsed from. */
+    fun response(): FileContentPageResponse = response
+
+    fun toBuilder() = Builder().from(this)
+
     companion object {
 
-        @JvmStatic
-        fun of(filesService: FileService, params: FileContentParams, response: Response) =
-            FileContentPage(filesService, params, response)
+        /**
+         * Returns a mutable builder for constructing an instance of [FileContentPage].
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         */
+        @JvmStatic fun builder() = Builder()
     }
 
-    class Response(
-        private val data: JsonField<List<FileContentResponse>>,
-        private val object_: JsonField<String>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
+    /** A builder for [FileContentPage]. */
+    class Builder internal constructor() {
 
-        @JsonCreator
-        private constructor(
-            @JsonProperty("data") data: JsonField<List<FileContentResponse>> = JsonMissing.of(),
-            @JsonProperty("object") object_: JsonField<String> = JsonMissing.of(),
-        ) : this(data, object_, mutableMapOf())
+        private var service: FileService? = null
+        private var params: FileContentParams? = null
+        private var response: FileContentPageResponse? = null
 
-        fun data(): List<FileContentResponse> = data.getOptional("data").getOrNull() ?: listOf()
-
-        fun object_(): String = object_.getRequired("object")
-
-        @JsonProperty("data")
-        fun _data(): Optional<JsonField<List<FileContentResponse>>> = Optional.ofNullable(data)
-
-        @JsonProperty("object")
-        fun _object_(): Optional<JsonField<String>> = Optional.ofNullable(object_)
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
+        @JvmSynthetic
+        internal fun from(fileContentPage: FileContentPage) = apply {
+            service = fileContentPage.service
+            params = fileContentPage.params
+            response = fileContentPage.response
         }
 
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
+        fun service(service: FileService) = apply { this.service = service }
 
-        private var validated: Boolean = false
+        /** The parameters that were used to request this page. */
+        fun params(params: FileContentParams) = apply { this.params = params }
 
-        fun validate(): Response = apply {
-            if (validated) {
-                return@apply
-            }
+        /** The response that this page was parsed from. */
+        fun response(response: FileContentPageResponse) = apply { this.response = response }
 
-            data().map { it.validate() }
-            object_()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: OpenAIInvalidDataException) {
-                false
-            }
-
-        fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Response && data == other.data && object_ == other.object_ && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(data, object_, additionalProperties) /* spotless:on */
-
-        override fun toString() =
-            "Response{data=$data, object_=$object_, additionalProperties=$additionalProperties}"
-
-        companion object {
-
-            /** Returns a mutable builder for constructing an instance of [FileContentPage]. */
-            @JvmStatic fun builder() = Builder()
-        }
-
-        class Builder {
-
-            private var data: JsonField<List<FileContentResponse>> = JsonMissing.of()
-            private var object_: JsonField<String> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(page: Response) = apply {
-                this.data = page.data
-                this.object_ = page.object_
-                this.additionalProperties.putAll(page.additionalProperties)
-            }
-
-            fun data(data: List<FileContentResponse>) = data(JsonField.of(data))
-
-            fun data(data: JsonField<List<FileContentResponse>>) = apply { this.data = data }
-
-            fun object_(object_: String) = object_(JsonField.of(object_))
-
-            fun object_(object_: JsonField<String>) = apply { this.object_ = object_ }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
-            }
-
-            /**
-             * Returns an immutable instance of [Response].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             */
-            fun build(): Response = Response(data, object_, additionalProperties.toMutableMap())
-        }
+        /**
+         * Returns an immutable instance of [FileContentPage].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): FileContentPage =
+            FileContentPage(
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
+            )
     }
 
     class AutoPager(private val firstPage: FileContentPage) : Iterable<FileContentResponse> {
@@ -192,4 +123,17 @@ private constructor(
             return StreamSupport.stream(spliterator(), false)
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is FileContentPage && service == other.service && params == other.params && response == other.response /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
+
+    override fun toString() =
+        "FileContentPage{service=$service, params=$params, response=$response}"
 }

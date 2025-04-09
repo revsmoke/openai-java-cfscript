@@ -21,9 +21,11 @@ import com.openai.models.vectorstores.VectorStoreCreateParams
 import com.openai.models.vectorstores.VectorStoreDeleteParams
 import com.openai.models.vectorstores.VectorStoreDeleted
 import com.openai.models.vectorstores.VectorStoreListPage
+import com.openai.models.vectorstores.VectorStoreListPageResponse
 import com.openai.models.vectorstores.VectorStoreListParams
 import com.openai.models.vectorstores.VectorStoreRetrieveParams
 import com.openai.models.vectorstores.VectorStoreSearchPage
+import com.openai.models.vectorstores.VectorStoreSearchPageResponse
 import com.openai.models.vectorstores.VectorStoreSearchParams
 import com.openai.models.vectorstores.VectorStoreUpdateParams
 import com.openai.services.blocking.vectorstores.FileBatchService
@@ -195,8 +197,8 @@ class VectorStoreServiceImpl internal constructor(private val clientOptions: Cli
             }
         }
 
-        private val listHandler: Handler<VectorStoreListPage.Response> =
-            jsonHandler<VectorStoreListPage.Response>(clientOptions.jsonMapper)
+        private val listHandler: Handler<VectorStoreListPageResponse> =
+            jsonHandler<VectorStoreListPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun list(
@@ -221,7 +223,11 @@ class VectorStoreServiceImpl internal constructor(private val clientOptions: Cli
                         }
                     }
                     .let {
-                        VectorStoreListPage.of(VectorStoreServiceImpl(clientOptions), params, it)
+                        VectorStoreListPage.builder()
+                            .service(VectorStoreServiceImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
                     }
             }
         }
@@ -254,8 +260,8 @@ class VectorStoreServiceImpl internal constructor(private val clientOptions: Cli
             }
         }
 
-        private val searchHandler: Handler<VectorStoreSearchPage.Response> =
-            jsonHandler<VectorStoreSearchPage.Response>(clientOptions.jsonMapper)
+        private val searchHandler: Handler<VectorStoreSearchPageResponse> =
+            jsonHandler<VectorStoreSearchPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun search(
@@ -281,7 +287,11 @@ class VectorStoreServiceImpl internal constructor(private val clientOptions: Cli
                         }
                     }
                     .let {
-                        VectorStoreSearchPage.of(VectorStoreServiceImpl(clientOptions), params, it)
+                        VectorStoreSearchPage.builder()
+                            .service(VectorStoreServiceImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
                     }
             }
         }
