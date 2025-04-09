@@ -1,16 +1,9 @@
 # OpenAI Java API Library
 
-> [!NOTE]  
-> The OpenAI Java API Library is currently in _beta_.
->
-> There may be minor breaking changes.
->
-> Have thoughts or feedback? [File an issue](https://github.com/openai/openai-java/issues/new) or comment on [this thread](https://community.openai.com/t/your-feedback-requested-java-sdk/1061029).
-
 <!-- x-release-please-start-version -->
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.openai/openai-java)](https://central.sonatype.com/artifact/com.openai/openai-java/0.45.0)
-[![javadoc](https://javadoc.io/badge2/com.openai/openai-java/0.45.0/javadoc.svg)](https://javadoc.io/doc/com.openai/openai-java/0.45.0)
+[![Maven Central](https://img.shields.io/maven-central/v/com.openai/openai-java)](https://central.sonatype.com/artifact/com.openai/openai-java/1.0.0)
+[![javadoc](https://javadoc.io/badge2/com.openai/openai-java/1.0.0/javadoc.svg)](https://javadoc.io/doc/com.openai/openai-java/1.0.0)
 
 <!-- x-release-please-end -->
 
@@ -18,7 +11,7 @@ The OpenAI Java SDK provides convenient access to the [OpenAI REST API](https://
 
 <!-- x-release-please-start-version -->
 
-The REST API documentation can be found on [platform.openai.com](https://platform.openai.com/docs). Javadocs are also available on [javadoc.io](https://javadoc.io/doc/com.openai/openai-java/0.45.0).
+The REST API documentation can be found on [platform.openai.com](https://platform.openai.com/docs). Javadocs are also available on [javadoc.io](https://javadoc.io/doc/com.openai/openai-java/1.0.0).
 
 <!-- x-release-please-end -->
 
@@ -29,7 +22,7 @@ The REST API documentation can be found on [platform.openai.com](https://platfor
 ### Gradle
 
 ```kotlin
-implementation("com.openai:openai-java:0.45.0")
+implementation("com.openai:openai-java:1.0.0")
 ```
 
 ### Maven
@@ -38,7 +31,7 @@ implementation("com.openai:openai-java:0.45.0")
 <dependency>
   <groupId>com.openai</groupId>
   <artifactId>openai-java</artifactId>
-  <version>0.45.0</version>
+  <version>1.0.0</version>
 </dependency>
 ```
 
