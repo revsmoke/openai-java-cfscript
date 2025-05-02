@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.6.0 (2025-05-02)
+
+Full Changelog: [v1.5.1...v1.6.0](https://github.com/openai/openai-java/compare/v1.5.1...v1.6.0)
+
+### Features
+
+* **api:** add image sizes, reasoning encryption ([a4a7d53](https://github.com/openai/openai-java/commit/a4a7d5390245ba11afe1cbd8665e0e39af3ca16f))
+
+
+### Chores
+
+* **internal:** update java toolchain ([eef415d](https://github.com/openai/openai-java/commit/eef415d067c9dd6ac6d4b8c825f4d068a6c4a63c))
+
+
+### Documentation
+
+* add `ImageGenerationExample` ([#457](https://github.com/openai/openai-java/issues/457)) ([286b7d5](https://github.com/openai/openai-java/commit/286b7d52d8cb917130579352a89afd5f8c839894))
+
 ## 1.5.1 (2025-04-27)
 
 Full Changelog: [v1.5.0...v1.5.1](https://github.com/openai/openai-java/compare/v1.5.0...v1.5.1)
