@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.6.1 (2025-05-08)
+
+Full Changelog: [v1.6.0...v1.6.1](https://github.com/openai/openai-java/compare/v1.6.0...v1.6.1)
+
+### Chores
+
+* **internal:** remove flaky `-Xbackend-threads=0` option ([1aec858](https://github.com/openai/openai-java/commit/1aec858db61e87065fa5d3f7fba94f601f71b3ac))
+
 ## 1.6.0 (2025-05-02)
 
 Full Changelog: [v1.5.1...v1.6.0](https://github.com/openai/openai-java/compare/v1.5.1...v1.6.0)
