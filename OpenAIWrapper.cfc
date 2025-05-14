@@ -1,45 +1,64 @@
 component accessors="true" output="false" {
+
     // Java Classes
     private any openAIClient;
     private string apiKey;
 
-    // Constructor
+    /**
+     * Constructor
+     * Initializes the OpenAI client using the provided API key.
+     *
+     * @param apiKey (string): Your OpenAI API key.
+     * @return OpenAIWrapper: The initialized instance of the wrapper.
+     */
     public OpenAIWrapper function init(required string apiKey) {
         this.apiKey = arguments.apiKey;
 
         // Load Java SDK classes
-        variables.OpenAIServiceClass = createObject("java", "com.theokanning.openai.service.OpenAiService");
-        variables.RequestClass = createObject("java", "com.theokanning.openai.completion.CompletionRequest");
+        variables.OpenAIClientClass = createObject("java", "com.openai.client.OpenAIClient");
+        variables.OpenAIOkHttpClientClass = createObject("java", "com.openai.client.okhttp.OpenAIOkHttpClient");
+        variables.ResponseCreateParamsClass = createObject("java", "com.openai.models.responses.ResponseCreateParams");
+        variables.ChatModelClass = createObject("java", "com.openai.models.ChatModel");
 
         // Initialize OpenAI client
-        this.openAIClient = variables.OpenAIServiceClass.init(apiKey);
+        try {
+            this.openAIClient = variables.OpenAIOkHttpClientClass.fromEnv();
+        } catch (any e) {
+            throw(type="InitializationError", message="Failed to initialize OpenAI client: " & e.message, detail=e);
+        }
 
         return this;
     }
 
     /**
-     * Call OpenAI Completion API
-     * @param prompt (string): The input prompt for generating a response.
-     * @param model (string): The model to use (e.g., "text-davinci-003").
-     * @param maxTokens (numeric): The maximum number of tokens to generate.
-     * @return Struct: OpenAI API response
+     * Call OpenAI Response API
+     * Generates a response based on the given input.
+     *
+     * @param input (string): The input prompt for generating a response.
+     * @param model (string): The model to use (default is "gpt-4").
+     * @return Struct: OpenAI API response including id, output, and other details.
+     *
+     * @throws APIError: If the API call fails.
      */
-    public struct function getCompletion(required string prompt, string model = "text-davinci-003", numeric maxTokens = 100) {
-        // Create a CompletionRequest
-        var request = variables.RequestClass.init();
-        request.setPrompt(arguments.prompt);
-        request.setModel(arguments.model);
-        request.setMaxTokens(arguments.maxTokens);
+    public struct function getResponse(required string input, string model = "gpt-4") {
+        // Create a ResponseCreateParams object
+        var responseParams = variables.ResponseCreateParamsClass.builder()
+            .input(arguments.input)
+            .model(variables.ChatModelClass.of(arguments.model))
+            .build();
 
-        // Call OpenAI API
-        var response = this.openAIClient.createCompletion(request);
+        // Call OpenAI Response API and handle errors
+        try {
+            var response = this.openAIClient.responses().create(responseParams);
+        } catch (any e) {
+            throw(type="APIError", message="Error calling OpenAI Response API: " & e.message, detail=e);
+        }
 
-        // Return the result as a CFML struct
+        // Convert the response to a CFML struct
         return {
             id: response.getId(),
-            created: response.getCreated(),
             model: response.getModel(),
-            choices: response.getChoices().toArray()
+            output: response.getOutput().toArray()
         };
     }
 }
