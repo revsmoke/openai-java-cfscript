@@ -5,3 +5,7 @@
 build
 codegen.log
 kls_database.db
+.DS_Store
+java_lib/*
+openai-java-main/*
+verify-dependencies.sh
