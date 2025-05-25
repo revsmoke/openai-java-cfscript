@@ -21,8 +21,6 @@
 component accessors="true" output="false" {
 
     // Java Classes
-    private any openAIClient;
-    private string apiKey;
 
     /**
      * Constructor
@@ -196,11 +194,10 @@ component accessors="true" output="false" {
 
       /* ---------------------------------------------------------------------
      *  MODEL ENDPOINTS
-     * -------------------------------------------------------------------*/
 
     public array function listModels() {
         try {
-            var models = this.openAIClient.models().list(); // Java List<Model>  [oai_citation:0‡openai-java-sdk.devlive.org](https://openai-java-sdk.devlive.org/reference/openai/models.html?utm_source=chatgpt.com) [oai_citation:1‡GitHub](https://github.com/xrom888/openai-java-client?utm_source=chatgpt.com)
+            var models = this.openAIClient.models().list(); // Java List<Model>
             var out = [];
             models.stream().forEach(function(m){
                 arrayAppend(out,{
@@ -222,7 +219,7 @@ component accessors="true" output="false" {
 
     public struct function retrieveModel(required string modelId){
         try {
-            var m = this.openAIClient.models().retrieve(arguments.modelId);  [oai_citation:2‡GitHub](https://github.com/xrom888/openai-java-client?utm_source=chatgpt.com)
+            var m = this.openAIClient.models().retrieve(arguments.modelId);
             return {
                 id       : m.getId(),
                 object   : m.getObject(),
@@ -241,7 +238,6 @@ component accessors="true" output="false" {
 
     /* ---------------------------------------------------------------------
      *  COMPLETIONS – legacy /text completions endpoint
-     * -------------------------------------------------------------------*/
 
     public struct function createCompletion(required string prompt,
                                             string model="text-davinci-003",
@@ -250,7 +246,7 @@ component accessors="true" output="false" {
         // load param builder class once
         if (!structKeyExists(variables,"CompletionCreateParamsClass")){
             variables.CompletionCreateParamsClass = createObject(
-                    "java","com.openai.models.completions.CompletionCreateParams");  [oai_citation:3‡openai-java-sdk.devlive.org](https://openai-java-sdk.devlive.org/reference/openai/completions.html?utm_source=chatgpt.com)
+                    "java","com.openai.models.completions.CompletionCreateParams");
         }
 
         var params = variables.CompletionCreateParamsClass.builder()
@@ -261,7 +257,7 @@ component accessors="true" output="false" {
                         .build();
 
         try {
-            var comp = this.openAIClient.completions().create(params);  [oai_citation:4‡openai-java-sdk.devlive.org](https://openai-java-sdk.devlive.org/reference/openai/completions.html?utm_source=chatgpt.com)
+            var comp = this.openAIClient.completions().create(params);
             // map Java response to CF struct
             var choicesArr = [];
             comp.getChoices().stream().forEach(function(c){
@@ -288,13 +284,12 @@ component accessors="true" output="false" {
 
     /* ---------------------------------------------------------------------
      *  EMBEDDINGS
-     * -------------------------------------------------------------------*/
 
     public struct function createEmbedding(required any input,
                                            string model="text-embedding-ada-002"){
         if (!structKeyExists(variables,"EmbeddingCreateParamsClass")){
             variables.EmbeddingCreateParamsClass = createObject(
-                "java","com.openai.models.embeddings.EmbeddingCreateParams");  [oai_citation:5‡GitHub](https://github.com/ai-for-java/openai4j?utm_source=chatgpt.com) [oai_citation:6‡GitHub](https://github.com/openai/openai-java?utm_source=chatgpt.com)
+                "java","com.openai.models.embeddings.EmbeddingCreateParams");
         }
 
         // ensure input is a Java List<String>
@@ -311,7 +306,7 @@ component accessors="true" output="false" {
                        .build();
 
         try{
-            var emb = this.openAIClient.embeddings().create(params);  [oai_citation:7‡GitHub](https://github.com/ai-for-java/openai4j?utm_source=chatgpt.com)
+            var emb = this.openAIClient.embeddings().create(params);
             var vecs = [];
             emb.getData().stream().forEach(function(d){
                 arrayAppend(vecs,{
@@ -332,53 +327,12 @@ component accessors="true" output="false" {
         }
     }
 
-    /* ---------------------------------------------------------------------
-     *  MODERATIONS
-     * -------------------------------------------------------------------*/
-
-    public struct function createModeration(required any input,
-                                            string model="text-moderation-latest"){
-        if (!structKeyExists(variables,"ModerationCreateParamsClass")){
-            variables.ModerationCreateParamsClass = createObject(
-                "java","com.openai.models.moderations.ModerationCreateParams");  [oai_citation:8‡GitHub](https://github.com/ai-for-java/openai4j?utm_source=chatgpt.com)
-        }
-
-        var jInput = createObject("java","java.util.ArrayList").init();
-        if (isArray(input)){
-            arrayEach(input,function(i){ jInput.add(i); });
-        } else {
-            jInput.add(input);
-        }
-
-        var params = variables.ModerationCreateParamsClass.builder()
-                       .model(arguments.model)
-                       .input(jInput)
-                       .build();
-
-        try{
-            var mod = this.openAIClient.moderations().create(params);  [oai_citation:9‡GitHub](https://github.com/ai-for-java/openai4j?utm_source=chatgpt.com)
-            return {
-                id     : mod.getId(),
-                model  : mod.getModel(),
-                results: mod.getResults().toArray()
-            };
-        } catch (any e){
-            throw(type="APIError",
-                  message="Moderation request failed: #e.message#",
-                  detail=e);
-        }
-    }
-
-    /* ---------------------------------------------------------------------
-     *  IMAGE GENERATION
-     * -------------------------------------------------------------------*/
-
     public struct function generateImage(required string prompt,
                                          numeric n=1,
                                          string size="1024x1024"){
         if (!structKeyExists(variables,"ImageGenerateParamsClass")){
             variables.ImageGenerateParamsClass = createObject(
-                "java","com.openai.models.images.ImageGenerateParams");  [oai_citation:10‡GitHub](https://github.com/ai-for-java/openai4j?utm_source=chatgpt.com)
+                "java","com.openai.models.images.ImageGenerateParams");
         }
 
         var params = variables.ImageGenerateParamsClass.builder()
@@ -388,7 +342,7 @@ component accessors="true" output="false" {
                        .build();
 
         try{
-            var imgResp = this.openAIClient.images().generate(params);  [oai_citation:11‡GitHub](https://github.com/xrom888/openai-java-client?utm_source=chatgpt.com)
+            var imgResp = this.openAIClient.images().generate(params);
             var out = [];
             imgResp.getData().stream().forEach(function(d){
                 arrayAppend(out,d.getUrl());
@@ -406,7 +360,6 @@ component accessors="true" output="false" {
 
     /* ---------------------------------------------------------------------
      *  IMAGE EDIT & VARIATION
-     * -------------------------------------------------------------------*/
 
     /**
      * Edit an existing image using an optional mask.
@@ -509,7 +462,6 @@ component accessors="true" output="false" {
 
     /* ---------------------------------------------------------------------
      *  AUDIO – Transcription & Translation
-     * -------------------------------------------------------------------*/
 
     /**
      * Transcribe audio file using Whisper.
@@ -589,7 +541,6 @@ component accessors="true" output="false" {
 
     /* ---------------------------------------------------------------------
      *  FINE-TUNING
-     * -------------------------------------------------------------------*/
 
     /**
      * Create a fine-tuning job.
@@ -738,7 +689,6 @@ component accessors="true" output="false" {
 
     /* ---------------------------------------------------------------------
      *  FILE MANAGEMENT – retrieve & delete
-     * -------------------------------------------------------------------*/
 
     /**
      * Retrieve metadata for an uploaded file.

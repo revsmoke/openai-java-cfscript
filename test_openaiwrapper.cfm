@@ -1,5 +1,7 @@
 <cfscript>
 // Edit this with your actual OpenAI API key
+// SECURITY: Never commit API keys to source control
+// Consider using environment variables or ColdFusion's application settings
 apiKey = "YOUR_OPENAI_API_KEY_HERE";
 
 // Include the wrapper
