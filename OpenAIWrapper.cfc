@@ -282,6 +282,63 @@ component accessors="true" output="false" {
         }
     }
 
+    /**
+     * Chat completion endpoint using message arrays.
+     *
+     * @param messages Array of structs with keys `role` and `content`.
+     * @param model    Chat model identifier, default "gpt-4o".
+     * @return Struct of completion data.
+     */
+    public struct function createChatCompletion(required array messages,
+                                               string model="gpt-4o") {
+        if (!structKeyExists(variables,"ChatCompletionCreateParamsClass")) {
+            variables.ChatCompletionCreateParamsClass = createObject(
+                "java","com.openai.models.chat.completions.ChatCompletionCreateParams");
+        }
+        if (!structKeyExists(variables,"ChatCompletionUserMessageParamClass")) {
+            variables.ChatCompletionUserMessageParamClass = createObject(
+                "java","com.openai.models.chat.completions.ChatCompletionUserMessageParam");
+            variables.ChatCompletionSystemMessageParamClass = createObject(
+                "java","com.openai.models.chat.completions.ChatCompletionSystemMessageParam");
+            variables.ChatCompletionAssistantMessageParamClass = createObject(
+                "java","com.openai.models.chat.completions.ChatCompletionAssistantMessageParam");
+        }
+
+        var builder = variables.ChatCompletionCreateParamsClass.builder()
+                         .model(arguments.model);
+
+        // Convert CF message structs to Java message params
+        arrayEach(arguments.messages, function(m){
+            var role = lcase(m.role ?: "user");
+            var content = m.content ?: "";
+            switch(role){
+                case "system":
+                    builder.addSystemMessage(content);
+                    break;
+                case "assistant":
+                    var a = variables.ChatCompletionAssistantMessageParamClass.builder()
+                                .content(content).build();
+                    builder.addMessage(a);
+                    break;
+                default:
+                    builder.addUserMessage(content);
+            }
+        });
+
+        var params = builder.build();
+
+        try {
+            var resp = this.openAIClient.chat().create(params);
+            var msgs = [];
+            resp.getChoices().stream().forEach(function(c){
+                arrayAppend(msgs,{ index:c.getIndex(), message:c.getMessage().getContent() });
+            });
+            return { id: resp.getId(), choices: msgs, created: resp.getCreated() };
+        } catch(any e) {
+            throw(type="APIError", message="Chat completion failed: " & e.message, detail=e);
+        }
+    }
+
     /* ---------------------------------------------------------------------
      *  EMBEDDINGS
 
@@ -324,6 +381,43 @@ component accessors="true" output="false" {
             throw(type="APIError",
                   message="Embedding generation error: #e.message#",
                   detail=e);
+        }
+    }
+
+    /**
+     * Perform content moderation on text input.
+     *
+     * @param input Text or array of text to classify.
+     * @param model Moderation model, optional.
+     * @return Struct containing moderation results.
+     */
+    public struct function createModeration(required any input, string model){
+        if (!structKeyExists(variables,"ModerationCreateParamsClass")) {
+            variables.ModerationCreateParamsClass = createObject(
+                "java","com.openai.models.moderations.ModerationCreateParams");
+        }
+
+        var builder = variables.ModerationCreateParamsClass.builder();
+        if (isArray(arguments.input)) {
+            var jArr = createObject("java","java.util.ArrayList").init();
+            arrayEach(arguments.input, function(i){ jArr.add(i); });
+            builder.inputOfStrings(jArr);
+        } else {
+            builder.input(arguments.input);
+        }
+        if (structKeyExists(arguments,"model")) builder.model(arguments.model);
+
+        var params = builder.build();
+
+        try {
+            var resp = this.openAIClient.moderations().create(params);
+            var results = [];
+            resp.getResults().stream().forEach(function(r){
+                arrayAppend(results,{ flagged: r.getFlagged(), categories: r.getCategories() });
+            });
+            return { id: resp.getId(), model: resp.getModel(), results: results };
+        } catch(any e){
+            throw(type="APIError", message="Moderation failed: " & e.message, detail=e);
         }
     }
 

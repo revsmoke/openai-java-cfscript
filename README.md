@@ -40,3 +40,7 @@ This library requires Java 8 or later.
 ## Usage
 
 See the [`openai-java-example`](openai-java-example/src/main/java/com/openai/example) directory for complete and runnable examples.
+
+## ColdFusion Installation
+
+See [INSTALL.md](INSTALL.md) for step-by-step instructions. After installation you can run the samples in the `examples/` directory.
