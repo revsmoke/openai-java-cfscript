@@ -1,4 +1,10 @@
 # Changelog
+## Unreleased
+
+### Added
+* `createChatCompletion` and `createModeration` methods in `OpenAIWrapper` for parity with SDK
+* Example CFML and CFC files demonstrating tag-based and script usage
+* `INSTALL.md` with step-by-step setup instructions
 
 ## 1.6.1 (2025-05-08)
 
